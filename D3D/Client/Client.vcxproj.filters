@@ -64,6 +64,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>Resource</Filter>
     </ClInclude>
+    <ClInclude Include="RenderTargets.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -105,6 +108,9 @@
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTargets.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

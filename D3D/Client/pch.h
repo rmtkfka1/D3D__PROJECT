@@ -83,6 +83,8 @@ using Quaternion = DirectX::SimpleMath::Quaternion;
 
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 800 
+#define SWAP_CHAIN_FRAME_COUNT 2
+
 
 
 inline void ThrowIfFailed(HRESULT hr) {

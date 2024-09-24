@@ -22,7 +22,7 @@ void Game::Init(HWND hnwd)
 
 	shader->Init(L"..\\Resources\\Shader\\default.hlsl");
 
-	core->WaitSynce();
+	core->WaitSync();
 }
 
 void Game::Run()

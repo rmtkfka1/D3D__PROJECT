@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Core.h"
 #include "RootSignature.h"
+#include "RenderTargets.h"
 Core::Core()
 {
 }
@@ -26,7 +27,7 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 
 }
 
-void Core::WaitSynce()
+void Core::WaitSync()
 {
 	_fenceValue++;
 	_cmdQueue->Signal(_fence.Get(), _fenceValue);
@@ -48,24 +49,15 @@ void Core::RenderBegin()
 	if (FAILED(_cmdList->Reset(_cmdMemory.Get(), nullptr)))
 		__debugbreak();
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_uiRenderTargetIndex, m_rtvDescriptorSize);
-
-	_cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargets[m_uiRenderTargetIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
-
-	// Record commands.
-	const float BackColor[] = { 0.0f, 0.0f, 1.0f, 1.0f };
 	_cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
 
-	_cmdList->RSSetViewports(1, &m_Viewport);
-	_cmdList->RSSetScissorRects(1, &m_ScissorRect);
-	_cmdList->ClearRenderTargetView(rtvHandle, BackColor, 0, nullptr);
-	_cmdList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+	_renderTargets->RenderBegin();
 }
 
 void Core::RenderEnd()
 {
-	_cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_pRenderTargets[m_uiRenderTargetIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
-	_cmdList->Close();
+
+	_renderTargets->RenderEnd();
 
 	ID3D12CommandList* ppCommandLists[] = { _cmdList.Get()};
 	_cmdQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
@@ -76,19 +68,6 @@ void Core::RenderEnd()
 void Core::Present()
 {
 
-	// Back Buffer 화면을 Primary Buffer로 전송
-
-	//UINT m_SyncInterval = 1;	// VSync On
-	//UINT m_SyncInterval = 0;	// VSync Off
-
-	//UINT uiSyncInterval = m_SyncInterval;
-	//UINT uiPresentFlags = 0;
-
-	//if (!uiSyncInterval)
-	//{
-	//	uiPresentFlags = DXGI_PRESENT_ALLOW_TEARING;
-	//}
-
 	HRESULT hr = _swapChain->Present(1, 0);
 
 	if (DXGI_ERROR_DEVICE_REMOVED == hr)
@@ -97,59 +76,17 @@ void Core::Present()
 	}
 
 	// for next frame
-	m_uiRenderTargetIndex = _swapChain->GetCurrentBackBufferIndex();
+	_renderTargets->SetIndex(_swapChain->GetCurrentBackBufferIndex());
 
-	WaitSynce();
+	WaitSync();
 }
 
 void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 {
 
-	if (!(BackBufferWidth * BackBufferHeight))
-		return;
+	WaitSync();
 
-	if (m_dwWidth == BackBufferWidth && m_dwHeight == BackBufferHeight)
-		return;
-
-	WaitSynce();
-
-	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
-	{
-		m_pRenderTargets[n].Reset();
-	}
-
-	DXGI_SWAP_CHAIN_DESC1	desc;
-	HRESULT	hr = _swapChain->GetDesc1(&desc);
-
-	if (FAILED(hr))
-		__debugbreak();
-
-	if (FAILED(_swapChain->ResizeBuffers(SWAP_CHAIN_FRAME_COUNT, BackBufferWidth, BackBufferHeight, DXGI_FORMAT_R8G8B8A8_UNORM, m_dwSwapChainFlags)))
-	{
-		__debugbreak();
-	}
-
-	m_uiRenderTargetIndex = _swapChain->GetCurrentBackBufferIndex();
-
-	// Create frame resources.
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(_RTVHeap->GetCPUDescriptorHandleForHeapStart());
-
-	// Create a RTV for each frame.
-	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
-	{
-		_swapChain->GetBuffer(n, IID_PPV_ARGS(&m_pRenderTargets[n]));
-		_device->CreateRenderTargetView(m_pRenderTargets[n].Get(), nullptr, rtvHandle);
-		rtvHandle.Offset(1, m_rtvDescriptorSize);
-	}
-
-	m_dwWidth = BackBufferWidth;
-	m_dwHeight = BackBufferHeight;
-	m_Viewport.Width = (float)m_dwWidth;
-	m_Viewport.Height = (float)m_dwHeight;
-	m_ScissorRect.left = 0;
-	m_ScissorRect.top = 0;
-	m_ScissorRect.right = m_dwWidth;
-	m_ScissorRect.bottom = m_dwHeight;
+	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, m_dwSwapChainFlags);
 
 }
 
@@ -261,106 +198,40 @@ void Core::CreateSwapChain()
 	UINT	dwBackBufferWidth = rect.right - rect.left;
 	UINT	dwBackBufferHeight = rect.bottom - rect.top;
 
-	_swapChain.Reset();
 
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
+	swapChainDesc.Width = dwBackBufferWidth;
+	swapChainDesc.Height = dwBackBufferHeight;
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount = SWAP_CHAIN_FRAME_COUNT;
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.Scaling = DXGI_SCALING_NONE;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
+	swapChainDesc.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
+	m_dwSwapChainFlags = swapChainDesc.Flags;
 
-	////1번방식 
+	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsSwapChainDesc = {};
+	fsSwapChainDesc.Windowed = TRUE;
 
-	//DXGI_SWAP_CHAIN_DESC sd;
-	//sd.BufferDesc.Width = dwWndWidth; // 버퍼의 해상도 너비
-	//sd.BufferDesc.Height = dwWndHeight; // 버퍼의 해상도 높이
-	//sd.BufferDesc.RefreshRate.Numerator = 240; // 화면 갱신 비율
-	//sd.BufferDesc.RefreshRate.Denominator = 1; // 화면 갱신 비율
-	//sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 버퍼의 디스플레이 형식
-	//sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	//sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	//sd.SampleDesc.Count = 1; // 멀티 샘플링 OFF
-	//sd.SampleDesc.Quality = 0;
-	//sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 후면 버퍼에 렌더링할 것 
-	//sd.BufferCount = 2; // 전면+후면 버퍼
-	//sd.OutputWindow = _hwnd;
-	//sd.Windowed = true;
-	//sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 전면 후면 버퍼 교체 시 이전 프레임 정보 버림
-	//sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	//ComPtr<IDXGISwapChain> pSwapChain = nullptr;
-	//_factory->CreateSwapChain(_cmdQueue.Get(), &sd, &pSwapChain);
-
-	//pSwapChain->QueryInterface(IID_PPV_ARGS(&_swapChain));
-
-	//for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
-	//	_swapChain->GetBuffer(i, IID_PPV_ARGS(&m_pRenderTargets[i]));
-
-	//m_uiRenderTargetIndex = _swapChain->GetCurrentBackBufferIndex();
-
-	//2번방식
-
-	{
-		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.Width = dwBackBufferWidth;
-		swapChainDesc.Height = dwBackBufferHeight;
-		swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapChainDesc.BufferCount = SWAP_CHAIN_FRAME_COUNT;
-		swapChainDesc.SampleDesc.Count = 1;
-		swapChainDesc.SampleDesc.Quality = 0;
-		swapChainDesc.Scaling = DXGI_SCALING_NONE;
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-		swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
-		swapChainDesc.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
-		m_dwSwapChainFlags = swapChainDesc.Flags;
-
-		DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsSwapChainDesc = {};
-		fsSwapChainDesc.Windowed = TRUE;
-
-		IDXGISwapChain1* pSwapChain1 = nullptr;
-		if (FAILED(_factory->CreateSwapChainForHwnd(_cmdQueue.Get(), _hwnd, &swapChainDesc, &fsSwapChainDesc, nullptr, &pSwapChain1)))
-		{
-			__debugbreak();
-		}
-
-		pSwapChain1->QueryInterface(IID_PPV_ARGS(&_swapChain));
-		pSwapChain1->Release();
-		pSwapChain1 = nullptr;
-
-		m_uiRenderTargetIndex = _swapChain->GetCurrentBackBufferIndex();
-	}
-
-	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = SWAP_CHAIN_FRAME_COUNT;	// SwapChain Buffer 0	| SwapChain Buffer 1
-	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-
-	if (FAILED(_device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&_RTVHeap))))
+	IDXGISwapChain1* pSwapChain1 = nullptr;
+	if (FAILED(_factory->CreateSwapChainForHwnd(_cmdQueue.Get(), _hwnd, &swapChainDesc, &fsSwapChainDesc, nullptr, &pSwapChain1)))
 	{
 		__debugbreak();
 	}
 
-	m_rtvDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	pSwapChain1->QueryInterface(IID_PPV_ARGS(&_swapChain));
+	pSwapChain1->Release();
+	pSwapChain1 = nullptr;
 
-	m_Viewport.Width = (float)dwWndWidth;
-	m_Viewport.Height = (float)dwWndHeight;
-	m_Viewport.MinDepth = 0.0f;
-	m_Viewport.MaxDepth = 1.0f;
-
-	m_ScissorRect.left = 0;
-	m_ScissorRect.top = 0;
-	m_ScissorRect.right = dwWndWidth;
-	m_ScissorRect.bottom = dwWndHeight;
-
-	m_dwWidth = dwWndWidth;
-	m_dwHeight = dwWndHeight;
+	_renderTargets = make_shared<RenderTargets>();
+	_renderTargets->Init(dwWndWidth, dwWndHeight, _swapChain);
 
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(_RTVHeap->GetCPUDescriptorHandleForHeapStart());
 
-	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
-	{
-		_swapChain->GetBuffer(n, IID_PPV_ARGS(&m_pRenderTargets[n]));
-		_device->CreateRenderTargetView(m_pRenderTargets[n].Get(), nullptr, rtvHandle);
-		rtvHandle.Offset(1, m_rtvDescriptorSize);
-	}
-
-}
+};
 
 void Core::CreateFence()
 {

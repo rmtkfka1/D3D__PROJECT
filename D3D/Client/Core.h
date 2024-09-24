@@ -1,7 +1,7 @@
 #pragma once
-const UINT SWAP_CHAIN_FRAME_COUNT = 2;
 
 class RootSignature;
+class RenderTargets;
 
 class Core
 {
@@ -11,7 +11,7 @@ public:
 	~Core();
 
 	void Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV);
-	void WaitSynce();
+	void WaitSync();
 
 	void RenderBegin();
 	void RenderEnd();
@@ -49,22 +49,10 @@ private:
 
 private:
 	shared_ptr<RootSignature> _rootsignature;
-
+	shared_ptr<RenderTargets> _renderTargets;
 
 	ComPtr<IDXGISwapChain3> _swapChain = nullptr;
-	D3D12_VIEWPORT	m_Viewport = {};
-	D3D12_RECT		m_ScissorRect = {};
-	DWORD			m_dwWidth = 0;
-	DWORD			m_dwHeight = 0;
-
-	ComPtr<ID3D12Resource> m_pRenderTargets[SWAP_CHAIN_FRAME_COUNT] = {};
-	ComPtr<ID3D12DescriptorHeap> _RTVHeap = nullptr;
-	ComPtr<ID3D12DescriptorHeap> _DSVHeap = nullptr;
-	ComPtr<ID3D12DescriptorHeap> _SRVHeap = nullptr;
-
-	UINT	m_rtvDescriptorSize = 0;
-	UINT	m_uiRenderTargetIndex = 0;
-
+	
 	HANDLE	_fenceEvent = nullptr;
 	ComPtr<ID3D12Fence> _fence = nullptr;
 };
