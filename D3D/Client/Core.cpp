@@ -123,16 +123,18 @@ void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 {
 	ComPtr<ID3D12Debug> pDebugController = nullptr;
-	ComPtr<IDXGIAdapter1> pAdapter = nullptr;
-	DXGI_ADAPTER_DESC1 AdapterDesc = {};
+	ComPtr<IDXGIAdapter1> bestAdapter = nullptr;
+	DXGI_ADAPTER_DESC1 bestDesc;
+	ZeroMemory(&bestDesc, sizeof(bestDesc));
+	size_t bestMemory = 0; // VRAM 용량
 
 	DWORD dwCreateFlags = 0;
 	DWORD dwCreateFactoryFlags = 0;
 
 
+	// 디버그 레이어 활성화
 	if (EnableDebugLayer)
 	{
-
 		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&pDebugController))))
 		{
 			pDebugController->EnableDebugLayer();
@@ -152,47 +154,64 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 		}
 	}
 
-
+	// DXGI 팩토리 생성
 	CreateDXGIFactory2(dwCreateFactoryFlags, IID_PPV_ARGS(&_factory));
 
-	D3D_FEATURE_LEVEL	featureLevels[] =
+	// 지원되는 기능 레벨 설정
+	D3D_FEATURE_LEVEL featureLevels[] =
 	{
 		D3D_FEATURE_LEVEL_12_0,
 		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0
 	};
+	DWORD FeatureLevelNum = _countof(featureLevels);
 
-	DWORD	FeatureLevelNum = _countof(featureLevels);
-	
-
-	for (DWORD featerLevelIndex = 0; featerLevelIndex < FeatureLevelNum; featerLevelIndex++)
+	// 어댑터 열거
+	for (UINT adapterIndex = 0; ; ++adapterIndex)
 	{
-		UINT adapterIndex = 0;
+		ComPtr<IDXGIAdapter1> pAdapter;
+		HRESULT hr = _factory->EnumAdapters1(adapterIndex, &pAdapter);
 
-		while (DXGI_ERROR_NOT_FOUND != _factory->EnumAdapters1(adapterIndex, &pAdapter))
-		{
-			pAdapter->GetDesc1(&AdapterDesc);
-
-			if (SUCCEEDED(D3D12CreateDevice(pAdapter.Get(), featureLevels[featerLevelIndex], IID_PPV_ARGS(&_device))))
-			{
-				break;
-			}
-
-			adapterIndex++;
-		}
-
-		if (_device)
-		{
+		// 어댑터가 없으면 종료
+		if (hr == DXGI_ERROR_NOT_FOUND)
 			break;
+
+		DXGI_ADAPTER_DESC1 AdapterDesc;
+		pAdapter->GetDesc1(&AdapterDesc);
+
+		// VRAM을 메가바이트 단위로 변환
+		size_t memory = AdapterDesc.DedicatedVideoMemory / (1024 * 1024);
+	
+		// 가장 높은 VRAM을 가진 어댑터 선택
+		if (memory > bestMemory)
+		{
+			bestMemory = memory;
+			bestAdapter = pAdapter;
+			bestDesc = AdapterDesc;
 		}
 	}
 
-	_adapterDesc = AdapterDesc;
+	// 선택된 어댑터로 D3D12 장치 생성
+	for (DWORD featerLevelIndex = 0; featerLevelIndex < FeatureLevelNum; featerLevelIndex++)
+	{
+		if (bestAdapter)
+		{
+			HRESULT hr = D3D12CreateDevice(bestAdapter.Get(), featureLevels[featerLevelIndex], IID_PPV_ARGS(&_device));
 
+			if (SUCCEEDED(hr))
+			{
+				break;
+			}
+		}
+	}
+
+
+	// 디버그 레이어 정보 설정
 	if (pDebugController)
 	{
 		SetDebugLayerInfo(_device);
 	}
+
 
 }
 
@@ -213,7 +232,6 @@ void Core::CreateCmdQueue()
 		ThrowIfFailed(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _cmdMemory[i].Get(), nullptr, IID_PPV_ARGS(&_cmdList[i])));
 		ThrowIfFailed(_cmdList[i]->Close());
 	}
-
 
 
 	//FENCE GEN
