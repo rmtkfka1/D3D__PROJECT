@@ -164,6 +164,7 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0
 	};
+
 	DWORD FeatureLevelNum = _countof(featureLevels);
 
 	// 어댑터 열거
