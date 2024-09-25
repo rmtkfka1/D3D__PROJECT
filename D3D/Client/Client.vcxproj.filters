@@ -67,6 +67,9 @@
     <ClInclude Include="RenderTargets.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="D3D12ResourceManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -110,6 +113,9 @@
       <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="RenderTargets.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D12ResourceManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>

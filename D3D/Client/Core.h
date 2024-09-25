@@ -2,7 +2,7 @@
 
 class RootSignature;
 class RenderTargets;
-
+class D3D12ResourceManager;
 class Core
 {
 
@@ -23,10 +23,14 @@ public:
 
 
 	ComPtr<ID3D12Device5> GetDevice() { return _device; }
+
 	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst(uint32 index) { return _cmdList[index]; }
 	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst() { return _cmdList[_currentContextIndex]; }
+
+
 	shared_ptr<RootSignature> GetRootSignature() { return _rootsignature; }
 	shared_ptr<RenderTargets> GetRenderTarget() { return _renderTargets; }
+	shared_ptr<D3D12ResourceManager> GetResourceManager() { return _resourceManager; }
 
 	uint32 GetCurrentFrameIndex() { return _currentContextIndex; }
 
@@ -57,10 +61,10 @@ private:
 	UINT	_swapChainFlags = 0;
 	uint32  _currentContextIndex = 0;
 
-
 private:
 	shared_ptr<RootSignature> _rootsignature;
 	shared_ptr<RenderTargets> _renderTargets;
+	shared_ptr<D3D12ResourceManager> _resourceManager;
 
 	ComPtr<IDXGISwapChain3> _swapChain = nullptr;
 	

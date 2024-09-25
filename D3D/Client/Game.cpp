@@ -12,13 +12,20 @@ void Game::Init(HWND hnwd)
 	core->Init(hnwd, true, true);
 
 	vector<Vertex> vec(3);
-	vec[0].pos = vec3(0.f, 0.5f, 0.5f);
+	vec[0].pos = vec3(0.f, 0.5f, 0.5f); //À­²À
 	vec[0].color = vec4(1.f, 0.f, 0.f, 1.f);
-	vec[1].pos = vec3(0.5f, -0.5f, 0.5f);
+	vec[1].pos = vec3(0.5f, -0.5f, 0.5f); //¿À¸¥ÂÊ²À
 	vec[1].color = vec4(0.f, 1.0f, 0.f, 1.f);
-	vec[2].pos = vec3(-0.5f, -0.5f, 0.5f);
+	vec[2].pos = vec3(-0.5f, -0.5f, 0.5f); //¿Þ²À
 	vec[2].color = vec4(0.f, 0.f, 1.f, 1.f);
-	mesh->Init(vec);
+
+	vector<uint32> index(3);
+
+	index[0] = 0;
+	index[1] = 1;
+	index[2] = 2;
+
+	mesh->Init(vec, index);
 
 	shader->Init(L"..\\Resources\\Shader\\default.hlsl");
 

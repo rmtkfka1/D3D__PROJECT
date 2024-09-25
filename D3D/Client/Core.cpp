@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "RootSignature.h"
 #include "RenderTargets.h"
+#include "D3D12ResourceManager.h"
 Core::Core()
 {
 }
@@ -25,6 +26,8 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 	CreateFence();
 	CreateRootSignature();
 
+	_resourceManager = make_shared<D3D12ResourceManager>();
+	_resourceManager->Init();
 }
 
 void Core::Fence()
@@ -34,6 +37,7 @@ void Core::Fence()
 	_lastFenceValue[_currentContextIndex] = _fenceValue;
 
 }
+
 
 void Core::WaitForFenceValue(uint64 ExpectedFenceValue)
 {
@@ -200,7 +204,6 @@ void Core::CreateCmdQueue()
 	desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	desc.NodeMask = 0;
 
-
 	ThrowIfFailed(_device->CreateCommandQueue(&desc, IID_PPV_ARGS(&_cmdQueue)));
 
 
@@ -211,9 +214,14 @@ void Core::CreateCmdQueue()
 		ThrowIfFailed(_cmdList[i]->Close());
 	}
 
+
+
+	//FENCE GEN
 	ThrowIfFailed(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_fence)));
 	_fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
+
+	
 }
 
 void Core::CreateSwapChain()
