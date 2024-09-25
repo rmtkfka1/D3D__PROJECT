@@ -2,18 +2,16 @@
 #include "Mesh.h"
 #include "Core.h"
 #include "RootSignature.h"
+#include "RenderTargets.h"
 void Mesh::Init(vector<Vertex>& vec)
 {
 	_vertexCount = static_cast<uint32>(vec.size());
 	uint32 bufferSize = _vertexCount * sizeof(Vertex);
 
-	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
-
 	core->GetDevice()->CreateCommittedResource(
-		&heapProperty,
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
-		&desc,
+		&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&_vertexBuffer));
@@ -35,8 +33,9 @@ void Mesh::Init(vector<Vertex>& vec)
 
 void Mesh::Render()
 {
+	ComPtr<ID3D12GraphicsCommandList> cmdlist = core->GetCmdLIst();
 
-	core->GetCmdLIst()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	core->GetCmdLIst()->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
-	core->GetCmdLIst()->DrawInstanced(_vertexCount, 1, 0, 0);
+	cmdlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
+	cmdlist->DrawInstanced(_vertexCount, 1, 0, 0);
 }

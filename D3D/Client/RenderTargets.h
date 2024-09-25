@@ -8,20 +8,19 @@ public:
 
 public:
 	void Init(DWORD WndWidth, DWORD WndHeight , ComPtr<IDXGISwapChain3> swapchain);
-	void Resize(DWORD BackBufferWidth, DWORD BackBufferHeight, ComPtr<IDXGISwapChain3> swapchain, UINT	m_dwSwapChainFlags);
+	void Resize(DWORD BackBufferWidth, DWORD BackBufferHeight, ComPtr<IDXGISwapChain3> swapchain, UINT	_swapChainFlags);
 
-	ComPtr<ID3D12Resource>* GetResource() { return _RenderTargets; }
-	
 	void RenderBegin();
 	void RenderEnd();
+
 	void SetIndex(UINT index) { _RenderTargetIndex = index; }
+	uint32 GetIndex() { return _RenderTargetIndex; }
 private:
 
 	ComPtr<ID3D12Resource> _RenderTargets[SWAP_CHAIN_FRAME_COUNT] = {};
 	ComPtr<ID3D12DescriptorHeap> _RTVHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> _DSVHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> _SRVHeap = nullptr;
-
 
 
 	D3D12_VIEWPORT	_viewport = {};

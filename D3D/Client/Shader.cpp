@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Core.h"
 #include "RootSignature.h"
+#include "RenderTargets.h"
 
 void Shader::Init(const wstring& path)
 {
@@ -32,7 +33,12 @@ void Shader::Init(const wstring& path)
 
 void Shader::Update()
 {
-	core->GetCmdLIst()->SetPipelineState(_pipelineState.Get());
+
+	auto index = core->GetCurrentFrameIndex();
+	ComPtr< ID3D12GraphicsCommandList> cmdlist = core->GetCmdLIst();
+	cmdlist->SetPipelineState(_pipelineState.Get());
+
+
 }
 
 void Shader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)

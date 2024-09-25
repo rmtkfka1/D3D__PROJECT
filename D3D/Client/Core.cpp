@@ -27,14 +27,34 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 
 }
 
-void Core::WaitSync()
+void Core::Fence()
 {
 	_fenceValue++;
 	_cmdQueue->Signal(_fence.Get(), _fenceValue);
+	_lastFenceValue[_currentContextIndex] = _fenceValue;
 
-	if (_fence->GetCompletedValue() < _fenceValue)
+}
+
+void Core::WaitForFenceValue(uint64 ExpectedFenceValue)
+{
+
+	if (_fence->GetCompletedValue() < ExpectedFenceValue)
 	{
-		_fence->SetEventOnCompletion(_fenceValue, _fenceEvent);
+		_fence->SetEventOnCompletion(ExpectedFenceValue, _fenceEvent);
+
+		::WaitForSingleObject(_fenceEvent, INFINITE);
+	}
+
+}
+
+void Core::WaitForFenceValue()
+{
+
+	uint64 ExpectedFenceValue = _lastFenceValue[_currentContextIndex];
+
+	if (_fence->GetCompletedValue() < ExpectedFenceValue)
+	{
+		_fence->SetEventOnCompletion(ExpectedFenceValue, _fenceEvent);
 
 		::WaitForSingleObject(_fenceEvent, INFINITE);
 	}
@@ -43,13 +63,15 @@ void Core::WaitSync()
 
 void Core::RenderBegin()
 {
-	if (FAILED(_cmdMemory->Reset()))
-		__debugbreak();
+\
+	ComPtr<ID3D12CommandAllocator> cmdMemory = _cmdMemory[_currentContextIndex];
+	ComPtr<ID3D12GraphicsCommandList> cmdList = _cmdList[_currentContextIndex];
 
-	if (FAILED(_cmdList->Reset(_cmdMemory.Get(), nullptr)))
-		__debugbreak();
+	ThrowIfFailed(cmdMemory->Reset());
+	ThrowIfFailed(cmdList->Reset(_cmdMemory->Get(), nullptr));
+	
 
-	_cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
+	cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
 
 	_renderTargets->RenderBegin();
 }
@@ -59,7 +81,7 @@ void Core::RenderEnd()
 
 	_renderTargets->RenderEnd();
 
-	ID3D12CommandList* ppCommandLists[] = { _cmdList.Get()};
+	ID3D12CommandList* ppCommandLists[] = { _cmdList[_currentContextIndex].Get()};
 	_cmdQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 	Present();
@@ -67,26 +89,29 @@ void Core::RenderEnd()
 
 void Core::Present()
 {
+	Fence();
 
-	HRESULT hr = _swapChain->Present(1, 0);
+	ThrowIfFailed(_swapChain->Present(1, 0));
 
-	if (DXGI_ERROR_DEVICE_REMOVED == hr)
-	{
-		__debugbreak();
-	}
-
-	// for next frame
 	_renderTargets->SetIndex(_swapChain->GetCurrentBackBufferIndex());
 
-	WaitSync();
+	uint32 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
+	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
+
+	_currentContextIndex = nextContextIndex;
+
 }
 
 void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 {
+	Fence();
 
-	WaitSync();
+	for (DWORD i = 0; i < MAX_FRAME_COUNT; i++)
+	{
+		WaitForFenceValue(_lastFenceValue[i]);
+	}
 
-	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, m_dwSwapChainFlags);
+	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
 
 }
 
@@ -100,10 +125,10 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 	DWORD dwCreateFlags = 0;
 	DWORD dwCreateFactoryFlags = 0;
 
-	// if use debug Layer...
+
 	if (EnableDebugLayer)
 	{
-		// Enable the D3D12 debug layer.
+
 		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&pDebugController))))
 		{
 			pDebugController->EnableDebugLayer();
@@ -175,12 +200,16 @@ void Core::CreateCmdQueue()
 	desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	desc.NodeMask = 0;
 
+
 	ThrowIfFailed(_device->CreateCommandQueue(&desc, IID_PPV_ARGS(&_cmdQueue)));
-	ThrowIfFailed(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_cmdMemory)));
-	ThrowIfFailed(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _cmdMemory.Get(), nullptr, IID_PPV_ARGS(&_cmdList)));
 
 
-	_cmdList->Close();
+	for (int32 i = 0; i < MAX_FRAME_COUNT; i++)
+	{
+		ThrowIfFailed(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_cmdMemory[i])));
+		ThrowIfFailed(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _cmdMemory[i].Get(), nullptr, IID_PPV_ARGS(&_cmdList[i])));
+		ThrowIfFailed(_cmdList[i]->Close());
+	}
 
 	ThrowIfFailed(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_fence)));
 	_fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
@@ -211,7 +240,7 @@ void Core::CreateSwapChain()
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_IGNORE;
 	swapChainDesc.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
-	m_dwSwapChainFlags = swapChainDesc.Flags;
+	_swapChainFlags = swapChainDesc.Flags;
 
 	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsSwapChainDesc = {};
 	fsSwapChainDesc.Windowed = TRUE;
@@ -240,7 +269,6 @@ void Core::CreateFence()
 		__debugbreak();
 	}
 
-	_fenceValue = 0;
 	_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 }
 

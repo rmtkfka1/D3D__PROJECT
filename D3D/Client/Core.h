@@ -11,7 +11,9 @@ public:
 	~Core();
 
 	void Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV);
-	void WaitSync();
+	void Fence();
+	void WaitForFenceValue(uint64 ExpectedFenceValue);
+	void WaitForFenceValue();
 
 	void RenderBegin();
 	void RenderEnd();
@@ -21,8 +23,13 @@ public:
 
 
 	ComPtr<ID3D12Device5> GetDevice() { return _device; }
-	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst() { return _cmdList; }
+	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst(uint32 index) { return _cmdList[index]; }
+	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst() { return _cmdList[_currentContextIndex]; }
 	shared_ptr<RootSignature> GetRootSignature() { return _rootsignature; }
+	shared_ptr<RenderTargets> GetRenderTarget() { return _renderTargets; }
+
+	uint32 GetCurrentFrameIndex() { return _currentContextIndex; }
+
 private:
 
 	void CreateDevice(bool EnableDebugLayer, bool EnableGBV);
@@ -37,15 +44,19 @@ private:
 	HWND	_hwnd = nullptr;
 
 	ComPtr<ID3D12Device5> _device = nullptr;
-	ComPtr<IDXGIFactory4> _factory;
+	ComPtr<IDXGIFactory4> _factory =nullptr;
 	ComPtr<ID3D12CommandQueue> _cmdQueue = nullptr;
-	ComPtr<ID3D12CommandAllocator> _cmdMemory = nullptr;
-	ComPtr<ID3D12GraphicsCommandList> _cmdList = nullptr;
-	UINT64	_fenceValue = 0;
+
+	ComPtr<ID3D12CommandAllocator> _cmdMemory[MAX_FRAME_COUNT] = {};
+	ComPtr<ID3D12GraphicsCommandList> _cmdList[MAX_FRAME_COUNT] = {};
+	uint64  _lastFenceValue[MAX_FRAME_COUNT] = { 0 };
+	uint64	_fenceValue = 0;
 
 	D3D_FEATURE_LEVEL	_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
 	DXGI_ADAPTER_DESC1	_adapterDesc = {};
-	UINT	m_dwSwapChainFlags = 0;
+	UINT	_swapChainFlags = 0;
+	uint32  _currentContextIndex = 0;
+
 
 private:
 	shared_ptr<RootSignature> _rootsignature;
