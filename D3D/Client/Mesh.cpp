@@ -21,10 +21,10 @@ void Mesh::Render()
 
 void Mesh::CreateVertexBuffer(vector<Vertex>& vec)
 {
-	shared_ptr<D3D12ResourceManager> _resourceManager = core->GetResourceManager();
-	ComPtr<ID3D12GraphicsCommandList> cmdList = _resourceManager->GetCmdList();
-	ComPtr<ID3D12CommandQueue> cmdQueue = _resourceManager->GetCmdQueue();
-	ComPtr<ID3D12CommandAllocator> cmdMemory = _resourceManager->GetCmdMemory();
+	shared_ptr<D3D12ResourceManager>& _resourceManager = core->GetResourceManager();
+	ComPtr<ID3D12GraphicsCommandList>& cmdList = _resourceManager->GetCmdList();
+	ComPtr<ID3D12CommandQueue>& cmdQueue = _resourceManager->GetCmdQueue();
+	ComPtr<ID3D12CommandAllocator>& cmdMemory = _resourceManager->GetCmdMemory();
 
 	_vertexCount = static_cast<uint32>(vec.size());
 	uint32 bufferSize = _vertexCount * sizeof(Vertex);
@@ -88,10 +88,10 @@ void Mesh::CreateVertexBuffer(vector<Vertex>& vec)
 
 void Mesh::CreateIndexBuffer(vector<uint32>& vec)
 {
-	shared_ptr<D3D12ResourceManager> _resourceManager = core->GetResourceManager();
-	ComPtr<ID3D12GraphicsCommandList> cmdList = _resourceManager->GetCmdList();
-	ComPtr<ID3D12CommandQueue> cmdQueue = _resourceManager->GetCmdQueue();
-	ComPtr<ID3D12CommandAllocator> cmdMemory = _resourceManager->GetCmdMemory();
+	shared_ptr<D3D12ResourceManager>& _resourceManager = core->GetResourceManager();
+	ComPtr<ID3D12GraphicsCommandList>& cmdList = _resourceManager->GetCmdList();
+	ComPtr<ID3D12CommandQueue>& cmdQueue = _resourceManager->GetCmdQueue();
+	ComPtr<ID3D12CommandAllocator>& cmdMemory = _resourceManager->GetCmdMemory();
 
 	_indexCount = static_cast<uint32>(vec.size());
 	uint32 bufferSize = _indexCount * sizeof(uint32);

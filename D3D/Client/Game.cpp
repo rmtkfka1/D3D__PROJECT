@@ -9,6 +9,7 @@ shared_ptr<Shader> shader = make_shared<Shader>();
 
 void Game::Init(HWND hnwd)
 {
+	//다이렉트 코어 초기화
 	core->Init(hnwd, true, true);
 
 	vector<Vertex> vec(3);

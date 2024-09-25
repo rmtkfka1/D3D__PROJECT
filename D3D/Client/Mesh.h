@@ -8,6 +8,9 @@ public:
 	void CreateVertexBuffer(vector<Vertex>& vec);
 	void CreateIndexBuffer(vector<uint32>& vec);
 
+
+
+
 private:
 	ComPtr<ID3D12Resource>		_vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW	_vertexBufferView = {};
