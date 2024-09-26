@@ -51,30 +51,17 @@ void Core::WaitForFenceValue(uint64 ExpectedFenceValue)
 
 }
 
-void Core::WaitForFenceValue()
-{
 
-	uint64 ExpectedFenceValue = _lastFenceValue[_currentContextIndex];
-
-	if (_fence->GetCompletedValue() < ExpectedFenceValue)
-	{
-		_fence->SetEventOnCompletion(ExpectedFenceValue, _fenceEvent);
-
-		::WaitForSingleObject(_fenceEvent, INFINITE);
-	}
-
-}
 
 void Core::RenderBegin()
 {
-\
-	ComPtr<ID3D12CommandAllocator> cmdMemory = _cmdMemory[_currentContextIndex];
-	ComPtr<ID3D12GraphicsCommandList> cmdList = _cmdList[_currentContextIndex];
+
+	ID3D12CommandAllocator* cmdMemory = _cmdMemory[_currentContextIndex].Get();
+	ID3D12GraphicsCommandList* cmdList = _cmdList[_currentContextIndex].Get();
 
 	ThrowIfFailed(cmdMemory->Reset());
-	ThrowIfFailed(cmdList->Reset(_cmdMemory->Get(), nullptr));
+	ThrowIfFailed(cmdList->Reset(cmdMemory, nullptr));
 	
-
 	cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
 
 	_renderTargets->RenderBegin();
@@ -98,9 +85,9 @@ void Core::Present()
 	ThrowIfFailed(_swapChain->Present(1, 0));
 
 	_renderTargets->SetIndex(_swapChain->GetCurrentBackBufferIndex());
-
-	uint32 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
+	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
 	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
+
 
 	_currentContextIndex = nextContextIndex;
 

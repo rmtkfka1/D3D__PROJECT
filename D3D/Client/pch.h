@@ -3,7 +3,6 @@
 #define WIN32_LEAN_AND_MEAN             // 거의 사용되지 않는 내용을 Windows 헤더에서 제외합니다.
 #define _HAS_STD_BYTE 0
 
-
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
@@ -84,8 +83,9 @@ using Quaternion = DirectX::SimpleMath::Quaternion;
 
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 800 
-const int32 SWAP_CHAIN_FRAME_COUNT = 2;
-const int32 MAX_FRAME_COUNT = SWAP_CHAIN_FRAME_COUNT - 1;
+
+const uint64 SWAP_CHAIN_FRAME_COUNT = 5;
+const uint64 MAX_FRAME_COUNT = SWAP_CHAIN_FRAME_COUNT - 1;
 
 
 inline void ThrowIfFailed(HRESULT hr) {

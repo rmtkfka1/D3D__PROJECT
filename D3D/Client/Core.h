@@ -13,7 +13,7 @@ public:
 	void Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV);
 	void Fence();
 	void WaitForFenceValue(uint64 ExpectedFenceValue);
-	void WaitForFenceValue();
+
 
 	void RenderBegin();
 	void RenderEnd();
@@ -24,7 +24,6 @@ public:
 
 	ComPtr<ID3D12Device5> GetDevice() { return _device; }
 
-	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst(uint32 index) { return _cmdList[index]; }
 	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst() { return _cmdList[_currentContextIndex]; }
 
 
@@ -32,7 +31,7 @@ public:
 	shared_ptr<RenderTargets> GetRenderTarget() { return _renderTargets; }
 	shared_ptr<D3D12ResourceManager> GetResourceManager() { return _resourceManager; }
 
-	uint32 GetCurrentFrameIndex() { return _currentContextIndex; }
+	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
 
 private:
 
@@ -59,7 +58,7 @@ private:
 	D3D_FEATURE_LEVEL	_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
 	DXGI_ADAPTER_DESC1	_adapterDesc = {};
 	UINT	_swapChainFlags = 0;
-	uint32  _currentContextIndex = 0;
+	uint64  _currentContextIndex = 0;
 
 private:
 	shared_ptr<RootSignature> _rootsignature;

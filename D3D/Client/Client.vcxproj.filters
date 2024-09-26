@@ -5,31 +5,31 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Main">
-      <UniqueIdentifier>{df633236-188b-4b79-8f65-e1f48f44ef83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{e3a98475-926a-4072-bea3-78fa77d56b5c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{df27f001-bb9d-491c-a9a8-ccd65aeb2505}</UniqueIdentifier>
     </Filter>
     <Filter Include="pch">
       <UniqueIdentifier>{38ac07c1-5ae7-4950-80a8-da6326311c4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game">
+    <Filter Include="01.Game">
       <UniqueIdentifier>{e1e0594d-a142-49a9-8696-1611f4684233}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource">
+    <Filter Include="02.Core">
+      <UniqueIdentifier>{e3a98475-926a-4072-bea3-78fa77d56b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Main">
+      <UniqueIdentifier>{df633236-188b-4b79-8f65-e1f48f44ef83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Resource">
       <UniqueIdentifier>{45379a1b-3145-40c4-8474-364182488065}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HLSL">
+    <Filter Include="04.HLSL">
       <UniqueIdentifier>{a530b9b4-8abc-4d4d-9b0c-6706f135c987}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
-      <Filter>Main</Filter>
+      <Filter>00.Main</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Utils</Filter>
@@ -50,25 +50,25 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClInclude>
     <ClInclude Include="RootSignature.h">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Game</Filter>
+      <Filter>01.Game</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Resource</Filter>
+      <Filter>03.Resource</Filter>
     </ClInclude>
     <ClInclude Include="RenderTargets.h">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClInclude>
     <ClInclude Include="D3D12ResourceManager.h">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -86,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
-      <Filter>Main</Filter>
+      <Filter>00.Main</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>pch</Filter>
@@ -98,25 +98,25 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="RootSignature.cpp">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Game</Filter>
+      <Filter>01.Game</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Resource</Filter>
+      <Filter>03.Resource</Filter>
     </ClCompile>
     <ClCompile Include="RenderTargets.cpp">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="D3D12ResourceManager.cpp">
-      <Filter>Core</Filter>
+      <Filter>02.Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Resources\Shader\default.hlsl">
-      <Filter>HLSL</Filter>
+      <Filter>04.HLSL</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
