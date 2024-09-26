@@ -1,4 +1,7 @@
-
+cbuffer TEST_B0 : register(b0)
+{
+    float4 offset0;
+};
 
 struct VS_IN
 {
@@ -16,8 +19,8 @@ VS_OUT VS_Main(VS_IN input)
 {
     VS_OUT output = (VS_OUT) 0;
 
-    output.pos = float4(input.pos, 1.f);
-    output.color = input.color;
+    output.pos = float4(input.pos, 1.f) + offset0;
+    output.color = input.color ;
 
     return output;
 }

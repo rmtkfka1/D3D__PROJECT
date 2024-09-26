@@ -3,6 +3,7 @@
 #include "RootSignature.h"
 #include "RenderTargets.h"
 #include "D3D12ResourceManager.h"
+#include "BufferPool.h"
 Core::Core()
 {
 }
@@ -25,10 +26,12 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 	CreateCmdQueue();
 	CreateSwapChain();
 	CreateFence();
+	CreateBufferPool();
 	CreateRootSignature();
 
 	_resourceManager = make_shared<D3D12ResourceManager>();
 	_resourceManager->Init();
+
 }
 
 void Core::Fence()
@@ -64,7 +67,7 @@ void Core::RenderBegin()
 	ThrowIfFailed(cmdList->Reset(cmdMemory, nullptr));
 	
 	cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
-
+	cmdList->SetDescriptorHeaps(1, _table[_currentContextIndex]->GetDescriptorHeap().GetAddressOf());
 	_renderTargets->RenderBegin();
 }
 
@@ -89,6 +92,9 @@ void Core::Present()
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
 	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
 
+
+	_constantBufferPool[nextContextIndex]->Clear();
+	_table[nextContextIndex]->Clear();
 	_currentContextIndex = nextContextIndex;
 
 }
@@ -291,6 +297,26 @@ void Core::CreateRootSignature()
 {
 	_rootsignature = make_shared<RootSignature>();
 	_rootsignature->Init();
+
+}
+
+void Core::CreateBufferPool()
+{
+
+	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
+	{
+		_table[i] = make_shared<DescriptorTable>();
+		_table[i]->Init(255);
+	}
+
+	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
+	{
+		_constantBufferPool[i] = make_shared<ConstantBufferPool>();
+		_constantBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(Temp),255);
+	}
+
+	_textureBufferPool = make_shared<TextureBufferPool>();
+	_textureBufferPool->Init(255);
 
 }
 

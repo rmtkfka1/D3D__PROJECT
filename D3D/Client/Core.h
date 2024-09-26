@@ -3,6 +3,11 @@
 class RootSignature;
 class RenderTargets;
 class D3D12ResourceManager;
+
+class DescriptorTable;
+class TextureBufferPool;
+class ConstantBufferPool;
+
 class Core
 {
 
@@ -27,6 +32,8 @@ public:
 	shared_ptr<RootSignature> GetRootSignature() { return _rootsignature; }
 	shared_ptr<RenderTargets> GetRenderTarget() { return _renderTargets; }
 	shared_ptr<D3D12ResourceManager> GetResourceManager() { return _resourceManager; }
+	shared_ptr<DescriptorTable> GetTableHeap() { return _table[_currentContextIndex]; }
+	shared_ptr<ConstantBufferPool> GetConstantBufferPool() { return _constantBufferPool[_currentContextIndex]; }
 	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
 
 private:
@@ -36,6 +43,7 @@ private:
 	void CreateSwapChain();
 	void CreateFence();
 	void CreateRootSignature();
+	void CreateBufferPool();
 	void SetDebugLayerInfo(ComPtr<ID3D12Device> pD3DDevice);
 
 private:
@@ -65,5 +73,11 @@ private:
 	
 	HANDLE	_fenceEvent = nullptr;
 	ComPtr<ID3D12Fence> _fence = nullptr;
+
+private:
+	//Buffer pool
+	array<shared_ptr<DescriptorTable>,MAX_FRAME_COUNT>  _table;
+	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _constantBufferPool;
+	shared_ptr<TextureBufferPool>  _textureBufferPool;
 };
 

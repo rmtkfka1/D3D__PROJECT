@@ -70,6 +70,9 @@
     <ClInclude Include="D3D12ResourceManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
+    <ClInclude Include="BufferPool.h">
+      <Filter>02.Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -116,6 +119,9 @@
       <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="D3D12ResourceManager.cpp">
+      <Filter>02.Core</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferPool.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
   </ItemGroup>

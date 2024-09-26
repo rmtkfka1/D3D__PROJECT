@@ -100,5 +100,9 @@ struct Vertex
     vec4 color;
 };
 
+struct Temp
+{
+    vec4 offset;
+};
 
 extern unique_ptr<class Core> core;

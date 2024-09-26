@@ -3,9 +3,10 @@
 #include "Core.h"
 #include "Mesh.h"
 #include "Shader.h"
-
+#include "BufferPool.h"
 shared_ptr<Mesh> mesh = make_shared<Mesh>();
 shared_ptr<Shader> shader = make_shared<Shader>();
+Temp t;
 
 void Game::Init(HWND hnwd)
 {
@@ -29,6 +30,9 @@ void Game::Init(HWND hnwd)
 	mesh->Init(vec, index);
 
 	shader->Init(L"..\\Resources\\Shader\\default.hlsl");
+	t.offset = vec4(0.3f, 0, 0,0);
+
+
 
 
 
@@ -39,6 +43,10 @@ void Game::Run()
 	core->RenderBegin();
 
 	shader->Update();
+
+	core->GetConstantBufferPool()->PushData(&t, sizeof(t));
+	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
+
 	mesh->Render();
 
 	core->RenderEnd();
