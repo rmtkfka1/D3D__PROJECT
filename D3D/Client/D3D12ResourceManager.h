@@ -8,7 +8,6 @@ public:
 	ComPtr<ID3D12CommandAllocator> GetCmdMemory() { return _cmdMemory; }
 public:
 
-
 	void Fence();
 	void WaitForFenceValue();
 	void ResourceSet();

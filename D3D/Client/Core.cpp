@@ -17,8 +17,9 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 	_hwnd = hwnd;
 
 	RECT rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
-	::SetWindowPos(hwnd, 0, 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+	::SetWindowPos(hwnd, 0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
 	CreateDevice(EnableDebugLayer, EnableGBV);
 	CreateCmdQueue();
@@ -87,7 +88,6 @@ void Core::Present()
 	_renderTargets->SetIndex(_swapChain->GetCurrentBackBufferIndex());
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
 	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
-
 
 	_currentContextIndex = nextContextIndex;
 
@@ -234,17 +234,14 @@ void Core::CreateSwapChain()
 {
 
 
-	RECT	rect;
-	::GetClientRect(_hwnd, &rect);
-	DWORD	dwWndWidth = rect.right - rect.left;
-	DWORD	dwWndHeight = rect.bottom - rect.top;
-	UINT	dwBackBufferWidth = rect.right - rect.left;
-	UINT	dwBackBufferHeight = rect.bottom - rect.top;
+
+
+
 
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.Width = dwBackBufferWidth;
-	swapChainDesc.Height = dwBackBufferHeight;
+	swapChainDesc.Width = WINDOW_WIDTH;
+	swapChainDesc.Height = WINDOW_HEIGHT;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = SWAP_CHAIN_FRAME_COUNT;
@@ -270,7 +267,7 @@ void Core::CreateSwapChain()
 	pSwapChain1 = nullptr;
 
 	_renderTargets = make_shared<RenderTargets>();
-	_renderTargets->Init(dwWndWidth, dwWndHeight, _swapChain);
+	_renderTargets->Init(WINDOW_WIDTH, WINDOW_HEIGHT, _swapChain);
 
 
 
