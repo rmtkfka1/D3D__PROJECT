@@ -81,8 +81,8 @@ using Ray = DirectX::SimpleMath::Ray;
 using Quaternion = DirectX::SimpleMath::Quaternion;
 
 
-const int32 WINDOW_WIDTH = 1200;
-const int32 WINDOW_HEIGHT = 800;
+extern int32 WINDOW_WIDTH;
+extern int32 WINDOW_HEIGHT;
 
 const uint64 SWAP_CHAIN_FRAME_COUNT = 5;
 const uint64 MAX_FRAME_COUNT = SWAP_CHAIN_FRAME_COUNT - 1;

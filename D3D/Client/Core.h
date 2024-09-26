@@ -22,15 +22,11 @@ public:
 	void UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight);
 
 
-	ComPtr<ID3D12Device5> GetDevice() { return _device; }
-
+	ComPtr<ID3D12Device5> GetDevice() { return _device; } 
 	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst() { return _cmdList[_currentContextIndex]; }
-
-
 	shared_ptr<RootSignature> GetRootSignature() { return _rootsignature; }
 	shared_ptr<RenderTargets> GetRenderTarget() { return _renderTargets; }
 	shared_ptr<D3D12ResourceManager> GetResourceManager() { return _resourceManager; }
-
 	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
 
 private:

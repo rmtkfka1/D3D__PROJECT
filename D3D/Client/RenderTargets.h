@@ -20,8 +20,6 @@ private:
 	ComPtr<ID3D12Resource> _RenderTargets[SWAP_CHAIN_FRAME_COUNT] = {};
 	ComPtr<ID3D12DescriptorHeap> _RTVHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> _DSVHeap = nullptr;
-	ComPtr<ID3D12DescriptorHeap> _SRVHeap = nullptr;
-
 
 	D3D12_VIEWPORT	_viewport = {};
 	D3D12_RECT		_scissorRect = {};

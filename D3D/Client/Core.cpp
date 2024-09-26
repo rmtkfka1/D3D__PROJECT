@@ -102,6 +102,10 @@ void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 		WaitForFenceValue(_lastFenceValue[i]);
 	}
 
+	
+	WINDOW_WIDTH = BackBufferWidth;
+	WINDOW_HEIGHT = BackBufferHeight;
+
 	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
 
 }
