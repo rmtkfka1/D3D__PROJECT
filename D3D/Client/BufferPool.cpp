@@ -147,7 +147,7 @@ void DescriptorTable::Init(uint32 count)
 	core->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&_descHeap));
 
 	_handleSize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	_groupSize = _handleSize * (RegisterCount - 1);
+	_groupSize = _handleSize * (RegisterCount);
 
 }
 

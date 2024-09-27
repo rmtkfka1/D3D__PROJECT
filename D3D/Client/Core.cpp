@@ -32,6 +32,7 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 	_resourceManager = make_shared<D3D12ResourceManager>();
 	_resourceManager->Init();
 
+	
 }
 
 void Core::Fence()
@@ -91,7 +92,6 @@ void Core::Present()
 	_renderTargets->SetIndex(_swapChain->GetCurrentBackBufferIndex());
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
 	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
-
 
 	_constantBufferPool[nextContextIndex]->Clear();
 	_table[nextContextIndex]->Clear();

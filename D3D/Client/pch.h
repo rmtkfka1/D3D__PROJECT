@@ -3,6 +3,12 @@
 #define WIN32_LEAN_AND_MEAN             // 거의 사용되지 않는 내용을 Windows 헤더에서 제외합니다.
 #define _HAS_STD_BYTE 0
 
+#ifdef _DEBUG
+#pragma comment(lib, "DirectXTex\\DirectXTex_debug.lib")
+#else
+#pragma comment(lib, "DirectXTex\\DirectXTex.lib")
+#endif
+
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
@@ -48,11 +54,7 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
 
-#ifdef _DEBUG
-#pragma comment(lib, "DirectXTex\\DirectXTex_debug.lib")
-#else
-#pragma comment(lib, "DirectXTex\\DirectXTex.lib")
-#endif
+
 
 #include <Assimp/Importer.hpp>
 #include <Assimp/scene.h>
@@ -84,7 +86,7 @@ using Quaternion = DirectX::SimpleMath::Quaternion;
 extern int32 WINDOW_WIDTH;
 extern int32 WINDOW_HEIGHT;
 
-const uint64 SWAP_CHAIN_FRAME_COUNT = 5;
+const uint64 SWAP_CHAIN_FRAME_COUNT = 4;
 const uint64 MAX_FRAME_COUNT = SWAP_CHAIN_FRAME_COUNT - 1;
 
 
@@ -98,6 +100,7 @@ struct Vertex
 {
     vec3 pos;
     vec4 color;
+    vec2 uv;
 };
 
 struct Temp

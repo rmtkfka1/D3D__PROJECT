@@ -10,7 +10,6 @@ public:
 
 	void Fence();
 	void WaitForFenceValue();
-	void ResourceSet();
 
 
 private:

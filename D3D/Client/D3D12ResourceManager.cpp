@@ -44,19 +44,3 @@ void D3D12ResourceManager::WaitForFenceValue()
 	}
 }
 
-void D3D12ResourceManager::ResourceSet()
-{
-	
-	_cmdList->Close();
-
-	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
-	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
-
-	Fence();
-	WaitForFenceValue();
-
-	_cmdMemory->Reset();
-	_cmdList->Reset(_cmdMemory.Get(), nullptr);
-
-
-}
