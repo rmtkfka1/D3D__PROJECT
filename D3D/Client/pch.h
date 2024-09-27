@@ -103,9 +103,9 @@ struct Vertex
     vec2 uv;
 };
 
-struct Temp
+struct TransformParams
 {
-    vec4 offset;
+    Matrix matWorld;
 };
 
 extern unique_ptr<class Core> core;

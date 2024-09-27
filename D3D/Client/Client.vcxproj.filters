@@ -26,6 +26,12 @@
     <Filter Include="04.HLSL">
       <UniqueIdentifier>{a530b9b4-8abc-4d4d-9b0c-6706f135c987}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.GameObject">
+      <UniqueIdentifier>{2d052aae-f171-4245-a58d-d986cd64955c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Scene">
+      <UniqueIdentifier>{29f53f71-5c96-4a49-ab90-585c18cc50ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -75,6 +81,30 @@
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>03.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>05.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>05.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>06.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>06.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1.h">
+      <Filter>06.Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +159,30 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>05.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderer.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>05.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>06.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>06.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1.cpp">
+      <Filter>06.Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

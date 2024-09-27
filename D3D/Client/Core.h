@@ -18,7 +18,7 @@ public:
 	void Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV);
 	void Fence();
 	void WaitForFenceValue(uint64 ExpectedFenceValue);
-
+	void WaitForAllFence();
 
 	void RenderBegin();
 	void RenderEnd();

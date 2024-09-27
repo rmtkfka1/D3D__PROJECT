@@ -1,0 +1,33 @@
+#include "pch.h"
+#include "Material.h"
+#include "core.h"
+#include "BufferPool.h"
+#include "Texture.h"
+#include "Shader.h"
+#include "GameObject.h"
+
+Material::Material() 
+{
+
+
+}
+Material::~Material()
+{
+}
+
+
+void Material::Pushdata()
+{
+
+	if (_shader)
+	{
+		_shader->SetPipelineState();
+	}
+
+	if (_diffuseTexture)
+	{
+		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t0));
+		core->GetTableHeap()->CopySRV(_diffuseTexture->GetCpuHandle(), reg);
+	}
+	
+}

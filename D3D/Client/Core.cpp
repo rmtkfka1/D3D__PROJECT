@@ -10,6 +10,7 @@ Core::Core()
 
 Core::~Core()
 {
+	
 }
 
 void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
@@ -56,6 +57,15 @@ void Core::WaitForFenceValue(uint64 ExpectedFenceValue)
 
 }
 
+void Core::WaitForAllFence()
+{
+	Fence();
+
+	for (DWORD i = 0; i < MAX_FRAME_COUNT; i++)
+	{
+		WaitForFenceValue(_lastFenceValue[i]);
+	}
+}
 
 
 void Core::RenderBegin()
@@ -242,13 +252,6 @@ void Core::CreateCmdQueue()
 
 void Core::CreateSwapChain()
 {
-
-
-
-
-
-
-
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 	swapChainDesc.Width = WINDOW_WIDTH;
 	swapChainDesc.Height = WINDOW_HEIGHT;
@@ -278,8 +281,6 @@ void Core::CreateSwapChain()
 
 	_renderTargets = make_shared<RenderTargets>();
 	_renderTargets->Init(WINDOW_WIDTH, WINDOW_HEIGHT, _swapChain);
-
-
 
 };
 
@@ -312,7 +313,7 @@ void Core::CreateBufferPool()
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_constantBufferPool[i] = make_shared<ConstantBufferPool>();
-		_constantBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(Temp),255);
+		_constantBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(TransformParams),255);
 	}
 
 	_textureBufferPool = make_shared<TextureBufferPool>();

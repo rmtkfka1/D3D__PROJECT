@@ -1,6 +1,6 @@
 cbuffer TEST_B0 : register(b0)
 {
-    float4 offset0;
+    row_major matrix WorldMat;
 };
 
 Texture2D g_tex_0 : register(t0);
@@ -24,7 +24,7 @@ VS_OUT VS_Main(VS_IN input)
 {
     VS_OUT output = (VS_OUT) 0;
 
-    output.pos = float4(input.pos, 1.f) + offset0;
+    output.pos = mul(float4(input.pos, 1.f), WorldMat);
     output.color = input.color ;
     output.uv = input.uv;
   

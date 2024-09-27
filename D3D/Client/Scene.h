@@ -1,0 +1,30 @@
+#pragma once
+
+class GameObject;
+class Shader;
+class Mesh;
+class Material;
+class Transform;
+
+class Scene
+{
+
+public:
+	Scene();
+	virtual ~Scene();
+
+	virtual void Init();
+	virtual void Run();
+	virtual void LateUpdate();
+
+	void ReserveAddGameObject(shared_ptr<GameObject> object);
+	void ReserveDeleteGameObject(shared_ptr<GameObject> object);
+	void AddGameObject(shared_ptr<GameObject> object);
+	void DeleteGameObject(shared_ptr<GameObject> object);
+
+protected:
+	queue<shared_ptr<GameObject>> _reserveAddQueue;
+	queue<shared_ptr<GameObject>> _reserveDeleteQueue;
+	vector<shared_ptr<GameObject>> _gameObjects;
+};
+

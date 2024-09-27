@@ -5,7 +5,7 @@ class Shader
 {
 public:
 	void Init(const wstring& path);
-	void Update();
+	void SetPipelineState();
 
 private:
 	void CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode);
