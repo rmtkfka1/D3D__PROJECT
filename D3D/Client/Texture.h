@@ -8,12 +8,12 @@ public:
 	~Texture();
 
 	void Init(const wstring& path);
+	void InitCubeMap(const wstring& path);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle() { return _srvHandle; }
 
 public:
 
-	void CreateTexture(const wstring& path);
 
 
 private:

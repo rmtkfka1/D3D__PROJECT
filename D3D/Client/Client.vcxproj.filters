@@ -118,6 +118,9 @@
     <ClInclude Include="TimeManager.h">
       <Filter>07.Manager</Filter>
     </ClInclude>
+    <ClInclude Include="GeoMetryHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -205,6 +208,9 @@
     <ClCompile Include="TimeManager.cpp">
       <Filter>07.Manager</Filter>
     </ClCompile>
+    <ClCompile Include="GeoMetryHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -213,6 +219,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Resources\Shader\default.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\sky.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
   </ItemGroup>

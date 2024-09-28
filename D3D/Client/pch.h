@@ -98,9 +98,10 @@ inline void ThrowIfFailed(HRESULT hr) {
 
 struct Vertex
 {
-    vec3 pos;
-    vec4 color;
-    vec2 uv;
+    vec3 position = { 0, 0, 0 };
+    vec2 uv = { 0, 0 };
+    vec3 normal = { 0, 0, 0 };
+    vec3 tangent = { 0, 0, 0 };
 };
 
 struct TransformParams

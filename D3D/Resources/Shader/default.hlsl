@@ -11,14 +11,12 @@ SamplerState g_sam_0 : register(s0);
 struct VS_IN
 {
     float3 pos : POSITION;
-    float4 color : COLOR;
     float2 uv : TEXCOORD;
 };
 
 struct VS_OUT
 {
     float4 pos : SV_Position;
-    float4 color : COLOR;
     float2 uv : TEXCOORD;
 };
 
@@ -29,7 +27,6 @@ VS_OUT VS_Main(VS_IN input)
     output.pos = mul(float4(input.pos, 1.f), WorldMat);
     output.pos = mul(output.pos, ViewMat);
     output.pos = mul(output.pos, ProjMat);
-    output.color = input.color ;
     output.uv = input.uv;
   
     

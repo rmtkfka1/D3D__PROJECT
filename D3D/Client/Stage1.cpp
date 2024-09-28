@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "CustomObject.h"
 #include "Transform.h"
+#include "GeoMetryHelper.h"
 
 Stage1::Stage1()
 {
@@ -36,29 +37,10 @@ void Stage1::BulidObject()
 {
 	{
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-	
 
-		vector<Vertex> vec(3);
-		vec[0].pos = vec3(0.f, 0.5f, 0.5f); //À­²À
-		vec[0].color = vec4(1.f, 0.f, 0.f, 1.f);
-		vec[0].uv = vec2(0, 0);
-
-		vec[1].pos = vec3(0.5f, -0.5f, 0.5f); //¿À¸¥ÂÊ²À
-		vec[1].color = vec4(0.f, 1.0f, 0.f, 1.f);
-		vec[1].uv = vec2(1, 1);
-
-		vec[2].pos = vec3(-0.5f, -0.5f, 0.5f); //¿Þ²À
-		vec[2].color = vec4(0.f, 0.f, 1.f, 1.f);
-		vec[2].uv = vec2(0.5, 0.5);
-
-		vector<uint32> index(3);
-
-		index[0] = 0;
-		index[1] = 1;
-		index[2] = 2;
 
 		auto& meshptr = gameobject->GetMesh();
-		meshptr->Init(vec, index);
+		meshptr = GeoMetryHelper::LoadRectangleBox();
 
 		auto materialptr =gameobject->GetMaterial();
 
@@ -67,9 +49,30 @@ void Stage1::BulidObject()
 		materialptr->SetDiffuseTexture(texture);
 
 		shared_ptr<Shader> shader = make_shared<Shader>();
-		shader->Init(L"..\\Resources\\Shader\\default.hlsl");
+		shader->Init(L"default.hlsl");
 		materialptr->SetShader(shader);
 	
+
+		AddGameObject(gameobject);
+	}
+
+	{
+
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
+
+		shared_ptr<Texture> texture = make_shared<Texture>();
+		texture->InitCubeMap(L"../Resources/Texture/cubemap/DGarden_specularIBL.dds");
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		ShaderInfo info;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
+		shader->Init(L"sky.hlsl", info);
+
+		gameobject->GetMaterial()->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
 
 		AddGameObject(gameobject);
 	}

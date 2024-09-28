@@ -20,7 +20,6 @@ void CameraManager::Update()
 {
 
 	MouseUpdate();
-
 	KeyUpdate();
 
 
@@ -61,6 +60,9 @@ void CameraManager::MouseUpdate()
 	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(_cameraYaw), XMConvertToRadians(_cameraPitch), 0));
 	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(_cameraYaw), XMConvertToRadians(_cameraPitch), 0));
 
+	_cameraLook.Normalize();
+	_cameraRight.Normalize();
+
 	SetCursorPos(static_cast<int>(_centerScreen.x), static_cast<int>(_centerScreen.y));
 
 }
@@ -72,25 +74,22 @@ void CameraManager::KeyUpdate()
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::W))
 	{
-		_cameraLook.Normalize();
 		_cameraPos +=  dt * _cameraLook;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::S))
 	{
-		_cameraLook.Normalize();
+
 		_cameraPos -= dt * _cameraLook;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::D))
 	{
-		_cameraLook.Normalize();
 		_cameraPos += dt * _cameraRight;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::A))
 	{
-		_cameraLook.Normalize();
 		_cameraPos -= dt * _cameraRight;
 	}
 

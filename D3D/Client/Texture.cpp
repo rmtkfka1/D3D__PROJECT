@@ -17,13 +17,7 @@ Texture::~Texture()
 
 void Texture::Init(const wstring& path)
 {
-	CreateTexture(path);
 
-}
-
-
-void Texture::CreateTexture(const wstring& path)
-{
     wstring ext = fs::path(path).extension();
 
     if (ext == L".dds" || ext == L".DDS")
@@ -115,6 +109,117 @@ void Texture::CreateTexture(const wstring& path)
     srvDesc.Texture2D.MipLevels = 1;
 
     core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
-
 }
+
+void Texture::InitCubeMap(const wstring& path)
+{
+    // 확장자에 따라 텍스처 로드
+    wstring ext = fs::path(path).extension();
+
+    if (ext == L".dds" || ext == L".DDS")
+        ::LoadFromDDSFile(path.c_str(), DDS_FLAGS_NONE, nullptr, _image);
+    else {
+        assert(false && "Only DDS files are supported for cubemaps");
+        return;
+    }
+
+    auto metaData = _image.GetMetadata();
+    if (!(metaData.miscFlags & DirectX::TEX_MISC_TEXTURECUBE)) {
+        assert(false && "The DDS file is not a cubemap");
+        return;
+    }
+
+    // 텍스처 리소스 생성
+    HRESULT hr = ::CreateTexture(core->GetDevice().Get(), _image.GetMetadata(), &_resource);
+    if (FAILED(hr)) {
+        assert(false && "Failed to create texture");
+        return;
+    }
+
+    vector<D3D12_SUBRESOURCE_DATA> subResources;
+    hr = ::PrepareUpload(core->GetDevice().Get(),
+        _image.GetImages(),
+        _image.GetImageCount(),
+        _image.GetMetadata(),
+        subResources);
+
+    if (FAILED(hr)) {
+        assert(false && "Failed to prepare upload");
+        return;
+    }
+
+    const uint64 bufferSize = ::GetRequiredIntermediateSize(_resource.Get(), 0, static_cast<uint32>(subResources.size()));
+
+    ComPtr<ID3D12Resource> textureUploadHeap;
+    hr = core->GetDevice()->CreateCommittedResource(
+        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+        D3D12_HEAP_FLAG_NONE,
+        &CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
+        D3D12_RESOURCE_STATE_GENERIC_READ,
+        nullptr,
+        IID_PPV_ARGS(textureUploadHeap.GetAddressOf()));
+
+    if (FAILED(hr)) {
+        assert(false && "Failed to create upload heap");
+        return;
+    }
+
+    hr = core->GetDevice()->CreateCommittedResource(
+        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+        D3D12_HEAP_FLAG_NONE,
+        &CD3DX12_RESOURCE_DESC::Tex2D(
+            _image.GetMetadata().format,
+            _image.GetMetadata().width,
+            _image.GetMetadata().height,
+            6,  // 큐브맵은 6개의 면을 가짐
+            _image.GetMetadata().mipLevels),
+        D3D12_RESOURCE_STATE_GENERIC_READ,
+        nullptr,
+        IID_PPV_ARGS(&_resource));
+
+    if (FAILED(hr)) {
+        assert(false && "Failed to create committed resource");
+        return;
+    }
+
+    auto ResourceManager = core->GetResourceManager();
+    auto list = ResourceManager->GetCmdList();
+    auto queue = ResourceManager->GetCmdQueue();
+    auto memory = ResourceManager->GetCmdMemory();
+
+    memory->Reset();
+    list->Reset(memory.Get(), nullptr);
+
+    list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_DEST));
+
+    ::UpdateSubresources(list.Get(),
+        _resource.Get(),
+        textureUploadHeap.Get(),
+        0, 0,
+        static_cast<unsigned int>(subResources.size()),
+        subResources.data());
+
+    list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
+    list->Close();
+
+    ID3D12CommandList* cmdListArr[] = { list.Get() };
+    queue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
+
+    ResourceManager->Fence();
+    ResourceManager->WaitForFenceValue();
+
+    core->GetTextureBufferPool()->AllocDescriptorHandle(&_srvHandle);
+
+    // 큐브맵용 셰이더 리소스 뷰(SRV) 생성
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+    srvDesc.Format = _image.GetMetadata().format;
+    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    srvDesc.TextureCube.MipLevels = _image.GetMetadata().mipLevels;
+    srvDesc.TextureCube.MostDetailedMip = 0;
+    srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
+
+    core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
+}
+
 
