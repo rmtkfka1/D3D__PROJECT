@@ -4,6 +4,7 @@
 #include "RenderTargets.h"
 #include "D3D12ResourceManager.h"
 #include "BufferPool.h"
+#include "CameraManager.h"
 Core::Core()
 {
 }
@@ -67,6 +68,12 @@ void Core::WaitForAllFence()
 	}
 }
 
+void Core::Exit()
+{
+	_swapChain->SetFullscreenState(FALSE, nullptr);
+	WaitForAllFence();
+}
+
 
 void Core::RenderBegin()
 {
@@ -97,7 +104,18 @@ void Core::Present()
 {
 	Fence();
 
-	ThrowIfFailed(_swapChain->Present(1, 0));
+/*	UINT SyncInterval = 1;	*/// VSync On
+	UINT SyncInterval = 1;	// VSync Off
+
+	UINT uiSyncInterval = SyncInterval;
+	UINT uiPresentFlags = 0;
+
+	if (!uiSyncInterval)
+	{
+		uiPresentFlags = DXGI_PRESENT_ALLOW_TEARING;
+	}
+
+	HRESULT hr = _swapChain->Present(uiSyncInterval, uiPresentFlags);
 
 	_renderTargets->SetIndex(_swapChain->GetCurrentBackBufferIndex());
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
@@ -122,6 +140,8 @@ void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 	WINDOW_WIDTH = BackBufferWidth;
 	WINDOW_HEIGHT = BackBufferHeight;
 
+	POINT point{ BackBufferWidth/2, BackBufferHeight/2 };
+	CameraManager::GetInstance()->Resize(point);
 	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
 
 }

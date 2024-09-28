@@ -3,6 +3,7 @@
 class GameObject;
 class CustomObject;
 
+
 class CameraManager
 {
 public:
@@ -14,6 +15,7 @@ public:
 	}
 
 	void Init();
+	void Resize(POINT centerScreen) { _centerScreen = centerScreen; }
 	void SetPlayer(shared_ptr<CustomObject> object) { _player = object; }
 	void Update();
 
@@ -34,14 +36,16 @@ private:
 	vec3 _cameraUp = vec3(0, 1.0f, 0);
 	vec3 _cameraRight = vec3(1, 0, 0);
 
-	float _Pitch;
-	float _Roll;
-	float _Yaw;
+	float _cameraYaw{};
+	float _cameraPitch{};
 
 	Matrix _matView = {};
 	Matrix _matProjection = {};
 
 	float _cameraSpeed = 60.0f;
+
+	POINT _centerScreen{};
+	POINT _mousePos{};
 
 private:
 	shared_ptr<CustomObject> _player;

@@ -19,6 +19,7 @@ public:
 	void Fence();
 	void WaitForFenceValue(uint64 ExpectedFenceValue);
 	void WaitForAllFence();
+	void Exit();
 
 	void RenderBegin();
 	void RenderEnd();

@@ -11,26 +11,40 @@
 #include "SceneManager.h"
 #include "KeyManager.h"
 #include "CameraManager.h"
+#include "TimeManager.h"
 
+ULONGLONG _prvFrameCheckTick = 0;
+ULONGLONG g_PrvUpdateTick = 0;
+DWORD	g_FrameCount = 0;
 
-void Game::Init(HWND hnwd)
+void Game::Init(HWND hwnd)
 {
+
+	_hwnd = hwnd;
+
 	//다이렉트 코어 초기화
-	core->Init(hnwd, true, true);
-	KeyManager::GetInstance()->Init(hnwd);
+	core->Init(hwnd, true, true);
+	KeyManager::GetInstance()->Init(hwnd);
 	SceneManager::GetInstance()->ChangeScene(SceneType::STAGE1);
+	TimeManager::GetInstance()->Init(hwnd);
+	CameraManager::GetInstance()->Init();
 
 }
 
 void Game::Run()
 {
+
 	Update();
 	Render();
+
+
+
 }
 
 void Game::Update()
 {
-	//키입력 처리
+
+	TimeManager::GetInstance()->Update();
 	KeyManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
 

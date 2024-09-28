@@ -115,6 +115,9 @@
     <ClInclude Include="CameraManager.h">
       <Filter>07.Manager</Filter>
     </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>07.Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -197,6 +200,9 @@
       <Filter>07.Manager</Filter>
     </ClCompile>
     <ClCompile Include="CameraManager.cpp">
+      <Filter>07.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
       <Filter>07.Manager</Filter>
     </ClCompile>
   </ItemGroup>
