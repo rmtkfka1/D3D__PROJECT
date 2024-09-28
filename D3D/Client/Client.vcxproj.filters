@@ -32,6 +32,9 @@
     <Filter Include="06.Scene">
       <UniqueIdentifier>{29f53f71-5c96-4a49-ab90-585c18cc50ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07.Manager">
+      <UniqueIdentifier>{9aacc3b9-d944-4098-a657-75f4436cd403}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -82,20 +85,11 @@
     <ClInclude Include="Shader.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>05.GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>03.Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshRenderer.h">
-      <Filter>03.Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>05.GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>06.Scene</Filter>
@@ -105,6 +99,21 @@
     </ClInclude>
     <ClInclude Include="Stage1.h">
       <Filter>06.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomObject.h">
+      <Filter>05.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject.h">
+      <Filter>05.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>05.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>07.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>07.Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,20 +169,11 @@
     <ClCompile Include="Shader.cpp">
       <Filter>03.Resource</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>05.GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>03.Resource</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>03.Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshRenderer.cpp">
-      <Filter>03.Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>05.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>06.Scene</Filter>
@@ -183,6 +183,21 @@
     </ClCompile>
     <ClCompile Include="Stage1.cpp">
       <Filter>06.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomObject.cpp">
+      <Filter>05.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelObject.cpp">
+      <Filter>05.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>05.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
+      <Filter>07.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>07.Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

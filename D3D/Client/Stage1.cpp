@@ -5,8 +5,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Material.h"
-#include "GameObject.h"
-#include "MeshRenderer.h"
+#include "CustomObject.h"
 #include "Transform.h"
 
 Stage1::Stage1()
@@ -36,10 +35,8 @@ void Stage1::LateUpdate()
 void Stage1::BulidObject()
 {
 	{
-		shared_ptr<GameObject> gameobject = make_shared<GameObject>();
-		shared_ptr<Mesh> mesh = make_shared<Mesh>();
-		shared_ptr<Shader> shader = make_shared<Shader>();
-		shared_ptr<Texture> texture = make_shared<Texture>();
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+	
 
 		vector<Vertex> vec(3);
 		vec[0].pos = vec3(0.f, 0.5f, 0.5f); //À­²À
@@ -60,22 +57,19 @@ void Stage1::BulidObject()
 		index[1] = 1;
 		index[2] = 2;
 
-		mesh->Init(vec, index);
-		shader->Init(L"..\\Resources\\Shader\\default.hlsl");
+		auto& meshptr = gameobject->GetMesh();
+		meshptr->Init(vec, index);
+
+		auto materialptr =gameobject->GetMaterial();
+
+		shared_ptr<Texture> texture = make_shared<Texture>();
 		texture->Init(L"..\\Resources\\Texture\\box.jpg");
+		materialptr->SetDiffuseTexture(texture);
 
-		/////////////////////////
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetDiffuseTexture(texture);
-		material->SetShader(shader);
-
-		shared_ptr<Transform> transform = make_shared<Transform>();
-		shared_ptr<MeshRenderer> renderer = make_shared<MeshRenderer>();
-		renderer->SetMaterial(material);
-		renderer->SetTransform(transform);
-		renderer->SetMesh(mesh);
-
-		gameobject->Push(renderer);
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->Init(L"..\\Resources\\Shader\\default.hlsl");
+		materialptr->SetShader(shader);
+	
 
 		AddGameObject(gameobject);
 	}

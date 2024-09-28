@@ -161,15 +161,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BufferPool.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="CustomObject.h" />
     <ClInclude Include="D3D12ResourceManager.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="KeyManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="ModelObject.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderTargets.h" />
     <ClInclude Include="Resource.h" />
@@ -180,21 +183,23 @@
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Stage1.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BufferPool.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="CustomObject.cpp" />
     <ClCompile Include="D3D12ResourceManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="ModelObject.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
@@ -217,7 +222,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Stage1.cpp" />
-    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="tinyxml2.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

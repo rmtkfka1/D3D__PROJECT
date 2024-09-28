@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "Core.h"
 #include "BufferPool.h"
-
+#include "CameraManager.h"
 Transform::Transform() 
 {
 
@@ -48,6 +48,8 @@ void Transform::PushData()
 {
 	TransformParams transformParams = {};
 	transformParams.matWorld = _matWorld;
+	transformParams.matView = CameraManager::S_MatView;
+	transformParams.matProjection = CameraManager::S_MatProjection;
 
 	core->GetConstantBufferPool()->PushData(&transformParams, sizeof(transformParams));
 }

@@ -2,19 +2,24 @@
 
 class MeshRenderer;
 
+enum class GameObjectType
+{
+	Custom,
+	Model,
+	Hierarchy
+};
+
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(GameObjectType type);
 	virtual ~GameObject();
 public:
-	virtual void Init();
-	virtual void Update();
-	virtual void Render();
+	virtual void Init() =0;
+	virtual void Update()=0;
+	virtual void Render()=0;
 
-	void Push(shared_ptr<MeshRenderer> object) { _meshRenderer.push_back(object); }
-
-protected:
-	vector<shared_ptr<MeshRenderer>> _meshRenderer;
+private:
+	GameObjectType _type;
 };
 
