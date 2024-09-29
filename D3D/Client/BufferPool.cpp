@@ -137,7 +137,7 @@ void DescriptorTable::Init(uint32 count)
 {
 	_groupCount = count;
 
-	int32 RegisterCount =static_cast<int32>(CBV_REGISTER::END)+(static_cast<int32>(SRV_REGISTER::END) - static_cast<int32>(CBV_REGISTER::END));
+	int32 RegisterCount = REGISTER_COUNT;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.NumDescriptors = count * RegisterCount;
@@ -176,7 +176,6 @@ void DescriptorTable::SetGraphicsRootDescriptorTable()
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
 	core->GetCmdLIst()->SetGraphicsRootDescriptorTable(0, handle);
-
 	_currentGroupIndex++;
 }
 

@@ -104,8 +104,9 @@ void Core::Present()
 {
 	Fence();
 
-/*	UINT SyncInterval = 1;	*/// VSync On
-	UINT SyncInterval = 1;	// VSync Off
+	//Vsync on =1 Vsync off =0
+
+	UINT SyncInterval = 1;
 
 	UINT uiSyncInterval = SyncInterval;
 	UINT uiPresentFlags = 0;

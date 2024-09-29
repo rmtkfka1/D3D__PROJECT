@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "RootSignature.h"
 #include "Core.h"
-
+#include "BufferPool.h"
 void RootSignature::Init()
 {
 	// 정적 샘플러 설정
@@ -22,8 +22,8 @@ void RootSignature::Init()
 
 	CD3DX12_DESCRIPTOR_RANGE ranges[] =
 	{
-		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 3, 0),
-		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 0)// b0~b3
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, static_cast<uint8>(CBV_REGISTER::END), 0),
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, static_cast<uint8>(SRV_REGISTER::END), 0)// b0~b3
 	};
 
 	CD3DX12_ROOT_PARAMETER param[1];

@@ -2,8 +2,11 @@
 #include "CameraManager.h"
 #include "KeyManager.h"
 #include "TimeManager.h"
+#include "CustomObject.h"
+#include "Transform.h"
 Matrix CameraManager::S_MatView;
 Matrix CameraManager::S_MatProjection;
+bool CameraManager::SetCursorMode = true;
 
 void CameraManager::Init()
 {
@@ -19,21 +22,51 @@ void CameraManager::Init()
 void CameraManager::Update()
 {
 
-	MouseUpdate();
-	KeyUpdate();
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::TWO))
+	{
+		ChangeCamera(OBSERVER);
+	}
 
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::THREE))
+	{
+		ChangeCamera(THIRD_PERSON);
+	}
 
-	_matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
-	_matProjection = ::XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
-
-	S_MatView = _matView;
-	S_MatProjection = _matProjection;
+	switch (_mode)
+	{
+	case OBSERVER:
+		MouseUpdate();
+		ObserverUpdate();
+		RegenerateMatrix(_observer.cameraPos, _observer.cameraLook, _observer.cameraUp);
+		break;
+	case THIRD_PERSON:
+		MouseUpdate();
+		PlayerUpdate();
+		ThirdCameraUpdate();
+		RegenerateMatrix(_thrid.cameraPos, _thrid.cameraLook, _thrid.cameraUp);
+		break;
+	default:
+		break;
+	}
 
 }
 
 
+void CameraManager::RegenerateMatrix(vec3 cameraPos, vec3 cameraLook, vec3 CameraUp)
+{
+	_matView = XMMatrixLookToLH(cameraPos, cameraLook, CameraUp);
+	_matProjection = ::XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
+
+	S_MatView = _matView;
+	S_MatProjection = _matProjection;
+}
+
 void CameraManager::MouseUpdate()
 {
+
+	if (SetCursorMode == false)
+		return;
+
 	_mousePos = KeyManager::GetInstance()->GetMousePos();
 
 	// 화면 중심과의 차이 계산
@@ -54,43 +87,105 @@ void CameraManager::MouseUpdate()
 	if (_cameraYaw < 0.0f) _cameraYaw += 360.0f;
 	if (_cameraYaw > 360.0f) _cameraYaw -= 360.0f;
 
-	vec3 cameraLook = vec3(0, 0, 1.0f);
-	vec3 caemraRight = vec3(1.0f, 0, 0.0f);
-
-	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(_cameraYaw), XMConvertToRadians(_cameraPitch), 0));
-	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(_cameraYaw), XMConvertToRadians(_cameraPitch), 0));
-
-	_cameraLook.Normalize();
-	_cameraRight.Normalize();
-
 	SetCursorPos(static_cast<int>(_centerScreen.x), static_cast<int>(_centerScreen.y));
 
 }
 
-
-void CameraManager::KeyUpdate()
+void CameraManager::PlayerUpdate()
 {
+	auto now = _player->GetTransform()->GetLocalRotation();
+
+	_player->GetTransform()->SetLocalRotation(vec3(now.x + _cameraPitch, now.y + _cameraYaw +180.0f, 0));
+
+
+}
+
+void CameraManager::ThirdCameraUpdate()
+{
+	auto Matrix = _player->GetTransform()->GetWorldMatrix();
+
+	//오프셋을 플레이어의 회전한 만큼 이동시킴.
+	vec3 offset = vec3::TransformNormal(_offset, Matrix);
+	vec3 targetPos = _player->GetTransform()->GetLocalPosition() + offset;
+
+	//direction 을 구함.
+	vec3 direction = vec3(targetPos - _thrid.cameraPos);
+
+	float length = direction.Length();
+	direction.Normalize();
+
+	float dist = length * 0.3f;
+
+
+	auto look = (_player->GetTransform()->GetLocalPosition() - _thrid.cameraPos);
+	look.Normalize();
+	_thrid.cameraPos = _thrid.cameraPos + dist * direction;
+	_thrid.cameraLook = look;
+	_thrid.cameraUp = _player->GetTransform()->GetUp();
+}
+
+void CameraManager::ObserverUpdate()
+{
+	vec3 cameraLook = vec3(0, 0, 1.0f);
+	vec3 caemraRight = vec3(1.0f, 0, 0.0f);
+
+	_observer.cameraLook = cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(_cameraYaw), XMConvertToRadians(_cameraPitch), 0));
+	_observer.cameraRight = caemraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(_cameraYaw), XMConvertToRadians(_cameraPitch), 0));
+
+	_observer.cameraLook.Normalize();
+	_observer.cameraRight.Normalize();
+
+	const int speed = 10.0f;
+
 	float dt = TimeManager::GetInstance()->GetDeltaTime();
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::W))
 	{
-		_cameraPos +=  dt * _cameraLook;
+		_observer.cameraPos += speed *dt * _observer.cameraLook;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::S))
 	{
 
-		_cameraPos -= dt * _cameraLook;
+		_observer.cameraPos -= speed* dt * _observer.cameraLook;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::D))
 	{
-		_cameraPos += dt * _cameraRight;
+		_observer.cameraPos += speed *dt * _observer.cameraRight;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::A))
 	{
-		_cameraPos -= dt * _cameraRight;
+		_observer.cameraPos -= speed *dt * _observer.cameraRight;
 	}
 
+
 }
+
+void CameraManager::ChangeCamera(CameraMode mode)
+{
+	if (_mode == mode)
+		return;
+
+	_mode = mode;
+
+	switch (mode)
+	{
+	case OBSERVER:
+		break;
+	case THIRD_PERSON:
+		break;
+	default:
+		break;
+	}
+
+
+
+
+}
+
+
+
+
+

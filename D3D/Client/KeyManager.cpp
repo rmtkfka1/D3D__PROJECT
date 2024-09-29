@@ -3,7 +3,7 @@
 #include "Core.h"
 
 
-unique_ptr<KeyManager> KeyManager::instance = make_unique<KeyManager>();
+
 
 void KeyManager::Init(HWND hwnd)
 {

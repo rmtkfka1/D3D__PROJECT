@@ -4,6 +4,21 @@ class GameObject;
 class CustomObject;
 
 
+enum CameraMode
+{
+	OBSERVER,
+	THIRD_PERSON
+};
+
+struct Info
+{
+	vec3  cameraPos = vec3(0, 0, -15.0f);
+	vec3  cameraLook = vec3(0, 0, 1.0f);
+	vec3  cameraUp = vec3(0, 1.0f, 0);
+	vec3  cameraRight = vec3(1, 0, 0);
+};
+
+
 class CameraManager
 {
 public:
@@ -19,23 +34,34 @@ public:
 	void SetPlayer(shared_ptr<CustomObject> object) { _player = object; }
 	void Update();
 
-	vec3 GetWorldPos() { return _cameraPos; }
-	vec3 GetLook() { return _cameraLook; }
+
 
 private:
+	void RegenerateMatrix(vec3 cameraPos, vec3 cameraLook, vec3 CameraUp);
 	void MouseUpdate();
-	void KeyUpdate();
+	void PlayerUpdate();
+	void ThirdCameraUpdate();
+
+	void ObserverUpdate();
+	void ChangeCamera(CameraMode mode);
+private:
+
 
 	float _near = 0.1f;
 	float _far = 5000.f;
 	float _fov = XM_PI / 3.f;
 	float _scale = 1.f;
 
-	vec3 _cameraPos = vec3(0, 0, -1.0f);
-	vec3 _cameraLook = vec3(0, 0, 1.0f);
-	vec3 _cameraUp = vec3(0, 1.0f, 0);
-	vec3 _cameraRight = vec3(1, 0, 0);
+	///OBSERVER
+	Info _observer;
 
+
+	//THRID_PERSON
+	Info _thrid;
+	vec3  _offset = vec3(0, 10.0f, -10.0f);
+	float _TimeLag = 0.5f;
+
+	
 	float _cameraYaw{};
 	float _cameraPitch{};
 
@@ -53,6 +79,8 @@ private:
 public:
 	static Matrix S_MatView;
 	static Matrix S_MatProjection;
+	static bool SetCursorMode;
+	CameraMode _mode = THIRD_PERSON;
 	BoundingFrustum _boundingFrsutum;
 
 };

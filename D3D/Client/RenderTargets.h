@@ -13,7 +13,6 @@ public:
 	void CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3> swapchain);
 	void CreateDepthStencil();
 
-
 	void RenderBegin();
 	void RenderEnd();
 

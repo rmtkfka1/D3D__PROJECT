@@ -48,8 +48,6 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	}
 
 
-
-
 	_Width = BackBufferWidth;
 	_height = BackBufferHeight;
 	_viewport.Width = (float)_Width;
@@ -86,7 +84,7 @@ void RenderTargets::CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<I
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 		swapchain->GetBuffer(i, IID_PPV_ARGS(&_RenderTargets[i]));
 
-	for (int i = 0; i < SWAP_CHAIN_FRAME_COUNT; ++i)
+	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 	{
 		_rtvHandle[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeapBegin, i * rtvHeapSize);
 		core->GetDevice()->CreateRenderTargetView(_RenderTargets[i].Get(), nullptr, _rtvHandle[i]);

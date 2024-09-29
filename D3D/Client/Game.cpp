@@ -37,8 +37,6 @@ void Game::Run()
 	Update();
 	Render();
 
-
-
 }
 
 void Game::Update()
@@ -46,7 +44,6 @@ void Game::Update()
 
 	TimeManager::GetInstance()->Update();
 	KeyManager::GetInstance()->Update();
-	CameraManager::GetInstance()->Update();
 
 
 }

@@ -35,6 +35,12 @@
     <Filter Include="07.Manager">
       <UniqueIdentifier>{9aacc3b9-d944-4098-a657-75f4436cd403}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.GameObject\00.GameObject">
+      <UniqueIdentifier>{dcbc4c0a-3dcb-472f-aa7d-4fdef4774971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\01.CustomObject">
+      <UniqueIdentifier>{48a6d378-899d-47bc-a09a-a95eb6f6c7bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -100,15 +106,6 @@
     <ClInclude Include="Stage1.h">
       <Filter>06.Scene</Filter>
     </ClInclude>
-    <ClInclude Include="CustomObject.h">
-      <Filter>05.GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelObject.h">
-      <Filter>05.GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>05.GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="KeyManager.h">
       <Filter>07.Manager</Filter>
     </ClInclude>
@@ -120,6 +117,15 @@
     </ClInclude>
     <ClInclude Include="GeoMetryHelper.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>05.GameObject\00.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomObject.h">
+      <Filter>05.GameObject\01.CustomObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>05.GameObject\01.CustomObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -190,15 +196,6 @@
     <ClCompile Include="Stage1.cpp">
       <Filter>06.Scene</Filter>
     </ClCompile>
-    <ClCompile Include="CustomObject.cpp">
-      <Filter>05.GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelObject.cpp">
-      <Filter>05.GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>05.GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="KeyManager.cpp">
       <Filter>07.Manager</Filter>
     </ClCompile>
@@ -210,6 +207,15 @@
     </ClCompile>
     <ClCompile Include="GeoMetryHelper.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>05.GameObject\00.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomObject.cpp">
+      <Filter>05.GameObject\01.CustomObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

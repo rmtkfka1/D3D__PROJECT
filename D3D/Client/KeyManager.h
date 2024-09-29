@@ -18,6 +18,7 @@ enum class KEY_TYPE
 	O = 'O',
 	ONE = '1',
 	TWO = '2',
+	THREE = '3',
 	SPACE = VK_SPACE,
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
@@ -44,9 +45,10 @@ class KeyManager
 {
 public:
 
-	static unique_ptr<KeyManager>& GetInstance()
+	static KeyManager* GetInstance()
 	{
-		return instance;
+		static KeyManager instance;
+		return &instance;
 	}
 
 	void Init(HWND hwnd);
@@ -65,7 +67,6 @@ private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return _states[static_cast<uint8>(key)]; }
 
 private:
-	static unique_ptr<KeyManager> instance;
 	HWND _hwnd{};
 	vector<KEY_STATE> _states;
 	POINT _mousePos = {};

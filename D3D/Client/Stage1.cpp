@@ -8,6 +8,8 @@
 #include "CustomObject.h"
 #include "Transform.h"
 #include "GeoMetryHelper.h"
+#include "CameraManager.h"
+#include "Player.h"
 
 Stage1::Stage1()
 {
@@ -45,7 +47,7 @@ void Stage1::BulidObject()
 		auto materialptr =gameobject->GetMaterial();
 
 		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->Init(L"..\\Resources\\Texture\\box.jpg");
+		texture->Init(L"box.jpg");
 		materialptr->SetDiffuseTexture(texture);
 
 		shared_ptr<Shader> shader = make_shared<Shader>();
@@ -56,13 +58,41 @@ void Stage1::BulidObject()
 		AddGameObject(gameobject);
 	}
 
+
+	{
+
+		shared_ptr<Player> gameobject = make_shared<Player>();
+
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, 0, -10.0f));
+
+		auto& meshptr = gameobject->GetMesh();
+		meshptr = GeoMetryHelper::LoadRectangleBox(0.5f);
+
+		auto materialptr = gameobject->GetMaterial();
+
+		shared_ptr<Texture> texture = make_shared<Texture>();
+		texture->Init(L"1.jpg");
+		materialptr->SetDiffuseTexture(texture);
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->Init(L"default.hlsl");
+		materialptr->SetShader(shader);
+
+		CameraManager::GetInstance()->SetPlayer(gameobject);
+		AddGameObject(gameobject);
+
+
+	}
+
+
+
 	{
 
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 
 		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->InitCubeMap(L"../Resources/Texture/cubemap/DGarden_specularIBL.dds");
+		texture->InitCubeMap(L"cubemap/skybox.dds");
 
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;

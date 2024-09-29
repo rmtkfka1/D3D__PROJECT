@@ -24,8 +24,7 @@ void CustomObject::Init()
 
 void CustomObject::Update()
 {
-
-
+	_transform->Update();
 
 }
 

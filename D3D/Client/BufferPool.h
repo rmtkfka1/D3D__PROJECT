@@ -1,7 +1,22 @@
 #pragma once
 
 
+enum class CBV_REGISTER : uint8
+{
+	b0,
+	END
+};
 
+enum class SRV_REGISTER : uint8
+{
+	t0 = static_cast<uint8>(CBV_REGISTER::END),
+	END
+};
+
+enum
+{
+	REGISTER_COUNT = static_cast<uint8>(CBV_REGISTER::END) + (static_cast<uint8>(SRV_REGISTER::END) - static_cast<uint8>(CBV_REGISTER::END))
+};
 
 
 /*************************
@@ -10,13 +25,7 @@
 *                        *
 **************************/
 
-enum class CBV_REGISTER : uint8
-{
-	b0,
-	b1,
-	b2,
-	END
-};
+
 
 class ConstantBufferPool
 {
@@ -47,13 +56,7 @@ private:
 *                        *
 **************************/
 
-enum class SRV_REGISTER : uint8
-{
-	t0 = static_cast<uint8>(CBV_REGISTER::END),
-	t1,
-	t2,
-	END
-};
+
 
 class TextureBufferPool
 {

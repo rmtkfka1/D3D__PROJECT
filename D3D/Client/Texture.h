@@ -17,6 +17,7 @@ public:
 
 
 private:
+	wstring _path = L"../Resources/Texture/";
 	ScratchImage			 		_image;
 	ComPtr<ID3D12Resource>			_resource;
 	D3D12_CPU_DESCRIPTOR_HANDLE		_srvHandle{};
