@@ -58,7 +58,7 @@ private:
 
 	//THRID_PERSON
 	Info _thrid;
-	vec3  _offset = vec3(0, 10.0f, -10.0f);
+	vec3  _offset = vec3(0, 3.0f, -10.0f);
 	float _TimeLag = 0.5f;
 
 	

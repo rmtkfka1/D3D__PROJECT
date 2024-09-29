@@ -102,10 +102,10 @@ void CameraManager::PlayerUpdate()
 
 void CameraManager::ThirdCameraUpdate()
 {
-	auto Matrix = _player->GetTransform()->GetWorldMatrix();
+	auto mat = _player->GetTransform()->GetWorldMatrix();
 
 	//오프셋을 플레이어의 회전한 만큼 이동시킴.
-	vec3 offset = vec3::TransformNormal(_offset, Matrix);
+	vec3 offset = vec3::TransformNormal(_offset, mat);
 	vec3 targetPos = _player->GetTransform()->GetLocalPosition() + offset;
 
 	//direction 을 구함.
@@ -116,12 +116,13 @@ void CameraManager::ThirdCameraUpdate()
 
 	float dist = length * 0.3f;
 
-
-	auto look = (_player->GetTransform()->GetLocalPosition() - _thrid.cameraPos);
-	look.Normalize();
 	_thrid.cameraPos = _thrid.cameraPos + dist * direction;
-	_thrid.cameraLook = look;
-	_thrid.cameraUp = _player->GetTransform()->GetUp();
+
+	Matrix mat2 = XMMatrixLookAtLH(_thrid.cameraPos, _player->GetTransform()->GetLocalPosition(), _player->GetTransform()->GetUp());
+	_thrid.cameraRight = vec3(mat2._11, mat2._21, mat2._31);
+	_thrid.cameraUp = vec3(mat2._12, mat2._22, mat2._32);
+	_thrid.cameraLook = vec3(mat2._13, mat2._23, mat2._33);
+
 }
 
 void CameraManager::ObserverUpdate()
