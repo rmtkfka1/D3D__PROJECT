@@ -136,7 +136,7 @@ void CameraManager::ObserverUpdate()
 	_observer.cameraLook.Normalize();
 	_observer.cameraRight.Normalize();
 
-	const int speed = 100.0f;
+	const int speed = 10.0f;
 
 	float dt = TimeManager::GetInstance()->GetDeltaTime();
 

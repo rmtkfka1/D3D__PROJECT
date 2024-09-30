@@ -38,33 +38,20 @@ void Stage1::LateUpdate()
 
 void Stage1::BulidObject()
 {
-	{
-		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-
-
-		auto& meshptr = gameobject->GetMesh();
-		meshptr = GeoMetryHelper::LoadRectangleBox();
-
-		auto materialptr =gameobject->GetMaterial();
-
-		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->Init(L"box.jpg");
-		materialptr->SetDiffuseTexture(texture);
-
-		shared_ptr<Shader> shader = make_shared<Shader>();
-		shader->Init(L"default.hlsl");
-		materialptr->SetShader(shader);
 	
 
-		AddGameObject(gameobject);
-	}
 
 
 	{
 
+		
+		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		AddGameObject(terrain);
+		CameraManager::GetInstance()->SetTerrain(terrain);
+		
 		shared_ptr<Player> gameobject = make_shared<Player>();
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(0, 0, -10.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, 0, 0));
 
 		auto& meshptr = gameobject->GetMesh();
 		meshptr = GeoMetryHelper::LoadRectangleBox(0.5f);
@@ -80,6 +67,7 @@ void Stage1::BulidObject()
 		materialptr->SetShader(shader);
 
 		CameraManager::GetInstance()->SetPlayer(gameobject);
+		gameobject->SetTerrain(terrain);
 		AddGameObject(gameobject);
 
 
@@ -108,9 +96,5 @@ void Stage1::BulidObject()
 		AddGameObject(gameobject);
 	}
 
-	{
-
-		shared_ptr<Terrain> gameobject = make_shared<Terrain>();
-		AddGameObject(gameobject);
-	}
+	
 }

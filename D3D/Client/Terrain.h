@@ -13,7 +13,10 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 
+	vec3 GetHeight(vec3 pos);
+
 private:
+
 	void CreateMesh();
 	void LoadFIle(LPCTSTR pFileName, vec3 scale);
 

@@ -2,7 +2,7 @@
  
 class GameObject;
 class CustomObject;
-
+class Terrain;
 
 enum CameraMode
 {
@@ -32,6 +32,7 @@ public:
 	void Init();
 	void Resize(POINT centerScreen) { _centerScreen = centerScreen; }
 	void SetPlayer(shared_ptr<CustomObject> object) { _player = object; }
+	void SetTerrain(shared_ptr< Terrain> terrain) { _terrain = terrain; }
 	void Update();
 
 
@@ -42,8 +43,13 @@ private:
 	void PlayerUpdate();
 	void ThirdCameraUpdate();
 
+
 	void ObserverUpdate();
 	void ChangeCamera(CameraMode mode);
+	vec3 Lerp(const vec3& a, const vec3& b, float t)
+	{
+		return a + (b - a) * t;
+	}
 private:
 
 
@@ -75,7 +81,7 @@ private:
 
 private:
 	shared_ptr<CustomObject> _player;
-
+	shared_ptr<Terrain> _terrain;
 public:
 	static Matrix S_MatView;
 	static Matrix S_MatProjection;

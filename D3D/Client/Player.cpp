@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "TimeManager.h"
 #include "CameraManager.h"
+#include "Terrain.h"
 void Player::Init()
 {
 	Super::Init();
@@ -12,6 +13,8 @@ void Player::Init()
 void Player::Update()
 {
 	
+	_transform->SetLocalScale(vec3(0.1f, 1.0f, 0.1f));
+
 	MoveUpdate();
 	CameraManager::GetInstance()->Update();
 	Super::Update();
@@ -19,6 +22,7 @@ void Player::Update()
 
 void Player::Render()
 {
+
 	Super::Render();
 }
 
@@ -33,7 +37,6 @@ void Player::MoveUpdate()
 	vec3 diection = _transform->GetLook();
 	vec3 right = _transform->GetRight();
 	vec3 nowPos = _transform->GetLocalPosition();
-
 
 
 	if (key->GetButton(KEY_TYPE::W))
@@ -55,4 +58,7 @@ void Player::MoveUpdate()
 	{
 		_transform->SetLocalPosition(nowPos - right * _speed * dt);
 	}
+
+	auto pos = _terrain->GetHeight(_transform->GetLocalPosition());
+	_transform->SetLocalPosition(vec3(pos.x, pos.y+0.5f ,pos.z));
 }

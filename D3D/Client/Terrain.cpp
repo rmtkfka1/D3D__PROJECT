@@ -23,7 +23,7 @@ Terrain::~Terrain()
 
 void Terrain::Init()
 {
-    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(10.0f, 3.0f, 10.0f));
+    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(1.0f, 1.0f, 1.0f));
     CreateMesh();
 
     ShaderInfo info;
@@ -56,55 +56,128 @@ void Terrain::Render()
     cmdlist->DrawIndexedInstanced(_mesh->GetIndexCount(), 1, 0, 0, 0);
 }
 
+#define _WITH_APPROXIMATE_OPPOSITE_CORNER
+vec3 Terrain::GetHeight(vec3 pos)
+{
+    float normalizedX = pos.x + (_width * _scale.x) / 2;
+    float normalizedZ = -pos.z + (_length * _scale.z) / 2;
+
+    // 하이트맵의 인덱스 계산
+    int xIndex = static_cast<int>(normalizedX / _scale.x);
+    int zIndex = static_cast<int>(normalizedZ / _scale.z);
+
+    // 인덱스 유효성 검사
+    if (xIndex < 0 || xIndex >= _width - 1 || zIndex < 0 || zIndex >= _length - 1)
+    {
+        return vec3(pos.x, 0.0f, pos.z); // 범위를 벗어난 경우 기본 높이 반환
+    }
+
+    // 하이트맵에서 비율 계산
+    float fxPercent = (normalizedX / _scale.x) - xIndex;
+    float fzPercent = (normalizedZ / _scale.z) - zIndex;
+
+    // 하이트맵에서 높이값 가져오기
+    int heightIndex = zIndex * _width + xIndex;
+
+    float bottomLeft = static_cast<float>(_HeightMapPixels[heightIndex]);
+    float bottomRight = static_cast<float>(_HeightMapPixels[heightIndex + 1]);
+    float topLeft = static_cast<float>(_HeightMapPixels[heightIndex + _width]);
+    float topRight = static_cast<float>(_HeightMapPixels[heightIndex + _width + 1]);
+
+    // 선형 보간
+#ifdef _WITH_APPROXIMATE_OPPOSITE_CORNER
+    // 사각형의 분할 방식에 따라 보간을 조정
+    if (fzPercent < (1.0f - fxPercent))
+    {
+        // 오른쪽 삼각형의 높이값 조정
+        topRight = topLeft + (bottomRight - bottomLeft);
+    }
+    else
+    {
+        // 왼쪽 삼각형의 높이값 조정
+        bottomLeft = topLeft + (bottomRight - topRight);
+    }
+#endif
+
+    // 실제 높이값 계산
+    float topHeight = topLeft * (1 - fxPercent) + topRight * fxPercent;
+    float bottomHeight = bottomLeft * (1 - fxPercent) + bottomRight * fxPercent;
+    float height = bottomHeight * (1 - fzPercent) + topHeight * fzPercent;
+
+    // 높이값을 포함한 vec3 반환 (x, height, z)
+    return vec3(pos.x, height * _scale.y, pos.z);
+};
+
 void Terrain::CreateMesh()
 {
 
   
     int size = 1;
-
     vector<Vertex> v;
 
-    // _length와 _width는 그리드의 세로 및 가로 크기
     for (int i = 0; i <= _length; ++i)
     {
         for (int j = 0; j <= _width; ++j)
         {
             Vertex vertex;
 
-            vertex.position.x = (j - (_width / 2)) * size * _scale.x; // x축 위치
-            vertex.position.y = 0; // y축 높이
-            vertex.position.z = (i - (_length / 2)) * -size * _scale.z; // z축 위치 (음수로 설정하여 방향 맞추기)
+            vertex.position.x = (j - (_width / 2)) * size * _scale.x;
+            vertex.position.y = 0; // 초기화
+            vertex.position.z = (i - (_length / 2)) * -size * _scale.z;
 
-            int heightIndex = i * _width + j; // 하이트맵에서 인덱스 계산
+            int heightIndex = i * _width + j;
 
             if (heightIndex < _width * _length) {
-                vertex.position.y = static_cast<float>(_HeightMapPixels[heightIndex]) * _scale.y; // 스케일 적용
+                vec3 Height = GetHeight(vec3(vertex.position.x, 0, vertex.position.z));
+                vertex.position.y = Height.y * _scale.y;
             }
 
-            vertex.uv.x = static_cast<float>(j) / _width;  
-            vertex.uv.y = static_cast<float>(i) / _length; 
+            vertex.uv.x = static_cast<float>(j) / _width;
+            vertex.uv.y = static_cast<float>(i) / _length;
 
             v.push_back(vertex);
         }
     }
 
+    for (int i = 0; i <= _length; ++i)
+    {
+        for (int j = 0; j <= _width; ++j)
+        {
+            Vertex& vertex = v[i * (_width + 1) + j]; // 현재 정점
+
+            if (i > 0 && i < _length - 1 && j > 0 && j < _width - 1)
+            {
+                vec3 left = v[i * (_width + 1) + (j - 1)].position;
+                vec3 right = v[i * (_width + 1) + (j + 1)].position;
+                vec3 top = v[(i - 1) * (_width + 1) + j].position;
+                vec3 bottom = v[(i + 1) * (_width + 1) + j].position;
+
+                vec3 v1 = right - left;
+                vec3 v2 = bottom - top;
+
+                vec3 normal = v1.Cross(v2);
+                normal.Normalize();
+                vertex.normal = normal;
+            }
+            else
+            {
+                vertex.normal = vec3(0, 1, 0); // 기본 노말 설정
+            }
+        }
+    }
+
     vector<uint32_t> index;
 
-    for (int i = 0; i < _length-1; ++i)
+    for (int i = 0; i < _length - 1; ++i)
     {
-        for (int j = 0; j < _width-1; ++j)
+        for (int j = 0; j < _width - 1; ++j)
         {
-            // 첫 번째 삼각형
-            index.push_back(i * (_width + 1) + j); // 왼쪽 점
-            index.push_back(i * (_width + 1) + (j + 1)); // 오른쪽 점
-            index.push_back((i + 1) * (_width + 1) + j); // 아래쪽 점
-
-            // 두 번째 삼각형
-            index.push_back(i * (_width + 1) + (j + 1)); // 오른쪽 점
-            index.push_back((i + 1) * (_width + 1) + (j + 1)); // 아래쪽 오른쪽 점
-            index.push_back((i + 1) * (_width + 1) + j); // 아래쪽 점
-
-
+            index.push_back(i * (_width + 1) + j);
+            index.push_back(i * (_width + 1) + (j + 1));
+            index.push_back((i + 1) * (_width + 1) + j);
+            index.push_back(i * (_width + 1) + (j + 1));
+            index.push_back((i + 1) * (_width + 1) + (j + 1));
+            index.push_back((i + 1) * (_width + 1) + j);
         }
     }
 
