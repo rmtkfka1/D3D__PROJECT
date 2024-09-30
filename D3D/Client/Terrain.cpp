@@ -23,12 +23,11 @@ Terrain::~Terrain()
 
 void Terrain::Init()
 {
-    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(1, 1, 1));
+    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(10.0f, 3.0f, 10.0f));
     CreateMesh();
 
     ShaderInfo info;
-    /*   info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;*/
-
+  
     shared_ptr<Shader> shader = make_shared<Shader>();
     shader->Init(L"default.hlsl", info);
 
@@ -41,7 +40,6 @@ void Terrain::Init()
 
 void Terrain::Update()
 {
-    _transform->SetLocalScale(vec3(5.0f, 1.0f, 5.0f));
     _transform->Update();
 }
 
@@ -60,61 +58,57 @@ void Terrain::Render()
 
 void Terrain::CreateMesh()
 {
-    std::vector<Vertex> vertices;
-    float startX = 0.0f;
-    float startZ = 0.0f;
-    float gridSize = 1.0f; // 그리드 간격을 조정할 수 있는 변수
 
-    for (int z = 0; z <= _length; ++z)
+  
+    int size = 1;
+
+    vector<Vertex> v;
+
+    // _length와 _width는 그리드의 세로 및 가로 크기
+    for (int i = 0; i <= _length; ++i)
     {
-        for (int x = 0; x <= _width; ++x)
+        for (int j = 0; j <= _width; ++j)
         {
-            Vertex temp;
+            Vertex vertex;
 
-            // 하이트맵 데이터를 사용하여 y 값(높이) 설정
-            int heightIndex = z * _width + x;
-            float height = _HeightMapPixels[heightIndex]; // 스케일 적용된 높이
+            vertex.position.x = (j - (_width / 2)) * size * _scale.x; // x축 위치
+            vertex.position.y = 0; // y축 높이
+            vertex.position.z = (i - (_length / 2)) * -size * _scale.z; // z축 위치 (음수로 설정하여 방향 맞추기)
 
-            temp.position.x = (startX + x * gridSize); // x 축 스케일 적용
-            temp.position.y = height;
-            temp.position.z = (startZ + z * gridSize); // z 축 스케일 적용
+            int heightIndex = i * _width + j; // 하이트맵에서 인덱스 계산
 
-            // UV 좌표 설정
-            temp.uv.x = static_cast<float>(x) / _width;  // u = x 좌표를 정규화
-            temp.uv.y = static_cast<float>(z) / _length; // v = z 좌표를 정규화
+            if (heightIndex < _width * _length) {
+                vertex.position.y = static_cast<float>(_HeightMapPixels[heightIndex]) * _scale.y; // 스케일 적용
+            }
 
-            // 임시 노멀 값, 실제 노멀 계산은 나중에
-            temp.normal = vec3(0, 1, 0);
+            vertex.uv.x = static_cast<float>(j) / _width;  
+            vertex.uv.y = static_cast<float>(i) / _length; 
 
-            vertices.push_back(temp);
+            v.push_back(vertex);
         }
     }
 
-    // 인덱스 배열 설정 (삼각형을 그리기 위해)
-    std::vector<uint32> indices;
-    for (int z = 0; z < _length-1; ++z)
-    {
-        for (int x = 0; x < _width-1; ++x)
-        {
-            int topLeft = z * (_width + 1) + x;
-            int topRight = topLeft + 1;
-            int bottomLeft = topLeft + (_width + 1);
-            int bottomRight = bottomLeft + 1;
+    vector<uint32_t> index;
 
+    for (int i = 0; i < _length-1; ++i)
+    {
+        for (int j = 0; j < _width-1; ++j)
+        {
             // 첫 번째 삼각형
-            indices.push_back(topLeft);
-            indices.push_back(bottomLeft);
-            indices.push_back(bottomRight);
+            index.push_back(i * (_width + 1) + j); // 왼쪽 점
+            index.push_back(i * (_width + 1) + (j + 1)); // 오른쪽 점
+            index.push_back((i + 1) * (_width + 1) + j); // 아래쪽 점
 
             // 두 번째 삼각형
-            indices.push_back(topLeft);
-            indices.push_back(bottomRight);
-            indices.push_back(topRight);
+            index.push_back(i * (_width + 1) + (j + 1)); // 오른쪽 점
+            index.push_back((i + 1) * (_width + 1) + (j + 1)); // 아래쪽 오른쪽 점
+            index.push_back((i + 1) * (_width + 1) + j); // 아래쪽 점
+
+
         }
     }
 
-    _mesh->Init(vertices, indices); // 메쉬에 정점과 인덱스 전달
-
+    _mesh->Init(v, index);
 }
 
 void Terrain::LoadFIle(LPCTSTR pFileName, vec3 scale)

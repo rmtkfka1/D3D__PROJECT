@@ -20,6 +20,7 @@ private:
 
 private:
 	BYTE* _HeightMapPixels;
+
 	vec3 _scale;
 	int _width;
 	int _length;

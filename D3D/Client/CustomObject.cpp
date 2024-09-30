@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Core.h"
 #include "BufferPool.h"
+
 CustomObject::CustomObject():GameObject(GameObjectType::Custom)
 {
 	_mesh = make_shared<Mesh>();
@@ -24,6 +25,7 @@ void CustomObject::Init()
 
 void CustomObject::Update()
 {
+
 	_transform->Update();
 
 }

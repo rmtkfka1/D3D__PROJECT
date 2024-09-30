@@ -34,6 +34,8 @@ void Player::MoveUpdate()
 	vec3 right = _transform->GetRight();
 	vec3 nowPos = _transform->GetLocalPosition();
 
+
+
 	if (key->GetButton(KEY_TYPE::W))
 	{
 		_transform->SetLocalPosition(nowPos + diection * _speed * dt);
