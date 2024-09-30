@@ -127,6 +127,9 @@
     <ClInclude Include="Player.h">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>05.GameObject\01.CustomObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -215,6 +218,9 @@
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>05.GameObject\01.CustomObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
   </ItemGroup>

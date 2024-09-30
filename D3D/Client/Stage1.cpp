@@ -10,6 +10,7 @@
 #include "GeoMetryHelper.h"
 #include "CameraManager.h"
 #include "Player.h"
+#include "Terrain.h"
 
 Stage1::Stage1()
 {
@@ -21,8 +22,8 @@ Stage1::~Stage1()
 
 void Stage1::Init()
 {
-	Scene::Init();
 	BulidObject();
+	Scene::Init();
 }
 
 void Stage1::Run()
@@ -92,7 +93,7 @@ void Stage1::BulidObject()
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 
 		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->InitCubeMap(L"cubemap/skybox.dds");
+		texture->InitCubeMap(L"cubemap/DGarden_specularIBL.dds");
 
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;
@@ -104,6 +105,12 @@ void Stage1::BulidObject()
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
 
+		AddGameObject(gameobject);
+	}
+
+	{
+
+		shared_ptr<Terrain> gameobject = make_shared<Terrain>();
 		AddGameObject(gameobject);
 	}
 }
