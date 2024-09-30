@@ -21,7 +21,7 @@ private:
 private:
 	BYTE* _HeightMapPixels;
 	vec3 _scale;
-	float _width;
-	float _length;
+	int _width;
+	int _length;
 };
 

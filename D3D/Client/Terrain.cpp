@@ -27,20 +27,21 @@ void Terrain::Init()
     CreateMesh();
 
     ShaderInfo info;
- /*   info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;*/
+    /*   info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;*/
 
     shared_ptr<Shader> shader = make_shared<Shader>();
-    shader->Init(L"default.hlsl",info);
-    
+    shader->Init(L"default.hlsl", info);
+
     shared_ptr<Texture> texture = make_shared<Texture>();
     texture->Init(L"heightMap/Base_Texture.dds");
-    
+
     _material->SetShader(shader);
     _material->SetDiffuseTexture(texture);
 }
 
 void Terrain::Update()
 {
+    _transform->SetLocalScale(vec3(5.0f, 1.0f, 5.0f));
     _transform->Update();
 }
 
@@ -90,10 +91,10 @@ void Terrain::CreateMesh()
     }
 
     // 인덱스 배열 설정 (삼각형을 그리기 위해)
-    std::vector<uint32_t> indices;
-    for (int z = 0; z < _length; ++z)
+    std::vector<uint32> indices;
+    for (int z = 0; z < _length-1; ++z)
     {
-        for (int x = 0; x < _width; ++x)
+        for (int x = 0; x < _width-1; ++x)
         {
             int topLeft = z * (_width + 1) + x;
             int topRight = topLeft + 1;
@@ -105,7 +106,7 @@ void Terrain::CreateMesh()
             indices.push_back(bottomLeft);
             indices.push_back(bottomRight);
 
-            // 두 번째 삼각형 (대각선 방향)
+            // 두 번째 삼각형
             indices.push_back(topLeft);
             indices.push_back(bottomRight);
             indices.push_back(topRight);
