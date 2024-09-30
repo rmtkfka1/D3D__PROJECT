@@ -114,7 +114,7 @@ void CameraManager::ThirdCameraUpdate()
 	float length = direction.Length();
 	direction.Normalize();
 
-	float dist = length * 0.3f;
+	float dist = length * 0.1f;
 
 	_thrid.cameraPos = _thrid.cameraPos + dist * direction;
 

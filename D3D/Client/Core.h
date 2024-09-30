@@ -20,6 +20,7 @@ public:
 	void WaitForFenceValue(uint64 ExpectedFenceValue);
 	void WaitForAllFence();
 	void Exit();
+	void SetFullScreen();
 
 	void RenderBegin();
 	void RenderEnd();
@@ -50,7 +51,7 @@ private:
 	void SetDebugLayerInfo(ComPtr<ID3D12Device> pD3DDevice);
 
 private:
-
+	bool FullScreen = false;
 	HWND	_hwnd = nullptr;
 
 	ComPtr<ID3D12Device5> _device = nullptr;

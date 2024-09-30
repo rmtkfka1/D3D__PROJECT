@@ -74,6 +74,43 @@ void Core::Exit()
 	WaitForAllFence();
 }
 
+void Core::SetFullScreen()
+{
+	if (FullScreen == false)
+	{
+		//RECT rc;
+		//GetWindowRect(_hwnd, &rc);
+
+		//// 모니터 정보를 가져오기 위한 구조체
+		//MONITORINFO mi;
+		//mi.cbSize = sizeof(mi);
+		//GetMonitorInfo(MonitorFromWindow(_hwnd, MONITOR_DEFAULTTOPRIMARY), &mi);
+
+		//// 전체 화면 모드 설정
+		//SetWindowLong(_hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE); // 스타일 변경
+		//SetWindowPos(_hwnd, HWND_TOP, mi.rcMonitor.left, mi.rcMonitor.top,
+		//	mi.rcMonitor.right - mi.rcMonitor.left,
+		//	mi.rcMonitor.bottom - mi.rcMonitor.top,
+		//	SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+
+		//UpdateWindowSize(mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top);
+		_swapChain->SetFullscreenState(TRUE, nullptr);
+	}
+
+	else
+	{
+		_swapChain->SetFullscreenState(FALSE, nullptr);
+
+		//SetWindowLong(_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+		//// 원래 크기로 윈도우 설정
+		//SetWindowPos(_hwnd, HWND_TOP, 0, 0,800,600, SWP_NOOWNERZORDER| SWP_FRAMECHANGED);
+
+		//UpdateWindowSize(800,600);
+	}
+
+	FullScreen = !FullScreen;
+}
+
 
 void Core::RenderBegin()
 {
@@ -233,6 +270,39 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 			}
 		}
 	}
+
+	_adapterDesc = bestDesc;
+
+
+	UINT maxWidth = 0;
+	UINT maxHeight = 0;
+
+	if (bestAdapter)
+	{
+		ComPtr<IDXGIOutput> output;
+		// 어댑터의 첫 번째 출력 가져오기
+		bestAdapter->EnumOutputs(0, &output);
+
+		// 지원되는 모드의 수를 가져옵니다.
+		UINT modeCount = 0;
+		UINT nFlags = 0; // 인터레이스 모드와 관련된 플래그는 사용하지 않음
+		output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, nFlags, &modeCount, NULL);
+
+		// 모드 정보를 저장할 벡터 생성
+		std::vector<DXGI_MODE_DESC> displayModes(modeCount);
+		output->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, nFlags, &modeCount, displayModes.data());
+
+		// 최대 해상도 찾기
+		for (const auto& mode : displayModes)
+		{
+			if (mode.Width > maxWidth || (mode.Width == maxWidth && mode.Height > maxHeight))
+			{
+				maxWidth = mode.Width;
+				maxHeight = mode.Height;
+			}
+		}
+	}
+
 
 
 	// 디버그 레이어 정보 설정

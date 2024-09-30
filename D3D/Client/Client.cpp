@@ -158,10 +158,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_KEYDOWN: 
+
+        if (wParam == VK_F9)
+        {
+            core->SetFullScreen();
+        }
+
         if (wParam == VK_ESCAPE) 
         {
             core->Exit();
-            DestroyWindow(hWnd); 
+            DestroyWindow(hWnd);
         }
         break;
     case WM_SIZE:
