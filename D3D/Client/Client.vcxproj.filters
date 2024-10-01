@@ -239,5 +239,8 @@
     <FxCompile Include="..\Resources\Shader\sky.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="Terrain.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

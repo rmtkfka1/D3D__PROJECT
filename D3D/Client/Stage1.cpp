@@ -79,7 +79,7 @@ void Stage1::BulidObject()
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 
 		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->InitCubeMap(L"cubemap/DGarden_specularIBL.dds");
+		texture->InitCubeMap(L"cubemap/skybox.dds");
 
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;

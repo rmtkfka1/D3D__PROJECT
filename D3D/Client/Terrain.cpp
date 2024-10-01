@@ -23,13 +23,13 @@ Terrain::~Terrain()
 
 void Terrain::Init()
 {
-    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(1.0f, 1.0f, 1.0f));
+    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(5.0f, 1.0f, 5.0f));
     CreateMesh();
 
     ShaderInfo info;
   
     shared_ptr<Shader> shader = make_shared<Shader>();
-    shader->Init(L"default.hlsl", info);
+    shader->Init(L"Terrain.hlsl", info);
 
     shared_ptr<Texture> texture = make_shared<Texture>();
     texture->Init(L"heightMap/Base_Texture.dds");
