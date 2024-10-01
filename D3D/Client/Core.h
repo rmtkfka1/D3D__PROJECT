@@ -29,15 +29,15 @@ public:
 	void UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight);
 
 
-	ComPtr<ID3D12Device5> GetDevice() { return _device; } 
-	ComPtr<ID3D12GraphicsCommandList> GetCmdLIst() { return _cmdList[_currentContextIndex]; }
-	shared_ptr<RootSignature> GetRootSignature() { return _rootsignature; }
-	shared_ptr<RenderTargets> GetRenderTarget() { return _renderTargets; }
-	shared_ptr<D3D12ResourceManager> GetResourceManager() { return _resourceManager; }
-	shared_ptr<DescriptorTable> GetTableHeap() { return _table[_currentContextIndex]; }
-	shared_ptr<ConstantBufferPool> GetConstantBufferPool() { return _constantBufferPool[_currentContextIndex]; }
-	shared_ptr<ConstantBufferPool> GetConstantBufferPool2() { return _constantBufferPool2[_currentContextIndex]; }
-	shared_ptr<TextureBufferPool> GetTextureBufferPool() {return _textureBufferPool; }
+	ComPtr<ID3D12Device5>& GetDevice() { return _device; } 
+	ComPtr<ID3D12GraphicsCommandList>& GetCmdLIst() { return _cmdList[_currentContextIndex]; }
+	shared_ptr<RootSignature>& GetRootSignature() { return _rootsignature; }
+	shared_ptr<RenderTargets>& GetRenderTarget() { return _renderTargets; }
+	shared_ptr<D3D12ResourceManager>& GetResourceManager() { return _resourceManager; }
+	shared_ptr<DescriptorTable>& GetTableHeap() { return _table[_currentContextIndex]; }
+	shared_ptr<ConstantBufferPool>& GetWorldBufferPool() { return _WorldBufferPool[_currentContextIndex]; }
+	shared_ptr<ConstantBufferPool>& GetCameraBufferPool() { return _CameraBufferPool[_currentContextIndex]; }
+	shared_ptr<TextureBufferPool>& GetTextureBufferPool() {return _textureBufferPool; }
 
 	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
 
@@ -82,8 +82,8 @@ private:
 private:
 	//Buffer pool
 	array<shared_ptr<DescriptorTable>,MAX_FRAME_COUNT>  _table;
-	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _constantBufferPool;
-	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _constantBufferPool2;
+	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _WorldBufferPool;
+	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _CameraBufferPool;
 	shared_ptr<TextureBufferPool>  _textureBufferPool;
 };
 

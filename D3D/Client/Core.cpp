@@ -4,7 +4,8 @@
 #include "RenderTargets.h"
 #include "D3D12ResourceManager.h"
 #include "BufferPool.h"
-#include "CameraManager.h"
+#include "KeyManager.h"
+
 Core::Core()
 {
 }
@@ -158,8 +159,8 @@ void Core::Present()
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
 	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
 
-	_constantBufferPool[nextContextIndex]->Clear();
-	_constantBufferPool2[nextContextIndex]->Clear();
+	_WorldBufferPool[nextContextIndex]->Clear();
+	_CameraBufferPool[nextContextIndex]->Clear();
 	_table[nextContextIndex]->Clear();
 	_currentContextIndex = nextContextIndex;
 
@@ -178,8 +179,9 @@ void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 	WINDOW_WIDTH = BackBufferWidth;
 	WINDOW_HEIGHT = BackBufferHeight;
 
-	POINT point{ BackBufferWidth/2, BackBufferHeight/2 };
-	CameraManager::GetInstance()->Resize(point);
+	POINT point{ BackBufferWidth / 2, BackBufferHeight / 2 };
+	KeyManager::GetInstance()->SetCenterPos(point);
+
 	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
 
 }
@@ -371,14 +373,14 @@ void Core::CreateBufferPool()
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
-		_constantBufferPool[i] = make_shared<ConstantBufferPool>();
-		_constantBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(TransformParams),255,false);
+		_WorldBufferPool[i] = make_shared<ConstantBufferPool>();
+		_WorldBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(TransformParams),255,false);
 	}
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
-		_constantBufferPool2[i] = make_shared<ConstantBufferPool>();
-		_constantBufferPool2[i]->Init(CBV_REGISTER::b0, sizeof(CameraParams), 50, true);
+		_CameraBufferPool[i] = make_shared<ConstantBufferPool>();
+		_CameraBufferPool[i]->Init(CBV_REGISTER::b0, sizeof(CameraParams), 50, true);
 	}
 
 

@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "Core.h"
 #include "BufferPool.h"
-#include "CameraManager.h"
+
 Transform::Transform() 
 {
 
@@ -49,7 +49,12 @@ void Transform::PushData()
 	TransformParams transformParams = {};
 	transformParams.matWorld = _matWorld;
 
-	core->GetConstantBufferPool()->PushData(&transformParams, sizeof(transformParams));
+	core->GetWorldBufferPool()->PushData(&transformParams, sizeof(transformParams));
+}
+
+void Transform::Move(const vec3& shift)
+{
+	_localPosition += shift;
 }
 
 void Transform::SetLocalRotation(const vec3 localRotation)

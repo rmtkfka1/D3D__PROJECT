@@ -1,6 +1,7 @@
 #pragma once
 #include "CustomObject.h"
 
+class ThirdPersonCamera;
 class Terrain;
 
 class Player :public CustomObject
@@ -17,8 +18,10 @@ public:
 private:
 
 	void MoveUpdate();
+	void RotateUpdate();
 
 	shared_ptr<Terrain> _terrain;
+	shared_ptr<ThirdPersonCamera> _camera;
 	float _speed =30.0f;
 };
 

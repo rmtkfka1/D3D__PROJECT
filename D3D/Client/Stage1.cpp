@@ -8,7 +8,6 @@
 #include "CustomObject.h"
 #include "Transform.h"
 #include "GeoMetryHelper.h"
-#include "CameraManager.h"
 #include "Player.h"
 #include "Terrain.h"
 
@@ -45,9 +44,6 @@ void Stage1::BulidObject()
 	{
 
 		
-		shared_ptr<Terrain> terrain = make_shared<Terrain>();
-		AddGameObject(terrain);
-		CameraManager::GetInstance()->SetTerrain(terrain);
 		
 		shared_ptr<Player> gameobject = make_shared<Player>();
 
@@ -65,14 +61,16 @@ void Stage1::BulidObject()
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		shader->Init(L"default.hlsl");
 		materialptr->SetShader(shader);
-
-		CameraManager::GetInstance()->SetPlayer(gameobject);
-		gameobject->SetTerrain(terrain);
 		AddGameObject(gameobject);
+
+		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		AddGameObject(terrain);
+
+		gameobject->SetTerrain(terrain);
+	
 
 
 	}
-
 
 
 	{

@@ -1,5 +1,8 @@
 #pragma once
 #include "Scene.h"
+
+class ThirdPersonCamera;
+
 class Stage1 :public Scene
 {
 public:

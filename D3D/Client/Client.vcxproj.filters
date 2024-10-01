@@ -41,6 +41,9 @@
     <Filter Include="05.GameObject\01.CustomObject">
       <UniqueIdentifier>{48a6d378-899d-47bc-a09a-a95eb6f6c7bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08.Camera">
+      <UniqueIdentifier>{d8bbf631-49f0-4334-9f6e-225309850a2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -109,9 +112,6 @@
     <ClInclude Include="KeyManager.h">
       <Filter>07.Manager</Filter>
     </ClInclude>
-    <ClInclude Include="CameraManager.h">
-      <Filter>07.Manager</Filter>
-    </ClInclude>
     <ClInclude Include="TimeManager.h">
       <Filter>07.Manager</Filter>
     </ClInclude>
@@ -129,6 +129,9 @@
     </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>05.GameObject\01.CustomObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>08.Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,9 +205,6 @@
     <ClCompile Include="KeyManager.cpp">
       <Filter>07.Manager</Filter>
     </ClCompile>
-    <ClCompile Include="CameraManager.cpp">
-      <Filter>07.Manager</Filter>
-    </ClCompile>
     <ClCompile Include="TimeManager.cpp">
       <Filter>07.Manager</Filter>
     </ClCompile>
@@ -222,6 +222,9 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>05.GameObject\01.CustomObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>08.Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

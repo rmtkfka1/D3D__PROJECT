@@ -9,7 +9,7 @@ enum class GameObjectType
 	Hierarchy
 };
 
-class GameObject
+class GameObject : public enable_shared_from_this<GameObject>
 {
 public:
 	GameObject(GameObjectType type);

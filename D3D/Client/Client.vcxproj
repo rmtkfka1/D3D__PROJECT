@@ -161,7 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BufferPool.h" />
-    <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CustomObject.h" />
@@ -192,7 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BufferPool.cpp" />
-    <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CustomObject.cpp" />

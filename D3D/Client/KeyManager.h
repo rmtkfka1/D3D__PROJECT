@@ -53,6 +53,9 @@ public:
 
 	void Init(HWND hwnd);
 	void Update();
+	void SetCenterPos(POINT point) { _centerScreen = point; }
+	void KeyUpdate();
+	void MouseUpdate();
 
 	// 누르고 있을 때
 	bool GetButton(KEY_TYPE key) { return GetState(key) == KEY_STATE::PRESS; }
@@ -69,6 +72,12 @@ private:
 private:
 	HWND _hwnd{};
 	vector<KEY_STATE> _states;
+
 	POINT _mousePos = {};
+	POINT _centerScreen{};
+
+public:
+	float _dx;
+	float _dy;
 };
 
