@@ -29,13 +29,27 @@ void Terrain::Init()
     ShaderInfo info;
   
     shared_ptr<Shader> shader = make_shared<Shader>();
-    shader->Init(L"Terrain.hlsl", info);
-
-    shared_ptr<Texture> texture = make_shared<Texture>();
-    texture->Init(L"heightMap/Base_Texture.dds");
-
+    shader->Init(L"terrain.hlsl", info);
     _material->SetShader(shader);
-    _material->SetDiffuseTexture(texture);
+
+    {
+        shared_ptr<Texture> texture = make_shared<Texture>();
+        texture->Init(L"heightMap/Base_Texture.dds");
+        _material->SetDiffuseTexture(texture);
+    }
+
+    {
+        shared_ptr<Texture> texture = make_shared<Texture>();
+        texture->Init(L"heightMap/diffuse.tga");
+        _material->SetNormalTexture(texture);
+    }
+
+    {
+        shared_ptr<Texture> texture = make_shared<Texture>();
+        texture->Init(L"heightMap/Lava(Emissive).dds");
+        _material->SetSpecularTexture(texture);
+    }
+
 }
 
 void Terrain::Update()

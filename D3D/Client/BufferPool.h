@@ -9,6 +9,8 @@ enum class CBV_REGISTER : uint8
 enum class SRV_REGISTER : uint8
 {
 	t0 = 1,
+	t1,
+	t2
 
 };
 

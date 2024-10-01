@@ -30,15 +30,15 @@ void Material::Pushdata()
 		core->GetTableHeap()->CopySRV(_diffuseTexture->GetCpuHandle(), reg);
 	}
 
-	//if (_normalTexture)
-	//{
-	//	SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t1));
-	//	core->GetTableHeap()->CopySRV(_diffuseTexture->GetCpuHandle(), reg);
-	//}
-	//
-	//if (_SpecularTexture)
-	//{
-	//	SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t2));
-	//	core->GetTableHeap()->CopySRV(_diffuseTexture->GetCpuHandle(), reg);
-	//}
+	if (_normalTexture)
+	{
+		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t1));
+		core->GetTableHeap()->CopySRV(_normalTexture->GetCpuHandle(), reg);
+	}
+	
+	if (_SpecularTexture)
+	{
+		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t2));
+		core->GetTableHeap()->CopySRV(_SpecularTexture->GetCpuHandle(), reg);
+	}
 }

@@ -239,7 +239,7 @@
     <FxCompile Include="..\Resources\Shader\sky.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="Terrain.hlsl">
+    <FxCompile Include="..\Resources\Shader\terrain.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
   </ItemGroup>

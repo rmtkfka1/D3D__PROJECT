@@ -13,7 +13,6 @@ cbuffer TEST_B1 : register(b1)
 Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
 Texture2D g_tex_2 : register(t2);
-
 SamplerState g_sam_0 : register(s0);
 
 struct VS_IN
@@ -44,9 +43,13 @@ VS_OUT VS_Main(VS_IN input)
 float4 PS_Main(VS_OUT input) : SV_Target
 {
    
-    float color = g_tex_0.Sample(g_sam_0, input.uv);
-    color += g_tex_1.Sample(g_sam_0, input.uv *2.0f);
-    color += g_tex_2.Sample(g_sam_0, input.uv * 0.3f);
+   
+    float4 color = g_tex_0.Sample(g_sam_0, input.uv);
+    
+    color += g_tex_1.Sample(g_sam_0, input.uv * 0.5f);
+    
+    color += g_tex_2.Sample(g_sam_0, input.uv * 2.0f);
+    
     return color;
 
  

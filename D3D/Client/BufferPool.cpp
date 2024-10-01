@@ -146,7 +146,7 @@ void DescriptorTable::Init(uint32 count , uint64 CameraMaxCount)
 	_groupCount = count;
 	_cameraMaxCount = CameraMaxCount;
 
-	int32 RegisterCount = 1+1;
+	int32 RegisterCount = 1+3;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.NumDescriptors = count * RegisterCount + _cameraMaxCount;
