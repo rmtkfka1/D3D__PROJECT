@@ -159,6 +159,7 @@ void Core::Present()
 	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
 
 	_constantBufferPool[nextContextIndex]->Clear();
+	_constantBufferPool2[nextContextIndex]->Clear();
 	_table[nextContextIndex]->Clear();
 	_currentContextIndex = nextContextIndex;
 
@@ -365,14 +366,21 @@ void Core::CreateBufferPool()
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_table[i] = make_shared<DescriptorTable>();
-		_table[i]->Init(255);
+		_table[i]->Init(255,50);
 	}
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_constantBufferPool[i] = make_shared<ConstantBufferPool>();
-		_constantBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(TransformParams),255);
+		_constantBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(TransformParams),255,false);
 	}
+
+	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
+	{
+		_constantBufferPool2[i] = make_shared<ConstantBufferPool>();
+		_constantBufferPool2[i]->Init(CBV_REGISTER::b0, sizeof(CameraParams), 50, true);
+	}
+
 
 	_textureBufferPool = make_shared<TextureBufferPool>();
 	_textureBufferPool->Init(255);

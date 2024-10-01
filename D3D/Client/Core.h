@@ -36,6 +36,7 @@ public:
 	shared_ptr<D3D12ResourceManager> GetResourceManager() { return _resourceManager; }
 	shared_ptr<DescriptorTable> GetTableHeap() { return _table[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool> GetConstantBufferPool() { return _constantBufferPool[_currentContextIndex]; }
+	shared_ptr<ConstantBufferPool> GetConstantBufferPool2() { return _constantBufferPool2[_currentContextIndex]; }
 	shared_ptr<TextureBufferPool> GetTextureBufferPool() {return _textureBufferPool; }
 
 	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
@@ -82,6 +83,7 @@ private:
 	//Buffer pool
 	array<shared_ptr<DescriptorTable>,MAX_FRAME_COUNT>  _table;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _constantBufferPool;
+	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _constantBufferPool2;
 	shared_ptr<TextureBufferPool>  _textureBufferPool;
 };
 

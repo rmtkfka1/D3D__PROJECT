@@ -13,9 +13,6 @@
 #include "CameraManager.h"
 #include "TimeManager.h"
 
-ULONGLONG _prvFrameCheckTick = 0;
-ULONGLONG g_PrvUpdateTick = 0;
-DWORD	g_FrameCount = 0;
 
 void Game::Init(HWND hwnd)
 {
@@ -44,13 +41,22 @@ void Game::Update()
 
 	TimeManager::GetInstance()->Update();
 	KeyManager::GetInstance()->Update();
-
+	CameraManager::GetInstance()->Update();
 
 }
 
 void Game::Render()
 {
 	core->RenderBegin();
+
+	CameraParams param;
+	param.matView = CameraManager::S_MatView;
+	param.matView = CameraManager::S_MatProjection;
+
+	core->GetConstantBufferPool2()->PushData(&param, sizeof(CameraParams));
+	core->GetTableHeap()->SetGraphicsRootDescriptorTable(0);
+
+
 	SceneManager::GetInstance()->Run();
 	SceneManager::GetInstance()->LateUpdate();
 	core->RenderEnd();

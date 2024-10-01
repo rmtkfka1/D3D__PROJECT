@@ -1,8 +1,13 @@
+
 cbuffer TEST_B0 : register(b0)
 {
-    row_major matrix WorldMat;
     row_major matrix ViewMat;
     row_major matrix ProjMat;
+};
+
+cbuffer TEST_B1 : register(b1)
+{
+    row_major matrix WorldMat;
 };
 
 Texture2D g_tex_0 : register(t0);

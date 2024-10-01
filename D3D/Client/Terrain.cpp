@@ -47,7 +47,7 @@ void Terrain::Render()
 {
     _transform->PushData();
     _material->Pushdata();
-    core->GetTableHeap()->SetGraphicsRootDescriptorTable();
+    core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
 
     ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
     cmdlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

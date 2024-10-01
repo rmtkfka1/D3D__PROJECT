@@ -107,8 +107,11 @@ struct Vertex
 struct TransformParams
 {
     Matrix matWorld;
+};
+
+struct CameraParams
+{
     Matrix matView;
     Matrix matProjection;
 };
-
 extern unique_ptr<class Core> core;

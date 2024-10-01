@@ -2,11 +2,12 @@
 #include "BufferPool.h"
 #include "Core.h"
 
-void ConstantBufferPool::Init(CBV_REGISTER reg, uint32 size, uint32 count)
+void ConstantBufferPool::Init(CBV_REGISTER reg, uint32 size, uint32 count, bool useCamera)
 {
 	_reg = reg;
 	_elementSize = (size + 255) & ~255;
 	_elementCount = count;
+	_useCamera = useCamera;
 
 	//Buffer Pool »ý¼º
 	uint64 bufferSize = _elementSize * _elementCount;
@@ -51,7 +52,14 @@ void ConstantBufferPool::PushData(void* buffer, uint32 size)
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(_cpuHandleBegin, _currentIndex * _handleIncrementSize);
 
-	core->GetTableHeap()->CopyCBV(cpuHandle, _reg);
+	if (_useCamera==false)
+	{
+		core->GetTableHeap()->CopyCBV(cpuHandle, _reg);
+	}
+	else
+	{
+		core->GetTableHeap()->CopyCBV(cpuHandle);
+	}
 
 	_currentIndex++;
 }
@@ -133,14 +141,15 @@ int32 TextureBufferPool::Alloc()
 *                        *
 **************************/
 
-void DescriptorTable::Init(uint32 count)
+void DescriptorTable::Init(uint32 count , uint64 CameraMaxCount)
 {
 	_groupCount = count;
+	_cameraMaxCount = CameraMaxCount;
 
-	int32 RegisterCount = REGISTER_COUNT;
+	int32 RegisterCount = 2;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.NumDescriptors = count * RegisterCount;
+	desc.NumDescriptors = count * RegisterCount + _cameraMaxCount;
 	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
@@ -153,7 +162,15 @@ void DescriptorTable::Init(uint32 count)
 
 void DescriptorTable::Clear()
 {
+	_currentCameraIndex = 0;
 	_currentGroupIndex = 0;
+}
+
+void DescriptorTable::CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE destHandle = _descHeap->GetCPUDescriptorHandleForHeapStart();
+	destHandle.ptr += _currentCameraIndex * _handleSize;
+	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, srcHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
 void DescriptorTable::CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg)
@@ -170,13 +187,26 @@ void DescriptorTable::CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTE
 	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, srcHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
-void DescriptorTable::SetGraphicsRootDescriptorTable()
+void DescriptorTable::SetGraphicsRootDescriptorTable(int num)
 {
 
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
-	handle.ptr += _currentGroupIndex * _groupSize;
-	core->GetCmdLIst()->SetGraphicsRootDescriptorTable(0, handle);
-	_currentGroupIndex++;
+	if (num == 0)
+	{
+		D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
+		handle.ptr += _currentCameraIndex * _handleSize;
+		core->GetCmdLIst()->SetGraphicsRootDescriptorTable(0, handle);
+		_currentCameraIndex++;
+	}
+
+	else
+	{
+		D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
+		handle.ptr += _currentGroupIndex * _groupSize + _cameraMaxCount * _handleSize;
+		core->GetCmdLIst()->SetGraphicsRootDescriptorTable(1, handle);
+		_currentGroupIndex++;
+	}
+
+	
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE DescriptorTable::GetCPUHandle(CBV_REGISTER reg)
@@ -193,6 +223,6 @@ D3D12_CPU_DESCRIPTOR_HANDLE DescriptorTable::GetCPUHandle(uint32 reg)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = _descHeap->GetCPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
-	handle.ptr += reg * _handleSize;
+	handle.ptr += reg * _handleSize + _cameraMaxCount *_handleSize;
 	return handle;
 }

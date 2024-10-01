@@ -16,7 +16,6 @@ void Player::Update()
 	_transform->SetLocalScale(vec3(0.1f, 1.0f, 0.1f));
 
 	MoveUpdate();
-	CameraManager::GetInstance()->Update();
 	Super::Update();
 }
 

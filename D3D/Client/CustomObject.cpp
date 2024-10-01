@@ -35,7 +35,7 @@ void CustomObject::Render()
 
 	_transform->PushData();
 	_material->Pushdata();
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
+	core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
 	_mesh->Render();
 
 }

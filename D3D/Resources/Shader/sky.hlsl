@@ -9,12 +9,18 @@ struct VS_OUT
     float3 localPos : TEXCOORD;
 };
 
-cbuffer TransformParams : register(b0)
+cbuffer CameraParams : register(b0)
 {
-    row_major matrix WorldMatrix;
     row_major matrix ViewMatrix;
     row_major matrix ProjectionMatrix;
 };
+
+cbuffer TransformParams : register(b1)
+{
+    row_major matrix WorldMatrix;
+};
+
+
 
 TextureCube g_tex_0 : register(t0);
 SamplerState g_sam_0 : register(s0);
