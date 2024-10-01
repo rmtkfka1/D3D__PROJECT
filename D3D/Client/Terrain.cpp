@@ -23,7 +23,7 @@ Terrain::~Terrain()
 
 void Terrain::Init()
 {
-    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(5.0f, 1.0f, 5.0f));
+    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(5.0f, 3.0f, 5.0f));
     CreateMesh();
 
     ShaderInfo info;
@@ -143,7 +143,7 @@ void Terrain::CreateMesh()
 
             if (heightIndex < _width * _length) {
                 vec3 Height = GetHeight(vec3(vertex.position.x, 0, vertex.position.z));
-                vertex.position.y = Height.y * _scale.y;
+                vertex.position.y = Height.y ;
             }
 
             vertex.uv.x = static_cast<float>(j) / _width;
