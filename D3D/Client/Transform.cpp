@@ -52,9 +52,29 @@ void Transform::PushData()
 	core->GetWorldBufferPool()->PushData(&transformParams, sizeof(transformParams));
 }
 
-void Transform::Move(const vec3& shift)
+void Transform::MoveShift(const vec3& shift)
 {
 	_localPosition += shift;
+}
+
+void Transform::RotateShift(const vec3 shift)
+{
+	Quaternion currentRotation = Quaternion::CreateFromYawPitchRoll(
+		XMConvertToRadians(_localRotation.y),
+		XMConvertToRadians(_localRotation.x),
+		XMConvertToRadians(_localRotation.z)
+	);
+
+	// 새로 추가할 회전값을 계산
+	float pitch = XMConvertToRadians(shift.x);  // X-axis rotation
+	float yaw = XMConvertToRadians(shift.y);    // Y-axis rotation
+	float roll = XMConvertToRadians(shift.z);   // Z-axis rotation
+
+	// 새 회전을 쿼터니언으로 변환
+	Quaternion deltaRotation = Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
+
+	_localRotation = currentRotation * deltaRotation;
+
 }
 
 void Transform::SetLocalRotation(const vec3 localRotation)

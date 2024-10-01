@@ -43,7 +43,7 @@ void Camera::UpdateShaderVariables()
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(0);
 }
 
-void Camera::Move(const vec3& shift)
+void Camera::MoveShift(const vec3& shift)
 {
 	_cameraPos += shift;
 }

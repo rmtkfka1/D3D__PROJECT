@@ -11,7 +11,8 @@ public:
 	void Update();
 	void PushData();
 
-	void Move(const vec3& shift);
+	void MoveShift(const vec3& shift);
+	void RotateShift(const vec3 shift);
 	// Local
 	vec3 GetLocalScale() { return _localScale; }
 	void SetLocalScale(const vec3 localScale) { _localScale = localScale; }

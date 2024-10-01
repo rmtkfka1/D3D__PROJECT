@@ -29,7 +29,7 @@ public:
 	void UpdateShaderVariables();
 
 	virtual void Rotate(const vec3& offset) {};
-	void Move(const vec3& shift);
+	void MoveShift(const vec3& shift);
 
 protected:
 	CameraType _type = CameraType::NONE;

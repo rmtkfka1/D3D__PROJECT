@@ -39,43 +39,42 @@ void Player::MoveUpdate()
 
 	if (key->GetButton(KEY_TYPE::W))
 	{
-		_transform->Move(diection * _speed * dt);
+		_transform->MoveShift(diection * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::S))
 	{
-		_transform->Move(-(diection * _speed * dt));
+		_transform->MoveShift(-(diection * _speed * dt));
 	}
 
 	if (key->GetButton(KEY_TYPE::D))
 	{
-		_transform->Move(right * _speed * dt);
+		_transform->MoveShift(right * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::A))
 	{
-	    _transform->Move(-(right * _speed * dt));
+	    _transform->MoveShift(-(right * _speed * dt));
 	}
 
 
 	auto& pos = _terrain->GetHeight(_transform->GetLocalPosition());
+
 	if (_transform->GetLocalPosition().y < pos.y)
 	{
-		_transform->SetLocalPosition(vec3(pos.x, pos.y + 0.5f, pos.z));
+		_transform->SetLocalPosition(vec3(pos.x, pos.y , pos.z));
 	}
 
-	_camera->Move(diection * _speed * dt);
+	_camera->MoveShift(diection * _speed * dt);
 
 }
 
 
 void Player::RotateUpdate()
 {
-	float dx = KeyManager::GetInstance()->_dx;
-	float dy = KeyManager::GetInstance()->_dy;
-
-	auto now = GetTransform()->GetLocalRotation();
-	GetTransform()->SetLocalRotation(vec3(now.x+dx, now.y + 180.0f +dy, 0));
+	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
+	
+	GetTransform()->RotateShift(vec3(delataPos.y, delataPos.x, 0));
 
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
