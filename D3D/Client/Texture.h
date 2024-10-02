@@ -1,5 +1,10 @@
 #pragma once
 
+enum class TextureType
+{
+	Texture2D,
+	CubeMap
+};
 
 class Texture 
 {
@@ -7,8 +12,8 @@ public:
 	Texture();
 	~Texture();
 
-	void Init(const wstring& path);
-	void InitCubeMap(const wstring& path);
+	void Init(const wstring& path,TextureType type = TextureType::Texture2D);
+
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle() { return _srvHandle; }
 

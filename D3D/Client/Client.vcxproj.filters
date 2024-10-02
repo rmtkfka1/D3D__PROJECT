@@ -133,6 +133,12 @@
     <ClInclude Include="Camera.h">
       <Filter>08.Camera</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>07.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -225,6 +231,12 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>08.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>07.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>03.Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

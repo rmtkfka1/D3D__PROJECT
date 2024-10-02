@@ -17,7 +17,7 @@ void Player::Update()
 	
 	MoveUpdate();
 	RotateUpdate();
-	_camera->UpdateShaderVariables();
+	CameraPushData();
 	Super::Update();
 }
 
@@ -73,9 +73,14 @@ void Player::MoveUpdate()
 void Player::RotateUpdate()
 {
 	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
-	
-	GetTransform()->RotateShift(vec3(delataPos.y, delataPos.x, 0));
 
+
+	_transform->RotateShift(vec3(delataPos.y, delataPos.x, 0));
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
+};
+
+void Player::CameraPushData()
+{
+	_camera->UpdateShaderVariables();
 }

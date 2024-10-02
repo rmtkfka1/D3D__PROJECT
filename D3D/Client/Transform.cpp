@@ -31,14 +31,6 @@ void Transform::Update()
 		_matWorld = _matLocal;
 	}
 
-	//Quaternion quat;
-	//_matWorld.Decompose(_scale, quat, _position);
-
-	//_rotation = quat;
-	//_right = vec3::TransformNormal(vec3::Right, _matWorld);
-	//_up = vec3::TransformNormal(vec3::Up, _matWorld);
-	//_look = vec3::TransformNormal(vec3::Backward, _matWorld);
-
 	// Children
 	for (const shared_ptr<Transform>& child : _children)
 		child->Update();

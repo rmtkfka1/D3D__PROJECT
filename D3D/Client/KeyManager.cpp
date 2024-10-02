@@ -23,7 +23,6 @@ void KeyManager::Update()
 
 	KeyUpdate();
 	MouseUpdate();
-	//::ScreenToClient(core->GetWindowInfo().hwnd, &_mousePos);
 
 }
 
@@ -71,20 +70,16 @@ void KeyManager::MouseUpdate()
 	float deltaPosX = static_cast<float>(_mousePos.x - _centerScreen.x);
 	float deltaPosY = static_cast<float>(_mousePos.y - _centerScreen.y);
 
-
 	// Yaw와 Pitch 업데이트
-	_dx += deltaPosX * 30.0f * dt;  // Yaw는 마우스 X축 움직임에 따라
-	_dy += deltaPosY * 30.0f * dt;  // Pitch는 마우스 Y축 움직임에 따라 (반전 적용)
-
+	_dx += deltaPosX * 30.0f * dt;  
+	_dy += deltaPosY * 30.0f * dt;  
 
 	if (_dx < 0.0f) _dx += 360.0f;
 	if (_dx > 360.0f) _dx -= 360.0f;
 
-	// Yaw 값 제한 (360도 회전)
 	if (_dy > 89.0f) _dy = 89.0f;
 	if (_dy < -89.0f) _dy = -89.0f;
 
-	// 마우스 커서를 화면 중심으로 이동
 	SetCursorPos(static_cast<int>(_centerScreen.x), static_cast<int>(_centerScreen.y));
 
 }

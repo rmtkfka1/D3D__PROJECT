@@ -13,8 +13,7 @@
 
 Camera::Camera(CameraType type):_type(type)
 {
-	GenViewMatrix();
-	GenProjMatrix();
+
 }
 
 Camera::~Camera()
@@ -90,9 +89,7 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 	_cameraUp = vec3(resultMat._12, resultMat._22, resultMat._32);
 	_cameraLook = vec3(resultMat._13, resultMat._23, resultMat._33);
 
-	//쉐이더에게 보내줄 데이터를 갱신함.
-	GenViewMatrix();
-	UpdateShaderVariables();
+
 }
 
 

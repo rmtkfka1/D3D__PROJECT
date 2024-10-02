@@ -189,6 +189,7 @@ void Terrain::CreateMesh()
             index.push_back(i * (_width + 1) + j);
             index.push_back(i * (_width + 1) + (j + 1));
             index.push_back((i + 1) * (_width + 1) + j);
+
             index.push_back(i * (_width + 1) + (j + 1));
             index.push_back((i + 1) * (_width + 1) + (j + 1));
             index.push_back((i + 1) * (_width + 1) + j);

@@ -65,7 +65,7 @@ public:
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
 
 	const POINT& GetMousePos() { return _mousePos; }
-	const vec2& GetDeletaPos() { return vec2{ _dx,_dy }; }
+	vec2 GetDeletaPos() { return vec2{ _dx,_dy }; }
 
 private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return _states[static_cast<uint8>(key)]; }

@@ -10,6 +10,7 @@
 #include "GeoMetryHelper.h"
 #include "Player.h"
 #include "Terrain.h"
+#include "ResourceManager.h"
 
 Stage1::Stage1()
 {
@@ -43,8 +44,6 @@ void Stage1::BulidObject()
 
 	{
 
-		
-		
 		shared_ptr<Player> gameobject = make_shared<Player>();
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(0, 0, 0));
@@ -54,8 +53,7 @@ void Stage1::BulidObject()
 
 		auto materialptr = gameobject->GetMaterial();
 
-		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->Init(L"1.jpg");
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"1.jpg");
 		materialptr->SetDiffuseTexture(texture);
 
 		shared_ptr<Shader> shader = make_shared<Shader>();
@@ -77,16 +75,14 @@ void Stage1::BulidObject()
 
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
+		shared_ptr<Texture> texture = LOAD(Texture, L"cubemap/skybox.dds", TextureType::CubeMap);
+		//texture->InitCubeMap(L"cubemap/skybox.dds");
 
-		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->InitCubeMap(L"cubemap/skybox.dds");
-
-		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
-		shader->Init(L"sky.hlsl", info);
-
+		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Load<Shader>(L"sky.hlsl", info);
+	
 		gameobject->GetMaterial()->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 

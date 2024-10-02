@@ -30,6 +30,8 @@ public:
 
 	virtual void Rotate(const vec3& offset) {};
 	void MoveShift(const vec3& shift);
+	void SetCameraPos(const vec3& pos) { _cameraPos = pos; }
+	vec3 GetCameraPos() { return _cameraPos; }
 
 protected:
 	CameraType _type = CameraType::NONE;
@@ -63,6 +65,7 @@ public:
 	~ThirdPersonCamera();
 
 	virtual void Rotate(const shared_ptr<Player>& player);
+
 
 private:
 
