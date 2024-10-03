@@ -32,7 +32,7 @@ void Camera::GenProjMatrix()
 }
 
 
-void Camera::UpdateShaderVariables()
+void Camera::PushData()
 {
 	GenViewMatrix();
 	GenProjMatrix();

@@ -8,8 +8,6 @@
 void Player::Init()
 {
 	Super::Init();
-	_camera = make_shared<ThirdPersonCamera>();
-
 }
 
 void Player::Update()
@@ -57,12 +55,14 @@ void Player::MoveUpdate()
 	    _transform->MoveShift(-(right * _speed * dt));
 	}
 
-
-	auto& pos = _terrain->GetHeight(_transform->GetLocalPosition());
-
-	if (_transform->GetLocalPosition().y < pos.y)
+	if (_terrain)
 	{
-		_transform->SetLocalPosition(vec3(pos.x, pos.y , pos.z));
+		auto& pos = _terrain->GetHeight(_transform->GetLocalPosition());
+
+		if (_transform->GetLocalPosition().y < pos.y)
+		{
+			_transform->SetLocalPosition(vec3(pos.x, pos.y, pos.z));
+		}
 	}
 
 	_camera->MoveShift(diection * _speed * dt);
@@ -73,8 +73,6 @@ void Player::MoveUpdate()
 void Player::RotateUpdate()
 {
 	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
-
-
 	_transform->RotateShift(vec3(delataPos.y, delataPos.x, 0));
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
@@ -82,5 +80,5 @@ void Player::RotateUpdate()
 
 void Player::CameraPushData()
 {
-	_camera->UpdateShaderVariables();
+	_camera->PushData();
 }

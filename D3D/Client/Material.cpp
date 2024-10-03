@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "GameObject.h"
 
-Material::Material() 
+Material::Material():ResourceBase(ResourceType::Material)
 {
 
 

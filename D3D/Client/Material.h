@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ResourceBase.h"
 class Shader;
 class Texture;
 
@@ -16,11 +16,11 @@ struct MaterialParams
 };
 
 
-class Material 
+class Material :public ResourceBase
 {
 public:
 	Material();
-	 ~Material();
+	virtual ~Material();
 
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }

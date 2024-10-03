@@ -14,6 +14,7 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 
+	void SetThirdPersonCamera(shared_ptr<ThirdPersonCamera> camera) { _camera = camera; }
 	void SetTerrain(shared_ptr<Terrain> terrian) { _terrain = terrian; }
 private:
 

@@ -15,6 +15,7 @@ public:
 	virtual void LateUpdate() override;
 
 private:
+	shared_ptr<ThirdPersonCamera> _thirdCamera;
 	void BulidObject();
 
 };

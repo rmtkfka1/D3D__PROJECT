@@ -1,16 +1,16 @@
 #pragma once
-
+#include "ResourceBase.h"
 enum class TextureType
 {
 	Texture2D,
 	CubeMap
 };
 
-class Texture 
+class Texture :public ResourceBase
 {
 public:
 	Texture();
-	~Texture();
+	virtual ~Texture();
 
 	void Init(const wstring& path,TextureType type = TextureType::Texture2D);
 
@@ -18,7 +18,6 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle() { return _srvHandle; }
 
 public:
-
 
 
 private:

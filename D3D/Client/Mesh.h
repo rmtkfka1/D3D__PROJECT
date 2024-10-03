@@ -1,15 +1,19 @@
 #pragma once
+#include "ResourceBase.h"
 
-class Mesh
+class Mesh:public ResourceBase
 {
 public:
+	Mesh();
+	virtual ~Mesh();
+
 	void Init(vector<Vertex>& vec, vector<uint32>& index);
 	void Render();
 	void CreateVertexBuffer(vector<Vertex>& vec);
 	void CreateIndexBuffer(vector<uint32>& vec);
 
-	D3D12_VERTEX_BUFFER_VIEW& GetBufferView() { return _vertexBufferView; }
-	D3D12_INDEX_BUFFER_VIEW& GetIndexBufferView() { return _indexBufferView; }
+	D3D12_VERTEX_BUFFER_VIEW& GetVertexView() { return _vertexBufferView; }
+	D3D12_INDEX_BUFFER_VIEW& GetIndexView() { return _indexBufferView; }
 	uint32 GetIndexCount() { return _indexCount; }
 
 private:

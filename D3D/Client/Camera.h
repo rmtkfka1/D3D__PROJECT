@@ -26,7 +26,7 @@ public:
 
 	void GenViewMatrix();
 	void GenProjMatrix();
-	void UpdateShaderVariables();
+	void PushData();
 
 	virtual void Rotate(const vec3& offset) {};
 	void MoveShift(const vec3& shift);

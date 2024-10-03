@@ -44,6 +44,9 @@
     <Filter Include="08.Camera">
       <UniqueIdentifier>{d8bbf631-49f0-4334-9f6e-225309850a2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.GameObject\02.ModelObject">
+      <UniqueIdentifier>{918d7df1-fc4e-411a-855d-6fb70ef66e74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -137,6 +140,15 @@
       <Filter>07.Manager</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject.h">
+      <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceBase.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
   </ItemGroup>
@@ -236,6 +248,15 @@
       <Filter>07.Manager</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelObject.cpp">
+      <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceBase.cpp">
       <Filter>03.Resource</Filter>
     </ClCompile>
   </ItemGroup>

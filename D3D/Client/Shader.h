@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "ResourceBase.h"
 
 enum class RASTERIZER_TYPE
 {
@@ -36,7 +36,7 @@ struct ShaderInfo
 	BLEND_TYPE blendType = BLEND_TYPE::DEFAULT;
 };
 
-class Shader 
+class Shader :public ResourceBase
 {
 public:
 	Shader();

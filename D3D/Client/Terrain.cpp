@@ -62,12 +62,7 @@ void Terrain::Render()
     _transform->PushData();
     _material->Pushdata();
     core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
-
-    ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
-    cmdlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    cmdlist->IASetVertexBuffers(0, 1, &_mesh->GetBufferView()); // Slot: (0~15)
-    cmdlist->IASetIndexBuffer(&_mesh->GetIndexBufferView()); // Slot: (0~15)
-    cmdlist->DrawIndexedInstanced(_mesh->GetIndexCount(), 1, 0, 0, 0);
+    _mesh->Render();
 }
 
 #define _WITH_APPROXIMATE_OPPOSITE_CORNER

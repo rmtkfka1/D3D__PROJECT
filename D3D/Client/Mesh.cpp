@@ -4,6 +4,13 @@
 #include "RootSignature.h"
 #include "RenderTargets.h"
 #include "D3D12ResourceManager.h"
+Mesh::Mesh():ResourceBase(ResourceType::Mesh)
+{
+
+}
+Mesh::~Mesh()
+{
+}
 void Mesh::Init(vector<Vertex>& vec , vector<uint32>& index)
 {
 	CreateVertexBuffer(vec);

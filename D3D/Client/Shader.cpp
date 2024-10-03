@@ -3,7 +3,7 @@
 #include "Core.h"
 #include "RootSignature.h"
 
-Shader::Shader()
+Shader::Shader():ResourceBase(ResourceType::Shader)
 {
 
 }

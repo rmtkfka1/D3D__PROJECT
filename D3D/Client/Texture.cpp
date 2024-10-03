@@ -5,7 +5,7 @@
 #include "BufferPool.h"
 #include "D3D12ResourceManager.h"
 
-Texture::Texture()
+Texture::Texture():ResourceBase(ResourceType::Texture)
 {
 
 }
