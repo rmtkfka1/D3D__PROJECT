@@ -64,6 +64,16 @@ void ConstantBufferPool::PushData(void* buffer, uint32 size)
 	_currentIndex++;
 }
 
+void ConstantBufferPool::SetData(void* buffer, uint32 size)
+{
+	assert(_elementSize == ((size + 255) & ~255));
+
+	::memcpy(&_mappedBuffer[0], buffer, size);
+
+	core->GetCmdLIst()->SetGraphicsRootConstantBufferView(0, _cbvBufferPool->GetGPUVirtualAddress());
+
+}
+
 void ConstantBufferPool::Clear()
 {
 	_currentIndex = 0;
@@ -190,20 +200,25 @@ void DescriptorTable::CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTE
 void DescriptorTable::SetGraphicsRootDescriptorTable(int num)
 {
 
-	if (num == 0)
+	if (num == 1)
 	{
 		D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 		handle.ptr += _currentCameraIndex * _handleSize;
-		core->GetCmdLIst()->SetGraphicsRootDescriptorTable(0, handle);
+		core->GetCmdLIst()->SetGraphicsRootDescriptorTable(1, handle);
 		_currentCameraIndex++;
+	}
+
+	else if(num==2)
+	{
+		D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
+		handle.ptr += _currentGroupIndex * _groupSize + _cameraMaxCount * _handleSize;
+		core->GetCmdLIst()->SetGraphicsRootDescriptorTable(2, handle);
+		_currentGroupIndex++;
 	}
 
 	else
 	{
-		D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
-		handle.ptr += _currentGroupIndex * _groupSize + _cameraMaxCount * _handleSize;
-		core->GetCmdLIst()->SetGraphicsRootDescriptorTable(1, handle);
-		_currentGroupIndex++;
+		assert(false);
 	}
 
 	

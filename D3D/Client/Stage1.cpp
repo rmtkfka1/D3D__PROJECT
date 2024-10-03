@@ -79,9 +79,9 @@ void Stage1::BulidObject()
 		materialptr->SetShader(shader);
 		AddGameObject(gameobject);
 
-		shared_ptr<Terrain> terrain = make_shared<Terrain>();
-		AddGameObject(terrain);
-		gameobject->SetTerrain(terrain);
+		//shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		//AddGameObject(terrain);
+		//gameobject->SetTerrain(terrain);
 	
 	}
 
@@ -91,6 +91,7 @@ void Stage1::BulidObject()
 
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
+		
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/skybox.dds", TextureType::CubeMap);
 
 

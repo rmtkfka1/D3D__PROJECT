@@ -9,13 +9,13 @@ struct VS_OUT
     float3 localPos : TEXCOORD;
 };
 
-cbuffer CameraParams : register(b0)
+cbuffer CameraParams : register(b1)
 {
     row_major matrix ViewMatrix;
     row_major matrix ProjectionMatrix;
 };
 
-cbuffer TransformParams : register(b1)
+cbuffer TransformParams : register(b2)
 {
     row_major matrix WorldMatrix;
 };

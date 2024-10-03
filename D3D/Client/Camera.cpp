@@ -39,7 +39,7 @@ void Camera::PushData()
 
 	auto& bufferPool = core->GetCameraBufferPool();
 	bufferPool->PushData(&_params,sizeof(_params));
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable(0);
+	core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
 }
 
 void Camera::MoveShift(const vec3& shift)

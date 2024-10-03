@@ -151,6 +151,9 @@
     <ClInclude Include="ResourceBase.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>07.Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -258,6 +261,9 @@
     </ClCompile>
     <ClCompile Include="ResourceBase.cpp">
       <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>07.Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -374,13 +374,13 @@ void Core::CreateBufferPool()
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_WorldBufferPool[i] = make_shared<ConstantBufferPool>();
-		_WorldBufferPool[i]->Init(CBV_REGISTER::b0,sizeof(TransformParams),255,false);
+		_WorldBufferPool[i]->Init(CBV_REGISTER::b2,sizeof(TransformParams),255,false);
 	}
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_CameraBufferPool[i] = make_shared<ConstantBufferPool>();
-		_CameraBufferPool[i]->Init(CBV_REGISTER::b0, sizeof(CameraParams), 50, true);
+		_CameraBufferPool[i]->Init(CBV_REGISTER::b2, sizeof(CameraParams), 50, true); //b2 는 계산에 이용되지않음..
 	}
 
 

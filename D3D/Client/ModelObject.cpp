@@ -33,7 +33,6 @@ void ModelObject::Render()
 
 	for (auto& data : meshData)
 	{
-	
 		_transform->PushData();
 
 		if (data->material)
@@ -41,7 +40,7 @@ void ModelObject::Render()
 			data->material->Pushdata();
 		}
 
-		core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
+		core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);
 
 		data->meshes->Render();
 

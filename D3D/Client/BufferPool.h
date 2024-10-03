@@ -3,7 +3,8 @@
 
 enum class CBV_REGISTER : uint8
 {
-	b0=0,
+	b2=0,
+
 };
 
 enum class SRV_REGISTER : uint8
@@ -29,6 +30,7 @@ class ConstantBufferPool
 public:
 	void Init(CBV_REGISTER reg, uint32 size, uint32 count, bool useCamera);
 	void PushData(void* buffer, uint32 size);
+	void SetData(void* buffer, uint32 size);
 	void Clear();
 
 private:

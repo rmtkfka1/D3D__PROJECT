@@ -1,11 +1,11 @@
 
-cbuffer TEST_B0 : register(b0)
+cbuffer TEST_B0 : register(b1)
 {
     row_major matrix ViewMat;
     row_major matrix ProjMat;
 };
 
-cbuffer TEST_B1 : register(b1)
+cbuffer TEST_B1 : register(b2)
 {
     row_major matrix WorldMat;
 };

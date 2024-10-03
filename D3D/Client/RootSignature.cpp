@@ -20,21 +20,25 @@ void RootSignature::Init()
 	samplerDesc.RegisterSpace = 0;
 	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
+
+
+
 	CD3DX12_DESCRIPTOR_RANGE ranges1[] =
 	{
-		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0) //b0
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1) //b1
 	};
 
 	CD3DX12_DESCRIPTOR_RANGE ranges2[] =
 	{
-		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 1),//b1
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 2),//b2
 		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 0) //t0
 	};
 
 	// 루트 파라미터 정의
-	CD3DX12_ROOT_PARAMETER param[2];
-	param[0].InitAsDescriptorTable(_countof(ranges1), ranges1);
-	param[1].InitAsDescriptorTable(_countof(ranges2), ranges2);
+	CD3DX12_ROOT_PARAMETER param[3];
+	param[0].InitAsConstantBufferView(0);  //라이팅
+	param[1].InitAsDescriptorTable(_countof(ranges1), ranges1); //카메라정보
+	param[2].InitAsDescriptorTable(_countof(ranges2), ranges2); //월드행렬등등
 
 	// 루트 서명 설정
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
