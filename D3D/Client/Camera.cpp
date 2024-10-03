@@ -4,6 +4,7 @@
 #include "BufferPool.h"
 #include "Player.h"
 #include "Transform.h"
+#include "TimeManager.h"
 
 /*************************
 *                        *
@@ -77,8 +78,8 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 	float length = direction.Length();
 	direction.Normalize();
 
-	//한프레임당 움직일 량 //현재는 목표량의 10/1 만 움직임 한프레임당
-	float velocity = length * 0.1f;
+
+	float velocity = length * 30.0f * TimeManager::GetInstance()->GetDeltaTime();
 	_cameraPos = _cameraPos + velocity * direction;
 
 	

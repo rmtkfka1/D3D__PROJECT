@@ -87,7 +87,7 @@ using Quaternion = DirectX::SimpleMath::Quaternion;
 extern int32 WINDOW_WIDTH;
 extern int32 WINDOW_HEIGHT;
 
-const uint64 SWAP_CHAIN_FRAME_COUNT = 4;
+const uint64 SWAP_CHAIN_FRAME_COUNT = 5;
 const uint64 MAX_FRAME_COUNT = SWAP_CHAIN_FRAME_COUNT - 1;
 
 #define LOAD(type, path, ...) ResourceManager::GetInstance()->Load<type>(path, __VA_ARGS__)

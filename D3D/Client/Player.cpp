@@ -72,8 +72,9 @@ void Player::MoveUpdate()
 
 void Player::RotateUpdate()
 {
+	
 	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
-	_transform->RotateShift(vec3(delataPos.y, delataPos.x, 0));
+	_transform->RotateShift(vec3(delataPos.y , delataPos.x, 0));
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
 };

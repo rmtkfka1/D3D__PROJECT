@@ -77,7 +77,7 @@ private:
 	POINT _mousePos = {};
 	POINT _centerScreen{};
 
-	float _mouseSpeed = 30.0f;
+	float _mouseSpeed = 0.1f;
 
 private:
 	float _dx{};
