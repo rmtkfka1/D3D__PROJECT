@@ -5,6 +5,7 @@
 #include "D3D12ResourceManager.h"
 #include "BufferPool.h"
 #include "KeyManager.h"
+#include "LightManager.h"
 
 Core::Core()
 {
@@ -373,6 +374,12 @@ void Core::CreateBufferPool()
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
+		_lightBufferPool[i] = make_shared<ConstantBufferPool>();
+		_lightBufferPool[i]->Init(CBV_REGISTER::b0, sizeof(LightParams), 1, false); //b0 는 계산에 이용되지않음
+	}
+
+	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
+	{
 		_WorldBufferPool[i] = make_shared<ConstantBufferPool>();
 		_WorldBufferPool[i]->Init(CBV_REGISTER::b2,sizeof(TransformParams),255,false);
 	}
@@ -380,7 +387,7 @@ void Core::CreateBufferPool()
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_CameraBufferPool[i] = make_shared<ConstantBufferPool>();
-		_CameraBufferPool[i]->Init(CBV_REGISTER::b2, sizeof(CameraParams), 50, true); //b2 는 계산에 이용되지않음..
+		_CameraBufferPool[i]->Init(CBV_REGISTER::b0, sizeof(CameraParams), 50, true); //b0 는 계산에 이용되지않음
 	}
 
 

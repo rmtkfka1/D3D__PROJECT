@@ -3,8 +3,8 @@
 
 enum class CBV_REGISTER : uint8
 {
+	b0=0,
 	b2=0,
-
 };
 
 enum class SRV_REGISTER : uint8

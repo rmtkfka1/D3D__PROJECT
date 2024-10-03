@@ -37,6 +37,7 @@ public:
 	shared_ptr<DescriptorTable>& GetTableHeap() { return _table[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetWorldBufferPool() { return _WorldBufferPool[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetCameraBufferPool() { return _CameraBufferPool[_currentContextIndex]; }
+	shared_ptr<ConstantBufferPool>& GetLIghtBufferPool() { return _lightBufferPool[_currentContextIndex]; }
 	shared_ptr<TextureBufferPool>& GetTextureBufferPool() {return _textureBufferPool; }
 
 	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
@@ -82,6 +83,7 @@ private:
 private:
 	//Buffer pool
 	array<shared_ptr<DescriptorTable>,MAX_FRAME_COUNT>  _table;
+	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _lightBufferPool;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _WorldBufferPool;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _CameraBufferPool;
 	shared_ptr<TextureBufferPool>  _textureBufferPool;

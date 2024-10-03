@@ -32,6 +32,7 @@ public:
 	void MoveShift(const vec3& shift);
 	void SetCameraPos(const vec3& pos) { _cameraPos = pos; }
 	vec3 GetCameraPos() { return _cameraPos; }
+	vec3 GetCameraLook() { return _cameraLook; }
 
 protected:
 	CameraType _type = CameraType::NONE;
@@ -42,7 +43,7 @@ protected:
 	vec3 _cameraUp =vec3(0,1.0f,0);
 	vec3 _cameraRight =vec3(1.0f,0,0);
 
-	vec3 _offset = vec3(0, 0, -20.0f);
+	vec3 _offset = vec3(0, 10.0f, -20.0f);
 
 	float _near = 0.1f;
 	float _far = 5000.f;

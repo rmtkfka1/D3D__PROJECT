@@ -1,7 +1,8 @@
 #pragma once
 #include "Scene.h"
 
-class ThirdPersonCamera;
+class Player;
+
 
 class Stage1 :public Scene
 {
@@ -15,8 +16,13 @@ public:
 	virtual void LateUpdate() override;
 
 private:
-	shared_ptr<ThirdPersonCamera> _thirdCamera;
+	void BulidLight();
+	void BulidCamera();
 	void BulidObject();
+
+public:
+	//temp
+	shared_ptr<Player> _player;
 
 };
 

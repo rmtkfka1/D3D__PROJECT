@@ -13,8 +13,8 @@
 #include "ResourceManager.h"
 #include "ModelObject.h"
 #include "Model.h"
-#include "Camera.h"
-
+#include "CameraManager.h"
+#include "LightManager.h"
 Stage1::Stage1()
 {
 }
@@ -25,22 +25,64 @@ Stage1::~Stage1()
 
 void Stage1::Init()
 {
-	_thirdCamera = make_shared<ThirdPersonCamera>();
-	
+	BulidCamera();
 	BulidObject();
+	BulidLight();
 	Scene::Init();
 }
 
 void Stage1::Run()
 {
-	_thirdCamera->PushData();
 
+	CameraManager::GetInstance()->PushData();
+	LightManager::GetInstnace()->SetData();
 	Scene::Run();
 }
 
 void Stage1::LateUpdate()
 {
 	Scene::LateUpdate();
+}
+
+void Stage1::BulidLight()
+{
+	{
+	Light light;
+	light.direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
+	light.fallOffStart = 0.0f;
+	light.position = _player->GetTransform()->GetWorldPosition();
+	light.fallOffEnd = 3000.0f;
+	light.spotPower = 100.0f;
+	light.material.ambient = vec3(0.0f, 0, 0);
+	light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
+	light.material.specular = vec3(1.0f, 1.0f, 1.0f);
+	light.material.shininess = 15.0f;
+	light.material.lightType = static_cast<int32>(LIGHT_TYPE::SPOT_LIGHT);
+	light.strength = vec3(8.0f, 8.0f, 8.0f);
+	LightManager::GetInstnace()->PushLight(light);
+	LightManager::GetInstnace()->SetPlayer(_player);
+	}
+
+	{
+		Light light;
+
+		light.direction = vec3(0, -1.0f, 0);
+		light.material.ambient = vec3(0, 0, 0);
+		light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
+		light.material.specular = vec3(1.0f, 1.0f, 1.0f);
+		light.material.shininess = 64.0f;
+		light.material.lightType = static_cast<int32>(LIGHT_TYPE::DIRECTIONAL_LIGHT);;
+		light.strength = vec3(1.0f, 1.0f, 1.0f);
+		LightManager::GetInstnace()->PushLight(light);
+	}
+
+};
+
+void Stage1::BulidCamera()
+{
+	shared_ptr<ThirdPersonCamera> thirdCamera = make_shared<ThirdPersonCamera>();
+	CameraManager::GetInstance()->AddCamera(CameraType::THIRDVIEW, thirdCamera);
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
 }
 
 void Stage1::BulidObject()
@@ -62,7 +104,9 @@ void Stage1::BulidObject()
 
 		shared_ptr<Player> gameobject = make_shared<Player>();
 
-		gameobject->SetThirdPersonCamera(_thirdCamera);
+		_player = gameobject;
+
+		gameobject->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(0, 0, 0));
 
@@ -79,9 +123,9 @@ void Stage1::BulidObject()
 		materialptr->SetShader(shader);
 		AddGameObject(gameobject);
 
-		//shared_ptr<Terrain> terrain = make_shared<Terrain>();
-		//AddGameObject(terrain);
-		//gameobject->SetTerrain(terrain);
+		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		AddGameObject(terrain);
+		gameobject->SetTerrain(terrain);
 	
 	}
 

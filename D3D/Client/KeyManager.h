@@ -80,7 +80,7 @@ private:
 	float _mouseSpeed = 30.0f;
 
 private:
-	float _dx;
-	float _dy;
+	float _dx{};
+	float _dy{};
 };
 
