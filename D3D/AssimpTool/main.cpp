@@ -13,4 +13,9 @@ int main()
 	converter.ExportMaterialData(L"Tank/Tank");
 	converter.ExportModelData(L"Tank/Tank");
 
+	converter._meshes;
+	converter._bones;
+	converter._materials;
+
+	int a = 10;
 };

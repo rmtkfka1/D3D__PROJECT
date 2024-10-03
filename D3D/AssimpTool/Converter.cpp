@@ -144,11 +144,11 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 		}
 	}
 
-	//for (auto& v : mesh->vertices)
-	//{
-	//	v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
-	///*	v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);*/
-	//}
+	for (auto& v : mesh->vertices)
+	{
+		v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
+	/*	v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);*/
+	}
 
 	_meshes.push_back(mesh);
 
@@ -307,21 +307,13 @@ void Converter::CalculateBoundingBox()
 
 	}
 
-	if (_meshes.size() >= 2)
-	{
-		_totalbox = _meshes[0]->box;
-		_totalSphere = _meshes[0]->sphere;
-		for (int i = 1; i < _meshes.size(); ++i)
-		{
-			BoundingBox::CreateMerged(_totalbox, _totalbox, _meshes[i]->box);
-			BoundingSphere::CreateMerged(_totalSphere, _totalSphere, _meshes[i]->sphere);
-		}
-	}
+	_totalbox = _meshes[0]->box;
+	_totalSphere = _meshes[0]->sphere;
 
-	if (_meshes.size() == 1)
+	for (int i = 1; i < _meshes.size(); ++i) 
 	{
-		_totalbox = _meshes[0]->box;
-		_totalSphere = _meshes[0]->sphere;
+		BoundingBox::CreateMerged(_totalbox, _totalbox, _meshes[i]->box);
+		BoundingSphere::CreateMerged(_totalSphere, _totalSphere, _meshes[i]->sphere);
 	}
 
 	cout << "totalBox" << endl;
@@ -334,8 +326,6 @@ void Converter::CalculateBoundingBox()
 	cout << "반지름" << _totalSphere.Radius << endl;
 	cout << "중심점" << _totalSphere.Center.x << " , " << _totalSphere.Center.y << " ," << _totalSphere.Center.z << endl;
 	cout << "===========================================================" << endl;
-
-
 
 };
 void Converter::ReadMaterialData()

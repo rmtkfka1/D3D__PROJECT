@@ -38,13 +38,15 @@ private:
 template<typename T, typename... Args>
 inline shared_ptr<T> ResourceManager::Load(const wstring& path, Args&&... args)
 {
-    auto it = GetResourceMap<T>().find(path);
-    if (it != GetResourceMap<T>().end())
+    auto Map = GetResourceMap<T>();
+
+    auto it = Map.find(path);
+    if (it != Map.end())
         return it->second;
 
     shared_ptr<T> object = make_shared<T>();
     object->Init(path,forward<Args>(args)...);
-    GetResourceMap<T>()[path] = object;
+    Map[path] = object;
     return object;
 }
 

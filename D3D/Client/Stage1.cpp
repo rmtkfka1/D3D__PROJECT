@@ -79,9 +79,9 @@ void Stage1::BulidObject()
 		materialptr->SetShader(shader);
 		AddGameObject(gameobject);
 
-		//shared_ptr<Terrain> terrain = make_shared<Terrain>();
-		//AddGameObject(terrain);
-		//gameobject->SetTerrain(terrain);
+		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		AddGameObject(terrain);
+		gameobject->SetTerrain(terrain);
 	
 	}
 

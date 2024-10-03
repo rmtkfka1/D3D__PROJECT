@@ -33,10 +33,7 @@ void ModelObject::Render()
 
 	for (auto& data : meshData)
 	{
-		list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		list->IASetVertexBuffers(0, 1, &data->meshes->GetVertexView());
-		list->IASetIndexBuffer(&data->meshes->GetIndexView());
-
+	
 		_transform->PushData();
 
 		if (data->material)
@@ -46,7 +43,8 @@ void ModelObject::Render()
 
 		core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
 
-		list->DrawIndexedInstanced(data->meshes->GetIndexCount(), 1, 0, 0, 0);
+		data->meshes->Render();
+
 	}
 
 

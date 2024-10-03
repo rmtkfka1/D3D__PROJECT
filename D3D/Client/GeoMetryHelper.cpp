@@ -1,9 +1,22 @@
 #include "pch.h"
 #include "GeoMetryHelper.h"
 #include "Mesh.h"
+#include "ResourceManager.h"
 
 shared_ptr<Mesh> GeoMetryHelper::LoadRectangleBox(const float scale)
 {
+
+    std::wstringstream wss;
+    wss << scale;
+    wstring temp = wstring(wss.str());
+
+    shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"BOX" + temp);
+
+    if (mesh)
+    {
+        return mesh;
+    }
+
     vector<Vertex> v;
     v.reserve(24); 
 
@@ -53,8 +66,11 @@ shared_ptr<Mesh> GeoMetryHelper::LoadRectangleBox(const float scale)
         20, 21, 22, 20, 22, 23  // 오른쪽
     };
 
-    shared_ptr<Mesh> mesh = make_shared<Mesh>();
+  
+    mesh = make_shared<Mesh>();
     mesh->Init(v, index);
+
+    ResourceManager::GetInstance()->Add(L"BOX"+temp, mesh);
 
     return mesh;
 
@@ -62,6 +78,18 @@ shared_ptr<Mesh> GeoMetryHelper::LoadRectangleBox(const float scale)
 
 shared_ptr<Mesh> GeoMetryHelper::LoadRectangleMesh(const float scale)
 {
+
+    std::wstringstream wss;
+    wss << scale;
+    wstring temp = wstring(wss.str());
+
+    shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"RECTANGLE" + temp);
+
+    if (mesh)
+    {
+        return mesh;
+    }
+
     vector<Vertex> vec(4);
 
     // 앞면
@@ -76,8 +104,10 @@ shared_ptr<Mesh> GeoMetryHelper::LoadRectangleMesh(const float scale)
     idx[0] = 0; idx[1] = 1; idx[2] = 2;
     idx[3] = 0; idx[4] = 2; idx[5] = 3;
 
-    shared_ptr<Mesh> mesh = make_shared<Mesh>();
+    mesh = make_shared<Mesh>();
     mesh->Init(vec, idx);
+
+    ResourceManager::GetInstance()->Add(L"RECTANGLE" + temp, mesh);
 
     return mesh;
 }
