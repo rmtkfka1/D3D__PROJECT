@@ -18,4 +18,10 @@ int main()
 	converter._materials;
 
 	int a = 10;
+
+	for (auto& bone : converter._bones)
+	{
+
+		cout << bone->name << "," << bone->index << " " << bone->parent << endl;
+	}
 };

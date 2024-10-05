@@ -15,6 +15,8 @@
 #include "Model.h"
 #include "CameraManager.h"
 #include "LightManager.h"
+#include "HireacyObject.h"
+#include "TransformTree.h"
 Stage1::Stage1()
 {
 }
@@ -89,15 +91,7 @@ void Stage1::BulidObject()
 {
 	
 
-	{
-		shared_ptr<Model> data = Model::ReadData(L"Tank/Tank");
 
-		shared_ptr<ModelObject> object = make_shared<ModelObject>();
-		object->SetModel(data);
-
-		AddGameObject(object);
-
-	}
 
 
 	{
@@ -123,13 +117,23 @@ void Stage1::BulidObject()
 		materialptr->SetShader(shader);
 		AddGameObject(gameobject);
 
-		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+	/*	shared_ptr<Terrain> terrain = make_shared<Terrain>();
 		AddGameObject(terrain);
-		gameobject->SetTerrain(terrain);
+		gameobject->SetTerrain(terrain);*/
 	
 	}
 
+	{
+		shared_ptr<Model> data = Model::ReadData(L"Tank/Tank");
 
+		shared_ptr<HireacyObject> object = make_shared<HireacyObject>();
+		object->SetModel(data);
+		object->GetTransform()->GetRoot()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
+		object->GetTransform()->GetRoot()->SetLocalPosition(vec3(0, 0, 0));
+
+		AddGameObject(object);
+
+	}
 
 	{
 

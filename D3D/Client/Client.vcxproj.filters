@@ -47,6 +47,9 @@
     <Filter Include="05.GameObject\02.ModelObject">
       <UniqueIdentifier>{918d7df1-fc4e-411a-855d-6fb70ef66e74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.GameObject\03.HireacyObject">
+      <UniqueIdentifier>{236d5d3e-c2e5-49bc-9e1a-846aa52a1124}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -156,6 +159,12 @@
     </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>08.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="HireacyObject.h">
+      <Filter>05.GameObject\03.HireacyObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformTree.h">
+      <Filter>03.Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +279,12 @@
     </ClCompile>
     <ClCompile Include="CameraManager.cpp">
       <Filter>08.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="HireacyObject.cpp">
+      <Filter>05.GameObject\03.HireacyObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformTree.cpp">
+      <Filter>03.Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
