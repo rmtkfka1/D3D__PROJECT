@@ -13,11 +13,6 @@ int main()
 	converter.ExportMaterialData(L"Tank/Tank");
 	converter.ExportModelData(L"Tank/Tank",true);
 
-	converter._meshes;
-	converter._bones;
-	converter._materials;
-
-	int a = 10;
 
 	for (auto& bone : converter._bones)
 	{

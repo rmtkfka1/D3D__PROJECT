@@ -32,7 +32,7 @@ void TransformTree::MakeTransformTree(shared_ptr<Model> model)
 
 	for (auto& bone : bones)
 	{
-		if (bone->index == 0)
+		if (bone->index == -1)
 		{  
 			_root = make_shared<Transform>();
 

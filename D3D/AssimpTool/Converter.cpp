@@ -84,10 +84,9 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::
 		bone->transform = bone->transform * matParent;
 	}
 
-	if (bone->name != "RootNode")
-	{
-		_bones.push_back(bone);
-	}
+
+	_bones.push_back(bone);
+	
 
 	ReadMeshData(node, index, bone->transform);
 

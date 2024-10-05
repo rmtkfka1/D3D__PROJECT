@@ -128,8 +128,8 @@ void Stage1::BulidObject()
 
 		shared_ptr<HireacyObject> object = make_shared<HireacyObject>();
 		object->SetModel(data);
-		object->GetTransform()->GetRoot()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
-		object->GetTransform()->GetRoot()->SetLocalPosition(vec3(700.0f, 0, 0));
+		object->GetTransform()->GetRoot()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
+		object->GetTransform()->GetRoot()->SetLocalPosition(vec3(100.0f, 0, 0));
 
 		AddGameObject(object);
 
