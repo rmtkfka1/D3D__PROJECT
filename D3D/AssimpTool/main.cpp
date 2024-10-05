@@ -11,7 +11,7 @@ int main()
 {
 	converter.ReadAssetFile(L"Tank/Tank.fbx");
 	converter.ExportMaterialData(L"Tank/Tank");
-	converter.ExportModelData(L"Tank/Tank");
+	converter.ExportModelData(L"Tank/Tank",true);
 
 	converter._meshes;
 	converter._bones;

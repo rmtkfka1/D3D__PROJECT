@@ -22,6 +22,12 @@ void HireacyObject::Init()
 
 void HireacyObject::Update()
 {
+	static int i = 0;
+
+	//_transformTree->findByName(L"turret_geo")->SetLocalRotation(vec3(0, i++, 0));
+	_transformTree->findByName(L"r_engine_geo")->SetLocalRotation(vec3(0, i++, 0));
+	//_transformTree->findByName(L"l_engine_geo")->SetLocalRotation(vec3(0, i++, 0));
+
 	_transformTree->GetRoot()->Update();
 
 }

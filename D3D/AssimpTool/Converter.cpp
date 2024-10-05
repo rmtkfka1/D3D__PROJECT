@@ -48,8 +48,10 @@ void Converter::ExportMaterialData(wstring savePath )
 
 
 
-void Converter::ExportModelData(wstring savePath)
+void Converter::ExportModelData(wstring savePath, bool useHireacy)
 {
+	_useHireacy = useHireacy;
+
 	wstring finalPath = _modelPath + savePath + L".mesh";
 	Matrix tr;
 
@@ -76,8 +78,11 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::
 	if (parent >= 0)
 		matParent = _bones[parent]->transform;
 
-	//// Local (Root) Transform
-	bone->transform = bone->transform * matParent;
+	////// Local (Root) Transform
+	if (_useHireacy == false)
+	{
+		bone->transform = bone->transform * matParent;
+	}
 
 	if (bone->name != "RootNode")
 	{
@@ -147,10 +152,13 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 		}
 	}
 
-	for (auto& v : mesh->vertices)
+	if (_useHireacy == false)
 	{
-		v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
-	/*	v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);*/
+		for (auto& v : mesh->vertices)
+		{
+			v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
+			/*	v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);*/
+		}
 	}
 
 	_meshes.push_back(mesh);

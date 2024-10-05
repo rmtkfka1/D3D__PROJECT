@@ -11,7 +11,7 @@ public:
 
 public:
 	void ReadAssetFile(wstring file);
-	void ExportModelData(wstring savePath);
+	void ExportModelData(wstring savePath, bool useHireacy);
 	void ExportMaterialData(wstring savePath);
 
 
@@ -43,6 +43,7 @@ public:
 	vector<shared_ptr<asMaterial>> _materials;
 
 private:
+	bool _useHireacy;
 	BoundingBox _totalbox;
 	BoundingSphere _totalSphere;
 };

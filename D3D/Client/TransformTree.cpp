@@ -36,19 +36,18 @@ void TransformTree::MakeTransformTree(shared_ptr<Model> model)
 		{  
 			_root = make_shared<Transform>();
 
-		/*	Matrix m = bone->transformData;
+			Matrix m = bone->transformData; //본공간으로 변환하는 데이터
 
 			vec3 pos;
 			Quaternion rotation;
 			vec3 scale;
-			m.Decompose(scale, rotation, pos);*/
+			m.Decompose(scale, rotation, pos);
 
-			_root->_name = bone->name;
-			/*_root->SetLocalPosition(pos);
+			_root->SetLocalPosition(pos);
 			_root->SetLocalRotation(rotation);
-			_root->SetLocalScale(scale);*/
-		/*	_root->Update();*/
-
+			_root->SetLocalScale(scale);
+			_root->Update();
+			_root->_name = bone->name;
 			map[bone->index] = _root;
 			_nameMap[_root->_name] = _root;
 		}
@@ -57,18 +56,18 @@ void TransformTree::MakeTransformTree(shared_ptr<Model> model)
 		{
 			shared_ptr<Transform> transform = make_shared<Transform>();
 
-		/*	Matrix m = bone->transformData;
+			Matrix m = bone->transformData; //본공간으로 변환하는 데이터
 
 			vec3 pos;
 			Quaternion rotation;
 			vec3 scale;
-			m.Decompose(scale, rotation, pos);*/
+			m.Decompose(scale, rotation, pos);
 
-			transform->_name = bone->name;
-	/*		transform->SetLocalPosition(pos);
+			transform->SetLocalPosition(pos);
 			transform->SetLocalRotation(rotation);
 			transform->SetLocalScale(scale);
-			transform->Update();*/
+			transform->Update();
+			transform->_name = bone->name;
 
 			transform->SetParent(map[bone->parentIndex]);
 			transform->GetParent()->AddChild(transform);
