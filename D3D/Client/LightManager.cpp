@@ -27,7 +27,7 @@ void LightManager::Update()
 		if (_lightParmas.light[i].material.lightType == static_cast<int32>(LIGHT_TYPE::SPOT_LIGHT))
 		{
 			_lightParmas.light[i].direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
-			_lightParmas.light[i].position = _player->GetTransform()->GetLocalPosition();
+			_lightParmas.light[i].position = _player->GetTransform()->GetWorldPosition();
 		}
 
 	}

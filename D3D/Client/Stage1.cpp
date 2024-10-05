@@ -71,7 +71,7 @@ void Stage1::BulidLight()
 		light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
 		light.material.specular = vec3(1.0f, 1.0f, 1.0f);
 		light.material.shininess = 64.0f;
-		light.material.lightType = static_cast<int32>(LIGHT_TYPE::DIRECTIONAL_LIGHT);;
+		light.material.lightType = static_cast<int32>(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light.strength = vec3(1.0f, 1.0f, 1.0f);
 		LightManager::GetInstnace()->PushLight(light);
 	}
