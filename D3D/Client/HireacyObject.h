@@ -2,6 +2,7 @@
 #include "GameObject.h"
 class Model;
 class TransformTree;
+class Transform;
 
 class HireacyObject :public GameObject
 {
@@ -13,9 +14,9 @@ public:
 	virtual void Init() override;;
 	virtual void Update() override;
 	virtual void Render() override;
-
+	virtual shared_ptr<Transform> GetTransform() override;
 	void SetModel(shared_ptr< Model> model);
-	shared_ptr<TransformTree> GetTransform() { return _transform; }
+	
 
 public:
 	shared_ptr<Model> _model;

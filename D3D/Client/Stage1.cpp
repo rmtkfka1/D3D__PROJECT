@@ -18,6 +18,7 @@
 #include "TransformTree.h"
 #include "Player.h"
 #include "Core.h"
+#include "BoxCollider.h"
 
 Stage1::Stage1()
 {
@@ -41,6 +42,8 @@ void Stage1::Run()
 	CameraManager::GetInstance()->PushData();
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
+	_box->Update();
+	_box->Render();
 
 	//WCHAR wchTxt[64];
 	//swprintf_s(wchTxt, 64, L"look.x: %.2f, look.y: %.2f, look.z: %.2f",
@@ -62,7 +65,7 @@ void Stage1::BulidLight()
 	Light light;
 	light.direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
 	light.fallOffStart = 0.0f;
-	light.position = _player->GetTransform()->GetRoot()->GetWorldPosition();
+	light.position = _player->GetTransform()->GetWorldPosition();
 	light.fallOffEnd = 5000.0f;
 	light.spotPower = 200.0f;
 	light.material.ambient = vec3(0.0f, 0, 0);
@@ -110,8 +113,8 @@ void Stage1::BulidObject()
 		shared_ptr<Player> player = make_shared<Player>();
 		_player = player;
 		player->SetModel(data);
-		player->GetTransform()->GetRoot()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
-		player->GetTransform()->GetRoot()->SetLocalPosition(vec3(100.0f, 0, 0));
+		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
+		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
 	
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
@@ -143,5 +146,13 @@ void Stage1::BulidObject()
 		AddGameObject(gameobject);
 	}
 
+	{
+
+		_box = make_shared<BoxCollider>();
+		_box->SetOwner(_player);
+		_box->SetTotalCenter(vec3(0, 3.0f, 0));
+		_box->SetSize(vec3(3.0f, 3.0f, 3.0f));
+		_box->MakeBoundingBox();
+	}
 	
 }

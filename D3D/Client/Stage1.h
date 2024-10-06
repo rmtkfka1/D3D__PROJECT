@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 class Player;
+class BoxCollider;
 
 
 class Stage1 :public Scene
@@ -23,6 +24,6 @@ private:
 public:
 	//temp
 	shared_ptr<Player> _player;
-
+	shared_ptr<BoxCollider> _box;
 };
 

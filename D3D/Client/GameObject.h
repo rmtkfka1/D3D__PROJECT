@@ -1,6 +1,7 @@
 #pragma once
 
 class MeshRenderer;
+class Transform;
 
 enum class GameObjectType
 {
@@ -15,6 +16,8 @@ public:
 	GameObject(GameObjectType type);
 	virtual ~GameObject();
 public:
+
+	virtual shared_ptr<Transform> GetTransform()=0;
 	virtual void Init() =0;
 	virtual void Update()=0;
 	virtual void Render()=0;

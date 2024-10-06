@@ -50,6 +50,9 @@
     <Filter Include="05.GameObject\03.HireacyObject">
       <UniqueIdentifier>{236d5d3e-c2e5-49bc-9e1a-846aa52a1124}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Resource\Collider">
+      <UniqueIdentifier>{d29d2cb6-31f5-49b8-9f0f-36088452b5fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -165,6 +168,12 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>05.GameObject\03.HireacyObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCollider.h">
+      <Filter>03.Resource\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>03.Resource\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +295,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>05.GameObject\03.HireacyObject</Filter>
     </ClCompile>
+    <ClCompile Include="BaseCollider.cpp">
+      <Filter>03.Resource\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>03.Resource\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -303,6 +318,9 @@
       <Filter>04.HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\light.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\boundingbox.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
   </ItemGroup>

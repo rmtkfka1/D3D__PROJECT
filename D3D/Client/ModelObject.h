@@ -14,9 +14,9 @@ public:
 	virtual void Init() override;;
 	virtual void Update() override;
 	virtual void Render() override;
-
+	virtual shared_ptr<Transform> GetTransform() override { return _transform; }
 	void SetModel(shared_ptr< Model> model) { _model = model; }
-	shared_ptr<Transform> GetTransform() { return _transform; }
+
 
 public:
 	shared_ptr<Model> _model;

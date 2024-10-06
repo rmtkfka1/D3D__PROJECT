@@ -16,12 +16,12 @@ public:
 	virtual void Init() override;;
 	virtual void Update() override;
 	virtual void Render() override;
-
+	virtual shared_ptr<Transform> GetTransform() override { return _transform; }
 public:
 
 	shared_ptr<Mesh>& GetMesh() { return _mesh; }
 	shared_ptr<Material>& GetMaterial() { return _material; }
-	shared_ptr<Transform>& GetTransform() { return _transform; }
+
 
 	void SetMesh(shared_ptr<Mesh> mesh) { _mesh = mesh; }
 	void SetMaterial(shared_ptr<Material> material) { _material = material; }

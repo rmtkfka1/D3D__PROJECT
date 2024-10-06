@@ -67,10 +67,10 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 {
 
 	//offset 을 플레어의 회전방향에 맞게 회전시킴.
-	vec3 offset = vec3::TransformNormal(_offset, player->GetTransform()->GetRoot()->GetWorldMatrix());
+	vec3 offset = vec3::TransformNormal(_offset, player->GetTransform()->GetWorldMatrix());
 
 	//회전된 오프셋을 이용하여 카메라의 타켓 포즈를 정함.
-	vec3 targetPos = player->GetTransform()->GetRoot()->GetLocalPosition() + offset;
+	vec3 targetPos = player->GetTransform()->GetLocalPosition() + offset;
 
 	//이동방향을 정함
 	vec3 direction = vec3(targetPos - _cameraPos);
@@ -84,7 +84,7 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 
 	
 	//카메라의 Look 을 다시설정함. 
-	Matrix resultMat = XMMatrixLookAtLH(_cameraPos, player->GetTransform()->GetRoot()->GetLocalPosition(), player->GetTransform()->GetRoot()->GetUp());
+	Matrix resultMat = XMMatrixLookAtLH(_cameraPos, player->GetTransform()->GetLocalPosition(), player->GetTransform()->GetUp());
 
 	_cameraRight = vec3(resultMat._11, resultMat._21, resultMat._31);
 	_cameraUp = vec3(resultMat._12, resultMat._22, resultMat._32);
