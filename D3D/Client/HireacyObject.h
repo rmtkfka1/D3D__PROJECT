@@ -15,10 +15,10 @@ public:
 	virtual void Render() override;
 
 	void SetModel(shared_ptr< Model> model);
-	shared_ptr<TransformTree> GetTransform() { return _transformTree; }
+	shared_ptr<TransformTree> GetTransform() { return _transform; }
 
 public:
 	shared_ptr<Model> _model;
-	shared_ptr<TransformTree> _transformTree;
+	shared_ptr<TransformTree> _transform;
 };
 

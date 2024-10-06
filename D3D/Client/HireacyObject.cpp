@@ -22,13 +22,8 @@ void HireacyObject::Init()
 
 void HireacyObject::Update()
 {
-	static int i = 0;
 
-	_transformTree->findByName(L"turret_geo")->SetLocalRotation(vec3(0, i++, 0));
-	//_transformTree->findByName(L"r_engine_geo")->SetLocalRotation(vec3(0, i++, 0));
-	//_transformTree->findByName(L"l_engine_geo")->SetLocalRotation(vec3(0, i++, 0));
-
-	_transformTree->GetRoot()->Update();
+	_transform->GetRoot()->Update();
 
 }
 
@@ -40,7 +35,7 @@ void HireacyObject::Render()
 
 	for (auto& data : meshData)
 	{
-		_transformTree->findByName(data->name)->PushData();
+		_transform->findByName(data->name)->PushData();
 
 		if (data->material)
 		{
@@ -56,6 +51,6 @@ void HireacyObject::Render()
 void HireacyObject::SetModel(shared_ptr<Model> model)
 {
 	_model = model;
-	_transformTree = make_shared<TransformTree>();
-	_transformTree->MakeTransformTree(model);
+	_transform = make_shared<TransformTree>();
+	_transform->MakeTransformTree(model);
 }

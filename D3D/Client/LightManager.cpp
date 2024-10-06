@@ -3,8 +3,9 @@
 #include "Core.h"
 #include "BufferPool.h"
 #include "CameraManager.h"
-#include "Player.h"
 #include "Transform.h"
+#include "Player.h"
+#include "TransformTree.h"
 void LightManager::PushLight(Light light)
 {
 	_lightParmas.light[_lightParmas.lightCount] = light;
@@ -27,11 +28,12 @@ void LightManager::Update()
 		if (_lightParmas.light[i].material.lightType == static_cast<int32>(LIGHT_TYPE::SPOT_LIGHT))
 		{
 			_lightParmas.light[i].direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
-			_lightParmas.light[i].position = _player->GetTransform()->GetWorldPosition();
+			_lightParmas.light[i].position = _player->GetTransform()->GetRoot()->GetLocalPosition();
+			_lightParmas.light[i].position -= _player->GetTransform()->GetRoot()->GetLook() * 10.0f;
 		}
 
 	}
 
-	_lightParmas.eyeWorldPos = _player->GetTransform()->GetLocalPosition();
+	_lightParmas.eyeWorldPos = _player->GetTransform()->GetRoot()->GetLocalPosition();
 
 }

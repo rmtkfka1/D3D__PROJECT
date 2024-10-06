@@ -84,9 +84,7 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::
 		bone->transform = bone->transform * matParent;
 	}
 
-
 	_bones.push_back(bone);
-	
 
 	ReadMeshData(node, index, bone->transform);
 

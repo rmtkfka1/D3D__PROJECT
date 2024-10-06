@@ -8,7 +8,6 @@
 #include "CustomObject.h"
 #include "Transform.h"
 #include "GeoMetryHelper.h"
-#include "Player.h"
 #include "Terrain.h"
 #include "ResourceManager.h"
 #include "ModelObject.h"
@@ -17,6 +16,8 @@
 #include "LightManager.h"
 #include "HireacyObject.h"
 #include "TransformTree.h"
+#include "Player.h"
+
 Stage1::Stage1()
 {
 }
@@ -52,7 +53,7 @@ void Stage1::BulidLight()
 	Light light;
 	light.direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
 	light.fallOffStart = 0.0f;
-	light.position = _player->GetTransform()->GetWorldPosition();
+	light.position = _player->GetTransform()->GetRoot()->GetWorldPosition();
 	light.fallOffEnd = 3000.0f;
 	light.spotPower = 100.0f;
 	light.material.ambient = vec3(0.0f, 0, 0);
@@ -95,43 +96,23 @@ void Stage1::BulidObject()
 
 
 	{
+		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter");
 
-		shared_ptr<Player> gameobject = make_shared<Player>();
+		shared_ptr<Player> player = make_shared<Player>();
+		_player = player;
+		player->SetModel(data);
+		player->GetTransform()->GetRoot()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
+		player->GetTransform()->GetRoot()->SetLocalPosition(vec3(100.0f, 0, 0));
 
-		_player = gameobject;
+		//player->GetTransform()->GetRoot()->MoveShift(vec3(360.0f, 0, 0));
 
-		gameobject->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
+		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(0, 0, 0));
-
-		auto& meshptr = gameobject->GetMesh();
-		meshptr = GeoMetryHelper::LoadRectangleBox(0.5f);
-
-		auto materialptr = gameobject->GetMaterial();
-
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"1.jpg");
-		materialptr->SetDiffuseTexture(texture);
-
-		shared_ptr<Shader> shader = make_shared<Shader>();
-		shader->Init(L"default.hlsl");
-		materialptr->SetShader(shader);
-		AddGameObject(gameobject);
-
-	/*	shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		shared_ptr<Terrain> terrain = make_shared<Terrain>();
 		AddGameObject(terrain);
-		gameobject->SetTerrain(terrain);*/
-	
-	}
+		player->SetTerrain(terrain);
 
-	{
-		shared_ptr<Model> data = Model::ReadData(L"Tank/Tank");
-
-		shared_ptr<HireacyObject> object = make_shared<HireacyObject>();
-		object->SetModel(data);
-		object->GetTransform()->GetRoot()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
-		object->GetTransform()->GetRoot()->SetLocalPosition(vec3(100.0f, 0, 0));
-
-		AddGameObject(object);
+		AddGameObject(player);
 
 	}
 

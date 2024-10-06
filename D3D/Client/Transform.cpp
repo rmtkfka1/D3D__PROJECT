@@ -33,6 +33,7 @@ void Transform::Update()
 
 	_matWorld.Decompose(_scale, _rotation, _position);
 
+
 	for (const shared_ptr<Transform>& child : _children)
 		child->Update();
 }

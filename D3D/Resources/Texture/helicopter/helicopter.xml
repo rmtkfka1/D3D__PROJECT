@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials>
+    <Material>
+        <Name>lambert1</Name>
+        <Shader>default.hlsl</Shader>
+        <DiffuseFile>HueyTXTR3.png</DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Glass</Name>
+        <Shader>default.hlsl</Shader>
+        <DiffuseFile>HueyTXTR3.png</DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.30879998" G="0.65444106" B="0.80000001" A="1"/>
+        <Specular R="0.5" G="0.5" B="0.5" A="6.3117909"/>
+        <Emissive R="0.5" G="0.5" B="0.5" A="1"/>
+    </Material>
+    <Material>
+        <Name>Huey_inside_material</Name>
+        <Shader>default.hlsl</Shader>
+        <DiffuseFile>HueyTXTR3.png</DiffuseFile>
+        <SpecularFile></SpecularFile>
+        <NormalFile></NormalFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.35680002" G="0.35680002" B="0.35680002" A="1"/>
+        <Specular R="0.35680002" G="0.35680002" B="0.35680002" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>
