@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Transform.h"
+#include "BoxCollider.h"
 HireacyObject::HireacyObject():GameObject(GameObjectType::Hierarchy)
 {
 
@@ -25,6 +26,10 @@ void HireacyObject::Update()
 
 	_transform->GetRoot()->Update();
 
+	for (auto& ele : _colliders)
+	{
+		ele->Update();
+	}
 }
 
 void HireacyObject::Render()
@@ -45,6 +50,24 @@ void HireacyObject::Render()
 		core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);
 
 		data->meshes->Render();
+	}
+
+	for (auto& ele : _colliders)
+	{
+		ele->Render();
+	}
+}
+
+void HireacyObject::AddCollider(ColliderType type, vec3 offsetSize , vec3 offsetCeneter)
+{
+	if (type == ColliderType::Box)
+	{
+		shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
+		box->SetOwner(shared_from_this());
+		box->SetTotalCenter(_model->GetCenter() + offsetCeneter);
+		box->SetSize(_model->GetSize() + offsetSize);
+		box->MakeBoundingBox();
+		_colliders.push_back(box);
 	}
 }
 

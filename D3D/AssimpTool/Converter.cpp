@@ -56,7 +56,6 @@ void Converter::ExportModelData(wstring savePath, bool useHireacy)
 	Matrix tr;
 
 	ReadModelData(_scene->mRootNode, -1, -1, tr);
-	CalculateBoundingBox();
 	WriteModelFile(finalPath);
 }
 
@@ -277,7 +276,7 @@ void Converter::WriteModelFile(wstring finalPath)
 
 	}
 
-
+	CalculateBoundingBox();
 
 	{
 		//total bounding box 의 사이즈와 센터정보 기록.
@@ -292,7 +291,27 @@ void Converter::WriteModelFile(wstring finalPath)
 }
 void Converter::CalculateBoundingBox()
 {
+	if (_useHireacy)
+	{
+		for (int i = 0; i < _meshes.size(); ++i)
+		{
+			// Get the transform for the bone associated with the current mesh
+			Matrix m = Matrix::Identity;
 
+			for (int k = 0; k <= i; ++k)
+			{
+				 m *= _bones[_meshes[k]->boneIndex]->transform;
+			}
+
+			// Apply this transform to all vertices of the mesh
+			for (int j = 0; j < _meshes[i]->vertices.size(); ++j)
+			{
+				_meshes[i]->vertices[j].position = DirectX::SimpleMath::Vector3::Transform(
+					_meshes[i]->vertices[j].position, m);
+			}
+		}
+	}
+	
 	for (int i = 0; i < _meshes.size(); ++i)
 	{
 		auto& box = _meshes[i]->box;

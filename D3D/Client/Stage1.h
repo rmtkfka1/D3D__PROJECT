@@ -24,6 +24,6 @@ private:
 public:
 	//temp
 	shared_ptr<Player> _player;
-	shared_ptr<BoxCollider> _box;
+
 };
 

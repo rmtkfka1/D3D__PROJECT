@@ -42,8 +42,7 @@ void Stage1::Run()
 	CameraManager::GetInstance()->PushData();
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
-	_box->Update();
-	_box->Render();
+	
 
 	//WCHAR wchTxt[64];
 	//swprintf_s(wchTxt, 64, L"look.x: %.2f, look.y: %.2f, look.z: %.2f",
@@ -104,9 +103,6 @@ void Stage1::BulidObject()
 {
 	
 
-
-
-
 	{
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter");
 
@@ -115,6 +111,7 @@ void Stage1::BulidObject()
 		player->SetModel(data);
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
+		player->AddCollider(ColliderType::Box,vec3(-2.0f,0,0));
 	
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
@@ -146,13 +143,6 @@ void Stage1::BulidObject()
 		AddGameObject(gameobject);
 	}
 
-	{
-
-		_box = make_shared<BoxCollider>();
-		_box->SetOwner(_player);
-		_box->SetTotalCenter(vec3(0, 3.0f, 0));
-		_box->SetSize(vec3(3.0f, 3.0f, 3.0f));
-		_box->MakeBoundingBox();
-	}
+	
 	
 }
