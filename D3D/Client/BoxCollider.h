@@ -35,6 +35,6 @@ private:
 	vec3 _totalSize;
 	MaterialParams _params;
 
-	shared_ptr<Shader> _shader;
+	static shared_ptr<Shader> _shader;
 };
 

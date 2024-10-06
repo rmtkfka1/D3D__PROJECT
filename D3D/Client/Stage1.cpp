@@ -111,19 +111,20 @@ void Stage1::BulidObject()
 		player->SetModel(data);
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
+
 		player->AddCollider(ColliderType::Box,vec3(-2.5f,-1.0f,0));
 	
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
-		/*shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		shared_ptr<Terrain> terrain = make_shared<Terrain>();
 		AddGameObject(terrain);
-		player->SetTerrain(terrain);*/
+		player->SetTerrain(terrain);
 
 		AddGameObject(player);
 
 	}
 
-	{
+	/*{
 
 		shared_ptr<HireacyObject> object = make_shared<HireacyObject>();
 		shared_ptr<Model> data = Model::ReadData(L"Tank/Tank");
@@ -132,7 +133,7 @@ void Stage1::BulidObject()
 
 		AddGameObject(object);
 
-	}
+	}*/
 
 	{
 

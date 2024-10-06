@@ -66,6 +66,7 @@ void HireacyObject::AddCollider(ColliderType type, vec3 offsetSize , vec3 offset
 		box->SetOwner(shared_from_this());
 		box->SetTotalCenter(_model->GetCenter() + offsetCeneter);
 		box->SetSize(_model->GetSize() + offsetSize);
+		GetTransform()->Update();
 		box->MakeBoundingBox();
 		_colliders.push_back(box);
 	}
@@ -77,6 +78,7 @@ void HireacyObject::AddBoxCollider(vec3 size, vec3 center)
 	box->SetOwner(shared_from_this());
 	box->SetTotalCenter(center);
 	box->SetSize(size);
+	GetTransform()->Update();
 	box->MakeBoundingBox();
 	_colliders.push_back(box);
 }

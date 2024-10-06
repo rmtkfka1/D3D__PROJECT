@@ -10,17 +10,13 @@
 #include "TransformTree.h"
 #include "BufferPool.h"
 
-
+shared_ptr<Shader> BoxCollider::_shader = make_shared<Shader>();
 
 BoxCollider::BoxCollider() :BaseCollider(ColliderType::Box)
 {
-	
 	ShaderInfo info;
 	info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
 	_shader = ResourceManager::GetInstance()->Load<Shader>(L"boundingbox.hlsl", info);
-
-	
-
 }
 
 BoxCollider::~BoxCollider()
@@ -42,20 +38,10 @@ void BoxCollider::Update()
 
 void BoxCollider::Render()
 {
-
-
-
-	core->GetCmdLIst()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	core->GetCmdLIst()->IASetVertexBuffers(0, 1, &_mesh->GetVertexView());
-	core->GetCmdLIst()->IASetIndexBuffer(&_mesh->GetIndexView());
-
 	GetOwner()->GetTransform()->PushData();
 	_shader->SetPipelineState();
-
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);
-	core->GetCmdLIst()->DrawIndexedInstanced(_mesh->GetIndexCount(), 1, 0, 0, 0);
-
-
+	_mesh->Render();
 };
 
 bool BoxCollider::CheckCollusion(shared_ptr<BaseCollider>& other)
