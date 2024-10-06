@@ -82,6 +82,10 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::
 	{
 		bone->transform = bone->transform * matParent;
 	}
+	else
+	{
+		bone->transform = bone->transform;
+	}
 
 	_bones.push_back(bone);
 
@@ -295,15 +299,16 @@ void Converter::CalculateBoundingBox()
 	{
 		for (int i = 0; i < _meshes.size(); ++i)
 		{
-			// Get the transform for the bone associated with the current mesh
 			Matrix m = Matrix::Identity;
 
-			for (int k = 0; k <= i; ++k)
+			int boneIndex = _meshes[i]->boneIndex;
+
+			while (boneIndex >= 0) // 부모 본까지 트랜스폼을 누적 곱셈
 			{
-				 m *= _bones[_meshes[k]->boneIndex]->transform;
+				m *= _bones[boneIndex]->transform;
+				boneIndex = _bones[boneIndex]->parent; // 부모 본 인덱스를 참조
 			}
 
-			// Apply this transform to all vertices of the mesh
 			for (int j = 0; j < _meshes[i]->vertices.size(); ++j)
 			{
 				_meshes[i]->vertices[j].position = DirectX::SimpleMath::Vector3::Transform(

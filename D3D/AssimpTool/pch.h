@@ -112,6 +112,8 @@ struct asMesh
 	BoundingBox box;
 	BoundingSphere sphere;
 
+
+
 };
 
 struct asMaterial
