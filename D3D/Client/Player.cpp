@@ -30,10 +30,12 @@ void Player::Render()
 
 void Player::AnimateUpdate()
 {
+	float dt = TimeManager::GetInstance()->GetDeltaTime();
+	float rotation = 720.0f;
+	
+	float result = rotation * dt; //1초에 2바퀴 회전하도록
 
-	static int i = 0;
-	// Top_Rotor의 Y축 로컬 회전을 업데이트
-	_transform->findByName(L"Top_Rotor")->RotateShift(vec3(0, i++, 0));
+	_transform->findByName(L"Top_Rotor")->AddRotate(vec3(0, result, 0));
 
 }
 
@@ -50,22 +52,22 @@ void Player::MoveUpdate()
 
 	if (key->GetButton(KEY_TYPE::W))
 	{
-		_transform->GetRoot()->MoveShift(-(diection * _speed * dt));
+		_transform->GetRoot()->AddMove(-(diection * _speed * dt));
 	}
 
 	if (key->GetButton(KEY_TYPE::S))
 	{
-		_transform->GetRoot()->MoveShift((diection * _speed * dt));
+		_transform->GetRoot()->AddMove((diection * _speed * dt));
 	}
 
 	if (key->GetButton(KEY_TYPE::D))
 	{
-		_transform->GetRoot()->MoveShift(-(right * _speed * dt));
+		_transform->GetRoot()->AddMove(-(right * _speed * dt));
 	}
 
 	if (key->GetButton(KEY_TYPE::A))
 	{
-		_transform->GetRoot()->MoveShift((right * _speed * dt));
+		_transform->GetRoot()->AddMove((right * _speed * dt));
 	}
 
 	if (_terrain)
@@ -78,7 +80,7 @@ void Player::MoveUpdate()
 		}
 	}
 
-	_camera->MoveShift(diection * _speed * dt);
+	_camera->AddMove(diection * _speed * dt);
 
 }
 
@@ -87,7 +89,7 @@ void Player::RotateUpdate()
 {
 
 	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
-	_transform->GetRoot()->RotateShift(vec3(delataPos.y, delataPos.x, 0));
+	_transform->GetRoot()->SetLocalRotation(vec3(delataPos.y, delataPos.x, 0));
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
 };

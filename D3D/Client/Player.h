@@ -23,7 +23,7 @@ private:
 
 	shared_ptr<Terrain> _terrain;
 	shared_ptr<ThirdPersonCamera> _camera;
-	float _speed = 30.0f;
-	float _aniSpeed = 50000.0f;
+	float _speed = 200.0f;
+	
 };
 

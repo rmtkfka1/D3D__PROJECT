@@ -17,6 +17,7 @@
 #include "HireacyObject.h"
 #include "TransformTree.h"
 #include "Player.h"
+#include "Core.h"
 
 Stage1::Stage1()
 {
@@ -40,6 +41,14 @@ void Stage1::Run()
 	CameraManager::GetInstance()->PushData();
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
+
+	//WCHAR wchTxt[64];
+	//swprintf_s(wchTxt, 64, L"look.x: %.2f, look.y: %.2f, look.z: %.2f",
+	//	_player->GetTransform()->GetRoot()->GetLook().x,
+	//	_player->GetTransform()->GetRoot()->GetLook().y,
+	//	_player->GetTransform()->GetRoot()->GetLook().z);
+
+	//SetWindowText(core->GetWindowHandle(), wchTxt);
 }
 
 void Stage1::LateUpdate()
@@ -54,8 +63,8 @@ void Stage1::BulidLight()
 	light.direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
 	light.fallOffStart = 0.0f;
 	light.position = _player->GetTransform()->GetRoot()->GetWorldPosition();
-	light.fallOffEnd = 3000.0f;
-	light.spotPower = 100.0f;
+	light.fallOffEnd = 5000.0f;
+	light.spotPower = 200.0f;
 	light.material.ambient = vec3(0.0f, 0, 0);
 	light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
 	light.material.specular = vec3(1.0f, 1.0f, 1.0f);
@@ -103,9 +112,7 @@ void Stage1::BulidObject()
 		player->SetModel(data);
 		player->GetTransform()->GetRoot()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->GetRoot()->SetLocalPosition(vec3(100.0f, 0, 0));
-
-		//player->GetTransform()->GetRoot()->MoveShift(vec3(360.0f, 0, 0));
-
+	
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
 		shared_ptr<Terrain> terrain = make_shared<Terrain>();

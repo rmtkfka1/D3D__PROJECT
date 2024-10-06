@@ -11,8 +11,8 @@ public:
 	void Update();
 	void PushData();
 
-	void MoveShift(const vec3& shift);
-	void RotateShift(const vec3 shift);
+	void AddMove(const vec3& shift);
+	void AddRotate(const vec3& Euler);
 	// Local
 	vec3 GetLocalScale() { return _localScale; }
 	void SetLocalScale(const vec3 localScale) { _localScale = localScale; }
@@ -32,9 +32,9 @@ public:
 	vec3 GetWorldPosition() { return _position; }
 	void SetWorldPosition(const vec3 position);
 
-	vec3 GetRight() { return _matWorld.Right(); }
-	vec3 GetUp() { return _matWorld.Up(); }
-	vec3 GetLook() { return _matWorld.Backward(); }
+	vec3 GetRight();
+	vec3 GetUp();
+	vec3 GetLook();
 
 	void SetCenter(vec3 center) { _center = center; }
 	void SetSize(vec3 size) { _size = size; }

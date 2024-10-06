@@ -43,7 +43,7 @@ void Camera::PushData()
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
 }
 
-void Camera::MoveShift(const vec3& shift)
+void Camera::AddMove(const vec3& shift)
 {
 	_cameraPos += shift;
 }

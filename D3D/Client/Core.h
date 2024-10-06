@@ -28,7 +28,7 @@ public:
 
 	void UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight);
 
-
+	HWND GetWindowHandle() { return _hwnd; }
 	ComPtr<ID3D12Device5>& GetDevice() { return _device; } 
 	ComPtr<ID3D12GraphicsCommandList>& GetCmdLIst() { return _cmdList[_currentContextIndex]; }
 	shared_ptr<RootSignature>& GetRootSignature() { return _rootsignature; }
@@ -43,7 +43,7 @@ public:
 	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
 
 private:
-
+	
 	void CreateDevice(bool EnableDebugLayer, bool EnableGBV);
 	void CreateCmdQueue();
 	void CreateSwapChain();

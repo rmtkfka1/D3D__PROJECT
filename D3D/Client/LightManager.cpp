@@ -29,7 +29,7 @@ void LightManager::Update()
 		{
 			_lightParmas.light[i].direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
 			_lightParmas.light[i].position = _player->GetTransform()->GetRoot()->GetLocalPosition();
-			_lightParmas.light[i].position -= _player->GetTransform()->GetRoot()->GetLook() * 10.0f;
+			_lightParmas.light[i].position -= _player->GetTransform()->GetRoot()->GetLook() * 60.0f;
 		}
 
 	}

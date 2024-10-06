@@ -33,7 +33,6 @@ void Transform::Update()
 
 	_matWorld.Decompose(_scale, _rotation, _position);
 
-
 	for (const shared_ptr<Transform>& child : _children)
 		child->Update();
 }
@@ -46,39 +45,37 @@ void Transform::PushData()
 	core->GetWorldBufferPool()->PushData(&transformParams, sizeof(transformParams));
 }
 
-void Transform::MoveShift(const vec3& shift)
+void Transform::AddMove(const vec3& shift)
 {
 	_localPosition += shift;
 }
 
-void Transform::RotateShift(const vec3 shift)
+void Transform::AddRotate(const vec3& Euler)
 {
-	Quaternion currentRotation = Quaternion::CreateFromYawPitchRoll(
-		XMConvertToRadians(_localRotation.y),
-		XMConvertToRadians(_localRotation.x),
-		XMConvertToRadians(_localRotation.z)
+	//왼손좌표계로 이용하기위해 부호반전시킴
+	Quaternion newRotation = Quaternion::CreateFromYawPitchRoll(
+		XMConvertToRadians(-Euler.y),  // Yaw (Y축 회전)
+		XMConvertToRadians(-Euler.x),  // Pitch (X축 회전)
+		XMConvertToRadians(-Euler.z)   // Roll (Z축 회전)
 	);
 
-	// 새로 추가할 회전값을 계산
-	float pitch = XMConvertToRadians(shift.x);  // X-axis rotation
-	float yaw = XMConvertToRadians(shift.y);    // Y-axis rotation
-	float roll = XMConvertToRadians(shift.z);   // Z-axis rotation
+	// 기존 쿼터니언에 누적 회전 (새로운 회전 * 기존 회전)
+	_localRotation = newRotation * _localRotation;
 
-	// 새 회전을 쿼터니언으로 변환
-	Quaternion deltaRotation = Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
-
-	_localRotation = currentRotation * deltaRotation;
+	// 쿼터니언을 정규화
+	_localRotation.Normalize();
 
 }
 
 void Transform::SetLocalRotation(const vec3 localRotation)
 {
-	float pitch = XMConvertToRadians(localRotation.x); // X-axis rotation
-	float yaw = XMConvertToRadians(localRotation.y);   // Y-axis rotation
-	float roll = XMConvertToRadians(localRotation.z);  // Z-axis rotation
+	//왼손좌표계로 이용하기위해 부호반전시킴
+	float pitch = XMConvertToRadians(-localRotation.x);
+	float yaw = XMConvertToRadians(-localRotation.y);  
+	float roll = XMConvertToRadians(-localRotation.z); 
 
 	_localRotation = Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
-
+	_localRotation.Normalize();
 }
 
 void Transform::SetWorldScale(const vec3 worldScale)
@@ -138,4 +135,25 @@ void Transform::SetWorldPosition(const vec3 worldPosition)
 	{
 		SetLocalPosition(worldPosition);
 	}
+}
+
+vec3 Transform::GetRight()
+{
+	vec3 temp = _matWorld.Right();
+	temp.Normalize();
+	return temp;
+}
+
+vec3 Transform::GetUp()
+{
+	vec3 temp = _matWorld.Up();
+	temp.Normalize();
+	return temp;
+}
+
+vec3 Transform::GetLook()
+{
+	vec3 temp = _matWorld.Backward();
+	temp.Normalize();
+	return temp;
 }

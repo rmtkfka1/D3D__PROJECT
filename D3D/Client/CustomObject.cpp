@@ -5,7 +5,8 @@
 #include "Material.h"
 #include "Core.h"
 #include "BufferPool.h"
-
+#include "KeyManager.h"
+#include "TimeManager.h"
 CustomObject::CustomObject():GameObject(GameObjectType::Custom)
 {
 	_mesh = make_shared<Mesh>();
