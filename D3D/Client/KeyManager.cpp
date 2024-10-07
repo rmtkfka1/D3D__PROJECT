@@ -70,14 +70,9 @@ void KeyManager::MouseUpdate()
 	float deltaPosY = static_cast<float>(_mousePos.y - _centerScreen.y);
 
 	// Yaw와 Pitch 업데이트
-	_dx -= deltaPosX  * _mouseSpeed;
-	_dy += deltaPosY  * _mouseSpeed;
+	_dx = -deltaPosX  * _mouseSpeed;
+	_dy = deltaPosY * _mouseSpeed;
 
-	if (_dx < 0.0f) _dx += 360.0f;
-	if (_dx > 360.0f) _dx -= 360.0f;
-
-	if (_dy > 89.0f) _dy = 89.0f;
-	if (_dy < -89.0f) _dy = -89.0f;
 
 	SetCursorPos(static_cast<int>(_centerScreen.x), static_cast<int>(_centerScreen.y));
 

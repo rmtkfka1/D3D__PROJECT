@@ -8,6 +8,7 @@ public:
 
 	static void Replace(OUT string& str, string comp, string rep);
 	static void Replace(OUT wstring& str, wstring comp, wstring rep);
+	static vec3 ToEulerAngles(Quaternion q);
 
 	static wstring ToWString(string value);
 	static string ToString(wstring value);

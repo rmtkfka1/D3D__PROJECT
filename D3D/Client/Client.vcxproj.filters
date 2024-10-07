@@ -70,9 +70,6 @@
     <ClInclude Include="d3dx12.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleMath.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="tinyxml2.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -181,6 +178,9 @@
     <ClInclude Include="Box.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClInclude>
+    <ClInclude Include="simple_mesh_LH.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -201,9 +201,6 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>pch</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleMath.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="tinyxml2.cpp">
       <Filter>Utils</Filter>
@@ -313,11 +310,9 @@
     <ClCompile Include="Box.cpp">
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SimpleMath.inl">
+    <ClCompile Include="simple_mesh_LH.cpp">
       <Filter>Utils</Filter>
-    </None>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Resources\Shader\default.hlsl">
@@ -335,5 +330,10 @@
     <FxCompile Include="..\Resources\Shader\boundingbox.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath_LH.inl">
+      <Filter>Utils</Filter>
+    </None>
   </ItemGroup>
 </Project>

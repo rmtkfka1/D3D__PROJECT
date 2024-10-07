@@ -43,8 +43,8 @@ using namespace Microsoft::WRL;
 
 #include <DirectXTex/DirectXTex.h>
 #include <DirectXTex/DirectXTex.inl>
-#include "SimpleMath.h"
-#include "SimpleMath.inl"
+#include "simple_mesh_LH.h"
+#include "SimpleMath_LH.inl"
 #include "tinyxml2.h"
 // °¢Á¾ lib
 #pragma comment(lib, "d3d12")

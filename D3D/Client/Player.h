@@ -24,6 +24,7 @@ private:
 	void MoveUpdate();
 	void RotateUpdate();
 	void CameraPushData();
+	void BoundaryCheck();
 
 	shared_ptr<Terrain> _terrain;
 	shared_ptr<ThirdPersonCamera> _camera;

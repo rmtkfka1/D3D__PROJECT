@@ -17,15 +17,16 @@ void Player::Init()
 
 void Player::Update()
 {
+
 	if (CameraManager::GetInstance()->GetCameraType() == CameraType::THIRDVIEW)
 	{
-
 		MoveUpdate();
 		RotateUpdate();
 		CameraPushData();
 	}
 
 	AnimateUpdate();
+	BoundaryCheck();
 	Super::Update();
 }
 
@@ -61,21 +62,25 @@ void Player::MoveUpdate()
 	if (key->GetButton(KEY_TYPE::W))
 	{
 		_transform->GetRoot()->AddMove((diection * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::S))
 	{
 		_transform->GetRoot()->AddMove(-(diection * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::D))
 	{
 		_transform->GetRoot()->AddMove(-(right * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::A))
 	{
 		_transform->GetRoot()->AddMove((right * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (_terrain)
@@ -88,7 +93,7 @@ void Player::MoveUpdate()
 		}
 	}
 
-	_camera->AddMove(diection * _speed * dt);
+
 
 }
 
@@ -97,7 +102,7 @@ void Player::RotateUpdate()
 {
 
 	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
-	_transform->GetRoot()->SetLocalRotation(vec3(delataPos.y, delataPos.x, 0));
+	_transform->GetRoot()->AddCameraRotate(vec3(delataPos.y, delataPos.x, 0));
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
 };
@@ -105,6 +110,40 @@ void Player::RotateUpdate()
 void Player::CameraPushData()
 {
 	_camera->PushData();
+}
+
+void Player::BoundaryCheck()
+{
+	if (_transform->GetRoot()->GetLocalPosition().x > 3000.0f  || _transform->GetRoot()->GetLocalPosition().x < -3000.0f ||
+		_transform->GetRoot()->GetLocalPosition().z > 3000.0f  || _transform->GetRoot()->GetLocalPosition().z <- 3000.0f ||
+		_transform->GetRoot()->GetLocalPosition().y > 3000.0f)
+	{
+		vec3 forward = GetTransform()->GetLook();
+
+		// 반대 방향 구하기
+		vec3 oppositeDirection = -forward;
+
+		// 반대 방향으로 회전 적용
+		Quaternion targetRotation = Quaternion::FromToRotation(forward, oppositeDirection) * GetTransform()->GetLocalRotation();
+
+		// 회전 속도 설정 (조절 가능)
+		float rotationSpeed = 0.1f; // 이 값을 조정하여 회전 속도를 조절할 수 있습니다.
+
+		Quaternion currentRotation = GetTransform()->GetLocalRotation(); 
+
+		Quaternion newRotation = Quaternion::Slerp(currentRotation, targetRotation, rotationSpeed);
+
+		newRotation.Normalize();
+
+		vec3 result = newRotation.ToEuler();
+
+		// Transform에 회전 적용
+		GetTransform()->AddRotate(result);
+		GetTransform()->Update();
+	
+	}
+	
+	
 }
 
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
