@@ -49,4 +49,12 @@ void ModelObject::Render()
 
 }
 
+void ModelObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
+}
+
+void ModelObject::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
+}
+
 

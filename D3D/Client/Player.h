@@ -15,6 +15,10 @@ public:
 
 	void SetThirdPersonCamera(shared_ptr<ThirdPersonCamera> camera) { _camera = camera; }
 	void SetTerrain(shared_ptr<Terrain> terrian) { _terrain = terrian; }
+
+	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
+	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
+
 private:
 	void AnimateUpdate();
 	void MoveUpdate();

@@ -41,4 +41,14 @@ void CustomObject::Render()
 
 }
 
+void CustomObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
+
+}
+
+void CustomObject::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
+
+}
+
 

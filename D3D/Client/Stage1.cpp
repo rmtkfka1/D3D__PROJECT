@@ -116,15 +116,15 @@ void Stage1::BulidObject()
 	
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
-		shared_ptr<Terrain> terrain = make_shared<Terrain>();
-		AddGameObject(terrain);
-		player->SetTerrain(terrain);
+		//shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		//AddGameObject(terrain);
+		//player->SetTerrain(terrain);
 
 		AddGameObject(player);
 
 	}
 
-	/*{
+	{
 
 		shared_ptr<HireacyObject> object = make_shared<HireacyObject>();
 		shared_ptr<Model> data = Model::ReadData(L"Tank/Tank");
@@ -133,7 +133,7 @@ void Stage1::BulidObject()
 
 		AddGameObject(object);
 
-	}*/
+	}
 
 	{
 

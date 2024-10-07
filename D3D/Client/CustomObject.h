@@ -6,6 +6,7 @@
 class Mesh;
 class Material;
 class Transform;
+class BaseCollider;
 
 class CustomObject :public GameObject
 {
@@ -27,6 +28,8 @@ public:
 	void SetMaterial(shared_ptr<Material> material) { _material = material; }
 	void SetTransform(shared_ptr<Transform> transform) { _transform = transform; }
 
+	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
+	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
 protected:
 	shared_ptr<Mesh> _mesh;
 	shared_ptr<Material> _material;

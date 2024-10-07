@@ -8,6 +8,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "BoxCollider.h"
+#include "CollisonManager.h"
 HireacyObject::HireacyObject():GameObject(GameObjectType::Hierarchy)
 {
 
@@ -68,6 +69,7 @@ void HireacyObject::AddCollider(ColliderType type, vec3 offsetSize , vec3 offset
 		box->SetSize(_model->GetSize() + offsetSize);
 		GetTransform()->Update();
 		box->MakeBoundingBox();
+		CollisonManager::GetInstance()->AddCollider(box);
 		_colliders.push_back(box);
 	}
 }
@@ -80,6 +82,7 @@ void HireacyObject::AddBoxCollider(vec3 size, vec3 center)
 	box->SetSize(size);
 	GetTransform()->Update();
 	box->MakeBoundingBox();
+	CollisonManager::GetInstance()->AddCollider(box);
 	_colliders.push_back(box);
 }
 
@@ -93,4 +96,13 @@ void HireacyObject::SetModel(shared_ptr<Model> model)
 	_model = model;
 	_transform = make_shared<TransformTree>();
 	_transform->MakeTransformTree(model);
+}
+
+void HireacyObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
+	
+}
+
+void HireacyObject::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
 }

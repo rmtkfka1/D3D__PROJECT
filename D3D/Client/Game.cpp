@@ -11,7 +11,7 @@
 #include "SceneManager.h"
 #include "KeyManager.h"
 #include "TimeManager.h"
-
+#include "CollisonManager.h"
 
 void Game::Init(HWND hwnd)
 {
@@ -23,6 +23,7 @@ void Game::Init(HWND hwnd)
 	KeyManager::GetInstance()->Init(hwnd);
 	SceneManager::GetInstance()->ChangeScene(SceneType::STAGE1);
 	TimeManager::GetInstance()->Init(hwnd);
+	CollisonManager::GetInstance()->Init();
 
 
 }
@@ -46,8 +47,11 @@ void Game::Update()
 
 void Game::Render()
 {
+
 	core->RenderBegin();
 	SceneManager::GetInstance()->Run();
-	SceneManager::GetInstance()->LateUpdate();
 	core->RenderEnd();
+	SceneManager::GetInstance()->LateUpdate();
+	CollisonManager::GetInstance()->Update();
+
 }

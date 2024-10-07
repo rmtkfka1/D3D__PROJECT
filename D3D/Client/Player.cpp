@@ -6,7 +6,9 @@
 #include "TimeManager.h"
 #include "Camera.h"
 #include "Terrain.h"
-
+#include "SceneManager.h"
+#include "Scene.h"
+#include "CollisonManager.h"
 void Player::Init()
 {
 	
@@ -27,6 +29,8 @@ void Player::Render()
 {
 	Super::Render();
 }
+
+
 
 void Player::AnimateUpdate()
 {
@@ -97,4 +101,14 @@ void Player::RotateUpdate()
 void Player::CameraPushData()
 {
 	_camera->PushData();
+}
+
+void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
+	SceneManager::GetInstance()->GetCurrentScene()->ReserveDeleteGameObject(other->GetOwner());
+	CollisonManager::GetInstance()->ReserveDeleteCollider(other);
+}
+
+void Player::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
 }
