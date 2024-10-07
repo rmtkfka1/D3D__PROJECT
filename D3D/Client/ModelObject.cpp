@@ -8,6 +8,7 @@
 #include "BufferPool.h"
 ModelObject::ModelObject():GameObject(GameObjectType::Model)
 {
+	_transform = make_shared<Transform>();
 }
 
 ModelObject::~ModelObject()
@@ -16,12 +17,14 @@ ModelObject::~ModelObject()
 
 void ModelObject::Init()
 {
-	_transform = make_shared<Transform>();
+	
 
 }
 
 void ModelObject::Update()
 {
+
+
 	_transform->Update();
 }
 

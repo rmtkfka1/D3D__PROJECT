@@ -9,6 +9,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "CollisonManager.h"
+#include "CameraManager.h"
 void Player::Init()
 {
 	
@@ -16,12 +17,15 @@ void Player::Init()
 
 void Player::Update()
 {
+	if (CameraManager::GetInstance()->GetCameraType() == CameraType::THIRDVIEW)
+	{
 
-	MoveUpdate();
-	RotateUpdate();
+		MoveUpdate();
+		RotateUpdate();
+		CameraPushData();
+	}
+
 	AnimateUpdate();
-	CameraPushData();
-
 	Super::Update();
 }
 
@@ -56,12 +60,12 @@ void Player::MoveUpdate()
 
 	if (key->GetButton(KEY_TYPE::W))
 	{
-		_transform->GetRoot()->AddMove(-(diection * _speed * dt));
+		_transform->GetRoot()->AddMove((diection * _speed * dt));
 	}
 
 	if (key->GetButton(KEY_TYPE::S))
 	{
-		_transform->GetRoot()->AddMove((diection * _speed * dt));
+		_transform->GetRoot()->AddMove(-(diection * _speed * dt));
 	}
 
 	if (key->GetButton(KEY_TYPE::D))
@@ -105,8 +109,8 @@ void Player::CameraPushData()
 
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
-	SceneManager::GetInstance()->GetCurrentScene()->ReserveDeleteGameObject(other->GetOwner());
-	CollisonManager::GetInstance()->ReserveDeleteCollider(other);
+	//SceneManager::GetInstance()->GetCurrentScene()->ReserveDeleteGameObject(other->GetOwner());
+	//CollisonManager::GetInstance()->ReserveDeleteCollider(other);
 }
 
 void Player::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)

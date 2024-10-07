@@ -19,7 +19,8 @@
 #include "Player.h"
 #include "Core.h"
 #include "BoxCollider.h"
-
+#include "KeyManager.h"
+#include "Box.h"
 Stage1::Stage1()
 {
 }
@@ -39,18 +40,33 @@ void Stage1::Init()
 void Stage1::Run()
 {
 
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::ONE))
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
+	}
+
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::THREE))
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+	}
+
 	CameraManager::GetInstance()->PushData();
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
 	
 
-	//WCHAR wchTxt[64];
-	//swprintf_s(wchTxt, 64, L"look.x: %.2f, look.y: %.2f, look.z: %.2f",
-	//	_player->GetTransform()->GetRoot()->GetLook().x,
-	//	_player->GetTransform()->GetRoot()->GetLook().y,
-	//	_player->GetTransform()->GetRoot()->GetLook().z);
+	WCHAR wchTxt[100];
+	swprintf_s(wchTxt, 100, L"look.x: %.2f, look.y: %.2f, look.z: %.2f, pos.x: % .2f, pos.y : % .2f, pos.z : % .2f",
+		_player->GetTransform()->GetLook().x,
+		_player->GetTransform()->GetLook().y,
+		_player->GetTransform()->GetLook().z,
 
-	//SetWindowText(core->GetWindowHandle(), wchTxt);
+		_player->GetTransform()->GetLocalPosition().x,
+		_player->GetTransform()->GetLocalPosition().y,
+		_player->GetTransform()->GetLocalPosition().z
+	);
+
+	SetWindowText(core->GetWindowHandle(), wchTxt);
 }
 
 void Stage1::LateUpdate()
@@ -97,6 +113,9 @@ void Stage1::BulidCamera()
 	shared_ptr<ThirdPersonCamera> thirdCamera = make_shared<ThirdPersonCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::THIRDVIEW, thirdCamera);
 	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+
+	shared_ptr<ObserveCamera> observeCamera = make_shared<ObserveCamera>();
+	CameraManager::GetInstance()->AddCamera(CameraType::OBSERVE, observeCamera);
 }
 
 void Stage1::BulidObject()
@@ -112,25 +131,24 @@ void Stage1::BulidObject()
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
 
-		player->AddCollider(ColliderType::Box,vec3(-2.5f,-1.0f,0));
+		player->AddCollider("this",ColliderType::Box, vec3(-2.5f, -1.0f, -0.5f));
+		player->AddBoxCollider("raycheck",vec3(1.5f, 1.5f,50.0f),vec3(0,2.0f,-50.0f));
 	
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
-		//shared_ptr<Terrain> terrain = make_shared<Terrain>();
-		//AddGameObject(terrain);
-		//player->SetTerrain(terrain);
+		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		AddGameObject(terrain);
+		player->SetTerrain(terrain);
 
 		AddGameObject(player);
 
 	}
 
+	for (int i = 0; i < 50; ++i)
 	{
-
-		shared_ptr<HireacyObject> object = make_shared<HireacyObject>();
-		shared_ptr<Model> data = Model::ReadData(L"Tank/Tank");
+		shared_ptr<Box> object = make_shared<Box>();
+		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
 		object->SetModel(data);
-		object->AddCollider(ColliderType::Box);
-
 		AddGameObject(object);
 
 	}

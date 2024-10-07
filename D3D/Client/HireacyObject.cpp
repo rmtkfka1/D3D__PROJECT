@@ -9,6 +9,7 @@
 #include "Transform.h"
 #include "BoxCollider.h"
 #include "CollisonManager.h"
+#include "KeyManager.h"
 HireacyObject::HireacyObject():GameObject(GameObjectType::Hierarchy)
 {
 
@@ -24,6 +25,7 @@ void HireacyObject::Init()
 
 void HireacyObject::Update()
 {
+	
 
 	_transform->GetRoot()->Update();
 
@@ -59,11 +61,12 @@ void HireacyObject::Render()
 	}
 }
 
-void HireacyObject::AddCollider(ColliderType type, vec3 offsetSize , vec3 offsetCeneter)
+void HireacyObject::AddCollider(string name ,ColliderType type, vec3 offsetSize , vec3 offsetCeneter )
 {
 	if (type == ColliderType::Box)
 	{
 		shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
+		box->SetName(name);
 		box->SetOwner(shared_from_this());
 		box->SetTotalCenter(_model->GetCenter() + offsetCeneter);
 		box->SetSize(_model->GetSize() + offsetSize);
@@ -74,9 +77,10 @@ void HireacyObject::AddCollider(ColliderType type, vec3 offsetSize , vec3 offset
 	}
 }
 
-void HireacyObject::AddBoxCollider(vec3 size, vec3 center)
+void HireacyObject::AddBoxCollider(string name,vec3 size, vec3 center)
 {
 	shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
+	box->SetName(name);
 	box->SetOwner(shared_from_this());
 	box->SetTotalCenter(center);
 	box->SetSize(size);

@@ -20,7 +20,8 @@ public:
 
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
-public:
+
+protected:
 	shared_ptr<Model> _model;
 	shared_ptr<Transform> _transform;
 

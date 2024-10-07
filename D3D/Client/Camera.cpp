@@ -6,6 +6,7 @@
 #include "TimeManager.h"
 #include "Player.h"
 #include "TransformTree.h"
+#include "KeyManager.h"
 /*************************
 *                        *
 *       Camera           *
@@ -35,12 +36,17 @@ void Camera::GenProjMatrix()
 
 void Camera::PushData()
 {
+	Update();
 	GenViewMatrix();
 	GenProjMatrix();
 
 	auto& bufferPool = core->GetCameraBufferPool();
 	bufferPool->PushData(&_params,sizeof(_params));
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
+}
+
+void Camera::Update()
+{
 }
 
 void Camera::AddMove(const vec3& shift)
@@ -61,6 +67,11 @@ ThirdPersonCamera::ThirdPersonCamera():Camera(CameraType::THIRDVIEW)
 
 ThirdPersonCamera::~ThirdPersonCamera()
 {
+}
+
+void ThirdPersonCamera::Update()
+{
+
 }
 
 void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
@@ -93,4 +104,61 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 
 }
 
+/*************************
+*                        *
+*     ObserveCamera      *
+*                        *
+**************************/
 
+ObserveCamera::ObserveCamera():Camera(CameraType::OBSERVE)
+{
+
+}
+
+ObserveCamera::~ObserveCamera()
+{
+}
+
+void ObserveCamera::Update()
+{
+	MouseUpdate();
+	KeyUpdate();
+}
+
+void ObserveCamera::KeyUpdate()
+{
+	float dt = TimeManager::GetInstance()->GetDeltaTime();
+
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::W))
+	{
+		_cameraPos += _cameraSpeed * 10.0f * _cameraLook * dt;
+	}
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::S))
+	{
+		_cameraPos -= _cameraSpeed * 10.0f * _cameraLook * dt;
+	}
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::D))
+	{
+		_cameraPos += _cameraSpeed * 10.0f * _cameraRight * dt;
+	}
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::A))
+	{
+		_cameraPos -= _cameraSpeed * 10.0f * _cameraRight * dt;
+
+	}
+}
+
+void ObserveCamera::MouseUpdate()
+{
+	vec2 pos = KeyManager::GetInstance()->GetDeletaPos();
+
+	vec3 cameraLook = vec3(0, 0, 1.0f);
+	vec3 caemraRight = vec3(1.0f, 0, 0.0f);
+
+	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(-pos.x), XMConvertToRadians(pos.y), 0));
+	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(-pos.x), XMConvertToRadians(pos.y), 0));
+}

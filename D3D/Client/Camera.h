@@ -6,7 +6,7 @@ enum CameraType
 {
 	FIRSTVIEW,
 	THIRDVIEW,
-	OBESRVE,
+	OBSERVE,
 	NONE
 };
 
@@ -28,11 +28,13 @@ public:
 	void GenProjMatrix();
 	void PushData();
 
+	virtual void Update();
 	virtual void Rotate(const vec3& offset) {};
 	void AddMove(const vec3& shift);
 	void SetCameraPos(const vec3& pos) { _cameraPos = pos; }
 	vec3 GetCameraPos() { return _cameraPos; }
 	vec3 GetCameraLook() { return _cameraLook; }
+	CameraType GetCameraType() { return _type; }
 
 protected:
 	CameraType _type = CameraType::NONE;
@@ -63,12 +65,30 @@ class ThirdPersonCamera :public Camera
 
 public:
 	ThirdPersonCamera();
-	~ThirdPersonCamera();
+	virtual ~ThirdPersonCamera();
 
+	virtual void Update() override;
 	virtual void Rotate(const shared_ptr<Player>& player);
 
 
 private:
 
+};
+
+
+class ObserveCamera :public Camera
+{
+
+public:
+	ObserveCamera();
+	virtual ~ObserveCamera();
+
+	virtual void Update() override;
+private:
+	void KeyUpdate();
+	void MouseUpdate();
+
+private:
+	float _cameraSpeed = 50.0f;
 };
 

@@ -17,8 +17,8 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 
-	void AddCollider(ColliderType type, vec3 offsetSize= vec3(0, 0, 0), vec3 offsetCeneter=vec3(0,0,0));
-	void AddBoxCollider(vec3 size, vec3 center);
+	void AddCollider(string name, ColliderType type, vec3 offsetSize= vec3(0, 0, 0), vec3 offsetCeneter=vec3(0,0,0));
+	void AddBoxCollider(string name, vec3 size, vec3 center);
 
 	virtual shared_ptr<Transform> GetTransform() override;
 	void SetModel(shared_ptr< Model> model);

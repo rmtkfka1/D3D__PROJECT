@@ -153,7 +153,7 @@ vec3 Transform::GetUp()
 
 vec3 Transform::GetLook()
 {
-	vec3 temp = _matWorld.Backward();
+	vec3 temp = _matWorld.Forward();
 	temp.Normalize();
 	return temp;
 }

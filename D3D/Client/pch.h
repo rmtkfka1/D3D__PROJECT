@@ -46,7 +46,6 @@ using namespace Microsoft::WRL;
 #include "SimpleMath.h"
 #include "SimpleMath.inl"
 #include "tinyxml2.h"
-
 // °¢Á¾ lib
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
@@ -115,3 +114,5 @@ struct CameraParams
     Matrix matProjection;
 };
 extern unique_ptr<class Core> core;
+
+#include "KeyManager.h"

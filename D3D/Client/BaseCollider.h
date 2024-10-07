@@ -24,6 +24,8 @@ public:
 	virtual bool CheckCollusion(Ray& ray, OUT float& distance) = 0;	//위치,나가는방향
 
 public:
+	string GetName() { return _name; }
+	void SetName(string& name) { _name = std::move(name); }
 	ColliderType GetColliderType() { return _colliderType; }
 	void SetTotalCenter(vec3 center) { _totalCenter = center; }
 	vec3 GetCenter() { return _totalCenter; }
@@ -35,6 +37,7 @@ protected:
 	ColliderType _colliderType = {};
 
 public:
+	string _name;
 	weak_ptr<GameObject> _owner;
 	unordered_set<BaseCollider*> _collisionMap;
 };
