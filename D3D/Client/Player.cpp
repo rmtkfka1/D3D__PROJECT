@@ -27,7 +27,7 @@ void Player::Update()
 	}
 
 	AnimateUpdate();
-	BoundaryCheck();
+	CollisonUpdate();
 	Super::Update();
 }
 
@@ -113,51 +113,53 @@ void Player::CameraPushData()
 	_camera->PushData();
 }
 
-void Player::BoundaryCheck()
+void Player::CollisonUpdate()
 {
-
 	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::ENTER))
 	{
-		CollisionDected = true;
-		rotationProgress = 0.0f;  // 보간 시작 시 초기화
+		if (_collisionDected)
+			return;
 
-		// 현재 회전 상태를 시작 회전으로 저장
-		startRotation = Quaternion::CreateFromYawPitchRoll(
-			XMConvertToRadians(GetTransform()->GetLocalRotation().y),
-			XMConvertToRadians(GetTransform()->GetLocalRotation().x),
-			XMConvertToRadians(GetTransform()->GetLocalRotation().z)
-		);
-
-		// 목표 회전 설정 (look에서 right로 회전)
-		auto look = GetTransform()->GetLook();
-		vec3 goingVec = GetTransform()->GetRight();
-		targetRotation = Quaternion::FromToRotation(look, goingVec);
+		_collisionDected = true;
+		_dir = GetTransform()->GetRight();
+		CollisonRotate(GetTransform()->GetLook(), _dir);
 	}
 
-	if (CollisionDected)
+}
+void Player::CollisonRotate(vec3 look,vec3 dir)
+{
+
+	// Normalize the vectors
+	look.Normalize();
+	dir.Normalize();
+
+	// Calculate the axis of rotation (cross product)
+	vec3 rotationAxis = look.Cross(dir);
+
+	// Calculate the angle between the look and dir vectors (dot product)
+	float dotProduct = look.Dot(dir);
+	float angle = acosf(dotProduct);  // Angle in radians
+
+	if (fabs(angle) < 0.0001f)
 	{
-		// 매 프레임마다 회전 보간 진행
-		float rotationSpeed = 1.0f;  // 보간 속도, 값이 작을수록 느리게 회전
-		rotationProgress += rotationSpeed * TimeManager::GetInstance()->GetDeltaTime();
-
-		// `Slerp`로 부드럽게 회전
-		Quaternion smoothRotation = Quaternion::Slerp(startRotation, targetRotation, rotationProgress);
-		vec3 result = smoothRotation.ToEuler();
-
-		GetTransform()->SetLocalRotation(vec3(
-			XMConvertToDegrees(result.x),
-			XMConvertToDegrees(result.y),
-			XMConvertToDegrees(result.z)
-		));
-		GetTransform()->Update();
-
-		if (rotationProgress >= 1.0f)
-		{
-			CollisionDected = false;
-		}
-
-
+		_collisionDected = false;
+		return;
 	}
+
+	// Create a quaternion representing the rotation
+	Quaternion rotationQuat = Quaternion::CreateFromAxisAngle(rotationAxis, angle);
+
+	vec3 rotate = GetTransform()->GetLocalRotation();
+	Quaternion nowQuat = Quaternion::CreateFromYawPitchRoll(vec3(XMConvertToRadians(rotate.x), XMConvertToRadians(rotate.y), XMConvertToRadians(rotate.z)));
+
+	Quaternion result = nowQuat * rotationQuat;
+
+	vec3 resultEuler = result.ToEuler();
+
+	GetTransform()->SetLocalRotation(vec3(XMConvertToDegrees(resultEuler.x), XMConvertToDegrees(resultEuler.y), XMConvertToDegrees(resultEuler.z)));
+
+
+
 }
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {

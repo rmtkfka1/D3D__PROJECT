@@ -24,17 +24,21 @@ private:
 	void MoveUpdate();
 	void RotateUpdate();
 	void CameraPushData();
-	void BoundaryCheck();
+	void CollisonUpdate();
+	void CollisonRotate(vec3 look ,vec3 dir);
 
 	shared_ptr<Terrain> _terrain;
 	shared_ptr<ThirdPersonCamera> _camera;
+
 	float _speed = 200.0f;
+	bool _collisionDected = false;
+	vec3 _dir = vec3(1.0f,0,0);
 
 
-	Quaternion targetRotation;
-	Quaternion startRotation;
-	bool CollisionDected=false;
-	float rotationProgress = 0.0f;  // 0.0에서 1.0 사이의 값으로 보간 정도를 나타냄
+	float _totalAngle;
+	float _sumAngle;
+	float _addAngle =10.0f;
+
 	
 };
 

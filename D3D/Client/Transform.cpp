@@ -59,7 +59,6 @@ void Transform::AddRotate(const vec3& Euler)
     _localRotation.y += Euler.y;
     _localRotation.z += Euler.z;
 
-  
 }
 
 
