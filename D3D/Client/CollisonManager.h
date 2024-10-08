@@ -22,12 +22,13 @@ public:
 
 	void CheckObjectCollusion();
 	void CheckRayCollusion();
+	bool CheckRayCollusion(Ray ray);
 	void LateUpdate();
 	vec3 ToWorldPosition(const vec3& pos, const Matrix& W, const Matrix& V, const Matrix& P);
 
 	void ReserveDeleteCollider(shared_ptr<BaseCollider>& collider);
 	void AddCollider(const shared_ptr<BaseCollider>& collider);
-	
+	void Reset();
 private:
 	void RemoveCollider(shared_ptr<BaseCollider>& collider);
 

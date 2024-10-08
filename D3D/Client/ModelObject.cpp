@@ -9,8 +9,9 @@
 #include "BoxCollider.h"
 #include "CollisonManager.h"
 
-ModelObject::ModelObject():GameObject(GameObjectType::Model)
+ModelObject::ModelObject(PlayerType type):GameObject(GameObjectType::Model)
 {
+	_playerType = type;
 	_transform = make_shared<Transform>();
 }
 

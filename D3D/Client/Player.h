@@ -7,6 +7,10 @@ class Terrain;
 class Player :public HireacyObject
 {
 public:
+
+	Player();
+	virtual ~Player();
+
 	using Super = HireacyObject;
 
 	virtual void Init() override;;
@@ -25,6 +29,8 @@ private:
 	void RotateUpdate();
 	void CameraPushData();
 	void CollisonUpdate();
+	void StartCollisionRotation(vec3 direction);
+
 	void CollisonRotate(vec3 look ,vec3 dir ,float angle , vec3 rotationAxis);
 
 	shared_ptr<Terrain> _terrain;
@@ -34,9 +40,11 @@ private:
 	float _rotationSpeed = 1.0f;
 	bool _collisionDected = false;
 	vec3 _dir = vec3(1.0f,0,0);
-
-
+	vec3 _look;
+	float _angle;
+	vec3 _rotationAxis;
 	float _addAngle = 0;
+
 
 	
 };

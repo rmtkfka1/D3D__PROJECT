@@ -10,9 +10,9 @@
 #include "BoxCollider.h"
 #include "CollisonManager.h"
 #include "KeyManager.h"
-HireacyObject::HireacyObject():GameObject(GameObjectType::Hierarchy)
+HireacyObject::HireacyObject(PlayerType type):GameObject(GameObjectType::Hierarchy)
 {
-
+	_playerType = type;
 }
 
 HireacyObject::~HireacyObject()

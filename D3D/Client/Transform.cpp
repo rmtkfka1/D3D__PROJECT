@@ -107,7 +107,7 @@ vec3 Transform::GetRight()
 {
     vec3 temp = _matWorld.Right();
     temp.Normalize();
-    return temp;
+    return -temp;
 }
 
 vec3 Transform::GetUp()

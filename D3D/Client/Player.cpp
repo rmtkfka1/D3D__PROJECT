@@ -11,6 +11,13 @@
 #include "CollisonManager.h"
 #include "CameraManager.h"
 #include "Utils.h"
+Player::Player():HireacyObject(PlayerType::Player)
+{
+
+}
+Player::~Player()
+{
+}
 void Player::Init()
 {
 	
@@ -115,33 +122,30 @@ void Player::CameraPushData()
 
 void Player::CollisonUpdate()
 {
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::ENTER))
-	{
-		if (_collisionDected)
-			return;
-
-		_collisionDected = true;
-	
-	}
 
 	if(_collisionDected)
 	{
-		vec3 look = GetTransform()->GetLook();
-
-		_dir = GetTransform()->GetRight();
-		_dir.Normalize();
-
-		// Calculate the axis of rotation (cross product)
-		vec3 rotationAxis = look.Cross(_dir); //회전해야될축
-
-		// Calculate the angle between the look and dir vectors (dot product)
-		float dotProduct = look.Dot(_dir);
-		float angle = acosf(dotProduct);  //회전해야될 량
-
-		CollisonRotate(look, _dir, angle, rotationAxis);
+		CollisonRotate(_look, _dir, _angle, _rotationAxis);
 	}
 
 }
+
+void Player::StartCollisionRotation(vec3 direction)
+{
+
+	CollisonManager::GetInstance()->Reset();
+	_collisionDected = true;
+	_look = GetTransform()->GetLook();
+	_dir = direction;
+	_dir.Normalize();
+	_rotationAxis = _look.Cross(_dir);
+	float dotProduct = _look.Dot(_dir);
+	_angle = acosf(dotProduct);
+
+}
+
+
+
 void Player::CollisonRotate(vec3 look,vec3 dir ,float angle , vec3 rotationAxis)
 {
 	
@@ -174,7 +178,38 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 
 	if (collider->GetName() == "raycheck" && other->GetName() == "boxbox")
 	{
-		int a = 5;
+	
+		//ray 를 여러방향으로 발사해봄.
+
+		auto now = GetTransform()->GetLocalPosition();
+		auto right = GetTransform()->GetRight();
+		auto down = -GetTransform()->GetUp();
+		auto left = -right;
+
+		Ray rayleft = Ray(now, left);
+
+		if (CollisonManager::GetInstance()->CheckRayCollusion(rayleft) == false)
+		{
+			StartCollisionRotation(left);
+			return;
+		}
+
+		Ray rayright = Ray(now, right);
+		
+		if (CollisonManager::GetInstance()->CheckRayCollusion(rayright) == false)
+		{
+			StartCollisionRotation(right);
+			return;
+		}
+
+		Ray RayDown = Ray(now, down);
+
+		if (CollisonManager::GetInstance()->CheckRayCollusion(RayDown) == false)
+		{
+			StartCollisionRotation(down);
+			return;
+		}
+
 	}
 
 

@@ -32,11 +32,15 @@ void CollisonManager::CheckObjectCollusion()
 
 	for (int32 i = 0; i < _colliders.size(); i++)
 	{
+
+		if (_colliders[i]->GetOwner()->GetPlayerType() == PlayerType::Box)
+			continue;
+
+
 		for (int32 j = i + 1; j < _colliders.size(); j++)
 		{
 			shared_ptr<BaseCollider> src = _colliders[i];
 			shared_ptr<BaseCollider> dest = _colliders[j];
-
 
 			if (src == nullptr || dest == nullptr)
 			{
@@ -74,53 +78,28 @@ void CollisonManager::CheckObjectCollusion()
 
 void CollisonManager::CheckRayCollusion()
 {
-	//if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::LBUTTON))
-	//{
-	//	POINT mousePos = KeyManager::GetInstance()->GetMousePos();
-	//	vec3 pos = vec3(mousePos.x, mousePos.y, 0.0f);
+	
 
+}
 
-	//	vec3 nearPoint = ToWorldPosition(pos, Matrix::Identity, CameraManager::GetInstance()->S_MatView, CameraManager::GetInstance()->S_MatProjection);
+bool CollisonManager::CheckRayCollusion(Ray ray)
+{
 
-	//	pos.z = 1.0f;
-	//	vec3 farPoint = ToWorldPosition(pos, Matrix::Identity, CameraManager::GetInstance()->S_MatView, CameraManager::GetInstance()->S_MatProjection);
+	for (int i = 0; i < _colliders.size(); ++i)
+	{
 
+		if (_colliders[i]->GetOwner()->GetPlayerType() == PlayerType::Box)
+			continue;
 
-	//	vec3 worldRayDir = (farPoint - nearPoint);
-	//	worldRayDir.Normalize();
+		float distance = FLT_MAX; // 초기화
 
-	//	//월드기준정의된 좌표임
-	//	Ray ray = Ray(nearPoint, worldRayDir);
+		if (_colliders[i]->CheckCollusion(ray, distance))
+		{
+			return true;
+		}
+	}
 
-	//	float distance = 0;
-
-	//	float closestDistance = FLT_MAX;
-	//	std::shared_ptr<BaseCollider> closestCollider = nullptr;
-
-	//	for (int i = 0; i < _colliders.size(); ++i)
-	//	{
-	//		std::static_pointer_cast<BoxCollider>(_colliders[i])->_hit = false;
-
-	//		float distance = 0;
-
-	//		if (_colliders[i]->CheckCollusion(ray, distance))
-	//		{
-	//			if (distance < closestDistance)
-	//			{
-	//				closestDistance = distance;
-	//				closestCollider = _colliders[i];
-	//			}
-	//		}
-	//	}
-
-
-	//	if (closestCollider != nullptr)
-	//	{
-	//		std::static_pointer_cast<BoxCollider>(closestCollider)->_hit = true;
-	//	}
-
-
-	//}
+	return false; 
 
 }
 
@@ -161,6 +140,14 @@ void CollisonManager::ReserveDeleteCollider(shared_ptr<BaseCollider>& collider)
 void CollisonManager::AddCollider(const shared_ptr<BaseCollider>& collider)
 {
 	_colliders.push_back(collider);
+}
+
+void CollisonManager::Reset()
+{
+	for (auto& ele : _colliders)
+	{
+		ele->Clear();
+	}
 }
 
 void CollisonManager::RemoveCollider(shared_ptr<BaseCollider>& collider)
