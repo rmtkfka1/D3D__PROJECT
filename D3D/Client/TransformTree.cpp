@@ -5,7 +5,7 @@
 #include "Model.h"
 #include <unordered_map>
 #include <string>
-
+#include "Utils.h"
 TransformTree::TransformTree() 
 {
 
@@ -44,7 +44,7 @@ void TransformTree::MakeTransformTree(shared_ptr<Model> model)
 			m.Decompose(scale, rotation, pos);
 
 			_root->SetLocalPosition(pos);
-			_root->SetLocalRotation(rotation);
+			_root->SetLocalRotation(Utils::ToEulerAngles(rotation));
 			_root->SetLocalScale(scale);
 			_root->Update();
 			_root->_name = bone->name;
@@ -64,7 +64,7 @@ void TransformTree::MakeTransformTree(shared_ptr<Model> model)
 			m.Decompose(scale, rotation, pos);
 
 			transform->SetLocalPosition(pos);
-			transform->SetLocalRotation(rotation);
+			transform->SetLocalRotation(Utils::ToEulerAngles(rotation));
 			transform->SetLocalScale(scale);
 			transform->Update();
 			transform->_name = bone->name;

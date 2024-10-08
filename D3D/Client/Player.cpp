@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "CollisonManager.h"
 #include "CameraManager.h"
+#include "Utils.h"
 void Player::Init()
 {
 	
@@ -18,19 +19,15 @@ void Player::Init()
 void Player::Update()
 {
 
-	BoundaryCheck();
-
 	if (CameraManager::GetInstance()->GetCameraType() == CameraType::THIRDVIEW)
 	{
-
 		MoveUpdate();
 		RotateUpdate();
 		CameraPushData();
 	}
 
 	AnimateUpdate();
-
-
+	BoundaryCheck();
 	Super::Update();
 }
 
@@ -66,21 +63,25 @@ void Player::MoveUpdate()
 	if (key->GetButton(KEY_TYPE::W))
 	{
 		_transform->GetRoot()->AddMove((diection * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::S))
 	{
 		_transform->GetRoot()->AddMove(-(diection * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::D))
 	{
-		_transform->GetRoot()->AddMove(-(right * _speed * dt));
+		_transform->GetRoot()->AddMove((right * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (key->GetButton(KEY_TYPE::A))
 	{
-		_transform->GetRoot()->AddMove((right * _speed * dt));
+		_transform->GetRoot()->AddMove(-(right * _speed * dt));
+		_camera->AddMove(diection * _speed * dt);
 	}
 
 	if (_terrain)
@@ -93,16 +94,18 @@ void Player::MoveUpdate()
 		}
 	}
 
-	_camera->AddMove(diection * _speed * dt);
+
 
 }
 
 
 void Player::RotateUpdate()
 {
+
 	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
-	_transform->GetRoot()->AddRotate(vec3(delataPos.y, delataPos.x, 0));
+	_transform->GetRoot()->AddRotate(vec3(-delataPos.y, -delataPos.x, 0));
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
+
 };
 
 void Player::CameraPushData()
@@ -112,43 +115,50 @@ void Player::CameraPushData()
 
 void Player::BoundaryCheck()
 {
-	Quaternion currentRotation = GetTransform()->GetLocalRotation();
-	Quaternion targetRotation;
-	float rotationTime = 0.0f;
-	float totalRotationDuration = 30.0f;  // 2 seconds for the rotation
-	float dt = TimeManager::GetInstance()->GetDeltaTime();
 
-	if (_transform->GetRoot()->GetLocalPosition().x > 1000.0f || _transform->GetRoot()->GetLocalPosition().x < -1000.0f ||
-		_transform->GetRoot()->GetLocalPosition().z > 1000.0f || _transform->GetRoot()->GetLocalPosition().z < -1000.0f ||
-		_transform->GetRoot()->GetLocalPosition().y > 1000.0f)
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::ENTER))
 	{
-		vec3 forward = GetTransform()->GetLook();
+		CollisionDected = true;
+		rotationProgress = 0.0f;  // 보간 시작 시 초기화
 
-		// 반대 방향 구하기
-		vec3 oppositeDirection = -forward;
+		// 현재 회전 상태를 시작 회전으로 저장
+		startRotation = Quaternion::CreateFromYawPitchRoll(
+			XMConvertToRadians(GetTransform()->GetLocalRotation().y),
+			XMConvertToRadians(GetTransform()->GetLocalRotation().x),
+			XMConvertToRadians(GetTransform()->GetLocalRotation().z)
+		);
 
-		// 반대 방향으로 회전 적용
-		Quaternion targetRotation = Quaternion::LookRotation(forward, oppositeDirection);
-
-		// 회전 속도 설정 (조절 가능)
-		float rotationSpeed = 0.1f; // 이 값을 조정하여 회전 속도를 조절할 수 있습니다.
-
-		Quaternion currentRotation = GetTransform()->GetLocalRotation();
-
-		Quaternion newRotation = Quaternion::Slerp(currentRotation, targetRotation, rotationSpeed);
-
-		newRotation.Normalize();
-
-		vec3 result = newRotation.ToEuler();
-
-		// Transform에 회전 적용
-		GetTransform()->AddRotate(result);
-		GetTransform()->Update();
+		// 목표 회전 설정 (look에서 right로 회전)
+		auto look = GetTransform()->GetLook();
+		vec3 goingVec = GetTransform()->GetRight();
+		targetRotation = Quaternion::FromToRotation(look, goingVec);
 	}
 
+	if (CollisionDected)
+	{
+		// 매 프레임마다 회전 보간 진행
+		float rotationSpeed = 1.0f;  // 보간 속도, 값이 작을수록 느리게 회전
+		rotationProgress += rotationSpeed * TimeManager::GetInstance()->GetDeltaTime();
 
+		// `Slerp`로 부드럽게 회전
+		Quaternion smoothRotation = Quaternion::Slerp(startRotation, targetRotation, rotationProgress);
+		vec3 result = smoothRotation.ToEuler();
+
+		GetTransform()->SetLocalRotation(vec3(
+			XMConvertToDegrees(result.x),
+			XMConvertToDegrees(result.y),
+			XMConvertToDegrees(result.z)
+		));
+		GetTransform()->Update();
+
+		if (rotationProgress >= 1.0f)
+		{
+			CollisionDected = false;
+		}
+
+
+	}
 }
-
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
 	//SceneManager::GetInstance()->GetCurrentScene()->ReserveDeleteGameObject(other->GetOwner());

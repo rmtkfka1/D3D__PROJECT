@@ -29,6 +29,12 @@ private:
 	shared_ptr<Terrain> _terrain;
 	shared_ptr<ThirdPersonCamera> _camera;
 	float _speed = 200.0f;
+
+
+	Quaternion targetRotation;
+	Quaternion startRotation;
+	bool CollisionDected=false;
+	float rotationProgress = 0.0f;  // 0.0에서 1.0 사이의 값으로 보간 정도를 나타냄
 	
 };
 

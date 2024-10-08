@@ -11,7 +11,7 @@ int main()
 {
 	converter.ReadAssetFile(L"Box.fbx");
 	converter.ExportMaterialData(L"Box/Box");
-	converter.ExportModelData(L"Box/Box",true);
+	converter.ExportModelData(L"Box/Box",false);
 
 	for (auto& bone : converter._bones)
 	{
