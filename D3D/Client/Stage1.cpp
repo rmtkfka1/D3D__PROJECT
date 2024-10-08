@@ -57,9 +57,9 @@ void Stage1::Run()
 
 	WCHAR wchTxt[100];
 	swprintf_s(wchTxt, 100, L"look.x: %.2f, look.y: %.2f, look.z: %.2f, pos.x: % .2f, pos.y : % .2f, pos.z : % .2f",
-		_player->GetTransform()->GetUp().x,
-		_player->GetTransform()->GetUp().y,
-		_player->GetTransform()->GetUp().z,
+		_player->GetTransform()->GetLook().x,
+		_player->GetTransform()->GetLook().y,
+		_player->GetTransform()->GetLook().z,
 
 		_player->GetTransform()->GetLocalPosition().x,
 		_player->GetTransform()->GetLocalPosition().y,
@@ -97,8 +97,8 @@ void Stage1::BulidLight()
 		Light light;
 
 		light.direction = vec3(0, -1.0f, 0);
-		light.material.ambient = vec3(0, 0, 0);
-		light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
+		light.material.ambient = vec3(0.5f, 0.5f, 0.5f);
+		light.material.diffuse = vec3(0.3f, 0.3f, 0.3f);
 		light.material.specular = vec3(1.0f, 1.0f, 1.0f);
 		light.material.shininess = 64.0f;
 		light.material.lightType = static_cast<int32>(LIGHT_TYPE::DIRECTIONAL_LIGHT);
@@ -130,7 +130,7 @@ void Stage1::BulidObject()
 		player->SetModel(data);
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
-	
+
 		player->AddCollider("this",ColliderType::Box, vec3(-2.5f, -1.0f, -0.5f));
 		player->AddBoxCollider("raycheck",vec3(1.5f, 1.5f,50.0f),vec3(0,2.0f,-50.0f));
 	
@@ -159,7 +159,6 @@ void Stage1::BulidObject()
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 		
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/skybox.dds", TextureType::CubeMap);
-
 
 		ShaderInfo info;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;

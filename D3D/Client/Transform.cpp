@@ -3,133 +3,163 @@
 #include "Core.h"
 #include "BufferPool.h"
 
-Transform::Transform()
-    : _localRotation(0.0f, 0.0f, 0.0f)  // 초기 Euler 각도
+Transform::Transform() 
 {
+
 }
 
 Transform::~Transform()
 {
+
 }
+
 
 void Transform::Update()
 {
-    Matrix matScale = Matrix::CreateScale(_localScale);
-    Matrix matRotation = Matrix::CreateFromYawPitchRoll(
-        XMConvertToRadians(_localRotation.y),  // Yaw
-        XMConvertToRadians(_localRotation.x),  // Pitch
-        XMConvertToRadians(_localRotation.z)   // Roll
-    );
-    Matrix matTranslation = Matrix::CreateTranslation(_localPosition);
+	Matrix matScale = Matrix::CreateScale(_localScale);
+	Matrix matRotation = Matrix::CreateFromQuaternion(_localRotation);
+	Matrix matTranslation = Matrix::CreateTranslation(_localPosition);
 
-    _matLocal = matScale * matRotation * matTranslation;
+	_matLocal = matScale * matRotation * matTranslation;
 
-    if (HasParent())
-    {
-        _matWorld = _matLocal * _parent.lock()->GetWorldMatrix();
-    }
-    else
-    {
-        _matWorld = _matLocal;
-    }
+	if (HasParent())
+	{
+		_matWorld = _matLocal * _parent.lock()->GetWorldMatrix();
+	}
+	else
+	{
+		_matWorld = _matLocal;
+	}
 
+	_matWorld.Decompose(_scale, _rotation, _position);
 
-    for (const shared_ptr<Transform>& child : _children)
-        child->Update();
+	for (const shared_ptr<Transform>& child : _children)
+		child->Update();
 }
 
 void Transform::PushData()
 {
-    TransformParams transformParams = {};
-    transformParams.matWorld = _matWorld;
+	TransformParams transformParams = {};
+	transformParams.matWorld = _matWorld;
 
-    core->GetWorldBufferPool()->PushData(&transformParams, sizeof(transformParams));
+	core->GetWorldBufferPool()->PushData(&transformParams, sizeof(transformParams));
 }
 
 void Transform::AddMove(const vec3& shift)
 {
-    _localPosition += shift;
+	_localPosition += shift;
 }
 
 void Transform::AddRotate(const vec3& Euler)
 {
-    // 기존의 로컬 회전 값에 추가 회전값을 더함
-    _localRotation += Euler;
+	_pitch += Euler.x;
+	_yaw += Euler.y;
+	_roll += Euler.z;
 
-  
+	_localRotation = Quaternion::CreateFromYawPitchRoll(_yaw, _pitch, _roll);
+	_localRotation.Normalize();
 }
 
-void Transform::AddCameraRotate(const vec3& Euler)
+void Transform::AddRotate(const Quaternion& quat)
 {
-    // 왼손 좌표계로 이용하기 위해 부호 반전
-    _localRotation.x -= Euler.x;  // Pitch
-    _localRotation.y -= Euler.y;  // Yaw
-    _localRotation.z -= Euler.z;  // Roll
+	_localRotation = _localRotation * quat;
 
-    if (_localRotation.x > 89.0f) _localRotation.x = 89.0f;
-    if (_localRotation.x < -89.0f) _localRotation.x = -89.0f;
+	_localRotation.Normalize();
+
+	vec3 euler = _localRotation.ToEuler();
+
+	_pitch = euler.x;
+	_yaw = euler.y;
+	_roll = euler.z;
 }
 
+void Transform::SetLocalRotation(const vec3 localRotation)
+{
+	
+	float pitch = XMConvertToRadians(localRotation.x);
+	float yaw = XMConvertToRadians(localRotation.y);  
+	float roll = XMConvertToRadians(localRotation.z); 
 
+	_localRotation = Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
+	_localRotation.Normalize();
+}
 
 void Transform::SetWorldScale(const vec3 worldScale)
 {
-    if (HasParent())
-    {
-        vec3 parentScale = _parent.lock()->GetWorldScale();
-        vec3 scale = worldScale;
-        scale.x /= parentScale.x;
-        scale.y /= parentScale.y;
-        scale.z /= parentScale.z;
-        SetLocalScale(scale);
-    }
-    else
-    {
-        SetLocalScale(worldScale);
-    }
+	if (HasParent())
+	{
+		vec3 parentScale = _parent.lock()->GetWorldScale();
+		vec3 scale = worldScale;
+		scale.x /= parentScale.x;
+		scale.y /= parentScale.y;
+		scale.z /= parentScale.z;
+		SetLocalScale(scale);
+	}
+	else
+	{
+		SetLocalScale(worldScale);
+	}
 }
 
 void Transform::SetWorldRotation(const vec3 worldRotation)
 {
-    // 월드 회전 값을 그대로 로컬 회전으로 설정
-    SetLocalRotation(worldRotation);
-}
+	// 월드 회전 값을 이용해 쿼터니언 생성
+	Quaternion worldRotationQuat = Quaternion::CreateFromYawPitchRoll(worldRotation.y, worldRotation.x, worldRotation.z);
 
+	if (HasParent())
+	{
+		// 부모의 월드 행렬을 반전시킴 ex -30도 돌아가있으면  30도 돌아가는 행렬
+		Matrix inverseParentMatrix = _parent.lock()->GetWorldMatrix().Invert();
+
+		// 반전된 부모 행렬을 이용해 부모의 회전을 쿼터니언으로 변환
+		Quaternion inverseParentRotationQuat = Quaternion::CreateFromRotationMatrix(inverseParentMatrix);
+
+		// 월드 회전 쿼터니언을 부모의 반전된 회전 쿼터니언과 곱하여 로컬 회전 쿼터니언을 계산
+		Quaternion localRotationQuat = worldRotationQuat * inverseParentRotationQuat;
+
+		// 로컬 회전 설정
+		SetLocalRotation(localRotationQuat);
+	}
+	else
+	{
+		// 부모가 없으면 월드 회전을 그대로 로컬 회전으로 설정
+		SetLocalRotation(worldRotationQuat);
+	}
+}
 void Transform::SetWorldPosition(const vec3 worldPosition)
 {
-    if (HasParent())
-    {
-        Matrix worldToParentLocalMatrix = _parent.lock()->GetWorldMatrix().Invert();
+	if (HasParent())
+	{
+		Matrix worldToParentLocalMatrix = _parent.lock()->GetWorldMatrix().Invert();
 
-        vec3 position;
-        position = position.Transform(worldPosition, worldToParentLocalMatrix);
+		vec3 position;
+		position = position.Transform(worldPosition, worldToParentLocalMatrix);
 
-        SetLocalPosition(position);
-    }
-    else
-    {
-        SetLocalPosition(worldPosition);
-    }
+		SetLocalPosition(position);
+	}
+	else
+	{
+		SetLocalPosition(worldPosition);
+	}
 }
 
 vec3 Transform::GetRight()
 {
-    vec3 temp = _matWorld.Right();
-    temp.Normalize();
-    return temp;
+	vec3 temp = _matWorld.Right();
+	temp.Normalize();
+	return temp;
 }
 
 vec3 Transform::GetUp()
 {
-    vec3 temp = _matWorld.Up();
-    temp.Normalize();
-    return temp;
+	vec3 temp = _matWorld.Up();
+	temp.Normalize();
+	return temp;
 }
 
 vec3 Transform::GetLook()
 {
-    vec3 temp = _matWorld.Backward();
-    temp.Normalize();
-    return temp;
+	vec3 temp = _matWorld.Backward();
+	temp.Normalize();
+	return temp;
 }
-

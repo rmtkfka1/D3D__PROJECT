@@ -1,1 +1,2 @@
 C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\x64\Debug\AssimpTool.vcxproj.CopyComplete
+C:\Users\pakhe\Desktop\D3D__PROJECT-578e4810b014f797ecc038da9add697342ef550a (2)\D3D__PROJECT-578e4810b014f797ecc038da9add697342ef550a\D3D\AssimpTool\x64\Debug\AssimpTool.vcxproj.CopyComplete

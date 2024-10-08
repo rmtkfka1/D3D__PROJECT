@@ -13,13 +13,14 @@ public:
 
 	void AddMove(const vec3& shift);
 	void AddRotate(const vec3& Euler);
-	void AddCameraRotate(const vec3& Euler);
+	void AddRotate(const Quaternion& quat);
 	// Local
 	vec3 GetLocalScale() { return _localScale; }
 	void SetLocalScale(const vec3 localScale) { _localScale = localScale; }
 
-	vec3 GetLocalRotation() { return _localRotation; }
-	void SetLocalRotation(const vec3 localRotation) { _localRotation = localRotation; }
+	Quaternion GetLocalRotation() { return _localRotation; }
+	void SetLocalRotation(const Quaternion localRotation) { _localRotation = localRotation; }
+	void SetLocalRotation(const vec3 localRotation);
 
 	vec3 GetLocalPosition() { return _localPosition; }
 	void SetLocalPosition(const vec3 localPosition) { _localPosition = localPosition; }
@@ -27,7 +28,7 @@ public:
 	// World
 	vec3 GetWorldScale() { return _scale; }
 	void SetWorldScale(const vec3 scale);
-	vec3 GetWorldRotation() { return _rotation; }
+	Quaternion GetWorldRotation() { return _rotation; }
 	void SetWorldRotation(const vec3 rotation);
 	vec3 GetWorldPosition() { return _position; }
 	void SetWorldPosition(const vec3 position);
@@ -52,7 +53,7 @@ public:
 	wstring _name{};
 private:
 	vec3 _localScale = { 1.f, 1.f, 1.f };
-	vec3 _localRotation;
+	Quaternion _localRotation;
 	vec3 _localPosition = { 0.f, 0.f, 0.f };
 
 
@@ -60,7 +61,12 @@ private:
 	Matrix _matWorld = Matrix::Identity;
 
 	vec3 _scale;
-	vec3 _rotation;
+	Quaternion _rotation;
+
+	float _yaw =0;
+	float _pitch = 0;
+	float _roll = 0;
+
 	vec3 _position;
 
 	vec3 _right;

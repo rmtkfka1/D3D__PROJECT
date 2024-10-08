@@ -156,9 +156,17 @@ void ObserveCamera::MouseUpdate()
 {
 	vec2 pos = KeyManager::GetInstance()->GetDeletaPos();
 
-	vec3 cameraLook = vec3(0, 0, 1.0f);
-	vec3 caemraRight = vec3(1.0f, 0, 0.0f);
 
-	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(-pos.x), XMConvertToRadians(pos.y), 0));
-	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(-pos.x), XMConvertToRadians(pos.y), 0));
+	float sensitivity =50.0f; 
+
+	vec2 scaledPos = pos * sensitivity;
+
+	vec3 cameraLook = vec3(0, 0, 1.0f);
+	vec3 cameraRight = vec3(1.0f, 0, 0.0f);
+
+	static vec2 sumpos = { 0,0 };
+	sumpos += scaledPos;
+
+	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(sumpos.x), -XMConvertToRadians(sumpos.y), 0));
+	_cameraRight = _cameraRight.TransformNormal(cameraRight, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(sumpos.x), -XMConvertToRadians(sumpos.y), 0));
 }
