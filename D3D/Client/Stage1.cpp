@@ -149,6 +149,7 @@ void Stage1::BulidObject()
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
 		object->SetModel(data);
+		object->AddCollider("boxbox", ColliderType::Box);
 		AddGameObject(object);
 
 	}

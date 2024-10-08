@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "BaseCollider.h"
 
 class Model;
 class Transform;
@@ -18,12 +19,15 @@ public:
 	virtual shared_ptr<Transform> GetTransform() override { return _transform; }
 	void SetModel(shared_ptr< Model> model) { _model = model; }
 
+	void AddCollider(string name, ColliderType type, vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0));
+	void AddBoxCollider(string name, vec3 size, vec3 center);
+
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
 
 protected:
 	shared_ptr<Model> _model;
 	shared_ptr<Transform> _transform;
-
+	vector<shared_ptr<BaseCollider>> _colliders;
 };
 

@@ -18,6 +18,5 @@ public:
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
 
 
-
 };
 

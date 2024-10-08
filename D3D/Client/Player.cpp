@@ -121,33 +121,41 @@ void Player::CollisonUpdate()
 			return;
 
 		_collisionDected = true;
+	
+	}
+
+	if(_collisionDected)
+	{
+		vec3 look = GetTransform()->GetLook();
+
 		_dir = GetTransform()->GetRight();
-		CollisonRotate(GetTransform()->GetLook(), _dir);
+		_dir.Normalize();
+
+		// Calculate the axis of rotation (cross product)
+		vec3 rotationAxis = look.Cross(_dir); //회전해야될축
+
+		// Calculate the angle between the look and dir vectors (dot product)
+		float dotProduct = look.Dot(_dir);
+		float angle = acosf(dotProduct);  //회전해야될 량
+
+		CollisonRotate(look, _dir, angle, rotationAxis);
 	}
 
 }
-void Player::CollisonRotate(vec3 look,vec3 dir)
+void Player::CollisonRotate(vec3 look,vec3 dir ,float angle , vec3 rotationAxis)
 {
+	
+	_addAngle +=  XMConvertToRadians(_rotationSpeed);
 
-	// Normalize the vectors
-	look.Normalize();
-	dir.Normalize();
-
-	// Calculate the axis of rotation (cross product)
-	vec3 rotationAxis = look.Cross(dir);
-
-	// Calculate the angle between the look and dir vectors (dot product)
-	float dotProduct = look.Dot(dir);
-	float angle = acosf(dotProduct);  // Angle in radians
-
-	if (fabs(angle) < 0.0001f)
+	if (_addAngle >= angle)
 	{
+		_addAngle = 0;
 		_collisionDected = false;
 		return;
 	}
 
 	// Create a quaternion representing the rotation
-	Quaternion rotationQuat = Quaternion::CreateFromAxisAngle(rotationAxis, angle);
+	Quaternion rotationQuat = Quaternion::CreateFromAxisAngle(rotationAxis, XMConvertToRadians(_rotationSpeed));
 
 	vec3 rotate = GetTransform()->GetLocalRotation();
 	Quaternion nowQuat = Quaternion::CreateFromYawPitchRoll(vec3(XMConvertToRadians(rotate.x), XMConvertToRadians(rotate.y), XMConvertToRadians(rotate.z)));
@@ -156,15 +164,20 @@ void Player::CollisonRotate(vec3 look,vec3 dir)
 
 	vec3 resultEuler = result.ToEuler();
 
-	GetTransform()->SetLocalRotation(vec3(XMConvertToDegrees(resultEuler.x), XMConvertToDegrees(resultEuler.y), XMConvertToDegrees(resultEuler.z)));
+	GetTransform()->SetLocalRotation(vec3(XMConvertToDegrees(resultEuler.x), XMConvertToDegrees(resultEuler.y),0));
 
 
 
 }
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
-	//SceneManager::GetInstance()->GetCurrentScene()->ReserveDeleteGameObject(other->GetOwner());
-	//CollisonManager::GetInstance()->ReserveDeleteCollider(other);
+
+	if (collider->GetName() == "raycheck" && other->GetName() == "boxbox")
+	{
+		int a = 5;
+	}
+
+
 }
 
 void Player::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
