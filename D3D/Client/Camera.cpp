@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "TransformTree.h"
 #include "KeyManager.h"
+#include "BoxCollider.h"
 /*************************
 *                        *
 *       Camera           *
@@ -26,11 +27,19 @@ Camera::~Camera()
 void Camera::GenViewMatrix()
 {
 	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
+	
 }
 
 void Camera::GenProjMatrix()
 {
 	_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
+
+}
+
+void Camera::GenBoundingFrustum()
+{
+	_boundingFrsutum.CreateFromMatrix(_boundingFrsutum, _params.matProjection);
+	_boundingFrsutum.Transform(_boundingFrsutum, _params.matView.Invert());
 }
 
 
@@ -39,10 +48,16 @@ void Camera::PushData()
 	Update();
 	GenViewMatrix();
 	GenProjMatrix();
+	GenBoundingFrustum();
 
 	auto& bufferPool = core->GetCameraBufferPool();
 	bufferPool->PushData(&_params,sizeof(_params));
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
+}
+
+bool Camera::IsInFrustum(shared_ptr<BaseCollider>& collider)
+{
+	return _boundingFrsutum.Intersects(static_pointer_cast<BoxCollider>(collider)->GetBox());
 }
 
 void Camera::Update()
@@ -71,7 +86,8 @@ ThirdPersonCamera::~ThirdPersonCamera()
 
 void ThirdPersonCamera::Update()
 {
-
+	_boundingFrsutum.CreateFromMatrix(_boundingFrsutum, _params.matProjection);
+	_boundingFrsutum.Transform(_boundingFrsutum, _params.matView.Invert());
 }
 
 void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)

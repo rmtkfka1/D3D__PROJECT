@@ -16,7 +16,7 @@ CameraType CameraManager::GetCameraType()
 {
     return _activeCamera->GetCameraType();
 }
-;
+
 
 void CameraManager::SetActiveCamera(CameraType type)
 {

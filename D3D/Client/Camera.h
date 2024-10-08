@@ -1,6 +1,7 @@
 #pragma once
 
 class Player;
+class BaseCollider;
 
 enum CameraType
 {
@@ -26,7 +27,10 @@ public:
 
 	void GenViewMatrix();
 	void GenProjMatrix();
+	void GenBoundingFrustum();
 	void PushData();
+
+	bool IsInFrustum(shared_ptr<BaseCollider>& collider);
 
 	virtual void Update();
 	virtual void Rotate(const vec3& offset) {};
@@ -37,6 +41,7 @@ public:
 	CameraType GetCameraType() { return _type; }
 
 protected:
+	BoundingFrustum _boundingFrsutum;
 	CameraType _type = CameraType::NONE;
 	CameraParams _params;
 
@@ -48,7 +53,7 @@ protected:
 	vec3 _offset = vec3(0, 3.0f, 20.0f);
 
 	float _near = 0.1f;
-	float _far = 5000.f;
+	float _far = 10000.f;
 	float _fov = XM_PI / 3.f;
 
 };
@@ -70,7 +75,6 @@ public:
 	virtual void Update() override;
 	virtual void Rotate(const shared_ptr<Player>& player);
 
-
 private:
 
 };
@@ -90,5 +94,7 @@ private:
 
 private:
 	float _cameraSpeed = 50.0f;
+
+
 };
 

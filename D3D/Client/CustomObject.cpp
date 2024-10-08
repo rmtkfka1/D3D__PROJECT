@@ -41,6 +41,17 @@ void CustomObject::Render()
 
 }
 
+
+
+void CustomObject::AddCollider(string name, ColliderType type, vec3 offsetSize, vec3 offsetCeneter)
+{
+}
+
+void CustomObject::AddBoxCollider(string name, vec3 size, vec3 center)
+{
+
+}
+
 void CustomObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
 

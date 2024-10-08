@@ -27,5 +27,8 @@ private:
 	uint32	_frameCount = 0;
 	float	_frameTime = 0.f;
 	uint32	_fps = 0;
+
+public:
+	uint32 _objectCount = 0;
 };
 

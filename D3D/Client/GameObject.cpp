@@ -10,4 +10,7 @@ GameObject::~GameObject()
 
 }
 
-
+shared_ptr<BaseCollider>& GameObject::GetCollider()
+{
+	return _colliders[0];
+}

@@ -22,7 +22,7 @@ void TimeManager::Update()
 	if (_frameTime > 1.0f)
 	{
 		WCHAR wchTxt[64];
-		swprintf_s(wchTxt, L"FPS: %u", _fps);
+		swprintf_s(wchTxt, 64, L"FPS: %u, NonCullingObject: %d", _fps, _objectCount);
 		SetWindowText(_hwnd, wchTxt);
 
 		_fps = static_cast<uint32>(_frameCount / _frameTime);

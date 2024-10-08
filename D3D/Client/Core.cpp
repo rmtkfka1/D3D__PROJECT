@@ -369,7 +369,7 @@ void Core::CreateBufferPool()
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_table[i] = make_shared<DescriptorTable>();
-		_table[i]->Init(255,50);
+		_table[i]->Init(255,30);
 	}
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)

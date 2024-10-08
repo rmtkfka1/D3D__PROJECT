@@ -178,6 +178,8 @@ void DescriptorTable::Clear()
 
 void DescriptorTable::CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle)
 {
+	assert(_currentCameraIndex < _cameraMaxCount);
+
 	D3D12_CPU_DESCRIPTOR_HANDLE destHandle = _descHeap->GetCPUDescriptorHandleForHeapStart();
 	destHandle.ptr += _currentCameraIndex * _handleSize;
 	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, srcHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);

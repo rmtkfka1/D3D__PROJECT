@@ -54,7 +54,6 @@ void Stage1::Run()
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
 	
-
 	/*WCHAR wchTxt[100];
 	swprintf_s(wchTxt, 100, L"look.x: %.2f, look.y: %.2f, look.z: %.2f, right.x: % .2f, right.y : % .2f, right.z : % .2f",
 		_player->GetTransform()->GetLook().x,
@@ -112,10 +111,12 @@ void Stage1::BulidCamera()
 {
 	shared_ptr<ThirdPersonCamera> thirdCamera = make_shared<ThirdPersonCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::THIRDVIEW, thirdCamera);
-	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+
 
 	shared_ptr<ObserveCamera> observeCamera = make_shared<ObserveCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::OBSERVE, observeCamera);
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+
 }
 
 void Stage1::BulidObject()
@@ -124,8 +125,8 @@ void Stage1::BulidObject()
 
 	{
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter");
-
 		shared_ptr<Player> player = make_shared<Player>();
+
 		_player = player;
 		player->SetModel(data);
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
@@ -137,8 +138,10 @@ void Stage1::BulidObject()
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
 		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		terrain->SetFrustumCuling(false);
 		AddGameObject(terrain);
 		player->SetTerrain(terrain);
+
 
 		AddGameObject(player);
 
@@ -157,10 +160,10 @@ void Stage1::BulidObject()
 	{
 
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 		
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/skybox.dds", TextureType::CubeMap);
-
 
 		ShaderInfo info;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
@@ -169,7 +172,6 @@ void Stage1::BulidObject()
 	
 		gameobject->GetMaterial()->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
 
 		AddGameObject(gameobject);
 	}

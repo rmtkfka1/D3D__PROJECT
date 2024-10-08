@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "CameraManager.h"
+#include "Core.h"
+#include "TimeManager.h"
 Scene::Scene()
 {
 }
@@ -19,11 +22,28 @@ void Scene::Init()
 
 void Scene::Run()
 {
+	static int i = 0;
+
 	for (auto& ele : _gameObjects)
 	{
 		ele->Update();
+
+		if (ele->GetFrustumCuling())
+		{
+			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider())==false)
+			{
+				continue;
+			}
+		}
+
+		i++;
 		ele->Render();
 	}
+	
+	int temp = i;
+	TimeManager::GetInstance()->_objectCount = temp;
+	i = 0;
+
 }
 
 void Scene::LateUpdate()
