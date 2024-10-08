@@ -12,6 +12,7 @@
 #include "KeyManager.h"
 #include "TimeManager.h"
 #include "CollisonManager.h"
+#include "BoxCollider.h"
 
 void Game::Init(HWND hwnd)
 {
@@ -47,6 +48,10 @@ void Game::Update()
 
 void Game::Render()
 {
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Z))
+	{
+		BoxCollider::brender = !BoxCollider::brender;
+	}
 
 	core->RenderBegin();
 	SceneManager::GetInstance()->Run();

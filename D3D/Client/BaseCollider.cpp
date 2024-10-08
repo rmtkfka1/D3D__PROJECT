@@ -11,3 +11,18 @@ BaseCollider::~BaseCollider()
 
 }
 
+void BaseCollider::Clear()
+{
+	_collisionMap.clear();
+}
+
+void BaseCollider::Delete(BaseCollider* del)
+{
+	auto it = _collisionMap.find(del);
+	if (it != _collisionMap.end())
+	{
+		_collisionMap.erase(it);
+	}
+
+}
+

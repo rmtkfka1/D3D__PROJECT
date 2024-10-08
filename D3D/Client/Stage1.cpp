@@ -55,7 +55,7 @@ void Stage1::Run()
 	Scene::Run();
 	
 
-	WCHAR wchTxt[100];
+	/*WCHAR wchTxt[100];
 	swprintf_s(wchTxt, 100, L"look.x: %.2f, look.y: %.2f, look.z: %.2f, right.x: % .2f, right.y : % .2f, right.z : % .2f",
 		_player->GetTransform()->GetLook().x,
 		_player->GetTransform()->GetLook().y,
@@ -66,7 +66,7 @@ void Stage1::Run()
 		_player->GetTransform()->GetRight().z
 	);
 
-	SetWindowText(core->GetWindowHandle(), wchTxt);
+	SetWindowText(core->GetWindowHandle(), wchTxt);*/
 }
 
 void Stage1::LateUpdate()
@@ -97,7 +97,7 @@ void Stage1::BulidLight()
 		Light light;
 
 		light.direction = vec3(0, -1.0f, 0);
-		light.material.ambient = vec3(0, 0, 0);
+		light.material.ambient = vec3(0.5f, 0.5f, 0.5f);
 		light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
 		light.material.specular = vec3(1.0f, 1.0f, 1.0f);
 		light.material.shininess = 64.0f;
@@ -132,7 +132,7 @@ void Stage1::BulidObject()
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
 	
 		player->AddCollider("this",ColliderType::Box, vec3(-2.5f, -1.0f, -0.5f));
-		player->AddBoxCollider("raycheck",vec3(1.5f, 1.5f,50.0f),vec3(0,2.0f,-50.0f));
+		player->AddBoxCollider("raycheck",vec3(1.5f, 1.5f,5.0f),vec3(0,2.0f,-10.0f));
 	
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
@@ -144,7 +144,7 @@ void Stage1::BulidObject()
 
 	}
 
-	for (int i = 0; i < 50; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");

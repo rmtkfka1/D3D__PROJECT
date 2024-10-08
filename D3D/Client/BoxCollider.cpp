@@ -11,6 +11,7 @@
 #include "BufferPool.h"
 
 shared_ptr<Shader> BoxCollider::_shader = make_shared<Shader>();
+bool BoxCollider::brender = true;
 
 BoxCollider::BoxCollider() :BaseCollider(ColliderType::Box)
 {
@@ -38,6 +39,8 @@ void BoxCollider::Update()
 
 void BoxCollider::Render()
 {
+	if (brender == false) return;
+
 	GetOwner()->GetTransform()->PushData();
 	_shader->SetPipelineState();
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);

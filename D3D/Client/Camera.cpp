@@ -102,6 +102,7 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 	_cameraLook = vec3(resultMat._13, resultMat._23, resultMat._33);
 
 
+
 }
 
 /*************************
@@ -159,6 +160,10 @@ void ObserveCamera::MouseUpdate()
 	vec3 cameraLook = vec3(0, 0, 1.0f);
 	vec3 caemraRight = vec3(1.0f, 0, 0.0f);
 
-	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(-pos.x), XMConvertToRadians(pos.y), 0));
-	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(XMConvertToRadians(-pos.x), XMConvertToRadians(pos.y), 0));
+	static vec2 accmulate = vec2(0, 0);
+	accmulate.x += pos.x;
+	accmulate.y += pos.y;
+
+	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(-XMConvertToRadians(accmulate.x), XMConvertToRadians(accmulate.y), 0));
+	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(-XMConvertToRadians(accmulate.x), XMConvertToRadians(accmulate.y), 0));
 }

@@ -11,6 +11,11 @@
 #include "CollisonManager.h"
 #include "CameraManager.h"
 #include "Utils.h"
+#include <random>
+
+std::random_device rd;
+std::mt19937 g(rd());
+
 Player::Player():HireacyObject(PlayerType::Player)
 {
 
@@ -60,6 +65,7 @@ void Player::MoveUpdate()
 {
 
 
+
 	float dt = TimeManager::GetInstance()->GetDeltaTime();
 	auto key = KeyManager::GetInstance();
 
@@ -67,29 +73,33 @@ void Player::MoveUpdate()
 	vec3 right = _transform->GetRoot()->GetRight();
 	vec3 nowPos = _transform->GetRoot()->GetLocalPosition();
 
-	if (key->GetButton(KEY_TYPE::W))
+	if (_collisionDected == false)
 	{
-		_transform->GetRoot()->AddMove((diection * _speed * dt));
-		_camera->AddMove(diection * _speed * dt);
-	}
+		if (key->GetButton(KEY_TYPE::W))
+		{
+			_transform->GetRoot()->AddMove((diection * _speed * dt));
+			_camera->AddMove(diection * _speed * dt);
+		}
 
-	if (key->GetButton(KEY_TYPE::S))
-	{
-		_transform->GetRoot()->AddMove(-(diection * _speed * dt));
-		_camera->AddMove(diection * _speed * dt);
-	}
+		if (key->GetButton(KEY_TYPE::S))
+		{
+			_transform->GetRoot()->AddMove(-(diection * _speed * dt));
+			_camera->AddMove(diection * _speed * dt);
+		}
 
-	if (key->GetButton(KEY_TYPE::D))
-	{
-		_transform->GetRoot()->AddMove((right * _speed * dt));
-		_camera->AddMove(diection * _speed * dt);
-	}
+		if (key->GetButton(KEY_TYPE::D))
+		{
+			_transform->GetRoot()->AddMove((right * _speed * dt));
+			_camera->AddMove(diection * _speed * dt);
+		}
 
-	if (key->GetButton(KEY_TYPE::A))
-	{
-		_transform->GetRoot()->AddMove(-(right * _speed * dt));
-		_camera->AddMove(diection * _speed * dt);
+		if (key->GetButton(KEY_TYPE::A))
+		{
+			_transform->GetRoot()->AddMove(-(right * _speed * dt));
+			_camera->AddMove(diection * _speed * dt);
+		}
 	}
+	
 
 	if (_terrain)
 	{
@@ -108,9 +118,11 @@ void Player::MoveUpdate()
 
 void Player::RotateUpdate()
 {
-
-	vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
-	_transform->GetRoot()->AddRotate(vec3(-delataPos.y, -delataPos.x, 0));
+	if (_collisionDected == false)
+	{
+		vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
+		_transform->GetRoot()->AddRotate(vec3(-delataPos.y, -delataPos.x, 0));
+	}
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
 };
@@ -123,7 +135,7 @@ void Player::CameraPushData()
 void Player::CollisonUpdate()
 {
 
-	if(_collisionDected)
+	if (_collisionDected)
 	{
 		CollisonRotate(_look, _dir, _angle, _rotationAxis);
 	}
@@ -133,23 +145,46 @@ void Player::CollisonUpdate()
 void Player::StartCollisionRotation(vec3 direction)
 {
 
-	CollisonManager::GetInstance()->Reset();
-	_collisionDected = true;
+
 	_look = GetTransform()->GetLook();
 	_dir = direction;
 	_dir.Normalize();
 	_rotationAxis = _look.Cross(_dir);
 	float dotProduct = _look.Dot(_dir);
 	_angle = acosf(dotProduct);
+	_collisionDected = true;
 
+}
+
+vec3 Player::CalculateNextDir(vec3 direction,float degree)
+{
+
+	vec3 look = GetTransform()->GetLook();
+
+	direction.Normalize();
+	look.Normalize();
+
+	vec3 rotationAxis = look.Cross(direction);
+	rotationAxis.Normalize();
+	float angle = XMConvertToRadians(degree);
+
+	Quaternion rotation = Quaternion::CreateFromAxisAngle(rotationAxis, angle);
+	
+	Matrix m = Matrix::CreateFromQuaternion(rotation);
+
+
+	vec3 result = vec3::TransformNormal(look, m);
+
+	return result;
+	
 }
 
 
 
-void Player::CollisonRotate(vec3 look,vec3 dir ,float angle , vec3 rotationAxis)
+void Player::CollisonRotate(vec3 look, vec3 dir, float angle, vec3 rotationAxis)
 {
-	
-	_addAngle +=  XMConvertToRadians(_rotationSpeed);
+
+	_addAngle += XMConvertToRadians(_rotationSpeed);
 
 	if (_addAngle >= angle)
 	{
@@ -168,50 +203,53 @@ void Player::CollisonRotate(vec3 look,vec3 dir ,float angle , vec3 rotationAxis)
 
 	vec3 resultEuler = result.ToEuler();
 
-	GetTransform()->SetLocalRotation(vec3(XMConvertToDegrees(resultEuler.x), XMConvertToDegrees(resultEuler.y),0));
-
-
+	GetTransform()->SetLocalRotation(vec3(XMConvertToDegrees(resultEuler.x), XMConvertToDegrees(resultEuler.y), 0));
 
 }
+
+
+
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
 
+	//collider->Delete(other.get());
+
 	if (collider->GetName() == "raycheck" && other->GetName() == "boxbox")
 	{
-	
-		//ray 를 여러방향으로 발사해봄.
-
 		auto now = GetTransform()->GetLocalPosition();
 		auto right = GetTransform()->GetRight();
 		auto down = -GetTransform()->GetUp();
+		auto up = GetTransform()->GetUp();
 		auto left = -right;
 
-		Ray rayleft = Ray(now, left);
+		vector<vec3> directions = { right, left, down ,up};
 
-		if (CollisonManager::GetInstance()->CheckRayCollusion(rayleft) == false)
+		shuffle(directions.begin(), directions.end(), g);
+
+		for (int i = 1; i < 360; i+=10)
 		{
-			StartCollisionRotation(left);
-			return;
+			for (const auto& dir : directions)
+			{
+				Ray ray = Ray(now, dir);
+
+				if (CollisonManager::GetInstance()->CheckRayCollusion(ray) == false)
+				{
+					vec3 result = CalculateNextDir(dir,i);
+					Ray rayResult = Ray(now, result);
+
+					if (CollisonManager::GetInstance()->CheckRayCollusion(rayResult) == false)
+					{
+						StartCollisionRotation(dir);
+						return;
+					}
+				}
+			}
 		}
 
-		Ray rayright = Ray(now, right);
-		
-		if (CollisonManager::GetInstance()->CheckRayCollusion(rayright) == false)
-		{
-			StartCollisionRotation(right);
-			return;
-		}
+	
 
-		Ray RayDown = Ray(now, down);
-
-		if (CollisonManager::GetInstance()->CheckRayCollusion(RayDown) == false)
-		{
-			StartCollisionRotation(down);
-			return;
-		}
 
 	}
-
 
 }
 

@@ -36,5 +36,8 @@ private:
 	MaterialParams _params;
 
 	static shared_ptr<Shader> _shader;
+
+public:
+	static bool brender;
 };
 

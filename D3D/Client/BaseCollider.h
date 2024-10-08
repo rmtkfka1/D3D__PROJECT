@@ -8,7 +8,7 @@ enum class ColliderType
 	Sphere,
 };
 
-class BaseCollider 
+class BaseCollider
 {
 public:
 	BaseCollider(ColliderType colliderType);
@@ -22,6 +22,8 @@ public:
 
 	virtual bool CheckCollusion(shared_ptr<BaseCollider>& other) = 0;
 	virtual bool CheckCollusion(Ray& ray, OUT float& distance) = 0;	//위치,나가는방향
+	void Clear();
+	void Delete(BaseCollider* del);
 
 public:
 	string GetName() { return _name; }
