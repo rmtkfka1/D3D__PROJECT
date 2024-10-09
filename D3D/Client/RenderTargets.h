@@ -1,4 +1,12 @@
 #pragma once
+
+
+/*************************
+*                        *
+*      RenderTargets     *
+*                        *
+**************************/
+
 class RenderTargets
 {
 
@@ -17,7 +25,8 @@ public:
 	void RenderEnd();
 
 	void SetIndex(UINT index) { _RenderTargetIndex = index; }
-	uint32 GetIndex() { return _RenderTargetIndex; }
+
+	ComPtr<ID3D12DescriptorHeap> GetDSVHeap() { return _DSVHeap; }
 
 private:
 
@@ -37,4 +46,47 @@ private:
 
 
 };
+
+/*************************
+*                        *
+*         GBuffer        *
+*                        *
+**************************/
+class Texture;
+
+class GBuffer
+{
+public:
+	static const uint32 _count = 3; 
+
+	GBuffer();
+	~GBuffer();
+
+	void Init(ComPtr<ID3D12DescriptorHeap> DSVHeap);
+
+	void RenderBegin();
+	void RenderEnd();
+
+	shared_ptr<Texture> GetTexture(int32 index);
+
+
+private:
+	ComPtr<ID3D12DescriptorHeap> _RTVHeap = nullptr;
+	ComPtr<ID3D12DescriptorHeap> _SRVHeap = nullptr;
+	ComPtr<ID3D12DescriptorHeap> _DsvHeap = nullptr; //RENDER TARGET 에서 생성하고 받아올예정
+
+	ComPtr<ID3D12Resource> _resources[_count];  //rtv srv 둘다사용될것임
+
+	D3D12_CPU_DESCRIPTOR_HANDLE		_rtvHandle[_count];
+	D3D12_CPU_DESCRIPTOR_HANDLE		_srvHandle[_count];
+	D3D12_CPU_DESCRIPTOR_HANDLE     _dsvHandle;
+
+	//오브젝트에게 건내주기위해사용
+	vector<shared_ptr<Texture>> _textrues;
+
+	D3D12_VIEWPORT _vp;
+	D3D12_RECT _rect;
+};
+
+
 

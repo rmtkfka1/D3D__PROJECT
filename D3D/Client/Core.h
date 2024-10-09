@@ -2,6 +2,7 @@
 
 class RootSignature;
 class RenderTargets;
+class GBuffer;
 class D3D12ResourceManager;
 
 class DescriptorTable;
@@ -33,6 +34,7 @@ public:
 	ComPtr<ID3D12GraphicsCommandList>& GetCmdLIst() { return _cmdList[_currentContextIndex]; }
 	shared_ptr<RootSignature>& GetRootSignature() { return _rootsignature; }
 	shared_ptr<RenderTargets>& GetRenderTarget() { return _renderTargets; }
+	shared_ptr<GBuffer>& GetGBuffer() { return _GBuffer; }
 	shared_ptr<D3D12ResourceManager>& GetResourceManager() { return _resourceManager; }
 	shared_ptr<DescriptorTable>& GetTableHeap() { return _table[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetWorldBufferPool() { return _WorldBufferPool[_currentContextIndex]; }
@@ -73,6 +75,7 @@ private:
 private:
 	shared_ptr<RootSignature> _rootsignature;
 	shared_ptr<RenderTargets> _renderTargets;
+	shared_ptr<GBuffer> _GBuffer;
 	shared_ptr<D3D12ResourceManager> _resourceManager;
 
 	ComPtr<IDXGISwapChain3> _swapChain = nullptr;

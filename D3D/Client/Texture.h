@@ -18,7 +18,8 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle() { return _srvHandle; }
 
 public:
-
+	//FOR GBUFFER
+	void SetSrvHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle) { _srvHandle = handle; }
 
 private:
 	wstring _path = L"../Resources/Texture/";

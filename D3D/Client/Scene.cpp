@@ -4,6 +4,7 @@
 #include "CameraManager.h"
 #include "Core.h"
 #include "TimeManager.h"
+#include "RenderTargets.h"
 Scene::Scene()
 {
 }
@@ -22,8 +23,15 @@ void Scene::Init()
 
 void Scene::Run()
 {
+	core->GetRenderTarget()->RenderBegin();
 	GameObjectRender();
 	UiObjectRender();
+	core->GetRenderTarget()->RenderEnd();
+}
+
+void Scene::DeferredRender()
+{
+
 }
 
 void Scene::GameObjectRender()
@@ -124,6 +132,11 @@ void Scene::AddGameObject(shared_ptr<GameObject> object)
 void Scene::AddUiObject(shared_ptr<GameObject> object)
 {
 	_uiObjects.push_back(object);
+}
+
+void Scene::AddDeferredObject(shared_ptr<GameObject> object)
+{
+	_deferredObjects.push_back(object);
 }
 
 void Scene::DeleteGameObject(shared_ptr<GameObject> object)

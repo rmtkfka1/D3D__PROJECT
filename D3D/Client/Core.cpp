@@ -124,13 +124,11 @@ void Core::RenderBegin()
 	
 	cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
 	cmdList->SetDescriptorHeaps(1, _table[_currentContextIndex]->GetDescriptorHeap().GetAddressOf());
-	_renderTargets->RenderBegin();
+
 }
 
 void Core::RenderEnd()
 {
-
-	_renderTargets->RenderEnd();
 
 	ID3D12CommandList* ppCommandLists[] = { _cmdList[_currentContextIndex].Get()};
 	_cmdQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
@@ -346,6 +344,9 @@ void Core::CreateSwapChain()
 
 	_renderTargets = make_shared<RenderTargets>();
 	_renderTargets->Init(WINDOW_WIDTH, WINDOW_HEIGHT, _swapChain);
+
+	_GBuffer = make_shared<GBuffer>();
+	_GBuffer->Init(_renderTargets->GetDSVHeap());
 
 };
 
