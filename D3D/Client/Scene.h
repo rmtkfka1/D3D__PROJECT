@@ -1,5 +1,5 @@
 #pragma once
-
+#include "CameraManager.h"
 class GameObject;
 class Shader;
 class Mesh;
@@ -15,16 +15,22 @@ public:
 
 	virtual void Init();
 	virtual void Run();
+	void GameObjectRender();
+	void UiObjectRender();
 	virtual void LateUpdate();
 
 	void ReserveAddGameObject(shared_ptr<GameObject> object);
 	void ReserveDeleteGameObject(shared_ptr<GameObject> object);
 	void AddGameObject(shared_ptr<GameObject> object);
+	void AddUiObject(shared_ptr<GameObject> object);
 	void DeleteGameObject(shared_ptr<GameObject> object);
 
 protected:
 	queue<shared_ptr<GameObject>> _reserveAddQueue;
 	queue<shared_ptr<GameObject>> _reserveDeleteQueue;
 	vector<shared_ptr<GameObject>> _gameObjects;
+	vector<shared_ptr<GameObject>> _uiObjects;
+private:
+
 };
 

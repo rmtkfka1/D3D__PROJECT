@@ -162,22 +162,22 @@ void ObserveCamera::KeyUpdate()
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::W))
 	{
-		_cameraPos += _cameraSpeed * 10.0f * _cameraLook * dt;
+		_cameraPos += _cameraSpeed * 50.0f * _cameraLook * dt;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::S))
 	{
-		_cameraPos -= _cameraSpeed * 10.0f * _cameraLook * dt;
+		_cameraPos -= _cameraSpeed * 50.0f * _cameraLook * dt;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::D))
 	{
-		_cameraPos += _cameraSpeed * 10.0f * _cameraRight * dt;
+		_cameraPos += _cameraSpeed * 50.0f * _cameraRight * dt;
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::A))
 	{
-		_cameraPos -= _cameraSpeed * 10.0f * _cameraRight * dt;
+		_cameraPos -= _cameraSpeed * 50.0f * _cameraRight * dt;
 
 	}
 }
@@ -199,8 +199,7 @@ void ObserveCamera::MouseUpdate()
 
 UiCamera::UiCamera() :Camera(CameraType::UI)
 {
-	_cameraPos = vec3(0, 0, 0.0f);
-	_cameraRight = vec3(1.0f, 0, 0);
+	_cameraPos = vec3(0, 0, -100.0f);
 	_cameraLook = vec3(0, 0, 1.0f);
 	_cameraUp = vec3(0, 1.0f, 0);
 	_near = 0.1f;
@@ -226,6 +225,10 @@ void UiCamera::GenViewMatrix()
 
 void UiCamera::GenProjMatrix()
 {
-	_params.matProjection = XMMatrixOrthographicLH(WINDOW_WIDTH, WINDOW_HEIGHT, _near, _far);
+	_params.matProjection = XMMatrixOrthographicLH(600, 600, _near, _far);
+}
+
+void UiCamera::GenBoundingFrustum()
+{
 }
 

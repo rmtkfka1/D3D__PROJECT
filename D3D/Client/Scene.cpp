@@ -22,6 +22,37 @@ void Scene::Init()
 
 void Scene::Run()
 {
+	GameObjectRender();
+	UiObjectRender();
+}
+
+void Scene::GameObjectRender()
+{
+
+	static CameraType type = CameraType::THIRDVIEW;
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
+	{
+		type = CameraType::OBSERVE;
+	}
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))
+	{
+		type = CameraType::THIRDVIEW;
+	}
+
+	if (type == CameraType::OBSERVE)
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
+	}
+
+	else if (type == CameraType::THIRDVIEW)
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+	}
+
+	CameraManager::GetInstance()->PushData();
+
 	static int i = 0;
 
 	for (auto& ele : _gameObjects)
@@ -30,7 +61,7 @@ void Scene::Run()
 
 		if (ele->GetFrustumCuling())
 		{
-			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider())==false)
+			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
 			{
 				continue;
 			}
@@ -39,11 +70,22 @@ void Scene::Run()
 		i++;
 		ele->Render();
 	}
-	
+
 	int temp = i;
 	TimeManager::GetInstance()->_objectCount = temp;
 	i = 0;
+}
 
+void Scene::UiObjectRender()
+{
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::UI);
+	CameraManager::GetInstance()->PushData();
+
+	for (auto& ele : _uiObjects)
+	{
+		ele->Update();
+		ele->Render();
+	}
 }
 
 void Scene::LateUpdate()
@@ -76,6 +118,11 @@ void Scene::ReserveDeleteGameObject(shared_ptr<GameObject> object)
 void Scene::AddGameObject(shared_ptr<GameObject> object)
 {
 	_gameObjects.push_back(object);
+}
+
+void Scene::AddUiObject(shared_ptr<GameObject> object)
+{
+	_uiObjects.push_back(object);
 }
 
 void Scene::DeleteGameObject(shared_ptr<GameObject> object)

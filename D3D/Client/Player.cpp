@@ -30,16 +30,14 @@ void Player::Init()
 
 void Player::Update()
 {
-
 	if (CameraManager::GetInstance()->GetCameraType() == CameraType::THIRDVIEW)
 	{
 		MoveUpdate();
 		RotateUpdate();
-		CameraPushData();
+		CollisonUpdate();
 	}
 
 	AnimateUpdate();
-	CollisonUpdate();
 	Super::Update();
 }
 
@@ -123,6 +121,7 @@ void Player::RotateUpdate()
 		vec2 delataPos = KeyManager::GetInstance()->GetDeletaPos();
 		_transform->GetRoot()->AddRotate(vec3(-delataPos.y, -delataPos.x, 0));
 	}
+
 	_camera->Rotate(static_pointer_cast<Player>(shared_from_this()));
 
 };

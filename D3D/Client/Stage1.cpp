@@ -39,11 +39,8 @@ void Stage1::Init()
 
 void Stage1::Run()
 {
-
-	CameraManager::GetInstance()->PushData();
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
-	
 }
 
 void Stage1::LateUpdate()
@@ -90,10 +87,14 @@ void Stage1::BulidCamera()
 	shared_ptr<ThirdPersonCamera> thirdCamera = make_shared<ThirdPersonCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::THIRDVIEW, thirdCamera);
 
-
 	shared_ptr<ObserveCamera> observeCamera = make_shared<ObserveCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::OBSERVE, observeCamera);
+
+	shared_ptr<UiCamera> uicamera = make_shared<UiCamera>();
+	CameraManager::GetInstance()->AddCamera(CameraType::UI, uicamera);
+
 	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+
 
 }
 
@@ -124,7 +125,7 @@ void Stage1::BulidObject()
 
 	}
 
-	for (int i = 0; i < 200; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
@@ -133,6 +134,19 @@ void Stage1::BulidObject()
 		AddGameObject(object);
 
 	}
+
+
+	{
+		shared_ptr<CustomObject> object = make_shared<CustomObject>();
+
+		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(50.0f);
+		object->GetMaterial()->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
+		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"1.jpg"));
+		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
+		AddUiObject(object);
+	}
+
+
 
 	{
 

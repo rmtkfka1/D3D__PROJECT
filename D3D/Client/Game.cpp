@@ -32,15 +32,7 @@ void Game::Init(HWND hwnd)
 
 void Game::Run()
 {
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::ONE))
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
-	}
 
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::THREE))
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-	}
 
 
 

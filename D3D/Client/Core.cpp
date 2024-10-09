@@ -260,6 +260,8 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 		}
 	}
 
+	
+
 	// 선택된 어댑터로 D3D12 장치 생성
 	for (DWORD featerLevelIndex = 0; featerLevelIndex < FeatureLevelNum; featerLevelIndex++)
 	{
@@ -276,12 +278,13 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 
 	_adapterDesc = bestDesc;
 
+
 	// 디버그 레이어 정보 설정
 	if (pDebugController)
 	{
 		SetDebugLayerInfo(_device);
 	}
-
+	
 
 }
 

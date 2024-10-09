@@ -20,12 +20,7 @@ CameraType CameraManager::GetCameraType()
 
 void CameraManager::SetActiveCamera(CameraType type)
 {
-    if (type == CameraType::OBSERVE)
-    {
-        shared_ptr<Camera> camera = GetCamera(CameraType::OBSERVE);
-        shared_ptr<Camera> thirdCamera = GetCamera(CameraType::THIRDVIEW);
-        camera->SetCameraPos(thirdCamera->GetCameraPos()); 
-    }
+  
 
     if (_cameras.find(type) != _cameras.end())
     {

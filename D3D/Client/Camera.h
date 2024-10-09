@@ -130,6 +130,7 @@ public:
 private:
 	virtual void GenViewMatrix() override;
 	virtual void GenProjMatrix() override;
+	virtual void GenBoundingFrustum() override;
 	virtual void Update() override;
 
 private:
