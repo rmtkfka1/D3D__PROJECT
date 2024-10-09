@@ -102,6 +102,11 @@ void HireacyObject::SetModel(shared_ptr<Model> model)
 	_transform->MakeTransformTree(model);
 }
 
+void HireacyObject::SetShader(shared_ptr<Shader> shader)
+{
+	_model->SetShader(shader);
+}
+
 void HireacyObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
 	

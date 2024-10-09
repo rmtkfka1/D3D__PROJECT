@@ -2,6 +2,7 @@
 
 class Material;
 class Mesh;
+class Shader;
 
 struct ModelBone
 {
@@ -66,6 +67,8 @@ public:
 	vec3 GetSize() { return _totalSize; }
 	float GetRadius() { return _totalRadius; }
 
+	void SetShader(shared_ptr<Shader> shader);
+
 private:
 	void BindCacheInfo();
 
@@ -82,6 +85,7 @@ private:
 	vec3 _totalCenter{};
 	vec3 _totalSize{};
 	float _totalRadius{};
+
 };
 
 

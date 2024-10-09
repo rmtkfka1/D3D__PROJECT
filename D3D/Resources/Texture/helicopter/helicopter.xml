@@ -2,7 +2,6 @@
 <Materials>
     <Material>
         <Name>lambert1</Name>
-        <Shader>default.hlsl</Shader>
         <DiffuseFile>HueyTXTR3.png</DiffuseFile>
         <SpecularFile></SpecularFile>
         <NormalFile></NormalFile>
@@ -13,7 +12,6 @@
     </Material>
     <Material>
         <Name>Glass</Name>
-        <Shader>default.hlsl</Shader>
         <DiffuseFile>HueyTXTR3.png</DiffuseFile>
         <SpecularFile></SpecularFile>
         <NormalFile></NormalFile>
@@ -24,7 +22,6 @@
     </Material>
     <Material>
         <Name>Huey_inside_material</Name>
-        <Shader>default.hlsl</Shader>
         <DiffuseFile>HueyTXTR3.png</DiffuseFile>
         <SpecularFile></SpecularFile>
         <NormalFile></NormalFile>

@@ -9,9 +9,9 @@ Converter converter;
 
 int main()
 {
-	converter.ReadAssetFile(L"Box.fbx");
-	//converter.ExportMaterialData(L"Box/Box");
-	converter.ExportModelData(L"Box/Box",false);
+	converter.ReadAssetFile(L"helicopter/source/Bell Huey.fbx");
+	converter.ExportMaterialData(L"helicopter/helicopter");
+	converter.ExportModelData(L"helicopter/helicopter",true);
 
 	for (auto& bone : converter._bones)
 	{

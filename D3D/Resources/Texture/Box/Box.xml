@@ -2,8 +2,7 @@
 <Materials>
     <Material>
         <Name>DefaultMaterial</Name>
-        <Shader>default.hlsl</Shader>
-        <DiffuseFile>box.jpg</DiffuseFile>
+        <DiffuseFile></DiffuseFile>
         <SpecularFile></SpecularFile>
         <NormalFile></NormalFile>
         <Ambient R="0" G="0" B="0" A="1"/>

@@ -43,6 +43,20 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 	_pipelineDesc.SampleDesc.Count = 1;
 	_pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
+	switch (info.shaderType)
+	{
+	case ShaderType::DEFREED:
+		_pipelineDesc.NumRenderTargets = 3;
+		_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT; //POS
+		_pipelineDesc.RTVFormats[1] = DXGI_FORMAT_R32G32B32A32_FLOAT; //NORMAL
+		_pipelineDesc.RTVFormats[2] = DXGI_FORMAT_R8G8B8A8_UNORM; //NORMAL
+		break;
+	default:
+		_pipelineDesc.NumRenderTargets = 1;
+		_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		break;
+	}
+
 	switch (info.rasterizerType)
 	{
 	case RASTERIZER_TYPE::CULL_BACK:

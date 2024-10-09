@@ -108,6 +108,9 @@ void Stage1::BulidObject()
 
 		_player = player;
 		player->SetModel(data);
+		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl");
+		player->SetShader(shader);
+		
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
 	
@@ -121,15 +124,16 @@ void Stage1::BulidObject()
 		player->SetTerrain(terrain);
 
 		AddGameObject(player);
-		AddGameObject(terrain);
+		//AddGameObject(terrain);
 
 	}
 
-	for (int i = 0; i < 100; ++i)
+	/*for (int i = 0; i < 100; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
 		object->SetModel(data);
+		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
 		object->AddCollider("boxbox", ColliderType::Box);
 		AddGameObject(object);
 
@@ -165,7 +169,7 @@ void Stage1::BulidObject()
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
 		AddGameObject(gameobject);
-	}
+	}*/
 
 	
 	

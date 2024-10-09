@@ -419,6 +419,7 @@ void Converter::WriteMaterialData(wstring finalPath)
 	tinyxml2::XMLDeclaration* decl = document->NewDeclaration();
 	document->LinkEndChild(decl);
 
+
 	tinyxml2::XMLElement* root = document->NewElement("Materials");
 	document->LinkEndChild(root);
 
@@ -431,10 +432,6 @@ void Converter::WriteMaterialData(wstring finalPath)
 
 		element = document->NewElement("Name");
 		element->SetText(material->name.c_str());
-		node->LinkEndChild(element);
-
-		element = document->NewElement("Shader");
-		element->SetText(material->shader.c_str());
 		node->LinkEndChild(element);
 
 		element = document->NewElement("DiffuseFile");

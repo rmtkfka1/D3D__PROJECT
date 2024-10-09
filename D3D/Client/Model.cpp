@@ -64,18 +64,6 @@ void Model::ReadMaterial(wstring filename)
 		node = materialNode->FirstChildElement();
 		material->SetName(Utils::ToWString(node->GetText()));
 
-		node = node->NextSiblingElement();
-		if (node->GetText())
-		{
-			wstring shaderStr = Utils::ToWString(node->GetText());
-			if (shaderStr.length() > 0)
-			{
-				auto shader = ResourceManager::GetInstance()->Load<Shader>(shaderStr);
-				shader->SetName(shaderStr);
-				material->SetShader(shader);
-			}
-		}
-
 		// Diffuse Texture
 		node = node->NextSiblingElement();
 
@@ -364,6 +352,11 @@ std::shared_ptr<ModelBone> Model::GetBoneByName(const wstring& name)
 	}
 
 	return nullptr;
+}
+
+void Model::SetShader(shared_ptr<Shader> shader)
+{
+	_materialData[0]->SetShader(shader);
 }
 
 void Model::BindCacheInfo()

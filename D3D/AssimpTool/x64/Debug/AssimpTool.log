@@ -1,9 +1,2 @@
-﻿  Converter.cpp
-C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\Converter.cpp(96,48): warning C4267: '인수': 'size_t'에서 'int32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\Converter.cpp(120,49): warning C4267: '초기화 중': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\Converter.cpp(120,28): warning C4267: '초기화 중': 'size_t'에서 'const uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\Converter.cpp(183,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\Converter.cpp(207,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\Converter.cpp(257,16): warning C4267: '초기화 중': 'size_t'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\AssimpTool\Converter.cpp(260,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+﻿  main.cpp
   AssimpTool.vcxproj -> C:\Users\pakhe\Desktop\Git\D3D__PROJECT\D3D__PROJECT\D3D\x64\Debug\AssimpTool.exe

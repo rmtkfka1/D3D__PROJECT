@@ -64,6 +64,11 @@ void ModelObject::Render()
 	}
 }
 
+void ModelObject::SetShader(shared_ptr<Shader> shader)
+{
+	_model->SetShader(shader);
+}
+
 void ModelObject::AddCollider(string name, ColliderType type, vec3 offsetSize, vec3 offsetCeneter)
 {
 	if (type == ColliderType::Box)

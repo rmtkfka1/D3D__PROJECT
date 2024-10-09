@@ -118,7 +118,6 @@ struct asMesh
 
 struct asMaterial
 {
-	string shader = "default.hlsl";
 	string name{};
 	Color ambient{};
 	Color diffuse{};

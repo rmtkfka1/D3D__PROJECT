@@ -31,7 +31,6 @@ private:
 	void CollisonUpdate();
 	vec3 CalculateNextDir(vec3 direction,float degree);
 	void StartCollisionRotation(vec3 direction,int i);
-
 	void CollisonRotate(vec3 look ,vec3 dir ,float angle , vec3 rotationAxis);
 
 	shared_ptr<Terrain> _terrain;
