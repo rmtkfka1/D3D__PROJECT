@@ -23,7 +23,7 @@ public:
 
 	virtual shared_ptr<Transform> GetTransform() override;
 	void SetModel(shared_ptr< Model> model);
-	void SetShader(shared_ptr<Shader> shader);
+
 
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);

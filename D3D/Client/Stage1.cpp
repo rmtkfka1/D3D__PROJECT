@@ -105,7 +105,7 @@ void Stage1::BulidObject()
 	{
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter");
 		shared_ptr<Player> player = make_shared<Player>();
-
+	
 		_player = player;
 		player->SetModel(data);
 		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl");
@@ -124,11 +124,11 @@ void Stage1::BulidObject()
 		player->SetTerrain(terrain);
 
 		AddGameObject(player);
-		//AddGameObject(terrain);
+		AddGameObject(terrain);
 
 	}
 
-	/*for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
@@ -144,7 +144,7 @@ void Stage1::BulidObject()
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(50.0f);
-		object->GetMaterial()->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"1.jpg"));
 		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
 		AddUiObject(object);
@@ -165,11 +165,11 @@ void Stage1::BulidObject()
 		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
 		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Load<Shader>(L"sky.hlsl", info);
 	
-		gameobject->GetMaterial()->SetShader(shader);
+		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
 		AddGameObject(gameobject);
-	}*/
+	}
 
 	
 	

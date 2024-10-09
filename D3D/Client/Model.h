@@ -67,7 +67,6 @@ public:
 	vec3 GetSize() { return _totalSize; }
 	float GetRadius() { return _totalRadius; }
 
-	void SetShader(shared_ptr<Shader> shader);
 
 private:
 	void BindCacheInfo();

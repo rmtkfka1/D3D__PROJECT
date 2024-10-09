@@ -10,6 +10,7 @@
 #include "BoxCollider.h"
 #include "CollisonManager.h"
 #include "KeyManager.h"
+#include "Shader.h"
 HireacyObject::HireacyObject(PlayerType type):GameObject(GameObjectType::Hierarchy)
 {
 	_playerType = type;
@@ -40,6 +41,8 @@ void HireacyObject::Render()
 	auto& list = core->GetCmdLIst();
 
 	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
+
+	_shader->SetPipelineState();
 
 	for (auto& data : meshData)
 	{
@@ -102,10 +105,7 @@ void HireacyObject::SetModel(shared_ptr<Model> model)
 	_transform->MakeTransformTree(model);
 }
 
-void HireacyObject::SetShader(shared_ptr<Shader> shader)
-{
-	_model->SetShader(shader);
-}
+
 
 void HireacyObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {

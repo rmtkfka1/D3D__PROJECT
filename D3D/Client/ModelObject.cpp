@@ -8,7 +8,7 @@
 #include "BufferPool.h"
 #include "BoxCollider.h"
 #include "CollisonManager.h"
-
+#include "Shader.h"
 ModelObject::ModelObject(PlayerType type):GameObject(GameObjectType::Model)
 {
 	_playerType = type;
@@ -42,6 +42,8 @@ void ModelObject::Render()
 
 	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
 
+	_shader->SetPipelineState();
+
 	for (auto& data : meshData)
 	{
 		_transform->PushData();
@@ -64,10 +66,7 @@ void ModelObject::Render()
 	}
 }
 
-void ModelObject::SetShader(shared_ptr<Shader> shader)
-{
-	_model->SetShader(shader);
-}
+
 
 void ModelObject::AddCollider(string name, ColliderType type, vec3 offsetSize, vec3 offsetCeneter)
 {

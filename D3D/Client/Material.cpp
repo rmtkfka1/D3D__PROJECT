@@ -19,10 +19,7 @@ Material::~Material()
 void Material::Pushdata()
 {
 
-	if (_shader)
-	{
-		_shader->SetPipelineState();
-	}
+	
 
 	if (_diffuseTexture)
 	{

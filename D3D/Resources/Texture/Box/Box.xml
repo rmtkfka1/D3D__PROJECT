@@ -2,7 +2,7 @@
 <Materials>
     <Material>
         <Name>DefaultMaterial</Name>
-        <DiffuseFile></DiffuseFile>
+        <DiffuseFile>box.jpg</DiffuseFile>
         <SpecularFile></SpecularFile>
         <NormalFile></NormalFile>
         <Ambient R="0" G="0" B="0" A="1"/>

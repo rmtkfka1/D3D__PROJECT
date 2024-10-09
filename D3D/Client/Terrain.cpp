@@ -30,7 +30,7 @@ void Terrain::Init()
   
     shared_ptr<Shader> shader = make_shared<Shader>();
     shader->Init(L"terrain.hlsl", info);
-    _material->SetShader(shader);
+    this->SetShader(shader);
 
     {
         shared_ptr<Texture> texture = make_shared<Texture>();
@@ -59,6 +59,7 @@ void Terrain::Update()
 
 void Terrain::Render()
 {
+    _shader->SetPipelineState();
     _transform->PushData();
     _material->Pushdata();
     core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);

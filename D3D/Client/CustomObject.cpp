@@ -7,6 +7,7 @@
 #include "BufferPool.h"
 #include "KeyManager.h"
 #include "TimeManager.h"
+#include "Shader.h"
 CustomObject::CustomObject():GameObject(GameObjectType::Custom)
 {
 	_mesh = make_shared<Mesh>();
@@ -33,7 +34,7 @@ void CustomObject::Update()
 
 void CustomObject::Render()
 {
-
+	_shader->SetPipelineState();
 	_transform->PushData();
 	_material->Pushdata();
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);

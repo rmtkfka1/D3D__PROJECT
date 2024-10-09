@@ -8,7 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include "Texture.h"
-#include "Shader.h"
+
 Model::Model() :ResourceBase(ResourceType::Model)
 {
 
@@ -354,10 +354,6 @@ std::shared_ptr<ModelBone> Model::GetBoneByName(const wstring& name)
 	return nullptr;
 }
 
-void Model::SetShader(shared_ptr<Shader> shader)
-{
-	_materialData[0]->SetShader(shader);
-}
 
 void Model::BindCacheInfo()
 {

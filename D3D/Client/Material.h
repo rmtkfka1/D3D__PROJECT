@@ -30,14 +30,13 @@ public:
 	void SetNormalTexture(shared_ptr<Texture> texture) { _normalTexture = texture; }
 	void SetSpecularTexture(shared_ptr<Texture> texture) { _SpecularTexture = texture; }
 
-	void SetShader(shared_ptr<Shader> shader) { _shader = shader; }
 	void Pushdata();
 
 private:
 	shared_ptr<Texture> _diffuseTexture;
 	shared_ptr<Texture> _normalTexture;
 	shared_ptr<Texture> _SpecularTexture;
-	shared_ptr<Shader> _shader;
+
 
 public:
 	MaterialParams		_params;
