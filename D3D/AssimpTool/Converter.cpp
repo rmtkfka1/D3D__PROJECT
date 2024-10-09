@@ -157,7 +157,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 		for (auto& v : mesh->vertices)
 		{
 			v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
-			/*	v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);*/
+			v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);
 		}
 	}
 

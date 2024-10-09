@@ -228,7 +228,7 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 
 		shuffle(directions.begin(), directions.end(), g);
 
-		for (int i = 60; i <= 180; i += 30)
+		for (int i = 60; i <= 180; i += 10)
 		{
 			for (const auto& dir : directions)
 			{

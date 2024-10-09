@@ -10,7 +10,7 @@ Converter converter;
 int main()
 {
 	converter.ReadAssetFile(L"Box.fbx");
-	converter.ExportMaterialData(L"Box/Box");
+	//converter.ExportMaterialData(L"Box/Box");
 	converter.ExportModelData(L"Box/Box",false);
 
 	for (auto& bone : converter._bones)
