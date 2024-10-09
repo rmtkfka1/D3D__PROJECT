@@ -23,6 +23,7 @@ public:
 
 	void RenderBegin();
 	void RenderEnd();
+	void ClearDepth();
 
 	void SetIndex(UINT index) { _RenderTargetIndex = index; }
 

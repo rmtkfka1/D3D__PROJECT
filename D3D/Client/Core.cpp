@@ -345,8 +345,13 @@ void Core::CreateSwapChain()
 	_renderTargets = make_shared<RenderTargets>();
 	_renderTargets->Init(WINDOW_WIDTH, WINDOW_HEIGHT, _swapChain);
 
-	_GBuffer = make_shared<GBuffer>();
-	_GBuffer->Init(_renderTargets->GetDSVHeap());
+	
+	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
+	{
+		_GBuffer[i] = make_shared<GBuffer>();
+		_GBuffer[i]->Init(_renderTargets->GetDSVHeap());
+	}
+
 
 };
 

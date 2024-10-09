@@ -15,7 +15,7 @@ Scene::~Scene()
 
 void Scene::Init()
 {
-	for (auto& ele : _gameObjects)
+	for (auto& ele : _forwardObjects)
 	{
 		ele->Init();
 	}
@@ -23,9 +23,17 @@ void Scene::Init()
 
 void Scene::Run()
 {
+	//core->GetGBuffer()->RenderBegin();
+	//GameObjectRender();
+	//UiObjectRender();
+	//core->GetGBuffer()->RenderEnd();
+
+	core->GetRenderTarget()->ClearDepth();
 	core->GetRenderTarget()->RenderBegin();
-	GameObjectRender();
+
+	ForwardRender();
 	UiObjectRender();
+
 	core->GetRenderTarget()->RenderEnd();
 }
 
@@ -34,7 +42,7 @@ void Scene::DeferredRender()
 
 }
 
-void Scene::GameObjectRender()
+void Scene::ForwardRender()
 {
 
 	static CameraType type = CameraType::THIRDVIEW;
@@ -62,9 +70,7 @@ void Scene::GameObjectRender()
 
 	CameraManager::GetInstance()->PushData();
 
-	static int i = 0;
-
-	for (auto& ele : _gameObjects)
+	for (auto& ele : _forwardObjects)
 	{
 		ele->Update();
 
@@ -76,13 +82,8 @@ void Scene::GameObjectRender()
 			}
 		}
 
-		i++;
 		ele->Render();
 	}
-
-	int temp = i;
-	TimeManager::GetInstance()->_objectCount = temp;
-	i = 0;
 }
 
 void Scene::UiObjectRender()
@@ -126,7 +127,7 @@ void Scene::ReserveDeleteGameObject(shared_ptr<GameObject> object)
 
 void Scene::AddGameObject(shared_ptr<GameObject> object)
 {
-	_gameObjects.push_back(object);
+	_forwardObjects.push_back(object);
 }
 
 void Scene::AddUiObject(shared_ptr<GameObject> object)
@@ -144,8 +145,8 @@ void Scene::DeleteGameObject(shared_ptr<GameObject> object)
 	if (object == nullptr)
 		return;
 
-	auto it = std::remove(_gameObjects.begin(), _gameObjects.end(), object);
-	_gameObjects.erase(it, _gameObjects.end());
+	auto it = std::remove(_forwardObjects.begin(), _forwardObjects.end(), object);
+	_forwardObjects.erase(it, _forwardObjects.end());
 }
 
 

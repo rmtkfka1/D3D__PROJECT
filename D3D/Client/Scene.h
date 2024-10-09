@@ -28,13 +28,13 @@ protected:
 	queue<shared_ptr<GameObject>> _reserveAddQueue;
 	queue<shared_ptr<GameObject>> _reserveDeleteQueue;
 
-	vector<shared_ptr<GameObject>> _gameObjects;
+	vector<shared_ptr<GameObject>> _forwardObjects;
 	vector<shared_ptr<GameObject>> _uiObjects;
 	vector<shared_ptr<GameObject>> _deferredObjects;
 private:
 
 	void DeferredRender();
-	void GameObjectRender();
+	void ForwardRender();
 	void UiObjectRender();
 };
 

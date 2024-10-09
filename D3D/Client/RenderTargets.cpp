@@ -130,7 +130,6 @@ void RenderTargets::RenderBegin()
 	cmdList->RSSetViewports(1, &_viewport);
 	cmdList->RSSetScissorRects(1, &_scissorRect);
 	cmdList->ClearRenderTargetView(_rtvHandle[_RenderTargetIndex], BackColor, 0, nullptr);
-	cmdList->ClearDepthStencilView(_dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	cmdList->OMSetRenderTargets(1, &_rtvHandle[_RenderTargetIndex], FALSE, &_dsvHandle);
 
 }
@@ -140,6 +139,12 @@ void RenderTargets::RenderEnd()
 	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdLIst();
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_RenderTargets[_RenderTargetIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 	cmdList->Close();
+}
+
+void RenderTargets::ClearDepth()
+{
+	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdLIst();
+	cmdList->ClearDepthStencilView(_dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
 
@@ -324,7 +329,10 @@ void GBuffer::RenderBegin()
 		list->ClearRenderTargetView(_rtvHandle[i], arrFloat, 0, nullptr);
 	}
 
+	list->RSSetViewports(1, &_vp);
+	list->RSSetScissorRects(1, &_rect);
 	list->OMSetRenderTargets(_count, &_rtvHandle[0], TRUE, &_dsvHandle); //´ÙÁß¼Â
+
 }
 
 void GBuffer::RenderEnd()

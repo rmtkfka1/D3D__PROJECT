@@ -108,7 +108,7 @@ void Stage1::BulidObject()
 	
 		_player = player;
 		player->SetModel(data);
-		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl");
+		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl");
 		player->SetShader(shader);
 		
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
@@ -133,7 +133,7 @@ void Stage1::BulidObject()
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
 		object->SetModel(data);
-		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl"));
 		object->AddCollider("boxbox", ColliderType::Box);
 		AddGameObject(object);
 
@@ -144,7 +144,7 @@ void Stage1::BulidObject()
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(50.0f);
-		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"1.jpg"));
 		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
 		AddUiObject(object);
@@ -160,10 +160,8 @@ void Stage1::BulidObject()
 		
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/skybox.dds", TextureType::CubeMap);
 
-		ShaderInfo info;
-		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
-		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
-		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Load<Shader>(L"sky.hlsl", info);
+
+		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"sky.hlsl");
 	
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);

@@ -16,6 +16,8 @@ public:
         return &instance;
     }
 
+    void Init();
+
     template<typename T, typename... Args>
     shared_ptr<T> Load(const wstring& path, Args&&... args);
 
