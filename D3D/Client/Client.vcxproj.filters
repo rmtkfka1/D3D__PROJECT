@@ -336,4 +336,9 @@
       <Filter>Utils</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="memo.txt">
+      <Filter>Utils</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

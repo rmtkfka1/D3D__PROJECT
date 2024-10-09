@@ -24,31 +24,10 @@ Camera::~Camera()
 
 }
 
-void Camera::GenViewMatrix()
-{
-	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
-	
-}
-
-void Camera::GenProjMatrix()
-{
-	_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
-
-}
-
-void Camera::GenBoundingFrustum()
-{
-	_boundingFrsutum.CreateFromMatrix(_boundingFrsutum, _params.matProjection);
-	_boundingFrsutum.Transform(_boundingFrsutum, _params.matView.Invert());
-}
-
 
 void Camera::PushData()
 {
-	Update();
-	GenViewMatrix();
-	GenProjMatrix();
-	GenBoundingFrustum();
+	Update(); //각자의 업데이트를 호출
 
 	auto& bufferPool = core->GetCameraBufferPool();
 	bufferPool->PushData(&_params,sizeof(_params));
@@ -60,9 +39,6 @@ bool Camera::IsInFrustum(shared_ptr<BaseCollider>& collider)
 	return _boundingFrsutum.Intersects(static_pointer_cast<BoxCollider>(collider)->GetBox());
 }
 
-void Camera::Update()
-{
-}
 
 void Camera::AddMove(const vec3& shift)
 {
@@ -85,6 +61,24 @@ ThirdPersonCamera::~ThirdPersonCamera()
 }
 
 void ThirdPersonCamera::Update()
+{
+	GenViewMatrix();
+	GenProjMatrix();
+	GenBoundingFrustum();
+}
+
+
+void ThirdPersonCamera::GenViewMatrix()
+{
+	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
+}
+
+void ThirdPersonCamera::GenProjMatrix()
+{
+	_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
+}
+
+void ThirdPersonCamera::GenBoundingFrustum()
 {
 	_boundingFrsutum.CreateFromMatrix(_boundingFrsutum, _params.matProjection);
 	_boundingFrsutum.Transform(_boundingFrsutum, _params.matView.Invert());
@@ -136,10 +130,29 @@ ObserveCamera::~ObserveCamera()
 {
 }
 
+void ObserveCamera::GenViewMatrix()
+{
+	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
+}
+
+void ObserveCamera::GenProjMatrix()
+{
+	_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
+}
+
+void ObserveCamera::GenBoundingFrustum()
+{
+	_boundingFrsutum.CreateFromMatrix(_boundingFrsutum, _params.matProjection);
+	_boundingFrsutum.Transform(_boundingFrsutum, _params.matView.Invert());
+}
+
 void ObserveCamera::Update()
 {
 	MouseUpdate();
 	KeyUpdate();
+	GenViewMatrix();
+	GenProjMatrix();
+	GenBoundingFrustum();
 }
 
 void ObserveCamera::KeyUpdate()
@@ -183,3 +196,36 @@ void ObserveCamera::MouseUpdate()
 	_cameraLook = _cameraLook.TransformNormal(cameraLook, Matrix::CreateFromYawPitchRoll(-XMConvertToRadians(accmulate.x), XMConvertToRadians(accmulate.y), 0));
 	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(-XMConvertToRadians(accmulate.x), XMConvertToRadians(accmulate.y), 0));
 }
+
+UiCamera::UiCamera() :Camera(CameraType::UI)
+{
+	_cameraPos = vec3(0, 0, 0.0f);
+	_cameraRight = vec3(1.0f, 0, 0);
+	_cameraLook = vec3(0, 0, 1.0f);
+	_cameraUp = vec3(0, 1.0f, 0);
+	_near = 0.1f;
+	_far = 1000.0f;
+};
+
+UiCamera::~UiCamera()
+{
+
+}
+
+void UiCamera::Update()
+{
+	GenViewMatrix();
+	GenProjMatrix();
+}
+
+
+void UiCamera::GenViewMatrix()
+{
+	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
+}
+
+void UiCamera::GenProjMatrix()
+{
+	_params.matProjection = XMMatrixOrthographicLH(WINDOW_WIDTH, WINDOW_HEIGHT, _near, _far);
+}
+

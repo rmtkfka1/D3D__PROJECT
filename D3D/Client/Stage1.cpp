@@ -40,32 +40,10 @@ void Stage1::Init()
 void Stage1::Run()
 {
 
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::ONE))
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
-	}
-
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::THREE))
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-	}
-
 	CameraManager::GetInstance()->PushData();
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
 	
-	//WCHAR wchTxt[100];
-	//swprintf_s(wchTxt, 100, L"look.x: %.2f, look.y: %.2f, look.z: %.2f, right.x: % .2f, right.y : % .2f, right.z : % .2f",
-	//	_player->GetTransform()->GetLocalPosition().x,
-	//	_player->GetTransform()->GetLocalPosition().y,
-	//	_player->GetTransform()->GetLocalPosition().z,
-
-	//	_player->GetTransform()->GetRight().x,
-	//	_player->GetTransform()->GetRight().y,
-	//	_player->GetTransform()->GetRight().z
-	//);
-
-	//SetWindowText(core->GetWindowHandle(), wchTxt);
 }
 
 void Stage1::LateUpdate()
@@ -139,11 +117,10 @@ void Stage1::BulidObject()
 
 		shared_ptr<Terrain> terrain = make_shared<Terrain>();
 		terrain->SetFrustumCuling(false);
-		AddGameObject(terrain);
 		player->SetTerrain(terrain);
 
-
 		AddGameObject(player);
+		AddGameObject(terrain);
 
 	}
 

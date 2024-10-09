@@ -8,6 +8,7 @@ enum CameraType
 	FIRSTVIEW,
 	THIRDVIEW,
 	OBSERVE,
+	UI,
 	NONE
 };
 
@@ -25,15 +26,16 @@ public:
 	Camera(CameraType type);
 	virtual ~Camera();
 
-	void GenViewMatrix();
-	void GenProjMatrix();
-	void GenBoundingFrustum();
-	void PushData();
+	virtual void GenViewMatrix() =0; 
+	virtual void GenProjMatrix() =0; 
+	virtual void GenBoundingFrustum() =0; 
+
+	virtual void PushData();
 
 	bool IsInFrustum(shared_ptr<BaseCollider>& collider);
 
-	virtual void Update();
-	virtual void Rotate(const vec3& offset) {};
+	virtual void Update() = 0;
+
 	void AddMove(const vec3& shift);
 	void SetCameraPos(const vec3& pos) { _cameraPos = pos; }
 	vec3 GetCameraPos() { return _cameraPos; }
@@ -49,8 +51,6 @@ protected:
 	vec3 _cameraLook = vec3(0, 0, 1.0f);
 	vec3 _cameraUp =vec3(0,1.0f,0);
 	vec3 _cameraRight =vec3(1.0f,0,0);
-
-	vec3 _offset = vec3(0, 3.0f, 20.0f);
 
 	float _near = 0.1f;
 	float _far = 10000.f;
@@ -72,12 +72,22 @@ public:
 	ThirdPersonCamera();
 	virtual ~ThirdPersonCamera();
 
+	virtual void GenViewMatrix() override;
+	virtual void GenProjMatrix() override;
+	virtual void GenBoundingFrustum() override;
 	virtual void Update() override;
-	virtual void Rotate(const shared_ptr<Player>& player);
+
+	void Rotate(const shared_ptr<Player>& player);
 
 private:
-
+	vec3 _offset = vec3(0, 3.0f, 20.0f);
 };
+
+/*************************
+*                        *
+*     observeCamera      *
+*                        *
+**************************/
 
 
 class ObserveCamera :public Camera
@@ -87,8 +97,14 @@ public:
 	ObserveCamera();
 	virtual ~ObserveCamera();
 
-	virtual void Update() override;
+
 private:
+
+	virtual void GenViewMatrix() override;
+	virtual void GenProjMatrix() override;
+	virtual void GenBoundingFrustum() override;
+	virtual void Update() override;
+
 	void KeyUpdate();
 	void MouseUpdate();
 
@@ -98,3 +114,26 @@ private:
 
 };
 
+/*************************
+*                        *
+*       uiCamera         *
+*                        *
+**************************/
+
+class UiCamera :public Camera
+{
+
+public:
+	UiCamera();
+	virtual ~UiCamera();
+
+private:
+	virtual void GenViewMatrix() override;
+	virtual void GenProjMatrix() override;
+	virtual void Update() override;
+
+private:
+	float _cameraSpeed = 50.0f;
+
+
+};
