@@ -132,7 +132,7 @@ void Scene::LateUpdate()
 	while (!_reserveAddQueue.empty())
 	{
 		shared_ptr<GameObject> element = _reserveAddQueue.front();
-		AddGameObject(element);
+		AddForwardObject(element);
 		_reserveAddQueue.pop();
 	}
 
@@ -154,7 +154,7 @@ void Scene::ReserveDeleteGameObject(shared_ptr<GameObject> object)
 	_reserveDeleteQueue.push(object);
 }
 
-void Scene::AddGameObject(shared_ptr<GameObject> object)
+void Scene::AddForwardObject(shared_ptr<GameObject> object)
 {
 	_forwardObjects.push_back(object);
 }

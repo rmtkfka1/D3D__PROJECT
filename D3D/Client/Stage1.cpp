@@ -102,22 +102,30 @@ void Stage1::BulidCamera()
 void Stage1::BulidObject()
 {
 	
+	BulidDeferred();
+	BulidForward();
+
+	
+}
+
+void Stage1::BulidDeferred()
+{
 
 	{
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter");
 		shared_ptr<Player> player = make_shared<Player>();
-	
+
 		_player = player;
 		player->SetModel(data);
 		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl");
 		player->SetShader(shader);
-		
+
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
-	
-		player->AddCollider("this",ColliderType::Box, vec3(-2.5f, -1.0f, -0.5f));
-		player->AddBoxCollider("raycheck",vec3(1.5f, 1.5f,5.0f),vec3(0,2.0f,-10.0f));
-	
+
+		player->AddCollider("this", ColliderType::Box, vec3(-2.5f, -1.0f, -0.5f));
+		player->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 5.0f), vec3(0, 2.0f, -10.0f));
+
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
 		shared_ptr<Terrain> terrain = make_shared<Terrain>();
@@ -125,7 +133,7 @@ void Stage1::BulidObject()
 		player->SetTerrain(terrain);
 
 		AddDeferredObject(player);
-		AddGameObject(terrain);
+		AddForwardObject(terrain);
 
 	}
 
@@ -139,7 +147,12 @@ void Stage1::BulidObject()
 		AddDeferredObject(object);
 	}
 
-	for(int i=0; i<3; ++i)
+}
+
+void Stage1::BulidForward()
+{
+
+	for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 
@@ -147,28 +160,23 @@ void Stage1::BulidObject()
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
 		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
-		object->GetTransform()->SetLocalPosition(vec3(-240.0 + 70.0f*i, 250.0f, 1.0f));
+		object->GetTransform()->SetLocalPosition(vec3(-260.0 + 70.0f * i, 250.0f, 1.0f));
 		AddUiObject(object);
 	}
-
-
 
 	{
 
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
-		
+
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/skybox.dds", TextureType::CubeMap);
 
 		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"sky.hlsl");
-	
+
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
-		AddGameObject(gameobject);
+		AddForwardObject(gameobject);
 	}
-
-	
-	
 }

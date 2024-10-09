@@ -35,10 +35,6 @@ void Game::Init(HWND hwnd)
 
 void Game::Run()
 {
-
-
-
-
 	Update();
 	Render();
 

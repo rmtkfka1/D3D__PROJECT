@@ -25,5 +25,9 @@ public:
 	//temp
 	shared_ptr<Player> _player;
 
+private:
+	void BulidDeferred();
+	void BulidForward();
+
 };
 

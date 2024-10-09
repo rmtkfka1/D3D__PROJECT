@@ -95,6 +95,7 @@ void Core::SetFullScreen()
 			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 
 		UpdateWindowSize(mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top);
+
 	/*	_swapChain->SetFullscreenState(TRUE, nullptr);*/
 	}
 
@@ -174,7 +175,6 @@ void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 		WaitForFenceValue(_lastFenceValue[i]);
 	}
 
-	
 	WINDOW_WIDTH = BackBufferWidth;
 	WINDOW_HEIGHT = BackBufferHeight;
 
@@ -182,7 +182,7 @@ void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 	KeyManager::GetInstance()->SetCenterPos(point);
 
 	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
-
+	_GBuffer->Init(_renderTargets->GetDSVHeap());
 }
 
 
@@ -345,12 +345,9 @@ void Core::CreateSwapChain()
 	_renderTargets = make_shared<RenderTargets>();
 	_renderTargets->Init(WINDOW_WIDTH, WINDOW_HEIGHT, _swapChain);
 
-	
-	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
-	{
-		_GBuffer[i] = make_shared<GBuffer>();
-		_GBuffer[i]->Init(_renderTargets->GetDSVHeap());
-	}
+	_GBuffer = make_shared<GBuffer>();
+	_GBuffer->Init(_renderTargets->GetDSVHeap());
+
 
 
 };

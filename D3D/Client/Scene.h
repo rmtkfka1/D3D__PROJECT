@@ -19,7 +19,7 @@ public:
 
 	void ReserveAddGameObject(shared_ptr<GameObject> object);
 	void ReserveDeleteGameObject(shared_ptr<GameObject> object);
-	void AddGameObject(shared_ptr<GameObject> object);
+	void AddForwardObject(shared_ptr<GameObject> object);
 	void AddUiObject(shared_ptr<GameObject> object);
 	void AddDeferredObject(shared_ptr<GameObject> object);
 	void DeleteGameObject(shared_ptr<GameObject> object);

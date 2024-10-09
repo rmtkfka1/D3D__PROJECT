@@ -13,13 +13,13 @@ RenderTargets::~RenderTargets()
 void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3> swapchain)
 {
 	CreateRenderTarget(WndWidth, WndHeight, swapchain);
-	CreateDepthStencil();
+	CreateDepthStencil(WndWidth, WndHeight);
 }
 
 void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPtr<IDXGISwapChain3> swapchain , UINT	_swapChainFlags )
 {
 
-	CreateDepthStencil();
+	CreateDepthStencil(BackBufferWidth, BackBufferHeight);
 
 	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
 	{
@@ -45,15 +45,8 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 		core->GetDevice()->CreateRenderTargetView(_RenderTargets[i].Get(), nullptr, _rtvHandle[i]);
 	}
 
-
-	_Width = BackBufferWidth;
-	_height = BackBufferHeight;
-	_viewport.Width = (float)_Width;
-	_viewport.Height = (float)_height;
-	_scissorRect.left = 0;
-	_scissorRect.top = 0;
-	_scissorRect.right = _Width;
-	_scissorRect.bottom = _height;
+	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(BackBufferWidth),static_cast<float>(BackBufferHeight), 0,1.0f };
+	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(BackBufferWidth),static_cast<LONG>(BackBufferHeight) };
 }
 
 void RenderTargets::CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3> swapchain)
@@ -65,15 +58,9 @@ void RenderTargets::CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<I
 
 	ThrowIfFailed((core->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&_RTVHeap))));
 
-	_viewport.Width = (float)WndWidth;
-	_viewport.Height = (float)WndHeight;
-	_viewport.MinDepth = 0.0f;
-	_viewport.MaxDepth = 1.0f;
 
-	_scissorRect.left = 0;
-	_scissorRect.top = 0;
-	_scissorRect.right = WndWidth;
-	_scissorRect.bottom = WndHeight;
+	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WndWidth),static_cast<float>(WndHeight), 0,1.0f };
+	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WndWidth),static_cast<LONG>(WndHeight) };
 
 
 	int32 rtvHeapSize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -92,10 +79,9 @@ void RenderTargets::CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<I
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
 }
 
-void RenderTargets::CreateDepthStencil()
+void RenderTargets::CreateDepthStencil(DWORD WndWidth, DWORD WndHeight)
 {
-
-	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT);
+	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, WndWidth, WndHeight);
 	desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
 	D3D12_CLEAR_VALUE optimizedClearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
@@ -166,15 +152,13 @@ GBuffer::~GBuffer()
 
 void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 {
-	_vp = D3D12_VIEWPORT{ 0.0f,0.0f,WINDOW_WIDTH,WINDOW_HEIGHT, 0,1.0f };
-	_rect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH),static_cast<LONG>(WINDOW_WIDTH) };
+	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT), 0,1.0f };
+	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH),static_cast<LONG>(WINDOW_HEIGHT) };
 
 	UINT rtvHeapIncrementsize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	UINT srvHeapIncrementsize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	_DsvHeap = DSVHeap;
-	_dsvHandle = _DsvHeap->GetCPUDescriptorHandleForHeapStart();
-
+	_dsvHandle = DSVHeap->GetCPUDescriptorHandleForHeapStart();
 
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
 	rtvHeapDesc.NumDescriptors = _count;
@@ -303,8 +287,9 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 	//리소스 바인딩을 쉽게해주고있기때문에.
 	//텍스쳐 내부의 Resource 는 사용안할것임.
 
+
+
 	_textrues.resize(3);
-	
 	
 	for (int i = 0; i < _count; ++i)
 	{
@@ -329,8 +314,8 @@ void GBuffer::RenderBegin()
 		list->ClearRenderTargetView(_rtvHandle[i], arrFloat, 0, nullptr);
 	}
 
-	list->RSSetViewports(1, &_vp);
-	list->RSSetScissorRects(1, &_rect);
+	list->RSSetViewports(1, &_viewport);
+	list->RSSetScissorRects(1, &_scissorRect);
 	list->OMSetRenderTargets(_count, &_rtvHandle[0], TRUE, &_dsvHandle); //다중셋
 
 }
@@ -344,6 +329,8 @@ void GBuffer::RenderEnd()
 		list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resources[i].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
 	}
 }
+
+
 
 
 shared_ptr<Texture> GBuffer::GetTexture(int32 index)

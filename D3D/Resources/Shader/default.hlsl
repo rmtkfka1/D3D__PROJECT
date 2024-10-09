@@ -63,31 +63,31 @@ float4 PS_Main(VS_OUT input) : SV_Target
 {
    
    
-    //float3 color = float3(0, 0, 0);
+    float3 color = float3(0, 0, 0);
     
-    //float3 toEye = normalize(g_eyeWorld - input.worldPos);
+    float3 toEye = normalize(g_eyeWorld - input.worldPos);
     
-    //for (int i = 0; i < g_lightCount; ++i)
-    //{
+    for (int i = 0; i < g_lightCount; ++i)
+    {
    
-    //    if (g_lights[i].mateiral.lightType == 0)
-    //    {
-    //        color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, input.worldNormal, toEye);
-    //    }
-    //    else if (g_lights[i].mateiral.lightType == 1)
-    //    {
-    //        color += ComputePointLight(g_lights[i], g_lights[i].mateiral, input.worldPos, input.worldNormal, toEye);
+        if (g_lights[i].mateiral.lightType == 0)
+        {
+            color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, input.worldNormal, toEye);
+        }
+        else if (g_lights[i].mateiral.lightType == 1)
+        {
+            color += ComputePointLight(g_lights[i], g_lights[i].mateiral, input.worldPos, input.worldNormal, toEye);
             
        
-    //    }
-    //    else if (g_lights[i].mateiral.lightType == 2)
-    //    {
-    //        color += ComputeSpotLight(g_lights[i], g_lights[i].mateiral, input.worldPos, input.worldNormal, toEye);
-    //    }
+        }
+        else if (g_lights[i].mateiral.lightType == 2)
+        {
+            color += ComputeSpotLight(g_lights[i], g_lights[i].mateiral, input.worldPos, input.worldNormal, toEye);
+        }
           
-    //}
+    }
     
-    return g_tex_0.Sample(g_sam_0, input.uv);
+    return float4(color, 1.0f) * g_tex_0.Sample(g_sam_0, input.uv);
 
  
 }

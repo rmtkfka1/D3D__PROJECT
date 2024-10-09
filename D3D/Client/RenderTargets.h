@@ -19,7 +19,7 @@ public:
 	void Resize(DWORD BackBufferWidth, DWORD BackBufferHeight, ComPtr<IDXGISwapChain3> swapchain, UINT	_swapChainFlags);
 
 	void CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3> swapchain);
-	void CreateDepthStencil();
+	void CreateDepthStencil(DWORD WndWidth, DWORD WndHeight);
 
 	void RenderBegin();
 	void RenderEnd();
@@ -64,7 +64,6 @@ public:
 	~GBuffer();
 
 	void Init(ComPtr<ID3D12DescriptorHeap> DSVHeap);
-
 	void RenderBegin();
 	void RenderEnd();
 
@@ -74,8 +73,7 @@ public:
 private:
 	ComPtr<ID3D12DescriptorHeap> _RTVHeap = nullptr;
 	ComPtr<ID3D12DescriptorHeap> _SRVHeap = nullptr;
-	ComPtr<ID3D12DescriptorHeap> _DsvHeap = nullptr; //RENDER TARGET 에서 생성하고 받아올예정
-
+	
 	ComPtr<ID3D12Resource> _resources[_count];  //rtv srv 둘다사용될것임
 
 	D3D12_CPU_DESCRIPTOR_HANDLE		_rtvHandle[_count];
@@ -85,8 +83,8 @@ private:
 	//오브젝트에게 건내주기위해사용
 	vector<shared_ptr<Texture>> _textrues;
 
-	D3D12_VIEWPORT _vp;
-	D3D12_RECT _rect;
+	D3D12_VIEWPORT _viewport;
+	D3D12_RECT _scissorRect;
 };
 
 
