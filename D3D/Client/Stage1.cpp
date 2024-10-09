@@ -54,18 +54,18 @@ void Stage1::Run()
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
 	
-	/*WCHAR wchTxt[100];
-	swprintf_s(wchTxt, 100, L"look.x: %.2f, look.y: %.2f, look.z: %.2f, right.x: % .2f, right.y : % .2f, right.z : % .2f",
-		_player->GetTransform()->GetLook().x,
-		_player->GetTransform()->GetLook().y,
-		_player->GetTransform()->GetLook().z,
+	//WCHAR wchTxt[100];
+	//swprintf_s(wchTxt, 100, L"look.x: %.2f, look.y: %.2f, look.z: %.2f, right.x: % .2f, right.y : % .2f, right.z : % .2f",
+	//	_player->GetTransform()->GetLocalPosition().x,
+	//	_player->GetTransform()->GetLocalPosition().y,
+	//	_player->GetTransform()->GetLocalPosition().z,
 
-		_player->GetTransform()->GetRight().x,
-		_player->GetTransform()->GetRight().y,
-		_player->GetTransform()->GetRight().z
-	);
+	//	_player->GetTransform()->GetRight().x,
+	//	_player->GetTransform()->GetRight().y,
+	//	_player->GetTransform()->GetRight().z
+	//);
 
-	SetWindowText(core->GetWindowHandle(), wchTxt);*/
+	//SetWindowText(core->GetWindowHandle(), wchTxt);
 }
 
 void Stage1::LateUpdate()

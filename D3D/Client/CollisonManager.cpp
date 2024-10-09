@@ -82,26 +82,20 @@ void CollisonManager::CheckRayCollusion()
 
 }
 
-bool CollisonManager::CheckRayCollusion(Ray ray)
+bool CollisonManager::CheckRayCollusion(Ray ray, shared_ptr<BaseCollider> collider)
 {
 
-	for (int i = 0; i < _colliders.size(); ++i)
+
+	float distance = FLT_MAX;
+
+	if (collider->CheckCollusion(ray, distance))
 	{
-
-		if (_colliders[i]->GetOwner()->GetPlayerType() == PlayerType::Box)
-			continue;
-
-		float distance = FLT_MAX; // ÃÊ±âÈ­
-
-		if (_colliders[i]->CheckCollusion(ray, distance))
-		{
-			return true;
-		}
+		return true;
 	}
 
-	return false; 
+	return false;
 
-}
+};
 
 void CollisonManager::LateUpdate()
 {

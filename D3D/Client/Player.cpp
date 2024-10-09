@@ -142,7 +142,7 @@ void Player::CollisonUpdate()
 
 }
 
-void Player::StartCollisionRotation(vec3 direction)
+void Player::StartCollisionRotation(vec3 direction,int i)
 {
 
 
@@ -150,8 +150,8 @@ void Player::StartCollisionRotation(vec3 direction)
 	_dir = direction;
 	_dir.Normalize();
 	_rotationAxis = _look.Cross(_dir);
-	float dotProduct = _look.Dot(_dir);
-	_angle = acosf(dotProduct);
+	//float dotProduct = _look.Dot(_dir);
+	_angle = XMConvertToRadians(static_cast<float>(i));
 	_collisionDected = true;
 
 }
@@ -169,9 +169,8 @@ vec3 Player::CalculateNextDir(vec3 direction,float degree)
 	float angle = XMConvertToRadians(degree);
 
 	Quaternion rotation = Quaternion::CreateFromAxisAngle(rotationAxis, angle);
-	
-	Matrix m = Matrix::CreateFromQuaternion(rotation);
 
+	Matrix m = Matrix::CreateFromQuaternion(rotation);
 
 	vec3 result = vec3::TransformNormal(look, m);
 
@@ -193,12 +192,11 @@ void Player::CollisonRotate(vec3 look, vec3 dir, float angle, vec3 rotationAxis)
 		return;
 	}
 
-	// Create a quaternion representing the rotation
 	Quaternion rotationQuat = Quaternion::CreateFromAxisAngle(rotationAxis, XMConvertToRadians(_rotationSpeed));
 
 	vec3 rotate = GetTransform()->GetLocalRotation();
-	Quaternion nowQuat = Quaternion::CreateFromYawPitchRoll(vec3(XMConvertToRadians(rotate.x), XMConvertToRadians(rotate.y), XMConvertToRadians(rotate.z)));
 
+	Quaternion nowQuat = Quaternion::CreateFromYawPitchRoll(vec3(XMConvertToRadians(rotate.x), XMConvertToRadians(rotate.y), XMConvertToRadians(rotate.z)));
 	Quaternion result = nowQuat * rotationQuat;
 
 	vec3 resultEuler = result.ToEuler();
@@ -212,7 +210,11 @@ void Player::CollisonRotate(vec3 look, vec3 dir, float angle, vec3 rotationAxis)
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
 
-	//collider->Delete(other.get());
+	collider->Delete(other.get());
+
+	if (_collisionDected)
+		return;
+
 
 	if (collider->GetName() == "raycheck" && other->GetName() == "boxbox")
 	{
@@ -222,35 +224,26 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 		auto up = GetTransform()->GetUp();
 		auto left = -right;
 
-		vector<vec3> directions = { right, left, down ,up};
+		vector<vec3> directions = { right, left };
 
 		shuffle(directions.begin(), directions.end(), g);
 
-		for (int i = 1; i < 360; i+=10)
+		for (int i = 60; i <= 180; i += 30)
 		{
 			for (const auto& dir : directions)
 			{
-				Ray ray = Ray(now, dir);
+				vec3 result = CalculateNextDir(dir, i);
+				Ray rayResult = Ray(now, result);
 
-				if (CollisonManager::GetInstance()->CheckRayCollusion(ray) == false)
+				if (CollisonManager::GetInstance()->CheckRayCollusion(rayResult, other) == false)
 				{
-					vec3 result = CalculateNextDir(dir,i);
-					Ray rayResult = Ray(now, result);
-
-					if (CollisonManager::GetInstance()->CheckRayCollusion(rayResult) == false)
-					{
-						StartCollisionRotation(dir);
-						return;
-					}
+					StartCollisionRotation(dir, i);
+					return;
 				}
-			}
+			};
 		}
-
-	
-
-
 	}
-
+		
 }
 
 void Player::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
