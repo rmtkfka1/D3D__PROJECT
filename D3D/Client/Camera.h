@@ -38,6 +38,7 @@ public:
 
 	void AddMove(const vec3& shift);
 	void SetCameraPos(const vec3& pos) { _cameraPos = pos; }
+	void SetCameraLook(const vec3& look) { _cameraLook = look; }
 	vec3 GetCameraPos() { return _cameraPos; }
 	vec3 GetCameraLook() { return _cameraLook; }
 	CameraType GetCameraType() { return _type; }

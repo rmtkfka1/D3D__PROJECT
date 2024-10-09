@@ -11,7 +11,7 @@
 #include "BufferPool.h"
 
 shared_ptr<Shader> BoxCollider::_shader = make_shared<Shader>();
-bool BoxCollider::brender = true;
+bool BoxCollider::brender = false;
 
 BoxCollider::BoxCollider() :BaseCollider(ColliderType::Box)
 {

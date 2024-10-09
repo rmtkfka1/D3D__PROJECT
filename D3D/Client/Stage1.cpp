@@ -136,16 +136,15 @@ void Stage1::BulidObject()
 	}
 
 
-	{
-		shared_ptr<CustomObject> object = make_shared<CustomObject>();
+	//{
+	//	shared_ptr<CustomObject> object = make_shared<CustomObject>();
 
-		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(50.0f);
-		object->GetMaterial()->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
-		object->GetMaterial()->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
-		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"1.jpg"));
-		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
-		AddUiObject(object);
-	}
+	//	object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(50.0f);
+	//	object->GetMaterial()->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
+	//	object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"1.jpg"));
+	//	object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
+	//	AddUiObject(object);
+	//}
 
 
 

@@ -21,7 +21,6 @@ CameraType CameraManager::GetCameraType()
 void CameraManager::SetActiveCamera(CameraType type)
 {
   
-
     if (_cameras.find(type) != _cameras.end())
     {
         _activeCamera = _cameras[type];
@@ -30,6 +29,17 @@ void CameraManager::SetActiveCamera(CameraType type)
     else
     {
         assert(false);
+    }
+}
+
+void CameraManager::ChangeSetting(CameraType type)
+{
+    if (type == CameraType::OBSERVE)
+    {
+
+        vec3 thirdPos = _cameras[CameraType::THIRDVIEW]->GetCameraPos();
+        _cameras[CameraType::OBSERVE]->SetCameraPos(thirdPos);
+
     }
 }
 

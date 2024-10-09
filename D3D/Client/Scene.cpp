@@ -34,6 +34,7 @@ void Scene::GameObjectRender()
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
 	{
 		type = CameraType::OBSERVE;
+		CameraManager::GetInstance()->ChangeSetting(type);
 	}
 
 	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))

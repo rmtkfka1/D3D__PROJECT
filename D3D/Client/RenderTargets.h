@@ -18,6 +18,7 @@ public:
 
 	void SetIndex(UINT index) { _RenderTargetIndex = index; }
 	uint32 GetIndex() { return _RenderTargetIndex; }
+
 private:
 
 	ComPtr<ID3D12Resource> _RenderTargets[SWAP_CHAIN_FRAME_COUNT] = {};
