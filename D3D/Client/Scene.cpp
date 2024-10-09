@@ -19,10 +19,21 @@ void Scene::Init()
 	{
 		ele->Init();
 	}
+
+	for (auto& ele : _deferredObjects)
+	{
+		ele->Init();
+	}
+
+	for (auto& ele : _uiObjects)
+	{
+		ele->Init();
+	}
 }
 
 void Scene::Run()
 {
+
 	core->GetRenderTarget()->ClearDepth();
 
 	core->GetGBuffer()->RenderBegin();
@@ -33,6 +44,8 @@ void Scene::Run()
 	ForwardRender();
 	UiObjectRender();
 	core->GetRenderTarget()->RenderEnd();
+
+
 }
 
 void Scene::DeferredRender()
@@ -44,13 +57,13 @@ void Scene::DeferredRender()
 	{
 		ele->Update();
 
-		if (ele->GetFrustumCuling())
+	/*	if (ele->GetFrustumCuling())
 		{
 			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
 			{
 				continue;
 			}
-		}
+		}*/
 
 		ele->Render();
 	}

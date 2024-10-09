@@ -204,7 +204,7 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 		desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 
 		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
-		float arrFloat[4] = { 0, 0, 0, 0 };
+		float arrFloat[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		D3D12_CLEAR_VALUE optimizedClearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R32G32B32A32_FLOAT, arrFloat);
 
 		HRESULT hr = core->GetDevice()->CreateCommittedResource(
@@ -239,7 +239,7 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 
 		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
 		
-		float arrFloat[4] = { 0, 0, 0, 0 };
+		float arrFloat[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		D3D12_CLEAR_VALUE optimizedClearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R32G32B32A32_FLOAT, arrFloat);
 
 		HRESULT hr = core->GetDevice()->CreateCommittedResource(
@@ -272,7 +272,7 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 		desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 
 		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
-		float arrFloat[4] = { 0, 0, 0, 0 };
+		float arrFloat[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		D3D12_CLEAR_VALUE optimizedClearValue = CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM, arrFloat);
 
 		HRESULT hr = core->GetDevice()->CreateCommittedResource(
@@ -317,7 +317,7 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 void GBuffer::RenderBegin()
 {
 	auto& list =core->GetCmdLIst();
-	float arrFloat[4] = { 0, 0, 0, 0 };
+	float arrFloat[4] = {1, 1, 1, 1 };
 
 	for (uint32 i = 0; i < _count; i++)
 	{
