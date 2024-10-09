@@ -38,7 +38,8 @@ private:
 template<typename T, typename... Args>
 inline shared_ptr<T> ResourceManager::Load(const wstring& path, Args&&... args)
 {
-    auto Map = GetResourceMap<T>();
+   
+    auto& Map = GetResourceMap<T>();
 
     auto it = Map.find(path);
     if (it != Map.end())
@@ -48,6 +49,7 @@ inline shared_ptr<T> ResourceManager::Load(const wstring& path, Args&&... args)
     object->Init(path,forward<Args>(args)...);
     Map[path] = object;
     return object;
+
 }
 
 // Add ÇÔ¼ö

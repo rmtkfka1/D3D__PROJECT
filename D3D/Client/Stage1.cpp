@@ -141,6 +141,7 @@ void Stage1::BulidObject()
 
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(50.0f);
 		object->GetMaterial()->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
+		object->GetMaterial()->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"default.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"1.jpg"));
 		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
 		AddUiObject(object);
