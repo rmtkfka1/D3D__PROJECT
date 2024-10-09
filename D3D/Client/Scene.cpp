@@ -23,51 +23,67 @@ void Scene::Init()
 
 void Scene::Run()
 {
-	//core->GetGBuffer()->RenderBegin();
-	//GameObjectRender();
-	//UiObjectRender();
-	//core->GetGBuffer()->RenderEnd();
-
 	core->GetRenderTarget()->ClearDepth();
-	core->GetRenderTarget()->RenderBegin();
 
+	core->GetGBuffer()->RenderBegin();
+	DeferredRender();
+	core->GetGBuffer()->RenderEnd();
+
+	core->GetRenderTarget()->RenderBegin();
 	ForwardRender();
 	UiObjectRender();
-
 	core->GetRenderTarget()->RenderEnd();
 }
 
 void Scene::DeferredRender()
 {
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+	CameraManager::GetInstance()->PushData();
+
+	for (auto& ele : _deferredObjects)
+	{
+		ele->Update();
+
+		if (ele->GetFrustumCuling())
+		{
+			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
+			{
+				continue;
+			}
+		}
+
+		ele->Render();
+	}
 
 }
 
 void Scene::ForwardRender()
 {
 
-	static CameraType type = CameraType::THIRDVIEW;
+	//static CameraType type = CameraType::THIRDVIEW;
 
-	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
-	{
-		type = CameraType::OBSERVE;
-		CameraManager::GetInstance()->ChangeSetting(type);
-	}
+	//if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
+	//{
+	//	type = CameraType::OBSERVE;
+	//	CameraManager::GetInstance()->ChangeSetting(type);
+	//}
 
-	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))
-	{
-		type = CameraType::THIRDVIEW;
-	}
+	//if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))
+	//{
+	//	type = CameraType::THIRDVIEW;
+	//}
 
-	if (type == CameraType::OBSERVE)
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
-	}
+	//if (type == CameraType::OBSERVE)
+	//{
+	//	CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
+	//}
 
-	else if (type == CameraType::THIRDVIEW)
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-	}
+	//else if (type == CameraType::THIRDVIEW)
+	//{
+	//	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+	//}
 
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
 	CameraManager::GetInstance()->PushData();
 
 	for (auto& ele : _forwardObjects)

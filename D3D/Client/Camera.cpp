@@ -203,7 +203,7 @@ UiCamera::UiCamera() :Camera(CameraType::UI)
 	_cameraLook = vec3(0, 0, 1.0f);
 	_cameraUp = vec3(0, 1.0f, 0);
 	_near = 0.1f;
-	_far = 1000.0f;
+	_far = 10000.0f;
 };
 
 UiCamera::~UiCamera()

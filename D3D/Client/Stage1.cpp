@@ -21,6 +21,7 @@
 #include "BoxCollider.h"
 #include "KeyManager.h"
 #include "Box.h"
+#include "RenderTargets.h"
 Stage1::Stage1()
 {
 }
@@ -108,7 +109,7 @@ void Stage1::BulidObject()
 	
 		_player = player;
 		player->SetModel(data);
-		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl");
+		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl");
 		player->SetShader(shader);
 		
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
@@ -123,7 +124,7 @@ void Stage1::BulidObject()
 		terrain->SetFrustumCuling(false);
 		player->SetTerrain(terrain);
 
-		AddGameObject(player);
+		AddDeferredObject(player);
 		AddGameObject(terrain);
 
 	}
@@ -133,20 +134,20 @@ void Stage1::BulidObject()
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
 		object->SetModel(data);
-		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
 		object->AddCollider("boxbox", ColliderType::Box);
-		AddGameObject(object);
-
+		AddDeferredObject(object);
 	}
 
-
+	for(int i=0; i<3; ++i)
 	{
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 
-		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(50.0f);
+		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl"));
-		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"1.jpg"));
+		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
 		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
+		object->GetTransform()->SetLocalPosition(vec3(-240.0 + 70.0f*i, 250.0f, 1.0f));
 		AddUiObject(object);
 	}
 
@@ -159,7 +160,6 @@ void Stage1::BulidObject()
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 		
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/skybox.dds", TextureType::CubeMap);
-
 
 		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"sky.hlsl");
 	
