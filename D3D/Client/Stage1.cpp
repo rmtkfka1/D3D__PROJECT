@@ -124,7 +124,7 @@ void Stage1::BulidDeferred()
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
 
 		player->AddCollider("this", ColliderType::Box, vec3(-2.5f, -1.0f, -0.5f));
-		player->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 5.0f), vec3(0, 2.0f, -10.0f));
+		player->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
 
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
