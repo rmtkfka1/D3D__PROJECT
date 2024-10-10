@@ -182,16 +182,18 @@ vec3 Player::CalculateNextDir(vec3 direction,float degree)
 void Player::CollisonRotate(vec3 look, vec3 dir, float angle, vec3 rotationAxis)
 {
 
-	_addAngle += XMConvertToRadians(_rotationSpeed);
+	float framePerDegree = _rotationSpeed * TimeManager::GetInstance()->GetDeltaTime();
 
-	if (_addAngle >= angle)
+	_addAngle += framePerDegree;
+
+	if (_addAngle >=XMConvertToDegrees(angle))
 	{
 		_addAngle = 0;
 		_collisionDected = false;
 		return;
 	}
 
-	Quaternion rotationQuat = Quaternion::CreateFromAxisAngle(rotationAxis, XMConvertToRadians(_rotationSpeed));
+	Quaternion rotationQuat = Quaternion::CreateFromAxisAngle(rotationAxis, XMConvertToRadians(framePerDegree));
 
 	vec3 rotate = GetTransform()->GetLocalRotation();
 

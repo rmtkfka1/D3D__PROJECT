@@ -57,6 +57,7 @@ void Scene::Run()
 void Scene::DeferredRender()
 {
 
+	static int count = 0;
 	for (auto& ele : _deferredObjects)
 	{
 		ele->Update();
@@ -69,14 +70,16 @@ void Scene::DeferredRender()
 			}
 		}
 
+		count++;
 		ele->Render();
 	}
 
+	TimeManager::GetInstance()->_objectCount = count;
+	count = 0;
 }
 
 void Scene::ForwardRender()
 {
-
 	for (auto& ele : _forwardObjects)
 	{
 		ele->Update();

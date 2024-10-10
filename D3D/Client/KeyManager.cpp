@@ -73,8 +73,16 @@ void KeyManager::MouseUpdate()
 	_dx = -deltaPosX  * _mouseSpeed;
 	_dy = deltaPosY * _mouseSpeed;
 
+	static bool setCursor = true;
 
-	SetCursorPos(static_cast<int>(_centerScreen.x), static_cast<int>(_centerScreen.y));
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::C))
+	{
+		setCursor = !setCursor;
+	}
 
+	if (setCursor)
+	{
+		SetCursorPos(static_cast<int>(_centerScreen.x), static_cast<int>(_centerScreen.y));
+	}
 }
 

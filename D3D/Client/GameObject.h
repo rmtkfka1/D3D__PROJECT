@@ -50,6 +50,6 @@ protected:
 	vector<shared_ptr<BaseCollider>> _colliders;
 
 	shared_ptr<Shader> _shader;
-	bool _checkFrustum = false;
+	bool _checkFrustum = true;
 };
 
