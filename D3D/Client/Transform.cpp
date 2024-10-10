@@ -14,6 +14,7 @@ Transform::~Transform()
 
 void Transform::Update()
 {
+
     Matrix matScale = Matrix::CreateScale(_localScale);
     Matrix matRotation = Matrix::CreateFromYawPitchRoll(
         XMConvertToRadians(_localRotation.y),  // Yaw
@@ -33,10 +34,10 @@ void Transform::Update()
         _matWorld = _matLocal;
     }
 
-
-
     for (const shared_ptr<Transform>& child : _children)
         child->Update();
+
+
 }
 
 void Transform::PushData()
@@ -50,6 +51,8 @@ void Transform::PushData()
 void Transform::AddMove(const vec3& shift)
 {
     _localPosition += shift;
+
+    bUpdated = false;
 }
 
 void Transform::AddRotate(const vec3& Euler)
@@ -59,6 +62,7 @@ void Transform::AddRotate(const vec3& Euler)
     _localRotation.y += Euler.y;
     _localRotation.z += Euler.z;
 
+    bUpdated = false;
 }
 
 

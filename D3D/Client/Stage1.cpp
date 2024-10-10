@@ -23,6 +23,7 @@
 #include "Box.h"
 #include "RenderTargets.h"
 #include "Sphere.h"
+#include "Sea.h"
 Stage1::Stage1()
 {
 }
@@ -73,9 +74,9 @@ void Stage1::BulidLight()
 		Light light;
 
 		light.direction = vec3(0, -1.0f, 0);
-		light.material.ambient = vec3(0.3f, 0.3f, 0.3f);
-		light.material.diffuse = vec3(0.3f, 0.3f, 0.3f);
-		light.material.specular = vec3(0.3f, 0.3f, 0.3f);
+		light.material.ambient = vec3(0.35f, 0.35f, 0.35f);
+		light.material.diffuse = vec3(0.6f, 0.6f, 0.6f);
+		light.material.specular = vec3(0.6f, 0.6f, 0.6f);
 		light.material.shininess = 64.0f;
 		light.material.lightType = static_cast<int32>(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light.strength = vec3(1.0f, 1.0f, 1.0f);
@@ -191,7 +192,7 @@ void Stage1::BulidForward()
 
 
 	{
-		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		shared_ptr<Sea> gameobject = make_shared<Sea>();
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
 

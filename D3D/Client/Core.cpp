@@ -163,6 +163,7 @@ void Core::Present()
 	_WorldBufferPool[nextContextIndex]->Clear();
 	_CameraBufferPool[nextContextIndex]->Clear();
 	_table[nextContextIndex]->Clear();
+	_materialParamsBufferPool[nextContextIndex]->Clear();
 	_currentContextIndex = nextContextIndex;
 
 }
@@ -382,6 +383,12 @@ void Core::CreateBufferPool()
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
+		_CameraBufferPool[i] = make_shared<ConstantBufferPool>();
+		_CameraBufferPool[i]->Init(CBV_REGISTER::b0, sizeof(CameraParams), 50, true); //b0 는 계산에 이용되지않음
+	}
+
+	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
+	{
 		_lightBufferPool[i] = make_shared<ConstantBufferPool>();
 		_lightBufferPool[i]->Init(CBV_REGISTER::b0, sizeof(LightParams), 1, false); //b0 는 계산에 이용되지않음
 	}
@@ -392,17 +399,12 @@ void Core::CreateBufferPool()
 		_WorldBufferPool[i]->Init(CBV_REGISTER::b2,sizeof(TransformParams),255,false);
 	}
 
+
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
-		_CameraBufferPool[i] = make_shared<ConstantBufferPool>();
-		_CameraBufferPool[i]->Init(CBV_REGISTER::b0, sizeof(CameraParams), 50, true); //b0 는 계산에 이용되지않음
+		_materialParamsBufferPool[i] = make_shared<ConstantBufferPool>();
+		_materialParamsBufferPool[i]->Init(CBV_REGISTER::b3, sizeof(MaterialParams), 255, false); //b0 는 계산에 이용되지않음
 	}
-
-	//for (int i = 0; i < MAX_FRAME_COUNT; ++i)
-	//{
-	//	_materialParamsBufferPool[i] = make_shared<ConstantBufferPool>();
-	//	_materialParamsBufferPool[i]->Init(CBV_REGISTER::b3, sizeof(MaterialParams), 50, false); //b0 는 계산에 이용되지않음
-	//}
 
 	_textureBufferPool = make_shared<TextureBufferPool>();
 	_textureBufferPool->Init(255);

@@ -13,6 +13,7 @@ class CustomObject :public GameObject
 {
 public:
 	CustomObject();
+	CustomObject(PlayerType type);
 	virtual ~CustomObject();
 
 	virtual void Init() override;;

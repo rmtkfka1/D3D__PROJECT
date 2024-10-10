@@ -9,7 +9,7 @@
 #include "Texture.h"
 /////////////////////////////////////////////////////////
 
-Terrain::Terrain()
+Terrain::Terrain():CustomObject(PlayerType::Terrain)
 {
 }
 

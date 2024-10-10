@@ -37,6 +37,9 @@ void Material::Pushdata()
 		core->GetTableHeap()->CopySRV(_SpecularTexture->GetCpuHandle(), reg);
 	}
 
-
-	
+	if (_params.useParams)
+	{
+		core->GetMaterialParamsBufferPool()->PushData(&_params, sizeof(_params));
+		_params.useParams = false;
+	}
 }

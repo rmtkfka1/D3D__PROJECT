@@ -22,6 +22,15 @@ cbuffer TEST_B1 : register(b2)
     row_major matrix WorldMat;
 };
 
+cbuffer materialparams : register(b3)
+{
+    int intparams1;
+    int intparams2;
+    float floatparams1;
+    float floatparams2;
+};
+
+
 Texture2D g_tex_0 : register(t0);
 SamplerState g_sam_0 : register(s0);
 
@@ -87,7 +96,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
           
     }
     
-    return float4(color, 1.0f) * g_tex_0.Sample(g_sam_0, input.uv);
+    return float4(color, 1.0f) * g_tex_0.Sample(g_sam_0, input.uv + floatparams1);
 
  
 }

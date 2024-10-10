@@ -14,6 +14,13 @@ CustomObject::CustomObject():GameObject(GameObjectType::Custom)
 	_transform = make_shared<Transform>();
 	_material = make_shared<Material>();
 }
+CustomObject::CustomObject(PlayerType type):GameObject(GameObjectType::Custom)
+{
+	_mesh = make_shared<Mesh>();
+	_playerType = type;
+	_transform = make_shared<Transform>();
+	_material = make_shared<Material>();
+}
 
 CustomObject::~CustomObject()
 {

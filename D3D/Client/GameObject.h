@@ -14,9 +14,12 @@ enum class GameObjectType
 
 enum class PlayerType
 {
+	Default,
 	Player,
 	Box,
-	Sphere
+	Sphere,
+	Sea,
+	Terrain
 };
 
 class GameObject : public enable_shared_from_this<GameObject>
@@ -49,10 +52,11 @@ public:
 
 protected:
 	GameObjectType _type;
-	PlayerType _playerType;
+	PlayerType _playerType =PlayerType::Default;
 	vector<shared_ptr<BaseCollider>> _colliders;
 
 	shared_ptr<Shader> _shader;
 	bool _checkFrustum = true;
+
 };
 

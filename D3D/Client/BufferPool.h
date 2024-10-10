@@ -5,11 +5,12 @@ enum class CBV_REGISTER : uint8
 {
 	b0=0,
 	b2=0,
+	b3=1,
 };
 
 enum class SRV_REGISTER : uint8
 {
-	t0 = 1,
+	t0 = 2,
 	t1,
 	t2
 

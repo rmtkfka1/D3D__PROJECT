@@ -187,6 +187,9 @@
     <ClInclude Include="Sphere.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClInclude>
+    <ClInclude Include="Sea.h">
+      <Filter>05.GameObject\01.CustomObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -324,6 +327,9 @@
     </ClCompile>
     <ClCompile Include="Sphere.cpp">
       <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Sea.cpp">
+      <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

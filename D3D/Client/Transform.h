@@ -16,13 +16,13 @@ public:
 
 	// Local
 	vec3 GetLocalScale() { return _localScale; }
-	void SetLocalScale(const vec3 localScale) { _localScale = localScale; }
+	void SetLocalScale(const vec3 localScale) { _localScale = localScale; bUpdated = false; }
 
 	vec3 GetLocalRotation() { return _localRotation; }
-	void SetLocalRotation(const vec3 localRotation) { _localRotation = localRotation; }
+	void SetLocalRotation(const vec3 localRotation) { _localRotation = localRotation;  bUpdated = false; }
 
 	vec3 GetLocalPosition() { return _localPosition; }
-	void SetLocalPosition(const vec3 localPosition) { _localPosition = localPosition; }
+	void SetLocalPosition(const vec3 localPosition) { _localPosition = localPosition; bUpdated = false; }
 
 	// World
 	vec3 GetWorldScale() { return _scale; }
@@ -67,6 +67,7 @@ private:
 	vec3 _size{};
 	float _totalRadius{};
 
+	bool bUpdated = false;
 private:
 	weak_ptr<Transform> _parent;
 	vector<shared_ptr<Transform>> _children;

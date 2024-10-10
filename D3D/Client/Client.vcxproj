@@ -196,6 +196,7 @@
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Sea.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="simple_mesh_LH.h" />
     <ClInclude Include="Sphere.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Sea.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="simple_mesh_LH.cpp" />
     <ClCompile Include="Sphere.cpp" />
