@@ -41,16 +41,15 @@ void Game::Run()
 
 void Game::Update()
 {
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Z))
-	{
-		BoxCollider::brender = !BoxCollider::brender;
-	}
 
 
 	TimeManager::GetInstance()->Update();
 	KeyManager::GetInstance()->Update();
 
-
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Z))
+	{
+		BoxCollider::brender = !BoxCollider::brender;
+	}
 }
 
 void Game::Render()

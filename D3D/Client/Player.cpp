@@ -224,11 +224,11 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 		auto up = GetTransform()->GetUp();
 		auto left = -right;
 
-		vector<vec3> directions = { right, left };
+		vector<vec3> directions = { right, left ,up,down};
 
 		shuffle(directions.begin(), directions.end(), g);
 
-		for (int i = 60; i <= 180; i += 10)
+		for (int i = 30; i <= 180; i += 10)
 		{
 			for (const auto& dir : directions)
 			{
