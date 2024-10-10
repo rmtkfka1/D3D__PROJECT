@@ -28,7 +28,7 @@ void Sphere::Init()
 	float scale = random_sclae(dre);
 
 	_transform->SetLocalScale(vec3(scale, scale, scale));
-	_transform->SetLocalPosition(vec3(x, y, z));
+	_transform->SetLocalPosition(vec3( x, y,  z));
 }
 
 void Sphere::Update()

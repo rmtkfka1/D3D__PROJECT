@@ -7,12 +7,10 @@ struct MaterialParams
 {
 	void SetInt(uint8 index, int32 value) { intParams[index] = value; }
 	void Setfloat(uint8 index, float value) { floatParams[index] = value; }
-	void SetMatrix(uint8 index, Matrix& value) { matrixParams[index] = value; }
 
+	array<int32, 2> intParams{};
+	array<float, 2> floatParams{};
 
-	array<int32, 4> intParams{};
-	array<float, 4> floatParams{};
-	array<Matrix, 1> matrixParams{};
 };
 
 
@@ -24,7 +22,7 @@ public:
 
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
-	void SetMatrix(uint8 index, Matrix& value) { _params.SetMatrix(index, value); }
+
 
 	void SetDiffuseTexture(shared_ptr<Texture> texture) { _diffuseTexture = texture; }
 	void SetNormalTexture(shared_ptr<Texture> texture) { _normalTexture = texture; }

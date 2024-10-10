@@ -348,6 +348,9 @@
     <FxCompile Include="..\Resources\Shader\final.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\blendingsea.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">

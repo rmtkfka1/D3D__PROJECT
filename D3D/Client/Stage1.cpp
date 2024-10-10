@@ -73,9 +73,9 @@ void Stage1::BulidLight()
 		Light light;
 
 		light.direction = vec3(0, -1.0f, 0);
-		light.material.ambient = vec3(0.5f, 0.5f, 0.5f);
-		light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
-		light.material.specular = vec3(1.0f, 1.0f, 1.0f);
+		light.material.ambient = vec3(0.3f, 0.3f, 0.3f);
+		light.material.diffuse = vec3(0.3f, 0.3f, 0.3f);
+		light.material.specular = vec3(0.3f, 0.3f, 0.3f);
 		light.material.shininess = 64.0f;
 		light.material.lightType = static_cast<int32>(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light.strength = vec3(1.0f, 1.0f, 1.0f);
@@ -187,5 +187,29 @@ void Stage1::BulidForward()
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
 		AddForwardObject(gameobject);
+	}
+
+
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
+
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"sea.jpg");
+
+		ShaderInfo info;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.blendType = BLEND_TYPE::ONE_TO_ONE_BLEND;
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->Init(L"blendingsea.hlsl", info);
+
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, -3300.0f, 0));
+
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+		AddForwardObject(gameobject);
+
+
 	}
 }

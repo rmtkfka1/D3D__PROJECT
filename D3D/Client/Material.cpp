@@ -36,4 +36,7 @@ void Material::Pushdata()
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t2));
 		core->GetTableHeap()->CopySRV(_SpecularTexture->GetCpuHandle(), reg);
 	}
+
+
+	
 }
