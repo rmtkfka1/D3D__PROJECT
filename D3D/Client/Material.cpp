@@ -19,8 +19,6 @@ Material::~Material()
 void Material::Pushdata()
 {
 
-	
-
 	if (_diffuseTexture)
 	{
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t0));

@@ -5,6 +5,12 @@
 #include "Core.h"
 #include "TimeManager.h"
 #include "RenderTargets.h"
+#include "ResourceManager.h"
+#include "Shader.h"
+#include "Mesh.h"
+#include "Material.h"
+#include "BufferPool.h"
+
 Scene::Scene()
 {
 }
@@ -35,35 +41,33 @@ void Scene::Run()
 {
 
 	core->GetRenderTarget()->ClearDepth();
+	CameraControl();
 
 	core->GetGBuffer()->RenderBegin();
 	DeferredRender();
 	core->GetGBuffer()->RenderEnd();
 
 	core->GetRenderTarget()->RenderBegin();
+	FinalRender(); 
 	ForwardRender();
 	UiObjectRender();
 	core->GetRenderTarget()->RenderEnd();
-
-
 }
 
 void Scene::DeferredRender()
 {
-	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-	CameraManager::GetInstance()->PushData();
 
 	for (auto& ele : _deferredObjects)
 	{
 		ele->Update();
 
-	/*	if (ele->GetFrustumCuling())
+		if (ele->GetFrustumCuling())
 		{
 			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
 			{
 				continue;
 			}
-		}*/
+		}
 
 		ele->Render();
 	}
@@ -72,32 +76,6 @@ void Scene::DeferredRender()
 
 void Scene::ForwardRender()
 {
-
-	//static CameraType type = CameraType::THIRDVIEW;
-
-	//if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
-	//{
-	//	type = CameraType::OBSERVE;
-	//	CameraManager::GetInstance()->ChangeSetting(type);
-	//}
-
-	//if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))
-	//{
-	//	type = CameraType::THIRDVIEW;
-	//}
-
-	//if (type == CameraType::OBSERVE)
-	//{
-	//	CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
-	//}
-
-	//else if (type == CameraType::THIRDVIEW)
-	//{
-	//	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-	//}
-
-	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-	CameraManager::GetInstance()->PushData();
 
 	for (auto& ele : _forwardObjects)
 	{
@@ -126,6 +104,56 @@ void Scene::UiObjectRender()
 		ele->Render();
 	}
 }
+
+void Scene::FinalRender()
+{
+
+
+
+
+	auto& list = core->GetCmdLIst();
+
+	list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
+	shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
+	shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
+
+
+	material->Pushdata();
+	core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);
+	mesh->Render();
+
+}
+void Scene::CameraControl()
+{
+	static CameraType type = CameraType::THIRDVIEW;
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
+	{
+		type = CameraType::OBSERVE;
+		CameraManager::GetInstance()->ChangeSetting(type);
+	}
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))
+	{
+		type = CameraType::THIRDVIEW;
+	}
+
+	if (type == CameraType::OBSERVE)
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
+	}
+
+	else if (type == CameraType::THIRDVIEW)
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+	}
+
+
+	CameraManager::GetInstance()->PushData();
+}
+;
 
 void Scene::LateUpdate()
 {

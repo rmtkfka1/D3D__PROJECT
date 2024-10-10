@@ -36,5 +36,7 @@ private:
 	void DeferredRender();
 	void ForwardRender();
 	void UiObjectRender();
+	void FinalRender();
+	void CameraControl();
 };
 

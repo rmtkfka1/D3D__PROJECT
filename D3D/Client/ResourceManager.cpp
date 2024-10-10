@@ -1,7 +1,27 @@
 #include "pch.h"
 #include "ResourceManager.h"
 #include "Shader.h"
+#include "Mesh.h"
+#include "GeoMetryHelper.h"
+#include "Material.h"
+#include "Core.h"
+#include "RenderTargets.h"
 void ResourceManager::Init()
+{
+	CreateDefaultShader();
+	CreateDefaultMesh();
+	CreateDefaultMaterial();
+}
+
+void ResourceManager::CreateDefaultMesh()
+{
+	{
+		shared_ptr<Mesh> mesh = GeoMetryHelper::LoadRectangleMesh(1.0f);
+		Add<Mesh>(L"finalMesh", mesh);
+	}
+}
+
+void ResourceManager::CreateDefaultShader()
 {
 	{
 		shared_ptr<Shader> shader = make_shared<Shader>();
@@ -13,7 +33,7 @@ void ResourceManager::Init()
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;
 		info.shaderType = ShaderType::DEFREED;
-		shader->Init(L"deferred.hlsl",info);
+		shader->Init(L"deferred.hlsl", info);
 		Add<Shader>(L"deferred.hlsl", shader);
 	}
 
@@ -22,9 +42,47 @@ void ResourceManager::Init()
 		ShaderInfo info;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
+
 		shader->Init(L"sky.hlsl", info);
 		Add<Shader>(L"sky.hlsl", shader);
 	}
 
 
+	{
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		ShaderInfo info =
+		{
+			ShaderType::FORWARD,
+			RASTERIZER_TYPE::CULL_NONE,
+			DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE,
+			BLEND_TYPE::DEFAULT
+		};
+
+		shader->Init(L"final.hlsl", info);
+		Add<Shader>(L"final.hlsl", shader);
+	}
+
+
+}
+
+void ResourceManager::CreateDefaultMaterial()
+{
+
+	shared_ptr<Material> material = make_shared<Material>();
+	material->SetName(L"finalMaterial");
+	material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
+	material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
+	material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2));
+	Add<Material>(L"finalMaterial", material);
+
+}
+
+void ResourceManager::ReGenGbufferMaterial()
+{
+	shared_ptr<Material> material = make_shared<Material>();
+	material->SetName(L"finalMaterial");
+	material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
+	material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
+	material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2));
+	Add<Material>(L"finalMaterial", material);
 }

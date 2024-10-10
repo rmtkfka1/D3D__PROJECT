@@ -93,9 +93,7 @@ void Stage1::BulidCamera()
 
 	shared_ptr<UiCamera> uicamera = make_shared<UiCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::UI, uicamera);
-
 	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-
 
 }
 

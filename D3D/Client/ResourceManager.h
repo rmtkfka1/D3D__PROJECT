@@ -7,6 +7,7 @@ class Texture;
 class Model;
 
 
+
 class ResourceManager
 {
 public:
@@ -17,6 +18,10 @@ public:
     }
 
     void Init();
+    void CreateDefaultMesh();
+    void CreateDefaultShader();
+    void CreateDefaultMaterial();
+    void ReGenGbufferMaterial();
 
     template<typename T, typename... Args>
     shared_ptr<T> Load(const wstring& path, Args&&... args);
@@ -32,6 +37,8 @@ private:
     unordered_map<wstring, shared_ptr<Mesh>> _meshMap;
     unordered_map<wstring, shared_ptr<Texture>> _textureMap;
     unordered_map<wstring, shared_ptr<Model>> _modelMap;
+    unordered_map<wstring, shared_ptr<Material>> _materialMap;
+
 
     template<typename T>
     unordered_map<wstring, shared_ptr<T>>& GetResourceMap();
@@ -69,6 +76,7 @@ inline shared_ptr<T> ResourceManager::Get(const wstring& key)
     if (it != GetResourceMap<T>().end())
         return it->second;
 
+  
     return nullptr; 
 }
 
@@ -90,6 +98,10 @@ unordered_map<wstring, shared_ptr<T>>& ResourceManager::GetResourceMap()
     else if constexpr (is_same_v<T, Model>)
     {
         return _modelMap;
+    }
+    else if constexpr (is_same_v<T, Material>)
+    {
+        return _materialMap;
     }
     else
     {

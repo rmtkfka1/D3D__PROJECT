@@ -287,8 +287,6 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 	//리소스 바인딩을 쉽게해주고있기때문에.
 	//텍스쳐 내부의 Resource 는 사용안할것임.
 
-
-
 	_textrues.resize(3);
 	
 	for (int i = 0; i < _count; ++i)

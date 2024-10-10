@@ -23,7 +23,6 @@ void Game::Init(HWND hwnd)
 
 	//다이렉트 코어 초기화
 	core->Init(hwnd, true, true);
-
 	ResourceManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init(hwnd);
 	SceneManager::GetInstance()->ChangeScene(SceneType::STAGE1);

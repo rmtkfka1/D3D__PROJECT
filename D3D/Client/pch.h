@@ -84,8 +84,8 @@ using Quaternion = DirectX::SimpleMath::Quaternion;
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 
-const uint64 SWAP_CHAIN_FRAME_COUNT = 5;
-const uint64 MAX_FRAME_COUNT = SWAP_CHAIN_FRAME_COUNT - 1;
+const uint32 SWAP_CHAIN_FRAME_COUNT = 4;
+const uint32 MAX_FRAME_COUNT = SWAP_CHAIN_FRAME_COUNT - 1;
 
 #define LOAD(type, path, ...) ResourceManager::GetInstance()->Load<type>(path, __VA_ARGS__)
 
@@ -113,6 +113,6 @@ struct CameraParams
     Matrix matView;
     Matrix matProjection;
 };
-extern unique_ptr<class Core> core;
 
+extern unique_ptr<class Core> core;
 #include "KeyManager.h"
