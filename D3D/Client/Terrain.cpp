@@ -23,7 +23,7 @@ Terrain::~Terrain()
 
 void Terrain::Init()
 {
-    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(30.0f, 10.0f, 30.0f));
+    LoadFIle(L"../Resources/Texture/heightMap/heightMap.raw", vec3(30.0f, 20.0f, 30.0f));
     CreateMesh();
 
     ShaderInfo info;

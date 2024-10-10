@@ -204,7 +204,7 @@ void Stage1::BulidForward()
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		shader->Init(L"blendingsea.hlsl", info);
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(0, -3300.0f, 0));
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, -2500.0f, 0));
 
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
