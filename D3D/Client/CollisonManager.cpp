@@ -85,7 +85,6 @@ void CollisonManager::CheckRayCollusion()
 bool CollisonManager::CheckRayCollusion(Ray ray, shared_ptr<BaseCollider> collider)
 {
 
-
 	float distance = FLT_MAX;
 
 	if (collider->CheckCollusion(ray, distance))

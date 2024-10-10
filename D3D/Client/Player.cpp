@@ -143,7 +143,6 @@ void Player::CollisonUpdate()
 void Player::StartCollisionRotation(vec3 direction,int i)
 {
 
-
 	_look = GetTransform()->GetLook();
 	_dir = direction;
 	_dir.Normalize();
