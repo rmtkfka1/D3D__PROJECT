@@ -49,6 +49,7 @@ void Scene::Run()
 
 	core->GetRenderTarget()->RenderBegin();
 	FinalRender(); 
+	BoundingBoxRender();
 	ForwardRender();
 	UiObjectRender();
 	core->GetRenderTarget()->RenderEnd();
@@ -111,9 +112,6 @@ void Scene::UiObjectRender()
 void Scene::FinalRender()
 {
 
-
-
-
 	auto& list = core->GetCmdLIst();
 
 	list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -128,6 +126,18 @@ void Scene::FinalRender()
 	mesh->Render();
 
 }
+
+void Scene::BoundingBoxRender()
+{
+	if (BaseCollider::brender == false)
+		return;
+
+	for (auto& ele : _deferredObjects)
+	{
+		ele->BoundingRender();
+	}
+}
+
 void Scene::CameraControl()
 {
 	static CameraType type = CameraType::THIRDVIEW;

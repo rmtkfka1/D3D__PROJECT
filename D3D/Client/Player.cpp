@@ -63,7 +63,6 @@ void Player::MoveUpdate()
 {
 
 
-
 	float dt = TimeManager::GetInstance()->GetDeltaTime();
 	auto key = KeyManager::GetInstance();
 

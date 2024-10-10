@@ -10,6 +10,16 @@ GameObject::~GameObject()
 
 }
 
+void GameObject::BoundingRender()
+{
+
+
+	for (auto& ele : _colliders)
+	{
+		ele->Render();
+	}
+}
+
 shared_ptr<BaseCollider>& GameObject::GetCollider()
 {
 	return _colliders[0];

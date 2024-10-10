@@ -27,13 +27,13 @@ void HireacyObject::Init()
 void HireacyObject::Update()
 {
 	
-
 	_transform->GetRoot()->Update();
 
 	for (auto& ele : _colliders)
 	{
 		ele->Update();
 	}
+
 }
 
 void HireacyObject::Render()
@@ -58,10 +58,7 @@ void HireacyObject::Render()
 		data->meshes->Render();
 	}
 
-	for (auto& ele : _colliders)
-	{
-		ele->Render();
-	}
+
 }
 
 void HireacyObject::AddCollider(string name ,ColliderType type, vec3 offsetSize , vec3 offsetCeneter )

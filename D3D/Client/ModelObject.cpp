@@ -29,7 +29,6 @@ void ModelObject::Update()
 {
 	_transform->Update();
 
-
 	for (auto& ele : _colliders)
 	{
 		ele->Update();
@@ -60,10 +59,7 @@ void ModelObject::Render()
 	}
 
 
-	for (auto& ele : _colliders)
-	{
-		ele->Render();
-	}
+
 }
 
 

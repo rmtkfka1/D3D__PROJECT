@@ -42,5 +42,6 @@ public:
 	string _name;
 	weak_ptr<GameObject> _owner;
 	unordered_set<BaseCollider*> _collisionMap;
+	static bool brender;
 };
 

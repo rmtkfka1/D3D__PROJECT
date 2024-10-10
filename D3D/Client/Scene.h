@@ -37,6 +37,8 @@ private:
 	void ForwardRender();
 	void UiObjectRender();
 	void FinalRender();
+	void BoundingBoxRender();
 	void CameraControl();
+	
 };
 

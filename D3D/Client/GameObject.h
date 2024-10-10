@@ -36,6 +36,8 @@ public:
 	virtual void AddCollider(string name, ColliderType type, vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0)) =0;
 	virtual void AddBoxCollider(string name, vec3 size, vec3 center) =0;
 
+	void BoundingRender();
+
 	shared_ptr<BaseCollider>& GetCollider();
 	GameObjectType GetGameObjectType() { return _type; }
 	PlayerType GetPlayerType() { return _playerType; }
