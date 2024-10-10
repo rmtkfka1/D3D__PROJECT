@@ -4,9 +4,9 @@
 #include <random>
 
 static default_random_engine dre;
-static uniform_real_distribution<double> random_xz(-2000.0f, 2000.0f);
+static uniform_real_distribution<double> random_xz(-3000.0f, 3000.0f);
 static uniform_real_distribution<double> random_y(2000.0f, 4000.0f);
-static uniform_real_distribution<double> random_sclae(1.0f, 2.0f);
+static uniform_real_distribution<double> random_sclae(1.0f, 2.5f);
 
 
 Sphere::Sphere() :ModelObject(PlayerType::Sphere)

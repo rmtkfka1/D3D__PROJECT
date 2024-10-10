@@ -214,18 +214,14 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 	if (_collisionDected)
 		return;
 
-	
+	auto now = GetTransform()->GetLocalPosition();
+	auto right = GetTransform()->GetRight();
+	auto down = -GetTransform()->GetUp();
+	auto up = GetTransform()->GetUp();
+	auto left = -right;
 
-	if (collider->GetName() == "raycheck" )
+	if (collider->GetName() == "raycheck" && other->GetName()=="boxbox")
 	{
-
-		int a = 5;
-
-		auto now = GetTransform()->GetLocalPosition();
-		auto right = GetTransform()->GetRight();
-		auto down = -GetTransform()->GetUp();
-		auto up = GetTransform()->GetUp();
-		auto left = -right;
 
 		vector<vec3> directions = { right, left ,up,down};
 
@@ -246,6 +242,29 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 			};
 		}
 	}
+	else
+	{
+		vector<vec3> directions = { right, left };
+
+		shuffle(directions.begin(), directions.end(), g);
+
+		for (int i = 30; i <= 180; i += 10)
+		{
+			for (const auto& dir : directions)
+			{
+				vec3 result = CalculateNextDir(dir, i);
+				Ray rayResult = Ray(now, result);
+
+				if (CollisonManager::GetInstance()->CheckRayCollusion(rayResult, other) == false)
+				{
+					StartCollisionRotation(dir, i);
+					return;
+				}
+			};
+		}
+	}
+
+
 		
 }
 
