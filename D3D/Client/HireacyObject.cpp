@@ -11,6 +11,7 @@
 #include "CollisonManager.h"
 #include "KeyManager.h"
 #include "Shader.h"
+#include "SphereCollider.h"
 HireacyObject::HireacyObject(PlayerType type):GameObject(GameObjectType::Hierarchy)
 {
 	_playerType = type;
@@ -74,6 +75,18 @@ void HireacyObject::AddCollider(string name ,ColliderType type, vec3 offsetSize 
 		box->MakeBoundingBox();
 		CollisonManager::GetInstance()->AddCollider(box);
 		_colliders.push_back(box);
+	}
+	else if (type == ColliderType::Sphere)
+	{
+		shared_ptr<SphereCollider> sphere = make_shared<SphereCollider>();
+		sphere->SetName(name);
+		sphere->SetOwner(shared_from_this());
+		sphere->SetTotalCenter(_model->GetCenter());
+		sphere->SetRadius(_model->GetRadius());
+		GetTransform()->Update();
+		sphere->MakeBoundingSphere();
+		CollisonManager::GetInstance()->AddCollider(sphere);
+		_colliders.push_back(sphere);
 	}
 }
 

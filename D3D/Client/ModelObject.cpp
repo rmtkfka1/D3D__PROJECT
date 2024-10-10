@@ -9,6 +9,7 @@
 #include "BoxCollider.h"
 #include "CollisonManager.h"
 #include "Shader.h"
+#include "SphereCollider.h"
 ModelObject::ModelObject(PlayerType type):GameObject(GameObjectType::Model)
 {
 	_playerType = type;
@@ -77,6 +78,19 @@ void ModelObject::AddCollider(string name, ColliderType type, vec3 offsetSize, v
 		box->MakeBoundingBox();
 		CollisonManager::GetInstance()->AddCollider(box);
 		_colliders.push_back(box);
+	}
+
+	else
+	{
+		shared_ptr<SphereCollider> sphere = make_shared<SphereCollider>();
+		sphere->SetName(name);
+		sphere->SetOwner(shared_from_this());
+		sphere->SetTotalCenter(_model->GetCenter());
+		sphere->SetRadius(_model->GetRadius());
+		GetTransform()->Update();
+		sphere->MakeBoundingSphere();
+		CollisonManager::GetInstance()->AddCollider(sphere);
+		_colliders.push_back(sphere);
 	}
 }
 

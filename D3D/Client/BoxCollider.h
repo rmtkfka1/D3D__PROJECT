@@ -33,7 +33,6 @@ private:
 
 	shared_ptr<Mesh> _mesh; //디버깅용 그려주는 박스
 	vec3 _totalSize;
-	MaterialParams _params;
 
 	static shared_ptr<Shader> _shader;
 

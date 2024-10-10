@@ -8,6 +8,7 @@
 #include "TransformTree.h"
 #include "KeyManager.h"
 #include "BoxCollider.h"
+#include "SphereCollider.h"
 /*************************
 *                        *
 *       Camera           *
@@ -36,7 +37,16 @@ void Camera::PushData()
 
 bool Camera::IsInFrustum(shared_ptr<BaseCollider>& collider)
 {
-	return _boundingFrsutum.Intersects(static_pointer_cast<BoxCollider>(collider)->GetBox());
+	switch (collider->GetColliderType())
+	{
+	case ColliderType::Box:
+		return _boundingFrsutum.Intersects(static_pointer_cast<BoxCollider>(collider)->GetBox());
+	case ColliderType::Sphere:
+		return _boundingFrsutum.Intersects(static_pointer_cast<SphereCollider>(collider)->GetSphere());
+		break;
+	}
+
+	
 }
 
 

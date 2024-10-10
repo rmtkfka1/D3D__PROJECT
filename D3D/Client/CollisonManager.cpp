@@ -36,6 +36,7 @@ void CollisonManager::CheckObjectCollusion()
 		if (_colliders[i]->GetOwner()->GetPlayerType() == PlayerType::Box)
 			continue;
 
+	
 
 		for (int32 j = i + 1; j < _colliders.size(); j++)
 		{

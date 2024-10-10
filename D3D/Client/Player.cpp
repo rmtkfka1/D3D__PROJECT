@@ -214,9 +214,13 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 	if (_collisionDected)
 		return;
 
+	
 
-	if (collider->GetName() == "raycheck" && other->GetName() == "boxbox")
+	if (collider->GetName() == "raycheck" )
 	{
+
+		int a = 5;
+
 		auto now = GetTransform()->GetLocalPosition();
 		auto right = GetTransform()->GetRight();
 		auto down = -GetTransform()->GetUp();

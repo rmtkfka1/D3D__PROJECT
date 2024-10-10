@@ -2,7 +2,7 @@
 <Materials>
     <Material>
         <Name>Material.002</Name>
-        <DiffuseFile></DiffuseFile>
+        <DiffuseFile>1_earth_8k.jpg</DiffuseFile>
         <SpecularFile></SpecularFile>
         <NormalFile></NormalFile>
         <Ambient R="0" G="0" B="0" A="1"/>

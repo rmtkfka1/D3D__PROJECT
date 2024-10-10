@@ -9,15 +9,20 @@
 #include "Model.h"
 #include "TransformTree.h"
 #include "BufferPool.h"
+#include "SphereCollider.h"
 
-shared_ptr<Shader> BoxCollider::_shader = make_shared<Shader>();
+shared_ptr<Shader> BoxCollider::_shader = nullptr;
 
 
 BoxCollider::BoxCollider() :BaseCollider(ColliderType::Box)
 {
-	ShaderInfo info;
-	info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
-	_shader = ResourceManager::GetInstance()->Load<Shader>(L"boundingbox.hlsl", info);
+	if (!_shader)
+	{
+		_shader = make_shared<Shader>();
+		ShaderInfo info;
+		info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
+		_shader = ResourceManager::GetInstance()->Load<Shader>(L"boundingbox.hlsl", info);
+	}
 }
 
 BoxCollider::~BoxCollider()
@@ -40,7 +45,6 @@ void BoxCollider::Update()
 void BoxCollider::Render()
 {
 	
-
 	GetOwner()->GetTransform()->PushData();
 	_shader->SetPipelineState();
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);
@@ -57,6 +61,7 @@ bool BoxCollider::CheckCollusion(shared_ptr<BaseCollider>& other)
 		return _box.Intersects(static_pointer_cast<BoxCollider>(other)->GetBox());
 		break;
 	case ColliderType::Sphere:
+		return _box.Intersects(static_pointer_cast<SphereCollider>(other)->GetSphere());
 		break;
 	default:
 		break;
@@ -122,5 +127,7 @@ void BoxCollider::MakeBoundingBox()
 	index[33] = 6; 	index[34] = 2; 	index[35] = 7;
 
 	_mesh->Init(vec, index);
+
+	Update();
 
 }

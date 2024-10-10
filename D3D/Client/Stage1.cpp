@@ -22,6 +22,7 @@
 #include "KeyManager.h"
 #include "Box.h"
 #include "RenderTargets.h"
+#include "Sphere.h"
 Stage1::Stage1()
 {
 }
@@ -135,13 +136,23 @@ void Stage1::BulidDeferred()
 
 	}
 
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 50; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
 		object->AddCollider("boxbox", ColliderType::Box);
+		AddDeferredObject(object);
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		shared_ptr<Sphere> object = make_shared<Sphere>();
+		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth");
+		object->SetModel(data);
+		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
+		object->AddCollider("sphere", ColliderType::Sphere);
 		AddDeferredObject(object);
 	}
 
