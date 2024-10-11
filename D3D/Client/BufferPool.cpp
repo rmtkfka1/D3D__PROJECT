@@ -66,11 +66,14 @@ void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
 		::memcpy(&_mappedBuffer[0], buffer, size);
 		core->GetCmdLIst()->SetGraphicsRootConstantBufferView(0, _cbvBufferPool->GetGPUVirtualAddress());
 	}
+
 	else if(index ==1) //카메라 계산에 연산될것이므로 오프셋 계산필요함.
 	{
 		::memcpy(&_mappedBuffer[_currentIndex * _elementSize], buffer, size);
+		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = _cbvBufferPool->GetGPUVirtualAddress();
+		objCBAddress += _currentIndex * _elementSize;
+		core->GetCmdLIst()->SetGraphicsRootConstantBufferView(1, objCBAddress);
 		_currentIndex++;
-		core->GetCmdLIst()->SetGraphicsRootConstantBufferView(1, _cbvBufferPool->GetGPUVirtualAddress());
 	}
 
 	else
