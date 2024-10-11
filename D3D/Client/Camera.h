@@ -30,7 +30,7 @@ public:
 	virtual void GenProjMatrix() =0; 
 	virtual void GenBoundingFrustum() =0; 
 
-	virtual void PushData();
+	virtual void SetData();
 
 	bool IsInFrustum(shared_ptr<BaseCollider>& collider);
 

@@ -17,7 +17,7 @@ public:
     void ChangeSetting(CameraType type);
     shared_ptr<Camera> GetActiveCamera() {return _activeCamera;}
 
-    void PushData();
+    void SetData();
 
 private:
     std::unordered_map<CameraType, std::shared_ptr<Camera>> _cameras;

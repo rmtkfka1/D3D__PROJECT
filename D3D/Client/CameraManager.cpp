@@ -43,7 +43,7 @@ void CameraManager::ChangeSetting(CameraType type)
     }
 }
 
-void CameraManager::PushData()
+void CameraManager::SetData()
 {
-    _activeCamera->PushData();
+    _activeCamera->SetData();
 }

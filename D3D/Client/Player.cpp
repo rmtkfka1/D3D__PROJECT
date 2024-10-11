@@ -127,7 +127,7 @@ void Player::RotateUpdate()
 
 void Player::CameraPushData()
 {
-	_camera->PushData();
+	_camera->SetData();
 }
 
 void Player::CollisonUpdate()

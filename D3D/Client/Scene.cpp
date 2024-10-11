@@ -100,7 +100,7 @@ void Scene::ForwardRender()
 void Scene::UiObjectRender()
 {
 	CameraManager::GetInstance()->SetActiveCamera(CameraType::UI);
-	CameraManager::GetInstance()->PushData();
+	CameraManager::GetInstance()->SetData();
 
 	for (auto& ele : _uiObjects)
 	{
@@ -122,7 +122,7 @@ void Scene::FinalRender()
 
 
 	material->Pushdata();
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable(2);
+	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
 	mesh->Render();
 
 }
@@ -164,9 +164,8 @@ void Scene::CameraControl()
 	}
 
 
-	CameraManager::GetInstance()->PushData();
-}
-;
+	CameraManager::GetInstance()->SetData();
+};
 
 void Scene::LateUpdate()
 {

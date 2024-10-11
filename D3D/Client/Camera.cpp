@@ -26,13 +26,11 @@ Camera::~Camera()
 }
 
 
-void Camera::PushData()
+void Camera::SetData()
 {
 	Update(); //각자의 업데이트를 호출
-
 	auto& bufferPool = core->GetCameraBufferPool();
-	bufferPool->PushData(&_params,sizeof(_params));
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable(1);
+	bufferPool->SetData(1,&_params,sizeof(_params));
 }
 
 bool Camera::IsInFrustum(shared_ptr<BaseCollider>& collider)

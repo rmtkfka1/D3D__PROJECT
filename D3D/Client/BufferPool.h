@@ -3,7 +3,6 @@
 
 enum class CBV_REGISTER : uint8
 {
-	b0=0,
 	b2=0,
 	b3=1,
 };
@@ -13,7 +12,6 @@ enum class SRV_REGISTER : uint8
 	t0 = 2,
 	t1,
 	t2
-
 };
 
 
@@ -25,13 +23,13 @@ enum class SRV_REGISTER : uint8
 **************************/
 
 
-
 class ConstantBufferPool
 {
 public:
-	void Init(CBV_REGISTER reg, uint32 size, uint32 count, bool useCamera);
+	void Init(CBV_REGISTER reg, uint32 size, uint32 count);
 	void PushData(void* buffer, uint32 size);
-	void SetData(void* buffer, uint32 size);
+	void SetData(int index ,void* buffer, uint32 size);
+
 	void Clear();
 
 private:
@@ -47,8 +45,6 @@ private:
 
 	uint32					_currentIndex = 0;
 	CBV_REGISTER			_reg = {};
-
-	bool _useCamera=false;
 };
 
 
@@ -93,13 +89,12 @@ class DescriptorTable
 {
 
 public:
-	void Init(uint32 count, uint64 CameraMaxCount);
+	void Init(uint32 count);
 
 	void Clear();
-	void CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle);
 	void CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg);
 	void CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTER reg);
-	void SetGraphicsRootDescriptorTable(int num);
+	void SetGraphicsRootDescriptorTable();
 	ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return _descHeap; }
 
 
@@ -111,9 +106,6 @@ private:
 private:
 	ComPtr<ID3D12DescriptorHeap> _descHeap;
 
-	uint64                  _cameraMaxCount=0;
-	uint64                  _currentCameraIndex=0;
-
 	uint64					_handleSize = 0;
 	uint64					_groupSize = 0;
 	uint64					_groupCount = 0;
@@ -121,8 +113,6 @@ private:
 
 
 };
-
-
 
 
 
