@@ -25,7 +25,7 @@ void Game::Init(HWND hwnd)
 	core->Init(hwnd, true, true);
 	ResourceManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init(hwnd);
-	SceneManager::GetInstance()->ChangeScene(SceneType::STAGE1);
+	SceneManager::GetInstance()->ChangeScene(SceneType::StartScene);
 	TimeManager::GetInstance()->Init(hwnd);
 	CollisonManager::GetInstance()->Init();
 

@@ -19,15 +19,20 @@ public:
 private:
 	void BulidLight();
 	void BulidCamera();
-	void BulidObject();
-
-public:
-	//temp
-	shared_ptr<Player> _player;
-
-private:
 	void BulidDeferred();
 	void BulidForward();
 
+public:
+	shared_ptr<Player> _player;
+
+
+
+private:
+	void DeferredRender();
+	void ForwardRender();
+	void UiObjectRender();
+	void FinalRender();
+	void BoundingBoxRender();
+	void CameraControl();
 };
 

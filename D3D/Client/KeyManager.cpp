@@ -2,7 +2,7 @@
 #include "KeyManager.h"
 #include "Core.h"
 #include "TimeManager.h"
-
+#include "SceneManager.h"
 
 
 void KeyManager::Init(HWND hwnd)
@@ -61,8 +61,7 @@ void KeyManager::KeyUpdate()
 
 void KeyManager::MouseUpdate()
 {
-	
-
+	POINT _mousePos = {};
 	::GetCursorPos(&_mousePos);
 
 	// 화면 중심과의 차이 계산
@@ -73,14 +72,8 @@ void KeyManager::MouseUpdate()
 	_dx = -deltaPosX  * _mouseSpeed;
 	_dy = deltaPosY * _mouseSpeed;
 
-	static bool setCursor = true;
 
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::C))
-	{
-		setCursor = !setCursor;
-	}
-
-	if (setCursor)
+	if (SceneManager::GetInstance()->GetSceneType() == SceneType::STAGE1)
 	{
 		SetCursorPos(static_cast<int>(_centerScreen.x), static_cast<int>(_centerScreen.y));
 	}

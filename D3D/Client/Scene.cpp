@@ -21,6 +21,7 @@ Scene::~Scene()
 
 void Scene::Init()
 {
+	
 	for (auto& ele : _forwardObjects)
 	{
 		ele->Init();
@@ -35,187 +36,99 @@ void Scene::Init()
 	{
 		ele->Init();
 	}
+
 }
+
 
 void Scene::Run()
 {
 
-	core->GetRenderTarget()->ClearDepth();
-	CameraControl();
-
-	core->GetGBuffer()->RenderBegin();
-	DeferredRender();
-	core->GetGBuffer()->RenderEnd();
-
-	core->GetRenderTarget()->RenderBegin();
-	FinalRender(); 
-	BoundingBoxRender();
-	ForwardRender();
-	UiObjectRender();
-	core->GetRenderTarget()->RenderEnd();
 }
 
-void Scene::DeferredRender()
-{
-
-	static int count = 0;
-	for (auto& ele : _deferredObjects)
-	{
-		ele->Update();
-
-		if (ele->GetFrustumCuling())
-		{
-			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
-			{
-				continue;
-			}
-		}
-
-		count++;
-		ele->Render();
-	}
-
-	TimeManager::GetInstance()->_objectCount = count;
-	count = 0;
-}
-
-void Scene::ForwardRender()
-{
-	for (auto& ele : _forwardObjects)
-	{
-		ele->Update();
-
-		if (ele->GetFrustumCuling())
-		{
-			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
-			{
-				continue;
-			}
-		}
-
-		ele->Render();
-	}
-}
-
-void Scene::UiObjectRender()
-{
-	CameraManager::GetInstance()->SetActiveCamera(CameraType::UI);
-	CameraManager::GetInstance()->SetData();
-
-	for (auto& ele : _uiObjects)
-	{
-		ele->Update();
-		ele->Render();
-	}
-}
-
-void Scene::FinalRender()
-{
-
-	auto& list = core->GetCmdLIst();
-
-	list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
-	shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
-	shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
-
-
-	material->Pushdata();
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
-	mesh->Render();
-
-}
-
-void Scene::BoundingBoxRender()
-{
-	if (BaseCollider::brender == false)
-		return;
-
-	for (auto& ele : _deferredObjects)
-	{
-		ele->BoundingRender();
-	}
-}
-
-void Scene::CameraControl()
-{
-	static CameraType type = CameraType::THIRDVIEW;
-
-	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
-	{
-		type = CameraType::OBSERVE;
-		CameraManager::GetInstance()->ChangeSetting(type);
-	}
-
-	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))
-	{
-		type = CameraType::THIRDVIEW;
-	}
-
-	if (type == CameraType::OBSERVE)
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
-	}
-
-	else if (type == CameraType::THIRDVIEW)
-	{
-		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-	}
-
-
-	CameraManager::GetInstance()->SetData();
-};
 
 void Scene::LateUpdate()
 {
 	while (!_reserveAddQueue.empty())
 	{
-		shared_ptr<GameObject> element = _reserveAddQueue.front();
-		AddForwardObject(element);
+		auto& [object,type] = _reserveAddQueue.front();
+		AddGameObject(object,type);
 		_reserveAddQueue.pop();
 	}
 
 	while (!_reserveDeleteQueue.empty())
 	{
-		shared_ptr<GameObject> element = _reserveDeleteQueue.front();
-		DeleteGameObject(element);
+		auto& [object, type] = _reserveAddQueue.front();
+		DeleteGameObject(object, type);
 		_reserveDeleteQueue.pop();
 	}
 }
 
-void Scene::ReserveAddGameObject(shared_ptr<GameObject> object)
+void Scene::ReserveAddGameObject(const shared_ptr<GameObject>& object,RenderingType type)
 {
-	_reserveAddQueue.push(object);
+	_reserveAddQueue.push(make_pair(object,type));
+
 }
 
-void Scene::ReserveDeleteGameObject(shared_ptr<GameObject> object)
+void Scene::ReserveDeleteGameObject(const shared_ptr<GameObject>& object,RenderingType type)
 {
-	_reserveDeleteQueue.push(object);
+	_reserveDeleteQueue.push(make_pair(object, type));
 }
 
-void Scene::AddForwardObject(shared_ptr<GameObject> object)
+
+
+
+void Scene::AddGameObject(const shared_ptr<GameObject>& object, RenderingType type)
 {
-	_forwardObjects.push_back(object);
+	switch (type)
+	{
+	case RenderingType::Deferred:
+		_deferredObjects.push_back(object);
+		break;
+	case RenderingType::Forward:
+		_forwardObjects.push_back(object);	
+		break;
+	case RenderingType::Ui:
+		_uiObjects.push_back(object);	
+		break;
+	default:
+		break;
+	}
+
 }
 
-void Scene::AddUiObject(shared_ptr<GameObject> object)
-{
-	_uiObjects.push_back(object);
-}
 
-void Scene::AddDeferredObject(shared_ptr<GameObject> object)
-{
-	_deferredObjects.push_back(object);
-}
 
-void Scene::DeleteGameObject(shared_ptr<GameObject> object)
+void Scene::DeleteGameObject(const shared_ptr<GameObject>& object, RenderingType type)
 {
 	if (object == nullptr)
 		return;
 
-	auto it = std::remove(_forwardObjects.begin(), _forwardObjects.end(), object);
-	_forwardObjects.erase(it, _forwardObjects.end());
+	switch (type)
+	{
+	case RenderingType::Deferred:
+	{
+		auto it = std::remove(_deferredObjects.begin(), _deferredObjects.end(), object);
+		_deferredObjects.erase(it, _deferredObjects.end());
+	}
+		break;
+	case RenderingType::Forward:
+	{
+		auto it = std::remove(_forwardObjects.begin(), _forwardObjects.end(), object);
+		_forwardObjects.erase(it, _forwardObjects.end());
+	}
+		break;
+	case RenderingType::Ui:
+	{
+		auto it = std::remove(_uiObjects.begin(), _uiObjects.end(), object);
+		_uiObjects.erase(it, _uiObjects.end());
+	}
+		break;
+	default:
+		break;
+	}
+
+
+
 }
 
 

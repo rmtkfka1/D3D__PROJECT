@@ -4,6 +4,7 @@
 enum class SceneType
 {
 	NONE,
+	StartScene,
 	STAGE1,
 	STAGE2,
 

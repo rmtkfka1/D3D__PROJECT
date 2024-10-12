@@ -24,6 +24,9 @@
 #include "RenderTargets.h"
 #include "Sphere.h"
 #include "Sea.h"
+#include "BufferPool.h"
+#include "TimeManager.h"
+
 Stage1::Stage1()
 {
 }
@@ -35,15 +38,32 @@ Stage1::~Stage1()
 void Stage1::Init()
 {
 	BulidCamera();
-	BulidObject();
+	BulidDeferred();
+	BulidForward();
 	BulidLight();
-	Scene::Init();
+	Scene::Init(); //ObjectInit
 }
+
+
 
 void Stage1::Run()
 {
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
+
+	core->GetRenderTarget()->ClearDepth();
+	CameraControl();
+
+	core->GetGBuffer()->RenderBegin();
+	DeferredRender();
+	core->GetGBuffer()->RenderEnd();
+
+	core->GetRenderTarget()->RenderBegin();
+	FinalRender();
+	BoundingBoxRender();
+	ForwardRender();
+	UiObjectRender();
+	core->GetRenderTarget()->RenderEnd();
 }
 
 void Stage1::LateUpdate()
@@ -85,6 +105,8 @@ void Stage1::BulidLight()
 
 };
 
+
+
 void Stage1::BulidCamera()
 {
 	shared_ptr<ThirdPersonCamera> thirdCamera = make_shared<ThirdPersonCamera>();
@@ -96,20 +118,11 @@ void Stage1::BulidCamera()
 	shared_ptr<UiCamera> uicamera = make_shared<UiCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::UI, uicamera);
 	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
-
-}
-
-void Stage1::BulidObject()
-{
-	
-	BulidDeferred();
-	BulidForward();
-
-	
-}
+};
 
 void Stage1::BulidDeferred()
 {
+
 
 	{
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter");
@@ -132,8 +145,8 @@ void Stage1::BulidDeferred()
 		terrain->SetFrustumCuling(false);
 		player->SetTerrain(terrain);
 
-		AddDeferredObject(player);
-		AddForwardObject(terrain);
+		AddGameObject(player, RenderingType::Deferred);
+		AddGameObject(terrain,RenderingType::Forward);
 
 	}
 
@@ -144,7 +157,7 @@ void Stage1::BulidDeferred()
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
 		object->AddCollider("boxbox", ColliderType::Box);
-		AddDeferredObject(object);
+		AddGameObject(object, RenderingType::Deferred);
 	}
 
 	for (int i = 0; i < 10; ++i)
@@ -154,7 +167,7 @@ void Stage1::BulidDeferred()
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
 		object->AddCollider("sphere", ColliderType::Sphere);
-		AddDeferredObject(object);
+		AddGameObject(object, RenderingType::Deferred);
 	}
 
 }
@@ -162,16 +175,16 @@ void Stage1::BulidDeferred()
 void Stage1::BulidForward()
 {
 
+
 	for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
-
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
-		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"default.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishader.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
 		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
 		object->GetTransform()->SetLocalPosition(vec3(-260.0 + 70.0f * i, 250.0f, 1.0f));
-		AddUiObject(object);
+		AddGameObject(object, RenderingType::Ui);
 	}
 
 	{
@@ -187,7 +200,7 @@ void Stage1::BulidForward()
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
-		AddForwardObject(gameobject);
+		AddGameObject(gameobject,RenderingType::Forward);
 	}
 
 
@@ -209,8 +222,119 @@ void Stage1::BulidForward()
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
-		AddForwardObject(gameobject);
-
-
+		AddGameObject(gameobject, RenderingType::Forward);
 	}
 }
+
+
+void Stage1::DeferredRender()
+{
+
+	static int count = 0;
+	for (auto& ele : _deferredObjects)
+	{
+		ele->Update();
+
+		if (ele->GetFrustumCuling())
+		{
+			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
+			{
+				continue;
+			}
+		}
+
+		count++;
+		ele->Render();
+	}
+
+	TimeManager::GetInstance()->_objectCount = count;
+	count = 0;
+}
+
+void Stage1::ForwardRender()
+{
+	for (auto& ele : _forwardObjects)
+	{
+		ele->Update();
+
+		if (ele->GetFrustumCuling())
+		{
+			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
+			{
+				continue;
+			}
+		}
+
+		ele->Render();
+	}
+}
+
+void Stage1::UiObjectRender()
+{
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::UI);
+	CameraManager::GetInstance()->SetData();
+
+	for (auto& ele : _uiObjects)
+	{
+		ele->Update();
+		ele->Render();
+	}
+}
+
+void Stage1::FinalRender()
+{
+
+	auto& list = core->GetCmdLIst();
+
+	list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
+	shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
+	shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
+
+
+	material->Pushdata();
+	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
+	mesh->Render();
+
+}
+
+void Stage1::BoundingBoxRender()
+{
+	if (BaseCollider::brender == false)
+		return;
+
+	for (auto& ele : _deferredObjects)
+	{
+		ele->BoundingRender();
+	}
+}
+
+void Stage1::CameraControl()
+{
+	static CameraType type = CameraType::THIRDVIEW;
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::ONE))
+	{
+		type = CameraType::OBSERVE;
+		CameraManager::GetInstance()->ChangeSetting(type);
+	}
+
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::THREE))
+	{
+		type = CameraType::THIRDVIEW;
+	}
+
+	if (type == CameraType::OBSERVE)
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::OBSERVE);
+	}
+
+	else if (type == CameraType::THIRDVIEW)
+	{
+		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+	}
+
+
+	CameraManager::GetInstance()->SetData();
+};

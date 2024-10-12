@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Stage1.h"
+#include "StartScene.h"
+
 void SceneManager::Init()
 {
 	if (_scene)
@@ -33,6 +35,9 @@ void SceneManager::ChangeScene(SceneType type)
 
 	switch (type)
 	{
+	case::SceneType::StartScene:
+		_scene = make_shared<StartScene>();
+		break;
 	case SceneType::STAGE1:
 		_scene = make_shared<Stage1>();
 		break;
