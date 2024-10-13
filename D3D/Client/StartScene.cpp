@@ -122,7 +122,7 @@ void StartScene::MouseUpdate()
 	//WCHAR wchTxt[64];
 	//swprintf_s(wchTxt, 64, L"x: %d, y: %d (Normalized: %.2f, %.2f)", mousePos.x, mousePos.y, normalizedX, normalizedY);
 	//SetWindowText(core->GetWindowHandle(), wchTxt);
-
+	 
 }
 
 void StartScene::Run()

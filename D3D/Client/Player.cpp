@@ -78,7 +78,7 @@ void Player::MoveUpdate()
 			_camera->AddMove(diection * _speed * dt);
 		}
 
-		if (key->GetButton(KEY_TYPE::S))
+	/*	if (key->GetButton(KEY_TYPE::S))
 		{
 			_transform->GetRoot()->AddMove(-(diection * _speed * dt));
 			_camera->AddMove(diection * _speed * dt);
@@ -94,7 +94,7 @@ void Player::MoveUpdate()
 		{
 			_transform->GetRoot()->AddMove(-(right * _speed * dt));
 			_camera->AddMove(diection * _speed * dt);
-		}
+		}*/
 	}
 	
 

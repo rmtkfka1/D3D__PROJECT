@@ -94,7 +94,7 @@ void Stage1::BulidLight()
 		Light light;
 
 		light.direction = vec3(0, -1.0f, 0);
-		light.material.ambient = vec3(0.35f, 0.35f, 0.35f);
+		light.material.ambient = vec3(0.6f, 0.6f, 0.6f);
 		light.material.diffuse = vec3(0.6f, 0.6f, 0.6f);
 		light.material.specular = vec3(0.6f, 0.6f, 0.6f);
 		light.material.shininess = 64.0f;
@@ -183,7 +183,7 @@ void Stage1::BulidForward()
 		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishader.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
 		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
-		object->GetTransform()->SetLocalPosition(vec3(-800.0f + 200.0f * i, 400.0f, 1.0f));
+		object->GetTransform()->SetLocalPosition(vec3(-850.0f + 200.0f * i, 400.0f, 1.0f));
 		AddGameObject(object, RenderingType::Ui);
 	}
 
