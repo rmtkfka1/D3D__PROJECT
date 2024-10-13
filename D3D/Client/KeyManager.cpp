@@ -64,6 +64,8 @@ void KeyManager::MouseUpdate()
 	POINT _mousePos = {};
 	::GetCursorPos(&_mousePos);
 
+
+
 	// 화면 중심과의 차이 계산
 	float deltaPosX = static_cast<float>(_mousePos.x - _centerScreen.x);
 	float deltaPosY = static_cast<float>(_mousePos.y - _centerScreen.y);

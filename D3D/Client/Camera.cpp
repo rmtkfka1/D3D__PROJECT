@@ -205,12 +205,19 @@ void ObserveCamera::MouseUpdate()
 	_cameraRight = _cameraRight.TransformNormal(caemraRight, Matrix::CreateFromYawPitchRoll(-XMConvertToRadians(accmulate.x), XMConvertToRadians(accmulate.y), 0));
 }
 
+/*************************
+*                        *
+*     UiCamera           *
+*                        *
+**************************/
+
+
 UiCamera::UiCamera() :Camera(CameraType::UI)
 {
 	_cameraPos = vec3(0, 0, -100.0f);
 	_cameraLook = vec3(0, 0, 1.0f);
 	_cameraUp = vec3(0, 1.0f, 0);
-	_near = 0.1f;
+	_near = 0.01f;
 	_far = 3000.0f;
 };
 
@@ -233,7 +240,7 @@ void UiCamera::GenViewMatrix()
 
 void UiCamera::GenProjMatrix()
 {
-	_params.matProjection = XMMatrixOrthographicLH(600, 600, _near, _far);
+	_params.matProjection = XMMatrixOrthographicLH(1920, 1080, _near, _far);
 }
 
 void UiCamera::GenBoundingFrustum()

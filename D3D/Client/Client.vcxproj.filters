@@ -366,6 +366,9 @@
     <FxCompile Include="..\Resources\Shader\uishader.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\uishaderClip.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">

@@ -382,18 +382,6 @@ void Model::BindCacheInfo()
 	{
 		_root = _boneData[0];
 
-		for (const auto& bone : _boneData)
-		{
-			if (bone->parentIndex >= 0)
-			{
-				bone->parent = _boneData[bone->parentIndex];
-				bone->parent.lock()->children.push_back(bone);
-			}
-			else
-			{
-				bone->parent.lock() = nullptr;
-			}
-		}
 	}
 }
 

@@ -11,8 +11,6 @@ struct ModelBone
 	int32 parentIndex;
 	Matrix transformData;
 
-	weak_ptr<ModelBone> parent; // Cache
-	vector<shared_ptr<ModelBone>> children; // Cache
 };
 
 

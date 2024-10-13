@@ -1,5 +1,9 @@
 #pragma once
 #include "Scene.h"
+
+class CustomObject;
+
+
 class StartScene : public Scene
 {
 
@@ -17,5 +21,6 @@ private:
 
 public:
 
+	shared_ptr<CustomObject> temp;
 };
 

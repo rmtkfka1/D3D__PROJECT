@@ -11,6 +11,16 @@ cbuffer TEST_B1 : register(b2)
     row_major matrix WorldMat;
 };
 
+
+cbuffer materialparams : register(b3)
+{
+    int intparams1;
+    int intparams2;
+    float floatparams1;
+    float floatparams2;
+};
+
+
 Texture2D g_tex_0 : register(t0);
 SamplerState g_sam_0 : register(s0);
 
@@ -42,9 +52,21 @@ VS_OUT VS_Main(VS_IN input)
 
 float4 PS_Main(VS_OUT input) : SV_Target
 {
+    if (intparams1==0)
+    {
     
+        float4 color = g_tex_0.Sample(g_sam_0, input.uv);
+        float luminance = dot(color.rgb, float3(0.299, 0.587, 0.114));
+        clip(luminance - 0.2);
+        return color;
+    }
     
-    float4 color = g_tex_0.Sample(g_sam_0, input.uv);
-   
-    return color;
+    else
+    {
+
+        float4 color = g_tex_0.Sample(g_sam_0, input.uv);
+        float luminance = dot(color.rgb, float3(0.299, 0.587, 0.114));
+        clip(luminance - 0.9f);
+        return color * float4(1, 0, 0, 0);
+    }
 }

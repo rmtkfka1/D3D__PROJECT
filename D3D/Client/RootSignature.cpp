@@ -27,7 +27,7 @@ void RootSignature::Init()
 		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 0) //t0,t1,t2
 	};
 
-	// 루트 파라미터 정의
+	
 	CD3DX12_ROOT_PARAMETER param[3];
 	param[0].InitAsConstantBufferView(0);  //라이팅 b0
 	param[1].InitAsConstantBufferView(1);  //카메라 b1

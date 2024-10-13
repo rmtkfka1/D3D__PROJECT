@@ -182,8 +182,8 @@ void Stage1::BulidForward()
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
 		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishader.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
-		object->GetTransform()->SetLocalScale(vec3(1.0f, 1.0f, 1.0f));
-		object->GetTransform()->SetLocalPosition(vec3(-260.0 + 70.0f * i, 250.0f, 1.0f));
+		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
+		object->GetTransform()->SetLocalPosition(vec3(-800.0f + 200.0f * i, 400.0f, 1.0f));
 		AddGameObject(object, RenderingType::Ui);
 	}
 
@@ -224,6 +224,8 @@ void Stage1::BulidForward()
 
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
+
+
 }
 
 
