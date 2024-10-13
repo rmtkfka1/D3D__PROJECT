@@ -6,7 +6,7 @@
 static default_random_engine dre;
 static uniform_real_distribution<double> random_xz(-3000.0f, 3000.0f);
 static uniform_real_distribution<double> random_y(3000.0f, 5000.0f);
-static uniform_real_distribution<double> random_sclae(1.0f, 2.5f);
+static normal_distribution <double> random_sclae(1.0f, 2.5f);
 
 
 Sphere::Sphere() :ModelObject(PlayerType::Sphere)
@@ -28,7 +28,7 @@ void Sphere::Init()
 	float scale = random_sclae(dre);
 
 	_transform->SetLocalScale(vec3(scale, scale, scale));
-	_transform->SetLocalPosition(vec3( x, y,  z));
+	_transform->SetLocalPosition(vec3(x-500.f, y+500.0f,  z));
 }
 
 void Sphere::Update()
