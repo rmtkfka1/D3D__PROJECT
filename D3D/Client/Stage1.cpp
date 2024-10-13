@@ -150,7 +150,7 @@ void Stage1::BulidDeferred()
 
 	}
 
-	for (int i = 0; i < 50; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box");

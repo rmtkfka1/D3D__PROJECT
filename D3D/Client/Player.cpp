@@ -242,6 +242,7 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 			};
 		}
 	}
+
 	else
 	{
 		vector<vec3> directions = { right, left };
