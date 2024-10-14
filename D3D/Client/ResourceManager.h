@@ -5,7 +5,7 @@ class Mesh;
 class Shader;
 class Texture;
 class Model;
-
+class GameObject;
 
 
 class ResourceManager
@@ -21,7 +21,6 @@ public:
     void CreateDefaultMesh();
     void CreateDefaultShader();
     void CreateDefaultMaterial();
-    void ReGenGbufferMaterial();
 
     template<typename T, typename... Args>
     shared_ptr<T> Load(const wstring& path, Args&&... args);
@@ -38,7 +37,7 @@ private:
     unordered_map<wstring, shared_ptr<Texture>> _textureMap;
     unordered_map<wstring, shared_ptr<Model>> _modelMap;
     unordered_map<wstring, shared_ptr<Material>> _materialMap;
-
+    unordered_map<wstring, shared_ptr<GameObject>> _gameObjectMap;
 
     template<typename T>
     unordered_map<wstring, shared_ptr<T>>& GetResourceMap();
@@ -102,6 +101,10 @@ unordered_map<wstring, shared_ptr<T>>& ResourceManager::GetResourceMap()
     else if constexpr (is_same_v<T, Material>)
     {
         return _materialMap;
+    }
+    else if constexpr (is_same_v<T, GameObject>)
+    {
+        return _gameObjectMap;
     }
     else
     {

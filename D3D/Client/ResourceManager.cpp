@@ -6,6 +6,9 @@
 #include "Material.h"
 #include "Core.h"
 #include "RenderTargets.h"
+#include "GameObject.h"
+#include "CustomObject.h"
+
 void ResourceManager::Init()
 {
 	CreateDefaultShader();
@@ -77,12 +80,3 @@ void ResourceManager::CreateDefaultMaterial()
 
 }
 
-void ResourceManager::ReGenGbufferMaterial()
-{
-	/*shared_ptr<Material> material = make_shared<Material>();
-	material->SetName(L"finalMaterial");
-	material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
-	material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
-	material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2));
-	Add<Material>(L"finalMaterial", material);*/
-}

@@ -291,7 +291,11 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 	
 	for (int i = 0; i < _count; ++i)
 	{
-		_textrues[i] = make_shared<Texture>();
+		if (_textrues[i] == nullptr) //처음생성시에만 초기화 만들어줌 Resize Buffer 시 핸들복사만일어나도록
+		{
+			_textrues[i] = make_shared<Texture>();
+		}
+
 		_textrues[i]->SetSrvHandle(_srvHandle[i]);
 	}
 
@@ -327,6 +331,9 @@ void GBuffer::RenderEnd()
 		list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resources[i].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
 	}
 }
+
+
+
 
 shared_ptr<Texture> GBuffer::GetTexture(int32 index)
 {

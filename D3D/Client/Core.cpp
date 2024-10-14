@@ -185,7 +185,6 @@ void Core::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 
 	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
 	_GBuffer->Init(_renderTargets->GetDSVHeap());
-	ResourceManager::GetInstance()->ReGenGbufferMaterial();
 }
 
 
