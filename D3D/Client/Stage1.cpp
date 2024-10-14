@@ -64,6 +64,9 @@ void Stage1::Run()
 	ForwardRender();
 	UiObjectRender();
 	core->GetRenderTarget()->RenderEnd();
+
+
+
 }
 
 void Stage1::LateUpdate()

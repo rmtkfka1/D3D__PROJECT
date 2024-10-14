@@ -4,6 +4,7 @@ class MeshRenderer;
 class Transform;
 class BaseCollider;
 class Shader;
+class Material;
 
 enum class GameObjectType
 {

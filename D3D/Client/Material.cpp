@@ -52,12 +52,9 @@ void Material::Pushdata()
 		_params.SetTexon(2, 0);
 	}
 
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Q))
-	{
-		_params.padding = -_params.padding;
-	}
 
-	
+
+
 	core->GetMaterialParamsBufferPool()->PushData(&_params, sizeof(_params));
 	
 }

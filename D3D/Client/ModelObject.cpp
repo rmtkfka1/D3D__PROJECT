@@ -65,6 +65,8 @@ void ModelObject::Render()
 
 
 
+
+
 void ModelObject::AddCollider(string name, ColliderType type, vec3 offsetSize, vec3 offsetCeneter)
 {
 	if (type == ColliderType::Box)

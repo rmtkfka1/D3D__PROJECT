@@ -31,6 +31,8 @@ public:
 
 	void Pushdata();
 
+	void AllPadingInverse() { _params.padding *= -1; }
+
 private:
 	shared_ptr<Texture> _diffuseTexture;
 	shared_ptr<Texture> _normalTexture;

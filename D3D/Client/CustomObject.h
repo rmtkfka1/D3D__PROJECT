@@ -21,13 +21,12 @@ public:
 	virtual void Render() override;
 	virtual shared_ptr<Transform> GetTransform() override { return _transform; }
 
-
 	virtual void AddCollider(string name, ColliderType type, vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0));
 	virtual void AddBoxCollider(string name, vec3 size, vec3 center) override;
 public:
 
 	shared_ptr<Mesh>& GetMesh() { return _mesh; }
-	shared_ptr<Material>& GetMaterial() { return _material; }
+    shared_ptr<Material>& GetMaterial() { return _material; }
 
 
 	void SetMesh(shared_ptr<Mesh> mesh) { _mesh = mesh; }

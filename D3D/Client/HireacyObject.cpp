@@ -108,6 +108,8 @@ shared_ptr<Transform> HireacyObject::GetTransform()
 	return _transform->GetRoot();
 }
 
+
+
 void HireacyObject::SetModel(shared_ptr<Model> model)
 {
 	_model = model;

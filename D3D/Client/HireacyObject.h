@@ -5,7 +5,7 @@ class Model;
 class TransformTree;
 class Transform;
 class Shader;
-
+class Material;
 
 class HireacyObject :public GameObject
 {
@@ -22,6 +22,7 @@ public:
 	virtual void AddBoxCollider(string name, vec3 size, vec3 center) override;
 
 	virtual shared_ptr<Transform> GetTransform() override;
+
 	void SetModel(shared_ptr< Model> model);
 
 

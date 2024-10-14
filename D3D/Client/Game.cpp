@@ -15,7 +15,7 @@
 #include "BoxCollider.h"
 #include "CameraManager.h"
 #include "ResourceManager.h"
-
+#include "Material.h"
 void Game::Init(HWND hwnd)
 {
 
@@ -50,6 +50,8 @@ void Game::Update()
 	{
 		BoxCollider::brender = !BoxCollider::brender;
 	}
+
+
 }
 
 void Game::Render()
