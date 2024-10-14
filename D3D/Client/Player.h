@@ -36,7 +36,7 @@ private:
 	shared_ptr<Terrain> _terrain;
 	shared_ptr<ThirdPersonCamera> _camera;
 
-	float _speed = 200.0f;
+	float _speed = 600.0f;
 	float _rotationSpeed = 120.0f;
 	bool _collisionDected = false;
 	vec3 _dir = vec3(1.0f,0,0);

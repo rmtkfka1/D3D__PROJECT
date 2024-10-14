@@ -96,6 +96,7 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
         output.normal = float4(mul(tangentSpaceNormal, matTBN), 0.0f);
     }
 
+
     return output;
 
 }
