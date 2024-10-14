@@ -78,6 +78,20 @@ void Model::ReadMaterial(wstring filename)
 			}
 		}
 
+		// Normal Texture
+		node = node->NextSiblingElement();
+		if (node->GetText())
+		{
+			wstring textureStr = Utils::ToWString(node->GetText());
+			if (textureStr.length() > 0)
+			{
+				auto texture = ResourceManager::GetInstance()->Load<Texture>((lastname / textureStr).wstring());
+				texture->SetName(textureStr);
+				material->SetNormalTexture(texture);
+			}
+		}
+
+
 		// Specular Texture
 		node = node->NextSiblingElement();
 		if (node->GetText())
@@ -88,23 +102,10 @@ void Model::ReadMaterial(wstring filename)
 				wstring textureStr = Utils::ToWString(node->GetText());
 				if (textureStr.length() > 0)
 				{
-					auto texture = ResourceManager::GetInstance()->Load<Texture>((parentPath / textureStr).wstring());
+					auto texture = ResourceManager::GetInstance()->Load<Texture>((lastname / textureStr).wstring());
 					texture->SetName(textureStr);
 					material->SetSpecularTexture(texture);
 				}
-			}
-		}
-
-		// Normal Texture
-		node = node->NextSiblingElement();
-		if (node->GetText())
-		{
-			wstring textureStr = Utils::ToWString(node->GetText());
-			if (textureStr.length() > 0)
-			{
-				auto texture = ResourceManager::GetInstance()->Load<Texture>((parentPath / textureStr).wstring());
-				texture->SetName(textureStr);
-				material->SetNormalTexture(texture);
 			}
 		}
 

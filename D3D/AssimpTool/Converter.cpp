@@ -393,13 +393,13 @@ void Converter::ReadMaterialData()
 		srcMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &file);
 		material->diffuseFile = file.C_Str();
 
-		// Specular Texture
-		srcMaterial->GetTexture(aiTextureType_SPECULAR, 0, &file);
-		material->specularFile = file.C_Str();
-
 		// Normal Texture
 		srcMaterial->GetTexture(aiTextureType_NORMALS, 0, &file);
 		material->normalFile = file.C_Str();
+
+		// Specular Texture
+		srcMaterial->GetTexture(aiTextureType_SPECULAR, 0, &file);
+		material->specularFile = file.C_Str();
 
 		_materials.push_back(material);
 	}
@@ -438,12 +438,12 @@ void Converter::WriteMaterialData(wstring finalPath)
 		element->SetText(WriteTexture(folder, material->diffuseFile).c_str());
 		node->LinkEndChild(element);
 
-		element = document->NewElement("SpecularFile");
-		element->SetText(WriteTexture(folder, material->specularFile).c_str());
-		node->LinkEndChild(element);
-
 		element = document->NewElement("NormalFile");
 		element->SetText(WriteTexture(folder, material->normalFile).c_str());
+		node->LinkEndChild(element);
+
+		element = document->NewElement("SpecularFile");
+		element->SetText(WriteTexture(folder, material->specularFile).c_str());
 		node->LinkEndChild(element);
 
 		element = document->NewElement("Ambient");

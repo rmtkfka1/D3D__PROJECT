@@ -17,13 +17,13 @@ cbuffer materialparams : register(b3)
     float floatparams1;
     float floatparams2;
     int diffuseOn;
-    int specOn;
     int NormalOn;
+    int specOn;
     int padding;
 };
 
 Texture2D diffuseTexture : register(t0);
-Texture2D normalTexture : register(t2);
+Texture2D normalTexture : register(t1);
 SamplerState g_sam_0 : register(s0);
 
 struct VS_IN
@@ -59,7 +59,7 @@ VS_OUT VS_Main(VS_IN input)
     
     output.worldNormal = normalize(mul(float4(input.normal, 0.0f), WorldMat).xyz);
     output.worldTangent = normalize(mul(float4(input.tangent, 0.0f), WorldMat).xyz);
-    output.worldBinormal = normalize(cross(output.worldTangent, output.worldNormal));
+    output.worldBinormal = normalize(cross(output.worldNormal,output.worldTangent ));
     
     
     return output;
@@ -82,7 +82,7 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     output.color = diffuseTexture.Sample(g_sam_0, input.uv);
     output.normal = float4(input.worldNormal, 0.0f);
     
-    if (NormalOn)
+    if (NormalOn && padding ==1)
     {
         // [0,255] 범위에서 [0,1]로 변환
         float3 tangentSpaceNormal = normalTexture.Sample(g_sam_0, input.uv).xyz;
@@ -91,7 +91,6 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
         float3x3 matTBN = { input.worldTangent, input.worldBinormal, input.worldNormal };
         output.normal = float4(mul(tangentSpaceNormal, matTBN), 0.0f);
     }
-
 
     return output;
 

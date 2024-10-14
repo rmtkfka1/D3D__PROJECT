@@ -3,8 +3,8 @@
     <Material>
         <Name>Material.002</Name>
         <DiffuseFile>1_earth_8k.jpg</DiffuseFile>
-        <SpecularFile></SpecularFile>
         <NormalFile></NormalFile>
+        <SpecularFile></SpecularFile>
         <Ambient R="0" G="0" B="0" A="1"/>
         <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
         <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="36"/>

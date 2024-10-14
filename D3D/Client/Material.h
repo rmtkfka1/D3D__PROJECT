@@ -12,7 +12,7 @@ struct MaterialParams
 	array<int32, 2> intParams{0};
 	array<float, 2> floatParams{0};
 	array<int, 3> TextureParams{0};
-	int padding=0;
+	int padding=1;
 };
 
 
@@ -25,9 +25,9 @@ public:
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
 
-	void SetDiffuseTexture(shared_ptr<Texture> texture) { _diffuseTexture = texture; _params.SetTexon(0, 1); }
-	void SetSpecularTexture(shared_ptr<Texture> texture) { _SpecularTexture = texture;  _params.SetTexon(1, 1);}
-	void SetNormalTexture(shared_ptr<Texture> texture) { _normalTexture = texture; _params.SetTexon(2, 1); }
+	void SetDiffuseTexture(shared_ptr<Texture> texture) { _diffuseTexture = texture; }
+	void SetNormalTexture(shared_ptr<Texture> texture) { _normalTexture = texture; }
+	void SetSpecularTexture(shared_ptr<Texture> texture) { _SpecularTexture = texture; }
 
 	void Pushdata();
 
