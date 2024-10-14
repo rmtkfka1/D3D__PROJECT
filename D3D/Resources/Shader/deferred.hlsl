@@ -10,7 +10,20 @@ cbuffer TEST_B1 : register(b2)
     row_major matrix WorldMat;
 };
 
-Texture2D g_tex_0 : register(t0);
+cbuffer materialparams : register(b3)
+{
+    int intparams1;
+    int intparams2;
+    float floatparams1;
+    float floatparams2;
+    int diffuseOn;
+    int specOn;
+    int NormalOn;
+    int padding;
+};
+
+Texture2D diffuseTexture : register(t0);
+Texture2D normalTexture : register(t2);
 SamplerState g_sam_0 : register(s0);
 
 struct VS_IN
@@ -18,6 +31,7 @@ struct VS_IN
     float3 pos : POSITION;
     float3 normal : NORMAL;
     float2 uv : TEXCOORD;
+    float3 tangent : TANGENT;
 };
 
 struct VS_OUT
@@ -25,6 +39,8 @@ struct VS_OUT
     float4 pos : SV_Position;
     float3 worldPos : Position;
     float3 worldNormal : NORMAL;
+    float3 worldTangent : TANGENT;
+    float3 worldBinormal : BINORMAL;
     float2 uv : TEXCOORD;
 };
 
@@ -40,9 +56,12 @@ VS_OUT VS_Main(VS_IN input)
     output.pos = mul(viewPos, ProjMat);
 
     output.uv = input.uv;
-    output.worldNormal = normalize(mul(float4(input.normal, 0.0f), WorldMat).xyz);
     
-
+    output.worldNormal = normalize(mul(float4(input.normal, 0.0f), WorldMat).xyz);
+    output.worldTangent = normalize(mul(float4(input.tangent, 0.0f), WorldMat).xyz);
+    output.worldBinormal = normalize(cross(output.worldTangent, output.worldNormal));
+    
+    
     return output;
 };
 
@@ -58,10 +77,21 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
 {
    
     PS_OUT output;
-
+    
     output.position = float4(input.worldPos, 1.0f);
+    output.color = diffuseTexture.Sample(g_sam_0, input.uv);
     output.normal = float4(input.worldNormal, 0.0f);
-    output.color = g_tex_0.Sample(g_sam_0, input.uv);
+    
+    if (NormalOn)
+    {
+        // [0,255] 범위에서 [0,1]로 변환
+        float3 tangentSpaceNormal = normalTexture.Sample(g_sam_0, input.uv).xyz;
+        // [0,1] 범위에서 [-1,1]로 변환
+        tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
+        float3x3 matTBN = { input.worldTangent, input.worldBinormal, input.worldNormal };
+        output.normal = float4(mul(tangentSpaceNormal, matTBN), 0.0f);
+    }
+
 
     return output;
 

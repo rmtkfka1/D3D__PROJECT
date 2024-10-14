@@ -28,6 +28,11 @@ cbuffer materialparams : register(b3)
     int intparams2;
     float floatparams1;
     float floatparams2;
+    
+    int texon1;
+    int texon2;
+    int texon3;
+    int padding;
 };
 
 
