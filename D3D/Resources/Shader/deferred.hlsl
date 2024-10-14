@@ -56,11 +56,15 @@ VS_OUT VS_Main(VS_IN input)
     output.pos = mul(viewPos, ProjMat);
 
     output.uv = input.uv;
-    
+
     output.worldNormal = normalize(mul(float4(input.normal, 0.0f), WorldMat).xyz);
-    output.worldTangent = normalize(mul(float4(input.tangent, 0.0f), WorldMat).xyz);
-    output.worldBinormal = normalize(cross(output.worldNormal,output.worldTangent ));
-    
+    if (NormalOn)
+    {
+       
+        output.worldTangent = normalize(mul(float4(input.tangent, 0.0f), WorldMat).xyz);
+        output.worldBinormal = normalize(cross(output.worldNormal, output.worldTangent));
+        //output.worldBinormal = normalize(cross(output.worldTangent, output.worldNormal));
+    }
     
     return output;
 };

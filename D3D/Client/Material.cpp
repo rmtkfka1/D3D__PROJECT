@@ -53,6 +53,10 @@ void Material::Pushdata()
 	}
 
 
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Q))
+	{
+		_params.padding = -_params.padding;
+	}
 
 
 	core->GetMaterialParamsBufferPool()->PushData(&_params, sizeof(_params));
