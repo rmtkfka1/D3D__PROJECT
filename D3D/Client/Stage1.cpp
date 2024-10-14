@@ -179,6 +179,7 @@ void Stage1::BulidForward()
 	for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
+		ResourceManager::GetInstance()->Add<GameObject>(L"gbufferUi"+i, object);
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
 		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishader.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
