@@ -328,9 +328,6 @@ void GBuffer::RenderEnd()
 	}
 }
 
-
-
-
 shared_ptr<Texture> GBuffer::GetTexture(int32 index)
 {
 	assert(index < _count);
