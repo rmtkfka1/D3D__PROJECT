@@ -36,7 +36,7 @@ void D3D12ResourceManager::WaitForFenceValue()
 {
 	const uint64 ExpectedFenceValue = _fenceValue;
 
-	// Wait until the previous frame is finished.
+	
 	if (_fence->GetCompletedValue() < ExpectedFenceValue)
 	{
 		_fence->SetEventOnCompletion(ExpectedFenceValue, _fenceEvent);

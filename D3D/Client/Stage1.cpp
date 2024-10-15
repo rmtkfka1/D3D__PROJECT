@@ -197,7 +197,7 @@ void Stage1::BulidForward()
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/skybox.dds", TextureType::CubeMap);
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
 
 		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"sky.hlsl");
 
