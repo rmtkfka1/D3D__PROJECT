@@ -103,23 +103,14 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 
 	//이동방향을 정함
 	vec3 direction = vec3(targetPos - _cameraPos);
+	_cameraPos = vec3::Lerp(_cameraPos, targetPos, 0.1f);
 
-	float length = direction.Length();
-	direction.Normalize();
-
-
-	float velocity = length * 30.0f * TimeManager::GetInstance()->GetDeltaTime();
-	_cameraPos = _cameraPos + velocity * direction;
-
-	
 	//카메라의 Look 을 다시설정함. 
 	Matrix resultMat = XMMatrixLookAtLH(_cameraPos, player->GetTransform()->GetLocalPosition(), player->GetTransform()->GetUp());
 
 	_cameraRight = vec3(resultMat._11, resultMat._21, resultMat._31);
 	_cameraUp = vec3(resultMat._12, resultMat._22, resultMat._32);
 	_cameraLook = vec3(resultMat._13, resultMat._23, resultMat._33);
-
-
 
 }
 
@@ -217,7 +208,7 @@ UiCamera::UiCamera() :Camera(CameraType::UI)
 	_cameraPos = vec3(0, 0, -100.0f);
 	_cameraLook = vec3(0, 0, 1.0f);
 	_cameraUp = vec3(0, 1.0f, 0);
-	_near = 0.01f;
+	_near = 1.0f;
 	_far = 3000.0f;
 };
 

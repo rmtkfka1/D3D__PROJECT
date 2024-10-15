@@ -53,7 +53,7 @@ protected:
 	vec3 _cameraUp =vec3(0,1.0f,0);
 	vec3 _cameraRight =vec3(1.0f,0,0);
 
-	float _near = 0.1f;
+	float _near = 1.0f;
 	float _far = 10000.f;
 	float _fov = XM_PI / 3.f;
 

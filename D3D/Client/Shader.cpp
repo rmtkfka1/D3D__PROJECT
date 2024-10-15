@@ -103,7 +103,7 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 		_pipelineDesc.DepthStencilState.DepthEnable = FALSE;
 		_pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		break;
-	case DEPTH_STENCIL_TYPE::LESS_NO_WRITE:
+	case DEPTH_STENCIL_TYPE::DPTH_TEST_NO_WRITE:
 		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
 		_pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 		_pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;

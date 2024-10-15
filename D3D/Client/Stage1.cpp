@@ -218,10 +218,11 @@ void Stage1::BulidForward()
 		ShaderInfo info;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		info.blendType = BLEND_TYPE::ONE_TO_ONE_BLEND;
+		//info.depthStencilType = DEPTH_STENCIL_TYPE::DPTH_TEST_NO_WRITE;
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		shader->Init(L"blendingsea.hlsl", info);
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(0, -2500.0f, 0));
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, -2700.0f, 0));
 
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
