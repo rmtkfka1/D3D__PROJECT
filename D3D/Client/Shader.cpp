@@ -12,7 +12,7 @@ Shader::~Shader()
 
 }
 
-void Shader::Init(const wstring& path, ShaderInfo info)
+void Shader::Init(const wstring& path, ShaderInfo info , const string& gs)
 {
 
 	wstring finalPath = _path + path;
@@ -20,6 +20,11 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 
 	CreateVertexShader(finalPath, "VS_Main", "vs_5_0");
 	CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
+
+	if (gs.empty() == false)
+	{
+		CreateGeometryShader(finalPath, gs, "gs_5_0");
+	}
 
 
 	D3D12_INPUT_ELEMENT_DESC desc[] =
@@ -37,7 +42,7 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 	_pipelineDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	_pipelineDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	_pipelineDesc.SampleMask = UINT_MAX;
-	_pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	_pipelineDesc.PrimitiveTopologyType = info.primitiveType;
 	_pipelineDesc.NumRenderTargets = 1;
 	_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_pipelineDesc.SampleDesc.Count = 1;
@@ -167,4 +172,9 @@ void Shader::CreateVertexShader(const wstring& path, const string& name, const s
 void Shader::CreatePixelShader(const wstring& path, const string& name, const string& version)
 {
 	CreateShader(path, name, version, _psBlob, _pipelineDesc.PS);
+}
+
+void Shader::CreateGeometryShader(const wstring& path, const string& name, const string& version)
+{
+	CreateShader(path, name, version, _gsBlob, _pipelineDesc.GS);
 }

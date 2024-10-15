@@ -32,6 +32,7 @@ struct VS_IN
     float3 normal : NORMAL;
     float2 uv : TEXCOORD;
     float3 tangent : TANGENT;
+
 };
 
 struct VS_OUT
@@ -42,6 +43,7 @@ struct VS_OUT
     float3 worldTangent : TANGENT;
     float3 worldBinormal : BINORMAL;
     float2 uv : TEXCOORD;
+ 
 };
 
 
@@ -58,6 +60,7 @@ VS_OUT VS_Main(VS_IN input)
     output.uv = input.uv;
 
     output.worldNormal = normalize(mul(float4(input.normal, 0.0f), WorldMat).xyz);
+    
     if (NormalOn)
     {
        
@@ -82,11 +85,16 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
    
     PS_OUT output;
     
+ 
+    
     output.position = float4(input.worldPos, 1.0f);
     output.color = diffuseTexture.Sample(g_sam_0, input.uv);
     output.normal = float4(input.worldNormal, 0.0f);
+ 
+   
+
     
-    if (NormalOn && padding ==1)
+    if (NormalOn )
     {
         // [0,255] 범위에서 [0,1]로 변환
         float3 tangentSpaceNormal = normalTexture.Sample(g_sam_0, input.uv).xyz;

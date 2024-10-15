@@ -36,7 +36,9 @@ enum class BLEND_TYPE : uint8
 
 struct ShaderInfo
 {
+
 	ShaderType shaderType = ShaderType::FORWARD;
+	D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	RASTERIZER_TYPE rasterizerType = RASTERIZER_TYPE::CULL_BACK;
 	DEPTH_STENCIL_TYPE depthStencilType = DEPTH_STENCIL_TYPE::LESS;
 	BLEND_TYPE blendType = BLEND_TYPE::DEFAULT;
@@ -48,19 +50,21 @@ public:
 	Shader();
 	virtual ~Shader();
 
-	void Init(const wstring& path, ShaderInfo info = ShaderInfo());
+	void Init(const wstring& path, ShaderInfo info = ShaderInfo() , const string& gs = "");
 	void SetPipelineState();
 
 private:
 	void CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode);
 	void CreateVertexShader(const wstring& path, const string& name, const string& version);
 	void CreatePixelShader(const wstring& path, const string& name, const string& version);
+	void CreateGeometryShader(const wstring& path, const string& name, const string& version);
 
 private:
 	ShaderInfo _info;
 
 	ComPtr<ID3DBlob>					_vsBlob;
 	ComPtr<ID3DBlob>					_psBlob;
+	ComPtr<ID3DBlob>					_gsBlob;
 	ComPtr<ID3DBlob>					_errBlob;
 
 	ComPtr<ID3D12PipelineState>			_pipelineState;

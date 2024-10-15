@@ -293,7 +293,6 @@ void Stage1::FinalRender()
 
 	auto& list = core->GetCmdLIst();
 
-	list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
 	shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");

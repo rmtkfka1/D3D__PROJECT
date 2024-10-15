@@ -109,6 +109,7 @@ void Texture::Init(const wstring& path,TextureType type)
     srvDesc.Format = _image.GetMetadata().format;
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
     srvDesc.Texture2D.MipLevels = _image.GetMetadata().mipLevels;
+
     switch (type)
     {
     case TextureType::Texture2D:
