@@ -1,22 +1,22 @@
 #include "pch.h"
-#include "PlayerBullet.h"
+#include "EnemyBullet.h"
 #include "Transform.h"
 #include "TimeManager.h"
-PlayerBullet::PlayerBullet():ModelObject(PlayerType::PlayerBullet)
+EnemyBullet::EnemyBullet() :ModelObject(PlayerType::EnemyBullet)
 {
 
 }
 
-PlayerBullet::~PlayerBullet()
+EnemyBullet::~EnemyBullet()
 {
 }
 
-void PlayerBullet::Init()
+void EnemyBullet::Init()
 {
 	super::Init();
 }
 
-void PlayerBullet::Update()
+void EnemyBullet::Update()
 {
 
 	_transform->AddMove(_direction * 1500.0f * TimeManager::GetInstance()->GetDeltaTime());
@@ -25,25 +25,26 @@ void PlayerBullet::Update()
 
 }
 
-void PlayerBullet::Render()
+void EnemyBullet::Render()
 {
 	super::Render();
 }
 
-void PlayerBullet::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+void EnemyBullet::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
-	if (other->GetName() == "block")
+	if (other->GetName() == "this")
 	{
 		
 	}
 }
 
-void PlayerBullet::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+void EnemyBullet::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
 }
 
-void PlayerBullet::Delete()
+void EnemyBullet::Delete()
 {
+	
 	_sumTime += TimeManager::GetInstance()->GetDeltaTime();
 
 	if (_sumTime >= 5.0f)
@@ -51,5 +52,6 @@ void PlayerBullet::Delete()
 		CollisonManager::GetInstance()->ReserveDeleteCollider(this->GetCollider());
 		SceneManager::GetInstance()->GetCurrentScene()->ReserveDeleteGameObject(shared_from_this(), RenderingType::Deferred);
 	}
+
 }
 

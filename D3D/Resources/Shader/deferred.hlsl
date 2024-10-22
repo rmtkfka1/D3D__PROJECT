@@ -92,7 +92,7 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     
     if (enemyDraw)
     {
-        output.color += float4(0.7f, 0, 0, 0);
+        output.color += float4(0.2f, 0, 0, 0);
     }
     
     output.normal = float4(input.worldNormal, 0.0f);

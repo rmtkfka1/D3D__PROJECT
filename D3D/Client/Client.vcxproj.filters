@@ -199,6 +199,9 @@
     <ClInclude Include="StartScene.h">
       <Filter>07.Manager</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -347,6 +350,9 @@
       <Filter>05.GameObject\03.HireacyObject</Filter>
     </ClCompile>
     <ClCompile Include="PlayerBullet.cpp">
+      <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClCompile>
   </ItemGroup>

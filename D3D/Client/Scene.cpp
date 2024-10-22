@@ -48,6 +48,12 @@ void Scene::Run()
 
 void Scene::LateUpdate()
 {
+
+	if (_reserveAddQueue.empty() == false || _reserveDeleteQueue.empty() == false)
+	{
+		core->WaitForAllFence();
+	}
+
 	while (!_reserveAddQueue.empty())
 	{
 		auto& [object,type] = _reserveAddQueue.front();
@@ -57,7 +63,7 @@ void Scene::LateUpdate()
 
 	while (!_reserveDeleteQueue.empty())
 	{
-		auto& [object, type] = _reserveAddQueue.front();
+		auto& [object, type] = _reserveDeleteQueue.front();
 		DeleteGameObject(object, type);
 		_reserveDeleteQueue.pop();
 	}

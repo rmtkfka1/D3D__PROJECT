@@ -116,7 +116,10 @@ struct CameraParams
 
 extern unique_ptr<class Core> core;
 #include "KeyManager.h"
-
+#include "SceneManager.h"
+#include "Scene.h"
+#include "ResourceManager.h"
+#include "CollisonManager.h"
 
 
 

@@ -1,13 +1,13 @@
 #pragma once
 #include "ModelObject.h"
-class PlayerBullet : public ModelObject
+class EnemyBullet : public ModelObject
 {
 public:
 
 	using super = ModelObject;
 
-	PlayerBullet();
-	virtual ~PlayerBullet();
+	EnemyBullet();
+	virtual ~EnemyBullet();
 
 	virtual void Init() override;;
 	virtual void Update() override;
@@ -16,10 +16,11 @@ public:
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
 
-	void Delete();
 
 public:
+	void Delete();
+
+	float _sumTime=0;
 	vec3 _direction;
-	float _sumTime = 0;
 };
 

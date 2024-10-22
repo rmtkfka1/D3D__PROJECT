@@ -9,6 +9,11 @@
 #include "KeyManager.h"
 #include "BoxCollider.h"
 #include "SphereCollider.h"
+#include <random>
+
+std::default_random_engine generator;
+std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+
 /*************************
 *                        *
 *       Camera           *
@@ -70,6 +75,7 @@ ThirdPersonCamera::~ThirdPersonCamera()
 
 void ThirdPersonCamera::Update()
 {
+	Animation();
 	GenViewMatrix();
 	GenProjMatrix();
 	GenBoundingFrustum();
@@ -78,7 +84,7 @@ void ThirdPersonCamera::Update()
 
 void ThirdPersonCamera::GenViewMatrix()
 {
-	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
+	_params.matView = XMMatrixLookToLH(_cameraPos + _shake, _cameraLook , _cameraUp);
 }
 
 void ThirdPersonCamera::GenProjMatrix()
@@ -103,7 +109,7 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 
 	//이동방향을 정함
 	vec3 direction = vec3(targetPos - _cameraPos);
-	_cameraPos = vec3::Lerp(_cameraPos, targetPos, 0.1f);
+	_cameraPos = vec3::Lerp(_cameraPos, targetPos, 0.3f);
 
 	//카메라의 Look 을 다시설정함. 
 	Matrix resultMat = XMMatrixLookAtLH(_cameraPos, player->GetTransform()->GetLocalPosition(), player->GetTransform()->GetUp());
@@ -111,6 +117,29 @@ void ThirdPersonCamera::Rotate(const shared_ptr<Player>& player)
 	_cameraRight = vec3(resultMat._11, resultMat._21, resultMat._31);
 	_cameraUp = vec3(resultMat._12, resultMat._22, resultMat._32);
 	_cameraLook = vec3(resultMat._13, resultMat._23, resultMat._33);
+
+}
+
+void ThirdPersonCamera::Animation()
+{
+
+
+	float dt = TimeManager::GetInstance()->GetDeltaTime();;
+
+	if (_elaspedTime > 3.0f)
+	{
+		_animationflag = false;
+		_elaspedTime = 0;
+		_shake = vec3(0, 0, 0);
+	}
+
+	if (_animationflag)
+	{
+		float intenisty = 200.0f;
+		_shake.x = distribution(generator) * intenisty * dt;
+		_shake.y = distribution(generator) * intenisty * dt;
+		_elaspedTime += dt;
+	}
 
 }
 

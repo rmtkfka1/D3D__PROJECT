@@ -173,6 +173,7 @@
     <ClInclude Include="D3D12ResourceManager.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeoMetryHelper.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="CustomObject.cpp" />
     <ClCompile Include="D3D12ResourceManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeoMetryHelper.cpp" />

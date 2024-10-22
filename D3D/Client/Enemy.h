@@ -20,6 +20,7 @@ public:
 
 	void Animation();
 	void LookatPlayer();
+	void Shot();
 	void SetPlayer(shared_ptr<Player> player) { _player = player; }
 
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);

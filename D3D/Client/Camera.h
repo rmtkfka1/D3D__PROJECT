@@ -79,8 +79,13 @@ public:
 	virtual void Update() override;
 
 	void Rotate(const shared_ptr<Player>& player);
+	void Animation();
+	void ShakeOn() { _animationflag = true; }
 
 private:
+	vec3 _shake = { 0,0,0 };
+	bool _animationflag = false;
+	float _elaspedTime = 0;
 	vec3 _offset = vec3(0, 3.0f, 20.0f);
 };
 

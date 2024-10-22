@@ -83,23 +83,23 @@ void Player::MoveUpdate()
 			_camera->AddMove(diection * _speed * dt);
 		}
 
-	/*	if (key->GetButton(KEY_TYPE::S))
-		{
-			_transform->GetRoot()->AddMove(-(diection * _speed * dt));
-			_camera->AddMove(diection * _speed * dt);
-		}
+		//if (key->GetButton(KEY_TYPE::S))
+		//{
+		//	_transform->GetRoot()->AddMove(-(diection * _speed * dt));
+		//	_camera->AddMove(diection * _speed * dt);
+		//}
 
-		if (key->GetButton(KEY_TYPE::D))
-		{
-			_transform->GetRoot()->AddMove((right * _speed * dt));
-			_camera->AddMove(diection * _speed * dt);
-		}
+		//if (key->GetButton(KEY_TYPE::D))
+		//{
+		//	_transform->GetRoot()->AddMove((right * _speed * dt));
+		//	_camera->AddMove(diection * _speed * dt);
+		//}
 
-		if (key->GetButton(KEY_TYPE::A))
-		{
-			_transform->GetRoot()->AddMove(-(right * _speed * dt));
-			_camera->AddMove(diection * _speed * dt);
-		}*/
+		//if (key->GetButton(KEY_TYPE::A))
+		//{
+		//	_transform->GetRoot()->AddMove(-(right * _speed * dt));
+		//	_camera->AddMove(diection * _speed * dt);
+		//}
 	}
 	
 
@@ -291,6 +291,12 @@ void Player::AvoidCollision(shared_ptr<BaseCollider>& collider, shared_ptr<BaseC
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
 	AvoidCollision(collider, other);
+
+	if (other->GetName() == "enemyBullet")
+	{
+		auto& camera =CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW);
+		static_pointer_cast<ThirdPersonCamera>(camera)->ShakeOn();
+	}
 	
 
 }
