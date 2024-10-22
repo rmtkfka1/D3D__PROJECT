@@ -177,16 +177,17 @@ void Stage1::BulidDeferred()
 	}
 
 	{
-
 		shared_ptr<Enemy> enemy = make_shared<Enemy>();
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
 		data->SetIntValue(0, 1);
 		enemy->SetModel(data);
 		enemy->SetPlayer(_player);
-		enemy->GetTransform()->SetLocalScale(vec3(30.0f, 30.0f, 30.0f));
-		enemy->GetTransform()->SetLocalPosition(vec3(0, 2000.0f, 0));
+		enemy->GetTransform()->SetLocalScale(vec3(70.0f, 70.0f, 70.0f));
+		enemy->GetTransform()->SetLocalPosition(vec3(2000.0f, 5000.0f, 0));
+		//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
 		enemy->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"deferred.hlsl"));
-		enemy->AddCollider("enemy", ColliderType::Box);
+		//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
+		enemy->AddCollider("enemy", ColliderType::Box,vec3(-2.0f,-0.5,0));
 		AddGameObject(enemy, RenderingType::Deferred);
 	}
 

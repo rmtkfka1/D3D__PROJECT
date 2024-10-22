@@ -126,7 +126,7 @@ void ThirdPersonCamera::Animation()
 
 	float dt = TimeManager::GetInstance()->GetDeltaTime();;
 
-	if (_elaspedTime > 3.0f)
+	if (_elaspedTime > 2.0f)
 	{
 		_animationflag = false;
 		_elaspedTime = 0;

@@ -135,15 +135,6 @@ void Player::CameraPushData()
 	_camera->SetData();
 }
 
-void Player::CollisonUpdate()
-{
-
-	if (_collisionDected)
-	{
-		CollisonRotate(_look, _dir, _angle, _rotationAxis);
-	}
-
-}
 
 void Player::Shot()
 {
@@ -162,6 +153,17 @@ void Player::Shot()
 	}
 
 }
+
+void Player::CollisonUpdate()
+{
+
+	if (_collisionDected)
+	{
+		CollisonRotate(_look, _dir, _angle, _rotationAxis);
+	}
+
+}
+
 
 void Player::StartCollisionRotation(vec3 direction,int i)
 {
@@ -290,9 +292,12 @@ void Player::AvoidCollision(shared_ptr<BaseCollider>& collider, shared_ptr<BaseC
 
 void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
 {
-	AvoidCollision(collider, other);
+	if (collider->GetName() == "raycheck" && other->GetName() == "block" || other->GetName() == "earth")
+	{
+		AvoidCollision(collider, other);
+	}
 
-	if (other->GetName() == "enemyBullet")
+	if (collider->GetName() == "this" &&   other->GetName() == "enemyBullet")
 	{
 		auto& camera =CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW);
 		static_pointer_cast<ThirdPersonCamera>(camera)->ShakeOn();
