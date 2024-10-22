@@ -193,6 +193,9 @@
     <ClInclude Include="StartScene.h">
       <Filter>06.Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>05.GameObject\03.HireacyObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -336,6 +339,9 @@
     </ClCompile>
     <ClCompile Include="StartScene.cpp">
       <Filter>06.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>05.GameObject\03.HireacyObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

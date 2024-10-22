@@ -26,7 +26,7 @@
 #include "Sea.h"
 #include "BufferPool.h"
 #include "TimeManager.h"
-
+#include "Enemy.h"
 Stage1::Stage1()
 {
 }
@@ -128,7 +128,7 @@ void Stage1::BulidDeferred()
 
 
 	{
-		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter");
+		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"helicopter");
 		shared_ptr<Player> player = make_shared<Player>();
 
 		_player = player;
@@ -156,23 +156,37 @@ void Stage1::BulidDeferred()
 	for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
-		shared_ptr<Model> data = Model::ReadData(L"Box/Box");
+		shared_ptr<Model> data = Model::ReadData(L"Box/Box",L"Box");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
 		object->AddCollider("boxbox", ColliderType::Box);
 		AddGameObject(object, RenderingType::Deferred);
 	}
 
+
+
 	for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Sphere> object = make_shared<Sphere>();
-		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth");
+		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth",L"Earth");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
-		object->AddCollider("sphere", ColliderType::Sphere);
+		object->AddCollider("earth", ColliderType::Sphere);
 		AddGameObject(object, RenderingType::Deferred);
 	}
 
+	{
+
+		shared_ptr<Enemy> enemy = make_shared<Enemy>();
+		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
+		data->SetIntValue(0, 1);
+		enemy->SetModel(data);
+		enemy->GetTransform()->SetLocalScale(vec3(10.0f, 10.0f, 10.0f));
+		enemy->GetTransform()->SetLocalPosition(vec3(0, 2000.0f, 0));
+		enemy->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"deferred.hlsl"));
+		enemy->AddCollider("enemy", ColliderType::Box);
+		AddGameObject(enemy, RenderingType::Deferred);
+	}
 }
 
 void Stage1::BulidForward()

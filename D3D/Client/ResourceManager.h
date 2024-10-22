@@ -29,7 +29,7 @@ public:
     shared_ptr<T> Get(const wstring& path);
 
     template<typename T>
-    void Add(const wstring& path, shared_ptr<T> object);
+    void Add(const wstring& key, shared_ptr<T> object);
 
 private:
     unordered_map<wstring, shared_ptr<Shader>> _shaderMap;
@@ -62,9 +62,9 @@ inline shared_ptr<T> ResourceManager::Load(const wstring& path, Args&&... args)
 
 // Add 함수
 template<typename T>
-inline void ResourceManager::Add(const wstring& path, shared_ptr<T> object)
+inline void ResourceManager::Add(const wstring& key, shared_ptr<T> object)
 {
-    GetResourceMap<T>()[path] = object;
+    GetResourceMap<T>()[key] = object;
 }
 
 // Get 함수

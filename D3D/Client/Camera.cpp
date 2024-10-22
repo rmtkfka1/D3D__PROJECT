@@ -61,7 +61,7 @@ void Camera::AddMove(const vec3& shift)
 
 ThirdPersonCamera::ThirdPersonCamera():Camera(CameraType::THIRDVIEW)
 {
-	_cameraPos += _offset;
+
 }
 
 ThirdPersonCamera::~ThirdPersonCamera()

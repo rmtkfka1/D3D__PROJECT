@@ -36,12 +36,13 @@ public:
 	Model();
 	virtual ~Model();
 
-	static shared_ptr<Model> ReadData(wstring filename);
+	static shared_ptr<Model> ReadData(wstring filename ,wstring key);
 
 public:
 	void ReadMaterial(wstring filename);
 	void ReadModel(wstring filename);
-
+	void SetIntValue(uint8 index, int32 value);
+	void SetFloatValue(uint8 index, float value);
 public:
 
 	uint32 GetMaterialCount() { return static_cast<uint32>(_materialData.size()); }

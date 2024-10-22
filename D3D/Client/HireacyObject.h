@@ -23,11 +23,13 @@ public:
 
 	virtual shared_ptr<Transform> GetTransform() override;
 
-	void SetModel(shared_ptr< Model> model);
-
 
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
+
+
+	void SetModel(shared_ptr< Model> model);
+	const shared_ptr<Model>& GetModel() { return _model; }
 
 public:
 	shared_ptr<Model> _model;

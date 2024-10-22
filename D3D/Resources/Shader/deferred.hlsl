@@ -12,13 +12,13 @@ cbuffer TEST_B1 : register(b2)
 
 cbuffer materialparams : register(b3)
 {
-    int intparams1;
+    int enemyDraw;
     int intparams2;
     float floatparams1;
     float floatparams2;
     int diffuseOn;
     int NormalOn;
-    int specOn;
+    int specon;
     int padding;
 };
 
@@ -89,6 +89,12 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     
     output.position = float4(input.worldPos, 1.0f);
     output.color = diffuseTexture.Sample(g_sam_0, input.uv);
+    
+    if (enemyDraw)
+    {
+        output.color += float4(0.7f, 0, 0, 0);
+    }
+    
     output.normal = float4(input.worldNormal, 0.0f);
  
    

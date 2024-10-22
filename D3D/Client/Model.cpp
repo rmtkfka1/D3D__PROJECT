@@ -19,9 +19,8 @@ Model::~Model()
 
 }
 
-shared_ptr<Model> Model::ReadData(wstring filename)
+shared_ptr<Model> Model::ReadData(wstring filename, wstring key)
 {
-
 
 	shared_ptr<Model> model = ResourceManager::GetInstance()->Get<Model>(filename);
 
@@ -35,7 +34,7 @@ shared_ptr<Model> Model::ReadData(wstring filename)
 	model->ReadMaterial(filename);
 	model->ReadModel(filename);
 
-	ResourceManager::GetInstance()->Add<Model>(filename, model);
+	ResourceManager::GetInstance()->Add<Model>(key, model);
 
 	return model;
 }
@@ -311,6 +310,27 @@ void Model::ReadModel(wstring filename)
 
 	BindCacheInfo();
 }
+
+
+void Model::SetIntValue(uint8 index, int32 value)
+{
+
+	for (auto& ele : _materialData)
+	{
+		ele->SetInt(index, value);
+	}
+
+}
+
+void Model::SetFloatValue(uint8 index, float value)
+{
+	for (auto& ele : _materialData)
+	{
+		ele->SetFloat(index, value);
+	}
+}
+
+
 
 
 

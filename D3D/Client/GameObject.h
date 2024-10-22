@@ -20,7 +20,8 @@ enum class PlayerType
 	Box,
 	Sphere,
 	Sea,
-	Terrain
+	Terrain,
+	Enemy
 };
 
 class GameObject : public enable_shared_from_this<GameObject>

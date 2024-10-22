@@ -204,13 +204,8 @@ void Player::CollisonRotate(vec3 look, vec3 dir, float angle, vec3 rotationAxis)
 
 }
 
-
-
-void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+void Player::AvoidCollision(shared_ptr<BaseCollider>& collider, shared_ptr<BaseCollider>& other)
 {
-
-	collider->Delete(other.get());
-
 	if (_collisionDected)
 		return;
 
@@ -220,10 +215,11 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 	auto up = GetTransform()->GetUp();
 	auto left = -right;
 
-	if (collider->GetName() == "raycheck" && other->GetName()=="boxbox")
+	if (collider->GetName() == "raycheck" && other->GetName() == "boxbox")
 	{
+		collider->Delete(other.get());
 
-		vector<vec3> directions = { right, left ,up,down};
+		vector<vec3> directions = { right, left ,up,down };
 
 		shuffle(directions.begin(), directions.end(), g);
 
@@ -243,7 +239,7 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 		}
 	}
 
-	else
+	if (collider->GetName() == "raycheck" && other->GetName() == "earth")
 	{
 		vector<vec3> directions = { right, left };
 
@@ -265,8 +261,18 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 		}
 	}
 
+}
 
-		
+
+
+void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
+{
+	AvoidCollision(collider, other);
+	
+	//if (collider->GetName() == "this" && other->GetName() == "boxbox")
+	//{
+	//
+	//}
 }
 
 void Player::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)

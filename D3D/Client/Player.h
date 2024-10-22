@@ -33,6 +33,8 @@ private:
 	void StartCollisionRotation(vec3 direction,int i);
 	void CollisonRotate(vec3 look ,vec3 dir ,float angle , vec3 rotationAxis);
 
+	void AvoidCollision(shared_ptr<BaseCollider>& collider, shared_ptr<BaseCollider>& other);
+
 	shared_ptr<Terrain> _terrain;
 	shared_ptr<ThirdPersonCamera> _camera;
 

@@ -29,6 +29,7 @@ public:
 	void SetNormalTexture(shared_ptr<Texture> texture) { _normalTexture = texture; }
 	void SetSpecularTexture(shared_ptr<Texture> texture) { _SpecularTexture = texture; }
 
+
 	void Pushdata();
 
 	void AllPadingInverse() { _params.padding *= -1; }
