@@ -53,18 +53,24 @@ void BoxCollider::Render()
 
 bool BoxCollider::CheckCollusion(shared_ptr<BaseCollider>& other)
 {
-	ColliderType type = other->GetColliderType();
-
-	switch (type)
+	if (other->GetColliderType() == ColliderType::Box)
 	{
-	case ColliderType::Box:
-		return _box.Intersects(static_pointer_cast<BoxCollider>(other)->GetBox());
-		break;
-	case ColliderType::Sphere:
-		return _box.Intersects(static_pointer_cast<SphereCollider>(other)->GetSphere());
-		break;
-	default:
-		break;
+		shared_ptr<BoxCollider> otherbox = static_pointer_cast<BoxCollider>(other);
+
+		if (_box.Intersects(otherbox->GetBox()))
+		{
+			return true;
+		}
+	}
+
+	if (other->GetColliderType() == ColliderType::Sphere)
+	{
+		shared_ptr<SphereCollider> otherSphere = static_pointer_cast<SphereCollider>(other);
+
+		if (_box.Intersects(otherSphere->GetSphere()))
+		{
+			return true;
+		}
 	}
 
 	return false;

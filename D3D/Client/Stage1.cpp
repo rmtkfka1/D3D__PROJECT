@@ -131,7 +131,6 @@ void Stage1::BulidDeferred()
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"helicopter");
 		shared_ptr<Player> player = make_shared<Player>();
 
-		_player = player;
 		player->SetModel(data);
 		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl");
 		player->SetShader(shader);
@@ -151,6 +150,8 @@ void Stage1::BulidDeferred()
 		AddGameObject(player, RenderingType::Deferred);
 		AddGameObject(terrain,RenderingType::Forward);
 
+		_player = player;
+
 	}
 
 	for (int i = 0; i < 10; ++i)
@@ -159,7 +160,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box",L"Box");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
-		object->AddCollider("boxbox", ColliderType::Box);
+		object->AddCollider("block", ColliderType::Box);
 		AddGameObject(object, RenderingType::Deferred);
 	}
 
@@ -181,12 +182,16 @@ void Stage1::BulidDeferred()
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
 		data->SetIntValue(0, 1);
 		enemy->SetModel(data);
+		enemy->SetPlayer(_player);
 		enemy->GetTransform()->SetLocalScale(vec3(30.0f, 30.0f, 30.0f));
 		enemy->GetTransform()->SetLocalPosition(vec3(0, 2000.0f, 0));
 		enemy->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"deferred.hlsl"));
 		enemy->AddCollider("enemy", ColliderType::Box);
 		AddGameObject(enemy, RenderingType::Deferred);
 	}
+
+	//temp
+	Model::ReadData(L"playerBullet/playerBullet", L"playerBullet");
 }
 
 void Stage1::BulidForward()

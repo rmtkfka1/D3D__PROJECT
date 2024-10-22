@@ -32,12 +32,6 @@ void CollisonManager::CheckObjectCollusion()
 
 	for (int32 i = 0; i < _colliders.size(); i++)
 	{
-
-		if (_colliders[i]->GetOwner()->GetPlayerType() == PlayerType::Box)
-			continue;
-
-	
-
 		for (int32 j = i + 1; j < _colliders.size(); j++)
 		{
 			shared_ptr<BaseCollider> src = _colliders[i];

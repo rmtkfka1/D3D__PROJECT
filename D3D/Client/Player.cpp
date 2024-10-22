@@ -238,7 +238,7 @@ void Player::AvoidCollision(shared_ptr<BaseCollider>& collider, shared_ptr<BaseC
 	auto up = GetTransform()->GetUp();
 	auto left = -right;
 
-	if (collider->GetName() == "raycheck" && other->GetName() == "boxbox")
+	if (collider->GetName() == "raycheck" && other->GetName() == "block")
 	{
 		collider->Delete(other.get());
 
@@ -292,10 +292,7 @@ void Player::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_p
 {
 	AvoidCollision(collider, other);
 	
-	//if (collider->GetName() == "this" && other->GetName() == "boxbox")
-	//{
-	//
-	//}
+
 }
 
 void Player::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
