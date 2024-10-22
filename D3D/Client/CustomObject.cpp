@@ -8,6 +8,8 @@
 #include "KeyManager.h"
 #include "TimeManager.h"
 #include "Shader.h"
+#include "BoxCollider.h"
+#include "CollisonManager.h"
 CustomObject::CustomObject():GameObject(GameObjectType::Custom)
 {
 	_mesh = make_shared<Mesh>();
@@ -50,14 +52,22 @@ void CustomObject::Render()
 }
 
 
-
 void CustomObject::AddCollider(string name, ColliderType type, vec3 offsetSize, vec3 offsetCeneter)
 {
+	
 }
 
 void CustomObject::AddBoxCollider(string name, vec3 size, vec3 center)
 {
-
+	shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
+	box->SetName(name);
+	box->SetOwner(shared_from_this());
+	box->SetTotalCenter(center);
+	box->SetSize(size);
+	GetTransform()->Update();
+	box->MakeBoundingBox();
+	CollisonManager::GetInstance()->AddCollider(box);
+	_colliders.push_back(box);
 }
 
 void CustomObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)

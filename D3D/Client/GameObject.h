@@ -21,6 +21,7 @@ enum class PlayerType
 	Sphere,
 	Sea,
 	Terrain,
+	PlayerBullet,
 	Enemy
 };
 

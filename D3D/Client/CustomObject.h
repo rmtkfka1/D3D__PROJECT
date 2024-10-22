@@ -23,6 +23,9 @@ public:
 
 	virtual void AddCollider(string name, ColliderType type, vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0));
 	virtual void AddBoxCollider(string name, vec3 size, vec3 center) override;
+
+	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
+	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
 public:
 
 	shared_ptr<Mesh>& GetMesh() { return _mesh; }
@@ -33,8 +36,7 @@ public:
 	void SetMaterial(shared_ptr<Material> material) { _material = material; }
 	void SetTransform(shared_ptr<Transform> transform) { _transform = transform; }
 
-	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
-	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);
+
 protected:
 	shared_ptr<Mesh> _mesh;
 	shared_ptr<Material> _material;

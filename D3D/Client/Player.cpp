@@ -12,7 +12,11 @@
 #include "CameraManager.h"
 #include "Utils.h"
 #include <random>
-
+#include "PlayerBullet.h"
+#include "Model.h"
+#include "GeoMetryHelper.h"
+#include "Shader.h"
+#include "ResourceManager.h"
 std::random_device rd;
 std::mt19937 g(rd());
 
@@ -38,6 +42,7 @@ void Player::Update()
 	}
 
 	AnimateUpdate();
+	Shot();
 	Super::Update();
 }
 
@@ -136,6 +141,24 @@ void Player::CollisonUpdate()
 	if (_collisionDected)
 	{
 		CollisonRotate(_look, _dir, _angle, _rotationAxis);
+	}
+
+}
+
+void Player::Shot()
+{
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::SPACE))
+	{
+		shared_ptr<PlayerBullet> object = make_shared<PlayerBullet>();
+		shared_ptr<Model> data = Model::ReadData(L"playerBullet/playerBullet", L"playerBullet");
+		object->SetModel(data);
+		object->_direction = GetTransform()->GetLook();
+		auto& pos = this->GetTransform()->GetLocalPosition() + GetTransform()->GetLook()*100.0f;
+		object->GetTransform()->SetLocalPosition(pos);
+		object->GetTransform()->SetLocalScale(vec3(0.1f, 0.1f, 0.1f));
+		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
+		object->AddCollider("playerBullet", ColliderType::Box,vec3(0,0,0),vec3(0,0,0));
+		SceneManager::GetInstance()->GetCurrentScene()->ReserveAddGameObject(object,RenderingType::Deferred);
 	}
 
 }

@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{df27f001-bb9d-491c-a9a8-ccd65aeb2505}</UniqueIdentifier>
     </Filter>
@@ -52,6 +48,10 @@
     </Filter>
     <Filter Include="03.Resource\Collider">
       <UniqueIdentifier>{d29d2cb6-31f5-49b8-9f0f-36088452b5fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +195,9 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>05.GameObject\03.HireacyObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>05.GameObject\02.ModelObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -342,6 +345,9 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>05.GameObject\03.HireacyObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>05.GameObject\02.ModelObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,9 +9,9 @@ Converter converter;
 
 int main()
 {
-	converter.ReadAssetFile(L"earth/source/Earth.fbx");
-	//converter.ExportMaterialData(L"earth/earth");
-	converter.ExportModelData(L"earth/earth",false);
+	converter.ReadAssetFile(L"comical-bomb/source/ComBomb_ForSket.fbx");
+	converter.ExportMaterialData(L"bomb/bomb");
+	converter.ExportModelData(L"bomb/bomb",false);
 
 	for (auto& bone : converter._bones)
 	{

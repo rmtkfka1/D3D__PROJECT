@@ -98,7 +98,6 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     output.normal = float4(input.worldNormal, 0.0f);
  
    
-
     
     if (NormalOn )
     {

@@ -181,7 +181,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
 		data->SetIntValue(0, 1);
 		enemy->SetModel(data);
-		enemy->GetTransform()->SetLocalScale(vec3(10.0f, 10.0f, 10.0f));
+		enemy->GetTransform()->SetLocalScale(vec3(30.0f, 30.0f, 30.0f));
 		enemy->GetTransform()->SetLocalPosition(vec3(0, 2000.0f, 0));
 		enemy->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"deferred.hlsl"));
 		enemy->AddCollider("enemy", ColliderType::Box);

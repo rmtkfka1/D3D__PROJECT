@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "Enemy.h"
+#include "TimeManager.h"
+#include "Transform.h"
+#include "TransformTree.h"
 
 Enemy::Enemy():HireacyObject(PlayerType::Enemy)
 {
@@ -20,6 +23,14 @@ void Enemy::Init()
 
 void Enemy::Update()
 {
+	float dt = TimeManager::GetInstance()->GetDeltaTime();
+	float rotation = 720.0f;
+
+	float result = rotation * dt; //1초에 2바퀴 회전하도록
+
+	_transform->findByName(L"Top_Rotor")->AddRotate(vec3(0, result, 0));
+
+
 	Super::Update();
 }
 
