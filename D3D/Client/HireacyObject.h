@@ -18,11 +18,11 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 
-	virtual void AddCollider(string name, ColliderType type, vec3 offsetSize= vec3(0, 0, 0), vec3 offsetCeneter=vec3(0,0,0)) override;
-	virtual void AddBoxCollider(string name, vec3 size, vec3 center) override;
 
 	virtual shared_ptr<Transform> GetTransform() override;
 
+	void AddBoxColliderWithModel(string name, vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0));
+	void AddSphereColliderWithModel(string name, float offsetSize = 0, vec3 offsetCeneter = vec3(0, 0, 0));
 
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);

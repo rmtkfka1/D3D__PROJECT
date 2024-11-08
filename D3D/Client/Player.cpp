@@ -148,7 +148,7 @@ void Player::Shot()
 		object->GetTransform()->SetLocalPosition(pos);
 		object->GetTransform()->SetLocalScale(vec3(0.1f, 0.1f, 0.1f));
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
-		object->AddCollider("playerBullet", ColliderType::Box,vec3(0,0,0),vec3(0,0,0));
+		object->AddBoxColliderWithModel("playerBullet");
 		SceneManager::GetInstance()->GetCurrentScene()->ReserveAddGameObject(object,RenderingType::Deferred);
 	}
 

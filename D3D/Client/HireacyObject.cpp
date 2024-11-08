@@ -62,50 +62,37 @@ void HireacyObject::Render()
 
 }
 
-void HireacyObject::AddCollider(string name ,ColliderType type, vec3 offsetSize , vec3 offsetCeneter )
+
+
+shared_ptr<Transform> HireacyObject::GetTransform()
 {
-	if (type == ColliderType::Box)
-	{
-		shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
-		box->SetName(name);
-		box->SetOwner(shared_from_this());
-		box->SetTotalCenter(_model->GetCenter() + offsetCeneter);
-		box->SetSize(_model->GetSize() + offsetSize);
-		GetTransform()->Update();
-		box->MakeBoundingBox();
-		CollisonManager::GetInstance()->AddCollider(box);
-		_colliders.push_back(box);
-	}
-	else if (type == ColliderType::Sphere)
-	{
-		shared_ptr<SphereCollider> sphere = make_shared<SphereCollider>();
-		sphere->SetName(name);
-		sphere->SetOwner(shared_from_this());
-		sphere->SetTotalCenter(_model->GetCenter());
-		sphere->SetRadius(_model->GetRadius());
-		GetTransform()->Update();
-		sphere->MakeBoundingSphere();
-		CollisonManager::GetInstance()->AddCollider(sphere);
-		_colliders.push_back(sphere);
-	}
+	return _transform->GetRoot();
 }
 
-void HireacyObject::AddBoxCollider(string name,vec3 size, vec3 center)
+void HireacyObject::AddBoxColliderWithModel(string name, vec3 offsetSize, vec3 offsetCeneter)
 {
 	shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
 	box->SetName(name);
 	box->SetOwner(shared_from_this());
-	box->SetTotalCenter(center);
-	box->SetSize(size);
+	box->SetTotalCenter(_model->GetCenter() + offsetCeneter);
+	box->SetSize(_model->GetSize() + offsetSize);
 	GetTransform()->Update();
 	box->MakeBoundingBox();
 	CollisonManager::GetInstance()->AddCollider(box);
 	_colliders.push_back(box);
 }
 
-shared_ptr<Transform> HireacyObject::GetTransform()
+void HireacyObject::AddSphereColliderWithModel(string name, float offsetSize, vec3 offsetCeneter)
 {
-	return _transform->GetRoot();
+	shared_ptr<SphereCollider> sphere = make_shared<SphereCollider>();
+	sphere->SetName(name);
+	sphere->SetOwner(shared_from_this());
+	sphere->SetTotalCenter(_model->GetCenter() + offsetCeneter);
+	sphere->SetRadius(_model->GetRadius() + offsetSize);
+	GetTransform()->Update();
+	sphere->MakeBoundingSphere();
+	CollisonManager::GetInstance()->AddCollider(sphere);
+	_colliders.push_back(sphere);
 }
 
 
