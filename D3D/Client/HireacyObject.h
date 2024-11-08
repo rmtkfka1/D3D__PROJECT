@@ -21,8 +21,8 @@ public:
 
 	virtual shared_ptr<Transform> GetTransform() override;
 
-	void AddBoxColliderWithModel(string name, vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0));
-	void AddSphereColliderWithModel(string name, float offsetSize = 0, vec3 offsetCeneter = vec3(0, 0, 0));
+	void AddBoxColliderWithModel(string name, ColliderBehave behave , vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0));
+	void AddSphereColliderWithModel(string name, ColliderBehave behave, float offsetSize = 0, vec3 offsetCeneter = vec3(0, 0, 0));
 
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other);
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other);

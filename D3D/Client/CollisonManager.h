@@ -3,6 +3,12 @@
 class BaseCollider;
 class BoxCollider;
 
+enum class ColliderBehave
+{
+	Active,
+	Passive
+};
+
 class CollisonManager
 {
 public:
@@ -27,13 +33,17 @@ public:
 	vec3 ToWorldPosition(const vec3& pos, const Matrix& W, const Matrix& V, const Matrix& P);
 
 	void ReserveDeleteCollider(shared_ptr<BaseCollider>& collider);
-	void AddCollider(const shared_ptr<BaseCollider>& collider);
+	void AddCollider(const shared_ptr<BaseCollider>& collider , ColliderBehave behave);
+
 	void Reset();
 private:
 	void RemoveCollider(shared_ptr<BaseCollider>& collider);
 
 private:
-	vector<shared_ptr<BaseCollider>> _colliders;
+
+	vector<shared_ptr<BaseCollider>> _activeColliders;
+	vector<shared_ptr<BaseCollider>> _passiveColliders;
+
 	queue<shared_ptr<BaseCollider>> _deleteColliders;
 };
 

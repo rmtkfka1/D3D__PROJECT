@@ -15,7 +15,7 @@ GameObject::~GameObject()
 
 
 
-void GameObject::AddBoxCollider(string name, vec3 size, vec3 center)
+void GameObject::AddBoxCollider(string name, ColliderBehave behave, vec3 size, vec3 center)
 {
 	shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
 	box->SetName(name);
@@ -24,11 +24,11 @@ void GameObject::AddBoxCollider(string name, vec3 size, vec3 center)
 	box->SetSize(size);
 	GetTransform()->Update();
 	box->MakeBoundingBox();
-	CollisonManager::GetInstance()->AddCollider(box);
+	CollisonManager::GetInstance()->AddCollider(box,behave);
 	_colliders.push_back(box);
 }
 
-void GameObject::AddSphereCollider(string name, float radius, vec3 center)
+void GameObject::AddSphereCollider(string name, ColliderBehave behave, float radius, vec3 center)
 {
 	shared_ptr<SphereCollider> sphere = make_shared<SphereCollider>();
 	sphere->SetName(name);
@@ -37,7 +37,7 @@ void GameObject::AddSphereCollider(string name, float radius, vec3 center)
 	sphere->SetRadius(radius);
 	GetTransform()->Update();
 	sphere->MakeBoundingSphere();
-	CollisonManager::GetInstance()->AddCollider(sphere);
+	CollisonManager::GetInstance()->AddCollider(sphere, behave);
 	_colliders.push_back(sphere);
 }
 

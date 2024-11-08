@@ -137,8 +137,8 @@ void Stage1::BulidDeferred()
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
 
-		player->AddBoxColliderWithModel("this",vec3(-2.5f, -1.0f, -0.5f));
-		player->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
+		player->AddBoxColliderWithModel("this", ColliderBehave::Active,vec3(-2.5f, -1.0f, -0.5f));
+		player->AddBoxCollider("raycheck", ColliderBehave::Active, vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
 
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
@@ -160,7 +160,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box",L"Box");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
-		object->AddBoxColliderWithModel("block");
+		object->AddBoxColliderWithModel("block",ColliderBehave::Passive);
 		AddGameObject(object, RenderingType::Deferred);
 	}
 
@@ -172,7 +172,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth",L"Earth");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
-		object->AddSphereColliderWithModel("earth");
+		object->AddSphereColliderWithModel("earth", ColliderBehave::Passive);
 		AddGameObject(object, RenderingType::Deferred);
 	}
 
@@ -187,7 +187,7 @@ void Stage1::BulidDeferred()
 		//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
 		enemy->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"deferred.hlsl"));
 		//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
-		enemy->AddBoxColliderWithModel("enemy",vec3(-2.0f,-0.5,0));
+		enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active,vec3(-2.0f,-0.5,0));
 		AddGameObject(enemy, RenderingType::Deferred);
 	}
 

@@ -41,8 +41,8 @@ public:
 	virtual void OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider>other) = 0;
 	virtual void OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other) = 0;
 
-	void AddBoxCollider(string name, vec3 size, vec3 center);
-	void AddSphereCollider(string name, float radius, vec3 center);
+	void AddBoxCollider(string name, ColliderBehave behave, vec3 size, vec3 center );
+	void AddSphereCollider(string name, ColliderBehave behave,float radius, vec3 center);
 
 	void BoundingRender();
 

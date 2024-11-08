@@ -24,24 +24,24 @@ void CollisonManager::Update()
 
 void CollisonManager::Clear()
 {
-	_colliders.clear();
+	_activeColliders.clear();
+	_passiveColliders.clear();
 }
 
 void CollisonManager::CheckObjectCollusion()
 {
 
-	for (int32 i = 0; i < _colliders.size(); i++)
+	for (int32 i = 0; i < _activeColliders.size(); i++)
 	{
-		for (int32 j = i + 1; j < _colliders.size(); j++)
+		for (int32 j = 0; j < _passiveColliders.size(); j++)
 		{
-			shared_ptr<BaseCollider> src = _colliders[i];
-			shared_ptr<BaseCollider> dest = _colliders[j];
+			shared_ptr<BaseCollider> src = _activeColliders[i];
+			shared_ptr<BaseCollider> dest = _passiveColliders[j];
 
 			if (src == nullptr || dest == nullptr)
 			{
-				return;
+				continue;
 			}
-
 
 			if (src->CheckCollusion(dest))
 			{
@@ -68,6 +68,41 @@ void CollisonManager::CheckObjectCollusion()
 	}
 
 
+	for (int32 i = 0; i < _activeColliders.size(); i++)
+	{
+		for (int32 j = i+1; j < _activeColliders.size(); j++)
+		{
+			shared_ptr<BaseCollider> src = _activeColliders[i];
+			shared_ptr<BaseCollider> dest = _activeColliders[j];
+
+			if (src == nullptr || dest == nullptr)
+			{
+				continue;
+			}
+
+			if (src->CheckCollusion(dest))
+			{
+				if (src->_collisionMap.contains(dest.get()) == false)
+				{
+					src->GetOwner()->OnComponentBeginOverlap(src, dest);
+					dest->GetOwner()->OnComponentBeginOverlap(dest, src);
+					src->_collisionMap.insert(dest.get());
+					dest->_collisionMap.insert(src.get());
+				}
+			}
+
+			else
+			{
+				if (src->_collisionMap.contains(dest.get()))
+				{
+					src->GetOwner()->OnComponentEndOverlap(src, dest);
+					dest->GetOwner()->OnComponentEndOverlap(dest, src);
+					src->_collisionMap.erase(dest.get());
+					dest->_collisionMap.erase(src.get());
+				}
+			}
+		}
+	}
 
 }
 
@@ -125,14 +160,30 @@ void CollisonManager::ReserveDeleteCollider(shared_ptr<BaseCollider>& collider)
 	_deleteColliders.push(collider);
 }
 
-void CollisonManager::AddCollider(const shared_ptr<BaseCollider>& collider)
+void CollisonManager::AddCollider(const shared_ptr<BaseCollider>& collider, ColliderBehave behave)
 {
-	_colliders.push_back(collider);
+	switch (behave)
+	{
+	case ColliderBehave::Active:
+		_activeColliders.push_back(collider);
+		break;
+	case ColliderBehave::Passive:
+		_passiveColliders.push_back(collider);
+		break;
+	default:
+		break;
+	}
 }
+
 
 void CollisonManager::Reset()
 {
-	for (auto& ele : _colliders)
+	for (auto& ele : _activeColliders)
+	{
+		ele->Clear();
+	}
+
+	for (auto& ele : _passiveColliders)
 	{
 		ele->Clear();
 	}
@@ -141,8 +192,11 @@ void CollisonManager::Reset()
 void CollisonManager::RemoveCollider(shared_ptr<BaseCollider>& collider)
 {
 
-	auto it = std::remove(_colliders.begin(), _colliders.end(), collider);
-	_colliders.erase(it, _colliders.end());
+	auto it = std::remove(_activeColliders.begin(), _activeColliders.end(), collider);
+	_activeColliders.erase(it, _activeColliders.end());
+
+	auto it2 = std::remove(_passiveColliders.begin(), _passiveColliders.end(), collider);
+	_passiveColliders.erase(it2, _passiveColliders.end());
 
 
 }

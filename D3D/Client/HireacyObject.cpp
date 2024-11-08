@@ -69,7 +69,7 @@ shared_ptr<Transform> HireacyObject::GetTransform()
 	return _transform->GetRoot();
 }
 
-void HireacyObject::AddBoxColliderWithModel(string name, vec3 offsetSize, vec3 offsetCeneter)
+void HireacyObject::AddBoxColliderWithModel(string name, ColliderBehave behave, vec3 offsetSize, vec3 offsetCeneter)
 {
 	shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
 	box->SetName(name);
@@ -78,11 +78,11 @@ void HireacyObject::AddBoxColliderWithModel(string name, vec3 offsetSize, vec3 o
 	box->SetSize(_model->GetSize() + offsetSize);
 	GetTransform()->Update();
 	box->MakeBoundingBox();
-	CollisonManager::GetInstance()->AddCollider(box);
+	CollisonManager::GetInstance()->AddCollider(box, behave);
 	_colliders.push_back(box);
 }
 
-void HireacyObject::AddSphereColliderWithModel(string name, float offsetSize, vec3 offsetCeneter)
+void HireacyObject::AddSphereColliderWithModel(string name, ColliderBehave behave, float offsetSize, vec3 offsetCeneter)
 {
 	shared_ptr<SphereCollider> sphere = make_shared<SphereCollider>();
 	sphere->SetName(name);
@@ -91,7 +91,7 @@ void HireacyObject::AddSphereColliderWithModel(string name, float offsetSize, ve
 	sphere->SetRadius(_model->GetRadius() + offsetSize);
 	GetTransform()->Update();
 	sphere->MakeBoundingSphere();
-	CollisonManager::GetInstance()->AddCollider(sphere);
+	CollisonManager::GetInstance()->AddCollider(sphere, behave);
 	_colliders.push_back(sphere);
 }
 

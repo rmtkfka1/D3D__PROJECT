@@ -64,7 +64,7 @@ void ModelObject::Render()
 }
 
 
-void ModelObject::AddBoxColliderWithModel(string name, vec3 offsetSize, vec3 offsetCeneter)
+void ModelObject::AddBoxColliderWithModel(string name, ColliderBehave behave, vec3 offsetSize, vec3 offsetCeneter)
 {
 	shared_ptr<BoxCollider> box = make_shared<BoxCollider>();
 	box->SetName(name);
@@ -73,11 +73,11 @@ void ModelObject::AddBoxColliderWithModel(string name, vec3 offsetSize, vec3 off
 	box->SetSize(_model->GetSize() + offsetSize);
 	GetTransform()->Update();
 	box->MakeBoundingBox();
-	CollisonManager::GetInstance()->AddCollider(box);
+	CollisonManager::GetInstance()->AddCollider(box, behave);
 	_colliders.push_back(box);
 }
 
-void ModelObject::AddSphereColliderWithModel(string name, float offsetRadius, vec3 offsetCeneter)
+void ModelObject::AddSphereColliderWithModel(string name, ColliderBehave behave, float offsetRadius, vec3 offsetCeneter)
 {
 	shared_ptr<SphereCollider> sphere = make_shared<SphereCollider>();
 	sphere->SetName(name);
@@ -86,7 +86,7 @@ void ModelObject::AddSphereColliderWithModel(string name, float offsetRadius, ve
 	sphere->SetRadius(_model->GetRadius() + offsetRadius);
 	GetTransform()->Update();
 	sphere->MakeBoundingSphere();
-	CollisonManager::GetInstance()->AddCollider(sphere);
+	CollisonManager::GetInstance()->AddCollider(sphere, behave);
 	_colliders.push_back(sphere);
 }
 
