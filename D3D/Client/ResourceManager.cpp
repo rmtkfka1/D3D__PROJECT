@@ -32,7 +32,7 @@ void ResourceManager::CreateDefaultShader()
 		ShaderInfo info;
 		info.shaderType = ShaderType::FORWARD;
 		info.bActiveGSShader = true;
-		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_FRONT;
 		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
 		shader->Init(L"Bilboard.hlsl",info);
 		Add<Shader>(L"Bilboard.hlsl", shader);
