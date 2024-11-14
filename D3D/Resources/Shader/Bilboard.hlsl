@@ -1,15 +1,3 @@
-#include "light.hlsl"
-
-#define MAX_LIGHTS 5 
-
-
-cbuffer lighting : register(b0)
-{
-    float3 g_eyeWorld;
-    int g_lightCount;
-    Light g_lights[MAX_LIGHTS];
-};
-
 
 cbuffer TEST_B0 : register(b1)
 {
@@ -120,6 +108,8 @@ float4 PS_Main(GS_OUT input) : SV_Target
     float sumColor = (color.x + color.y + color.z) / 3.0f;
     
     clip(sumColor>0.8f ? -1:1);
+    
+    clip(color.a -0.9f);
     
     return color;
 }

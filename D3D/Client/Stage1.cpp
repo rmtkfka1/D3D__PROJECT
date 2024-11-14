@@ -31,6 +31,7 @@
 #include <random>
 
 static default_random_engine dre;
+static uniform_int_distribution<int> random_texture(1, 6);
 static uniform_int_distribution<int> random_xz(-3800, 3800);
 
 Stage1::Stage1()
@@ -277,8 +278,6 @@ void Stage1::BulidForward()
 
 		for (int i = 0; i < 50; ++i)
 		{
-
-
 			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
 			gameobject->_useWithHeightMap = true;
 			gameobject->SetFrustumCuling(false);
@@ -294,8 +293,57 @@ void Stage1::BulidForward()
 			vec3 Pos = _terrain->GetHeight(vec3(randomValueX, 0, randomValueZ));
 			gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x,Pos.y+250.0f,Pos.z));
 			gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
-			shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTree.png");
-			gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+			int randomTexture = random_texture(dre);
+			
+			switch (randomTexture)
+			{
+			case 1:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/1.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+				break;
+			case 2:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/2.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+				break;
+
+			case 3: 
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/3.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+				break;
+
+			case 4:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/4.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+				break;
+
+			case 5:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/5.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+				break;
+
+			case 6:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/6.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+				break;
+			default:
+				assert(false);
+				break;
+			}
+
+	
 			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
 
 			AddGameObject(gameobject, RenderingType::Forward);
@@ -307,12 +355,59 @@ void Stage1::BulidForward()
 			gameobject->SetFrustumCuling(false);
 
 			vector<Vertex> v;
-
 			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
 			gameobject->GetMesh()->Init(v);
 	
-			shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTree.png");
-			gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			int randomTexture = random_texture(dre);
+
+			switch (randomTexture)
+			{
+			case 1:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/1.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+			break;
+			case 2:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/2.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+			break;
+
+			case 3:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/3.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+			break;
+
+			case 4:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/4.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+			break;
+
+			case 5:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/5.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+			break;
+
+			case 6:
+			{
+				shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/6.png");
+				gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			}
+			break;
+			default:
+				assert(false);
+				break;
+			}
+
+
 			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
 
 			AddGameObject(gameobject, RenderingType::Forward);

@@ -1,5 +1,8 @@
 #pragma once
 #include "CustomObject.h"
+
+class Texture;
+
 class BilboardObject :	public CustomObject
 {
 public:
