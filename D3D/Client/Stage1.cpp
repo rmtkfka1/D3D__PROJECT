@@ -191,6 +191,12 @@ void Stage1::BulidDeferred()
 		AddGameObject(enemy, RenderingType::Deferred);
 	}
 
+
+	{
+		
+
+	}
+
 	//temp
 	Model::ReadData(L"playerBullet/playerBullet", L"playerBullet");
 }

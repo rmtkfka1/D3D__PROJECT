@@ -23,7 +23,7 @@ void Shader::Init(const wstring& path, ShaderInfo info , const string& gs)
 
 	if (gs.empty() == false)
 	{
-		CreateGeometryShader(finalPath, gs, "gs_5_0");
+		CreateGeometryShader(finalPath, "GS_Main", "gs_5_0");
 	}
 
 

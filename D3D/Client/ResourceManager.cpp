@@ -33,6 +33,15 @@ void ResourceManager::CreateDefaultShader()
 	}
 
 	{
+		ShaderInfo info;
+		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->Init(L"Bilboard.hlsl", info,"GS_Main");
+		Add<Shader>(L"Bilboard.hlsl", shader);
+	}
+
+	{
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;
 		info.shaderType = ShaderType::DEFREED;

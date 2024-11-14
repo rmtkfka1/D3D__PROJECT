@@ -97,7 +97,6 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     
     output.normal = float4(input.worldNormal, 0.0f);
  
-   
     
     if (NormalOn )
     {
@@ -108,7 +107,6 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
         float3x3 matTBN = { input.worldTangent, input.worldBinormal, input.worldNormal };
         output.normal = float4(mul(tangentSpaceNormal, matTBN), 0.0f);
     }
-
 
     return output;
 
