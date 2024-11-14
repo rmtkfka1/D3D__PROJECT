@@ -3,6 +3,7 @@
 
 class Player;
 class BoxCollider;
+class Terrain;
 
 
 class Stage1 :public Scene
@@ -24,8 +25,7 @@ private:
 
 public:
 	shared_ptr<Player> _player;
-
-
+	shared_ptr<Terrain> _terrain; //temp
 
 private:
 	void DeferredRender();

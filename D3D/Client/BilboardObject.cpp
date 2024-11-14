@@ -23,14 +23,16 @@ BilboardObject::~BilboardObject()
 
 void BilboardObject::Init()
 {
+	if (_useWithHeightMap==false)
+	{
+		float x = random_xz(dre);
+		float z = random_xz(dre);
+		float y = random_y(dre);
+		float scale = random_sclae(dre);
 
-	float x = random_xz(dre);
-	float z = random_xz(dre);
-	float y = random_y(dre);
-	float scale = random_sclae(dre);
-
-	_transform->SetLocalScale(vec3(scale, scale, scale));
-	_transform->SetLocalPosition(vec3(x, y+scale*15.0f, z));
+		_transform->SetLocalScale(vec3(scale, scale, scale));
+		_transform->SetLocalPosition(vec3(x, y + scale * 15.0f, z));
+	}
 }
 
 void BilboardObject::Update()

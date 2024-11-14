@@ -28,6 +28,11 @@
 #include "TimeManager.h"
 #include "Enemy.h"
 #include "BilboardObject.h"
+#include <random>
+
+static default_random_engine dre;
+static uniform_int_distribution<int> random_xz(-3800, 3800);
+
 Stage1::Stage1()
 {
 }
@@ -144,6 +149,8 @@ void Stage1::BulidDeferred()
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
 
 		shared_ptr<Terrain> terrain = make_shared<Terrain>();
+		_terrain = terrain;
+		_terrain->Init();
 		terrain->SetFrustumCuling(false);
 		player->SetTerrain(terrain);
 
@@ -268,10 +275,12 @@ void Stage1::BulidForward()
 
 	{
 
-		for (int i = 0; i < 10; ++i)
+		for (int i = 0; i < 50; ++i)
 		{
-			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
 
+
+			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
+			gameobject->_useWithHeightMap = true;
 			gameobject->SetFrustumCuling(false);
 
 			vector<Vertex> v;
@@ -279,6 +288,29 @@ void Stage1::BulidForward()
 			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
 			gameobject->GetMesh()->Init(v);
 
+			int randomValueX = random_xz(dre);
+			int randomValueZ = random_xz(dre);
+
+			vec3 Pos = _terrain->GetHeight(vec3(randomValueX, 0, randomValueZ));
+			gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x,Pos.y+250.0f,Pos.z));
+			gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
+			shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTree.png");
+			gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
+
+			AddGameObject(gameobject, RenderingType::Forward);
+		}
+
+		for (int i = 0; i < 10; ++i)
+		{
+			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
+			gameobject->SetFrustumCuling(false);
+
+			vector<Vertex> v;
+
+			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
+			gameobject->GetMesh()->Init(v);
+	
 			shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTree.png");
 			gameobject->GetMaterial()->SetDiffuseTexture(texture);
 			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
@@ -353,7 +385,6 @@ void Stage1::FinalRender()
 	ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
 	shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
 	shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
-
 
 	material->Pushdata();
 	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
