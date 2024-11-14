@@ -8,7 +8,7 @@ public:
 	virtual ~Mesh();
 
 	void Init(vector<Vertex>& vec, vector<uint32>& index);
-	void Render();
+	void Render(D3D_PRIMITIVE_TOPOLOGY topolgy = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	void CreateVertexBuffer(vector<Vertex>& vec);
 	void CreateIndexBuffer(vector<uint32>& vec);
 

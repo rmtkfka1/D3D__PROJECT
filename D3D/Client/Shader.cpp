@@ -12,7 +12,7 @@ Shader::~Shader()
 
 }
 
-void Shader::Init(const wstring& path, ShaderInfo info , const string& gs)
+void Shader::Init(const wstring& path, ShaderInfo info )
 {
 
 	wstring finalPath = _path + path;
@@ -21,7 +21,7 @@ void Shader::Init(const wstring& path, ShaderInfo info , const string& gs)
 	CreateVertexShader(finalPath, "VS_Main", "vs_5_0");
 	CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
 
-	if (gs.empty() == false)
+	if (info.bActiveGSShader)
 	{
 		CreateGeometryShader(finalPath, "GS_Main", "gs_5_0");
 	}

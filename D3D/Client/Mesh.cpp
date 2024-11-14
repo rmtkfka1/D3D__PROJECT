@@ -17,10 +17,10 @@ void Mesh::Init(vector<Vertex>& vec , vector<uint32>& index)
 	CreateIndexBuffer(index);
 }
 
-void Mesh::Render()
+void Mesh::Render(D3D_PRIMITIVE_TOPOLOGY topolgy)
 {
 	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
-	cmdlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	cmdlist->IASetPrimitiveTopology(topolgy);
 	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
 	cmdlist->IASetIndexBuffer(& _indexBufferView); // Slot: (0~15)
 	cmdlist->DrawIndexedInstanced(_indexCount, 1, 0, 0, 0);
