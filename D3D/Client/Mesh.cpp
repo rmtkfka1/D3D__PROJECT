@@ -4,6 +4,7 @@
 #include "RootSignature.h"
 #include "RenderTargets.h"
 #include "D3D12ResourceManager.h"
+#include <optional>
 Mesh::Mesh():ResourceBase(ResourceType::Mesh)
 {
 
@@ -17,6 +18,11 @@ void Mesh::Init(vector<Vertex>& vec , vector<uint32>& index)
 	CreateIndexBuffer(index);
 }
 
+void Mesh::Init(vector<Vertex>& vec)
+{
+	CreateVertexBuffer(vec);
+}
+
 void Mesh::Render(D3D_PRIMITIVE_TOPOLOGY topolgy)
 {
 	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
@@ -24,6 +30,14 @@ void Mesh::Render(D3D_PRIMITIVE_TOPOLOGY topolgy)
 	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
 	cmdlist->IASetIndexBuffer(& _indexBufferView); // Slot: (0~15)
 	cmdlist->DrawIndexedInstanced(_indexCount, 1, 0, 0, 0);
+}
+
+void Mesh::RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY topolgy)
+{
+	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
+	cmdlist->IASetPrimitiveTopology(topolgy);
+	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView); 
+	cmdlist->DrawInstanced(_vertexCount, 1, 0, 0);
 }
 
 void Mesh::CreateVertexBuffer(vector<Vertex>& vec)

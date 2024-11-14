@@ -42,9 +42,9 @@ struct ShaderInfo
 	RASTERIZER_TYPE rasterizerType = RASTERIZER_TYPE::CULL_BACK;
 	DEPTH_STENCIL_TYPE depthStencilType = DEPTH_STENCIL_TYPE::LESS;
 	BLEND_TYPE blendType = BLEND_TYPE::DEFAULT;
-	bool bActiveGSShader = false;
 	//bool bActiveHSShader = false;
 	//bool bActiveDSShader = false;
+	bool bActiveGSShader = false;
 };
 
 class Shader :public ResourceBase

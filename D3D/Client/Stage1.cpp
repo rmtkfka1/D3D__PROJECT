@@ -27,6 +27,7 @@
 #include "BufferPool.h"
 #include "TimeManager.h"
 #include "Enemy.h"
+#include "BilboardObject.h"
 Stage1::Stage1()
 {
 }
@@ -250,6 +251,41 @@ void Stage1::BulidForward()
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
 
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
+
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
+
+		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"sky.hlsl");
+
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
+
+	{
+
+		for (int i = 0; i < 10; ++i)
+		{
+			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
+
+			gameobject->SetFrustumCuling(false);
+
+			vector<Vertex> v;
+
+			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
+			gameobject->GetMesh()->Init(v);
+
+			shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"1.jpg");
+			gameobject->GetMaterial()->SetDiffuseTexture(texture);
+			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
+
+			AddGameObject(gameobject, RenderingType::Forward);
+		}
+	}
 
 }
 

@@ -26,6 +26,18 @@ void ResourceManager::CreateDefaultMesh()
 
 void ResourceManager::CreateDefaultShader()
 {
+
+	{
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.bActiveGSShader = true;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+		shader->Init(L"Bilboard.hlsl",info);
+		Add<Shader>(L"Bilboard.hlsl", shader);
+	}
+
 	{
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		shader->Init(L"default.hlsl");

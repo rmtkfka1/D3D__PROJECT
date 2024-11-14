@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{df27f001-bb9d-491c-a9a8-ccd65aeb2505}</UniqueIdentifier>
-    </Filter>
     <Filter Include="pch">
       <UniqueIdentifier>{38ac07c1-5ae7-4950-80a8-da6326311c4f}</UniqueIdentifier>
     </Filter>
@@ -53,25 +50,28 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="리소스 파일\Utils">
+      <UniqueIdentifier>{df27f001-bb9d-491c-a9a8-ccd65aeb2505}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
       <Filter>00.Main</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>pch</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="tinyxml2.h">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>02.Core</Filter>
@@ -122,7 +122,7 @@
       <Filter>07.Manager</Filter>
     </ClInclude>
     <ClInclude Include="GeoMetryHelper.h">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>05.GameObject\00.GameObject</Filter>
@@ -143,7 +143,7 @@
       <Filter>03.Resource</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="ModelObject.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
@@ -179,7 +179,7 @@
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClInclude>
     <ClInclude Include="simple_mesh_LH.h">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="SphereCollider.h">
       <Filter>03.Resource\Collider</Filter>
@@ -201,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="EnemyBullet.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BilboardObject.h">
+      <Filter>05.GameObject\01.CustomObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,7 +227,7 @@
       <Filter>pch</Filter>
     </ClCompile>
     <ClCompile Include="tinyxml2.cpp">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp">
       <Filter>02.Core</Filter>
@@ -275,7 +278,7 @@
       <Filter>07.Manager</Filter>
     </ClCompile>
     <ClCompile Include="GeoMetryHelper.cpp">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>05.GameObject\00.GameObject</Filter>
@@ -296,7 +299,7 @@
       <Filter>03.Resource</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClCompile>
     <ClCompile Include="ModelObject.cpp">
       <Filter>05.GameObject\02.ModelObject</Filter>
@@ -332,7 +335,7 @@
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClCompile>
     <ClCompile Include="simple_mesh_LH.cpp">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </ClCompile>
     <ClCompile Include="SphereCollider.cpp">
       <Filter>03.Resource\Collider</Filter>
@@ -354,6 +357,9 @@
     </ClCompile>
     <ClCompile Include="EnemyBullet.cpp">
       <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BilboardObject.cpp">
+      <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -387,15 +393,18 @@
     <FxCompile Include="..\Resources\Shader\uishaderClip.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\Bilboard.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="memo.txt">
-      <Filter>Utils</Filter>
+      <Filter>리소스 파일\Utils</Filter>
     </Text>
   </ItemGroup>
 </Project>
