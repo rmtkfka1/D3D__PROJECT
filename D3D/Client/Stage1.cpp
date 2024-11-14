@@ -206,12 +206,12 @@ void Stage1::BulidDeferred()
 		{
 			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
 			gameobject->_useWithHeightMap = true;
-			gameobject->SetFrustumCuling(false);
 
 			vector<Vertex> v;
 
 			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
 			gameobject->GetMesh()->Init(v);
+		
 
 			int randomValueX = random_xz(dre);
 			int randomValueZ = random_xz(dre);
@@ -219,7 +219,7 @@ void Stage1::BulidDeferred()
 			vec3 Pos = _terrain->GetHeight(vec3(randomValueX, 0, randomValueZ));
 			gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x, Pos.y + 250.0f, Pos.z));
 			gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
-
+			gameobject->AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 5.0f, 2.0f), vec3(0, 0, 0));
 			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
 
 			AddGameObject(gameobject, RenderingType::Deferred);
@@ -228,7 +228,7 @@ void Stage1::BulidDeferred()
 		for (int i = 0; i < 10; ++i)
 		{
 			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
-			gameobject->SetFrustumCuling(false);
+
 
 			vector<Vertex> v;
 			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));

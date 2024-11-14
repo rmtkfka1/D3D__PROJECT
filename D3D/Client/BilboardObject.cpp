@@ -85,6 +85,7 @@ void BilboardObject::Init()
 
 		_transform->SetLocalScale(vec3(scale, scale, scale));
 		_transform->SetLocalPosition(vec3(x, y + scale * 14.0f, z));
+		AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 4.0f, 2.0f), vec3(0, 0, 0));
 	}
 
 
