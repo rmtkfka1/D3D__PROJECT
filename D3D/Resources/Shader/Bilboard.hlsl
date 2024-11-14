@@ -3,13 +3,6 @@
 #define MAX_LIGHTS 5 
 
 
-cbuffer lighting : register(b0)
-{
-    float3 g_eyeWorld;
-    int g_lightCount;
-    Light g_lights[MAX_LIGHTS];
-};
-
 
 cbuffer TEST_B0 : register(b1)
 {
@@ -22,7 +15,8 @@ cbuffer TEST_B1 : register(b2)
     row_major matrix WorldMat;
 };
 
-Texture2D g_tex_0 : register(t0);
+Texture2D diffuseTexture : register(t0);
+Texture2D normalTexture : register(t1);
 SamplerState g_sam_0 : register(s0);
 
 struct VS_IN
@@ -42,6 +36,15 @@ struct GS_OUT
     float3 normal : NORMAL;
     float2 uv: TEXCOORD;
 };
+
+struct PS_OUT
+{
+    float4 position : SV_Target0;
+    float4 normal : SV_Target1;
+    float4 color : SV_Target2;
+};
+
+
 
 VS_OUT VS_Main(VS_IN input)
 {
@@ -146,42 +149,21 @@ void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
 }
 
 
-float4 PS_Main(GS_OUT input) : SV_Target
+PS_OUT PS_Main(GS_OUT input)
 {
   
-    float4 texColor = g_tex_0.Sample(g_sam_0, input.uv);
-    
-    float sumColor = (texColor.x + texColor.y + texColor.z) / 3.0f;
+    PS_OUT output;
+
+    output.position = float4(input.worldPos, 1.0f);
+    output.color = diffuseTexture.Sample(g_sam_0, input.uv);
+    output.normal = float4(normalize(input.normal), 0.0f);
+ 
+    float sumColor = (output.color.x + output.color.y + output.color.z) / 3.0f;
     
     clip(sumColor > 0.8f ? -1 : 1);
     
-    clip(texColor.a - 0.9f);
+    clip(output.color.a - 0.9f);
     
-    
-    float3 color = float3(0, 0, 0);
-    
-    float3 toEye = normalize(g_eyeWorld - input.worldPos);
-    
-    for (int i = 0; i < g_lightCount; ++i)
-    {
-   
-        if (g_lights[i].mateiral.lightType == 0)
-        {
-            color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, input.normal, toEye);
-        }
-        else if (g_lights[i].mateiral.lightType == 1)
-        {
-            color += ComputePointLight(g_lights[i], g_lights[i].mateiral, input.worldPos, input.normal, toEye);
-            
-       
-        }
-        else if (g_lights[i].mateiral.lightType == 2)
-        {
-            color += ComputeSpotLight(g_lights[i], g_lights[i].mateiral, input.worldPos, input.normal, toEye);
-        }
-          
-    }
-    
-    return float4(color, 1.0f) * texColor;
+    return output;
 
 }

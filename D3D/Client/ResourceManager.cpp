@@ -30,7 +30,7 @@ void ResourceManager::CreateDefaultShader()
 	{
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;
-		info.shaderType = ShaderType::FORWARD;
+		info.shaderType = ShaderType::DEFREED;
 		info.bActiveGSShader = true;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_FRONT;
 		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
