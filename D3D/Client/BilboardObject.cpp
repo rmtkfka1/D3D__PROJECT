@@ -35,6 +35,16 @@ void BilboardObject::Init()
 
 void BilboardObject::Update()
 {
+
+	auto CameraPos = CameraManager::GetInstance()->GetActiveCamera()->GetCameraPos();
+
+	// 카메라 방향 벡터 계산 (빌보드 -> 카메라)
+	vec3 toCameraDir = CameraPos - _transform->GetLocalPosition();
+	toCameraDir.Normalize();
+
+	// y축을 기준으로 빌보드를 회전시켜 항상 카메라를 바라보게 함
+	float angle = atan2(toCameraDir.x, toCameraDir.z); 
+	_transform->SetLocalRotation(vec3(0, XMConvertToDegrees(angle), 0));
 	_transform->Update();
 }
 

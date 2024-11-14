@@ -279,7 +279,7 @@ void Stage1::BulidForward()
 			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
 			gameobject->GetMesh()->Init(v);
 
-			shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"1.jpg");
+			shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTree.png");
 			gameobject->GetMaterial()->SetDiffuseTexture(texture);
 			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
 
