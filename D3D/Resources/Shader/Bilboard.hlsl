@@ -1,8 +1,3 @@
-#include "Light.hlsl"
-
-#define MAX_LIGHTS 5 
-
-
 
 cbuffer TEST_B0 : register(b1)
 {
@@ -61,89 +56,36 @@ void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
    
     float hw = 5.0f;
     GS_OUT output;
-    
+    float2 uvCoords[4] = { float2(0, 0), float2(1, 0), float2(0, 1), float2(1, 1) };
+    float2 offsets[4] = { float2(-hw, hw), float2(hw, hw), float2(-hw, -hw), float2(hw, -hw) };
 
+    // 공통 노멀 계산
+    float3 normal = float3(0, 0, 1.0f);
+    normal = normalize(mul(float4(normal, 0.0f), WorldMat).xyz);
+
+    for (int i = 0; i < 4; ++i)
     {
+        // 버텍스 위치 설정
         output.pos = input[0].pos;
-        output.pos.x -= hw;
-        output.pos.y += hw;
+        output.pos.xy += offsets[i]; // 오프셋 적용
         
+        // 월드 좌표 계산
         float4 WorldPos = mul(output.pos, WorldMat);
         output.worldPos = WorldPos.xyz;
-        
-        output.uv = float2(0, 0);
-        output.normal = float3(0, 0, 1.0f);
-        output.normal = mul(float4(output.normal, 0.0f), WorldMat);
-        output.normal = normalize(output.normal);
-        output.pos = mul(output.pos, WorldMat);
-        output.pos = mul(output.pos, ViewMat);
+
+        // UV 좌표 설정
+        output.uv = uvCoords[i];
+
+        // 노멀 설정 (공통으로 계산된 노멀 사용)
+        output.normal = normal;
+
+        // 클립 공간 변환
+        output.pos = mul(WorldPos, ViewMat);
         output.pos = mul(output.pos, ProjMat);
 
+        // 스트림 추가
         outputStream.Append(output);
     }
-    
-
-    {
-        output.pos = input[0].pos;
-        output.pos.x += hw;
-        output.pos.y += hw;
-        
-        float4 WorldPos = mul(output.pos, WorldMat);
-        output.worldPos = WorldPos.xyz;
-        
-        output.uv = float2(1, 0);
-        output.normal = float3(0, 0, 1.0f);
-        output.normal = mul(float4(output.normal, 0.0f), WorldMat);
-        output.normal = normalize(output.normal);
-
-        output.pos = mul(output.pos, WorldMat);
-        output.pos = mul(output.pos, ViewMat);
-        output.pos = mul(output.pos, ProjMat);
-
-        outputStream.Append(output);
-    }
-    
-
-    {
-        output.pos = input[0].pos;
-        output.pos.x -= hw;
-        output.pos.y -= hw;
-        
-        float4 WorldPos = mul(output.pos, WorldMat);
-        output.worldPos = WorldPos.xyz;
-        
-        output.uv = float2(0, 1);
-        output.normal = float3(0, 0, 1.0f);
-        output.normal = mul(float4(output.normal, 0.0f), WorldMat);
-        output.normal = normalize(output.normal);
-
-        output.pos = mul(output.pos, WorldMat);
-        output.pos = mul(output.pos, ViewMat);
-        output.pos = mul(output.pos, ProjMat);
-
-        outputStream.Append(output);
-        }
-    
-
-     {
-        output.pos = input[0].pos;
-        output.pos.x += hw;
-        output.pos.y -= hw;
-        
-        float4 WorldPos = mul(output.pos, WorldMat);
-        output.worldPos = WorldPos.xyz;
-        
-        output.uv = float2(1, 1);
-        output.normal = float3(0, 0, 1.0f);
-        output.normal = mul(float4(output.normal, 0.0f), WorldMat);
-        output.normal = normalize(output.normal);
-
-        output.pos = mul(output.pos, WorldMat);
-        output.pos = mul(output.pos, ViewMat);
-        output.pos = mul(output.pos, ProjMat);
-        outputStream.Append(output);
-    }
-    
    
    
 }
