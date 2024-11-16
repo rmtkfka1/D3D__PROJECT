@@ -17,8 +17,8 @@ static uniform_real_distribution<double> random_xz(-5000.0f, 5000.0f);
 static uniform_real_distribution<double> random_y(3000.0f, 5000.0f);
 static uniform_real_distribution<double> random_sclae(10.0f, 180.0f);
 static uniform_int_distribution<int> random_texture(1, 6);
+StreamOutputData BilboardObject::_soData;
 
-bool BilboardObject::_streamRender =false;
 BilboardObject::BilboardObject()
 {
 }
@@ -29,7 +29,14 @@ BilboardObject::~BilboardObject()
 
 void BilboardObject::Init()
 {
-	_SOShader = ResourceManager::GetInstance()->Get<Shader>(L"BilboardStreamOutput.hlsl");
+	if (_soData.binit == false)
+	{
+		_soData.SOBuffer = make_shared<StreamOutputBuffer>();
+		_soData.SOBuffer->Init(32*6);
+		_soData.SOShader = ResourceManager::GetInstance()->Get<Shader>(L"BilboardStreamOutput.hlsl");
+		_soData.binit = true;
+	}
+
 
 	int randomTexture = random_texture(dre2);
 
@@ -115,13 +122,13 @@ void BilboardObject::Update()
 void BilboardObject::Render()
 {
 
-	if (_streamRender == false)
+	if (_soData._bStreamRender == false)
 	{
-		_SOShader->SetPipelineState();
-		core->GetStreamOutputBuffer()->Bind();
+		_soData.SOShader->SetPipelineState();
+		_soData.SOBuffer->Bind();
 		_mesh->RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
-		core->GetStreamOutputBuffer()->UnBind();
-		_streamRender = true;
+		_soData.SOBuffer->UnBind();
+		_soData._bStreamRender = true;
 
 	}
 
@@ -131,7 +138,7 @@ void BilboardObject::Render()
 		_transform->PushData();
 		_material->Pushdata();
 		core->GetTableHeap()->SetGraphicsRootDescriptorTable();
-		core->GetStreamOutputBuffer()->Render();
+		_soData.SOBuffer->Render();
 	}
 
 	

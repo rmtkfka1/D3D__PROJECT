@@ -44,7 +44,7 @@ public:
 	shared_ptr<ConstantBufferPool>& GetLIghtBufferPool() { return _lightBufferPool[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetMaterialParamsBufferPool() { return _materialParamsBufferPool[_currentContextIndex]; }
 	shared_ptr<TextureBufferPool>& GetTextureBufferPool() {return _textureBufferPool; }
-	shared_ptr<StreamOutputBuffer>& GetStreamOutputBuffer() { return _streamOutputBuffer; }
+
 
 	uint64 GetCurrentFrameIndex() { return _currentContextIndex; }
 
@@ -93,7 +93,7 @@ private:
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _CameraBufferPool;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _materialParamsBufferPool;
 	shared_ptr<TextureBufferPool>  _textureBufferPool;
-	shared_ptr<StreamOutputBuffer> _streamOutputBuffer;
+
 	shared_ptr<RenderTargets> _renderTargets;
 	shared_ptr<GBuffer> _GBuffer;
 };

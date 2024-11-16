@@ -409,8 +409,7 @@ void Core::CreateBufferPool()
 	_textureBufferPool = make_shared<TextureBufferPool>();
 	_textureBufferPool->Init(255);
 
-	_streamOutputBuffer = make_shared<StreamOutputBuffer>();
-	_streamOutputBuffer->Init(32*6);
+
 
 }
 

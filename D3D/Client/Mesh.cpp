@@ -27,8 +27,8 @@ void Mesh::Render(D3D_PRIMITIVE_TOPOLOGY topolgy)
 {
 	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
 	cmdlist->IASetPrimitiveTopology(topolgy);
-	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
-	cmdlist->IASetIndexBuffer(& _indexBufferView); // Slot: (0~15)
+	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView);
+	cmdlist->IASetIndexBuffer(& _indexBufferView); 
 	cmdlist->DrawIndexedInstanced(_indexCount, 1, 0, 0, 0);
 }
 

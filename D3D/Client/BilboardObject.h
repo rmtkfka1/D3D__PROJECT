@@ -4,6 +4,16 @@
 class Texture;
 class StreamOutputBuffer;
 class Shader;
+
+struct StreamOutputData
+{
+	bool binit = false;
+	shared_ptr<Shader> SOShader;
+	shared_ptr<StreamOutputBuffer> SOBuffer;
+	bool _bStreamRender = false;
+};
+
+
 class BilboardObject :	public CustomObject
 {
 public:
@@ -22,8 +32,6 @@ public:
 
 
 private:
-	static bool _streamRender;
-	shared_ptr<Shader> _SOShader;
-	
+	static StreamOutputData _soData;
 };
 
