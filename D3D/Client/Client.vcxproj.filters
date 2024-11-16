@@ -205,6 +205,9 @@
     <ClInclude Include="BilboardObject.h">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClInclude>
+    <ClInclude Include="SteamOutputBuffer.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -361,6 +364,9 @@
     <ClCompile Include="BilboardObject.cpp">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
+    <ClCompile Include="SteamOutputBuffer.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Resources\Shader\default.hlsl">
@@ -394,6 +400,12 @@
       <Filter>04.HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\Bilboard.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\BilboardStreamOutput.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\BilboardRender.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
   </ItemGroup>

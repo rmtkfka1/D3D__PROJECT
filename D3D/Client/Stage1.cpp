@@ -206,10 +206,9 @@ void Stage1::BulidDeferred()
 		{
 			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
 			gameobject->_useWithHeightMap = true;
-
+			gameobject->SetFrustumCuling(true);
 			vector<Vertex> v;
-
-			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
+			v.push_back(Vertex(vec3(0, 0, 0.0f)));
 			gameobject->GetMesh()->Init(v);
 		
 
@@ -220,7 +219,7 @@ void Stage1::BulidDeferred()
 			gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x, Pos.y + 250.0f, Pos.z));
 			gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
 			gameobject->AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 5.0f, 2.0f), vec3(0, 0, 0));
-			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
+			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"BilboardRender.hlsl"));
 
 			AddGameObject(gameobject, RenderingType::Deferred);
 		}
@@ -234,7 +233,7 @@ void Stage1::BulidDeferred()
 			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
 			gameobject->GetMesh()->Init(v);
 
-			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
+			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"BilboardRender.hlsl"));
 
 			AddGameObject(gameobject, RenderingType::Deferred);
 		}

@@ -220,8 +220,10 @@ void Terrain::LoadFIle(LPCTSTR pFileName, vec3 scale)
     assert(_width * _length * bytesPerPixel == fileSize && "File size doesn't match calculated dimensions!");
 
     // 하이트맵 데이터를 담을 메모리 할당
-    _HeightMapPixels = new BYTE[_width * _length];
-
+    if (_HeightMapPixels==nullptr)
+    {
+        _HeightMapPixels = new BYTE[_width * _length];
+    }
     // 파일에서 데이터 읽기
     DWORD dwBytesRead;
     BOOL bReadSuccess = ::ReadFile(hFile, _HeightMapPixels, fileSize, &dwBytesRead, NULL);

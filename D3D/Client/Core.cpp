@@ -8,6 +8,7 @@
 #include "LightManager.h"
 #include "ResourceManager.h"
 #include "Material.h"
+#include "SteamOutputBuffer.h"
 Core::Core()
 {
 }
@@ -407,6 +408,9 @@ void Core::CreateBufferPool()
 
 	_textureBufferPool = make_shared<TextureBufferPool>();
 	_textureBufferPool->Init(255);
+
+	_streamOutputBuffer = make_shared<StreamOutputBuffer>();
+	_streamOutputBuffer->Init(10000);
 
 }
 

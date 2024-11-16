@@ -8,6 +8,8 @@
 #include "Material.h"
 #include <random>
 #include "Texture.h"
+#include "SteamOutputBuffer.h"
+
 
 static default_random_engine dre;
 static default_random_engine dre2;
@@ -15,6 +17,8 @@ static uniform_real_distribution<double> random_xz(-5000.0f, 5000.0f);
 static uniform_real_distribution<double> random_y(3000.0f, 5000.0f);
 static uniform_real_distribution<double> random_sclae(10.0f, 180.0f);
 static uniform_int_distribution<int> random_texture(1, 6);
+
+bool BilboardObject::_streamRender =false;
 BilboardObject::BilboardObject()
 {
 }
@@ -25,6 +29,8 @@ BilboardObject::~BilboardObject()
 
 void BilboardObject::Init()
 {
+	_SOShader = ResourceManager::GetInstance()->Get<Shader>(L"BilboardStreamOutput.hlsl");
+
 	int randomTexture = random_texture(dre2);
 
 	switch (randomTexture)
@@ -108,9 +114,27 @@ void BilboardObject::Update()
 
 void BilboardObject::Render()
 {
-	_shader->SetPipelineState();
-	_transform->PushData();
-	_material->Pushdata();
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
-	_mesh->RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	if (_streamRender == false)
+	{
+		_SOShader->SetPipelineState();
+		core->GetStreamOutputBuffer()->Bind();
+		_mesh->RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+		core->GetStreamOutputBuffer()->UnBind();
+		_streamRender = true;
+
+	}
+
+	else
+	{
+		_shader->SetPipelineState();
+		_transform->PushData();
+		_material->Pushdata();
+		core->GetTableHeap()->SetGraphicsRootDescriptorTable();
+		core->GetStreamOutputBuffer()->Render();
+	}
+
+	
+
 }
+

@@ -19,7 +19,11 @@ void Shader::Init(const wstring& path, ShaderInfo info )
 	_info = info;
 
 	CreateVertexShader(finalPath, "VS_Main", "vs_5_0");
-	CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
+
+	if (info.bActvieStreamOutput == false)
+	{
+		CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
+	}
 
 	if (info.bActiveGSShader)
 	{
@@ -47,6 +51,7 @@ void Shader::Init(const wstring& path, ShaderInfo info )
 	_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_pipelineDesc.SampleDesc.Count = 1;
 	_pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	
 
 	switch (info.shaderType)
 	{
@@ -138,6 +143,33 @@ void Shader::Init(const wstring& path, ShaderInfo info )
 		rt.DestBlend = D3D12_BLEND_ONE;
 		break;
 	}
+
+	if (info.bActvieStreamOutput)
+	{
+
+		D3D12_SO_DECLARATION_ENTRY entry[] =
+		{
+			// Stream index, Semantic Name, Semantic Index, Start Component, Component Count, *Output Slot* [4개까지사용가능]
+			{0, "POSITION", 0, 0, 3, 0},
+			{0, "TEXCOORD", 0, 0, 2, 0},
+			{0, "NORMAL", 0, 0, 3, 0},
+			{0, "TANGENT", 0, 0, 3, 0},
+		};
+
+		UINT strides[] = { 12+8+12+12 }; 
+
+		D3D12_STREAM_OUTPUT_DESC desc = {};
+		desc.pSODeclaration = entry;
+		desc.NumEntries = _countof(entry);
+		desc.pBufferStrides = strides;
+		desc.NumStrides = 1;
+		desc.RasterizedStream = D3D12_SO_NO_RASTERIZED_STREAM;
+
+		_pipelineDesc.StreamOutput = desc;
+		
+	}
+
+
 
 	core->GetDevice()->CreateGraphicsPipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));
 }

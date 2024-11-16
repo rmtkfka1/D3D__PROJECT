@@ -45,6 +45,7 @@ struct ShaderInfo
 	//bool bActiveHSShader = false;
 	//bool bActiveDSShader = false;
 	bool bActiveGSShader = false;
+	bool bActvieStreamOutput = false;
 };
 
 class Shader :public ResourceBase

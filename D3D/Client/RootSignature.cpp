@@ -39,7 +39,10 @@ void RootSignature::Init()
 	rootSignatureDesc.pParameters = param;
 	rootSignatureDesc.NumStaticSamplers = 1;
 	rootSignatureDesc.pStaticSamplers = &samplerDesc;
-	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT
+		| D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT;
+
+
 
 
 	ComPtr<ID3DBlob> signature;

@@ -22,7 +22,7 @@ private:
 
 
 private:
-	BYTE* _HeightMapPixels;
+	BYTE* _HeightMapPixels=nullptr;
 
 	vec3 _scale;
 	int _width;

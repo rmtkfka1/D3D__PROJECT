@@ -103,6 +103,7 @@ struct Vertex
     vec3 tangent = { 0, 0, 0 };
 };
 
+
 struct TransformParams
 {
     Matrix matWorld;
