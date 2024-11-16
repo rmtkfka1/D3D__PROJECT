@@ -20,7 +20,7 @@ struct VS_IN
     float4 pos : POSITION;
     float2 uv : TEXCOORD;
     float3 normal : NORMAL;
-    float3 tangent : TANGENT;
+
 };
 
 struct VS_OUT

@@ -153,16 +153,22 @@ void Shader::Init(const wstring& path, ShaderInfo info )
 			{0, "POSITION", 0, 0, 3, 0},
 			{0, "TEXCOORD", 0, 0, 2, 0},
 			{0, "NORMAL", 0, 0, 3, 0},
-			{0, "TANGENT", 0, 0, 3, 0},
 		};
 
-		UINT strides[] = { 12+8+12+12 }; 
+		D3D12_INPUT_ELEMENT_DESC eledesc[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+
+		_pipelineDesc.InputLayout = { eledesc, _countof(eledesc) };
 
 		D3D12_STREAM_OUTPUT_DESC desc = {};
 		desc.pSODeclaration = entry;
 		desc.NumEntries = _countof(entry);
-		desc.pBufferStrides = strides;
-		desc.NumStrides = 1;
+		desc.pBufferStrides = nullptr;
+		desc.NumStrides = 0;
 		desc.RasterizedStream = D3D12_SO_NO_RASTERIZED_STREAM;
 
 		_pipelineDesc.StreamOutput = desc;

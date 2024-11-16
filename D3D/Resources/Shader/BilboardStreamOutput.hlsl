@@ -11,10 +11,9 @@ struct VS_OUT
 
 struct GS_OUT
 {
-    float3 pos : POSITION; 
-    float2 uv: TEXCOORD; 
-    float3 normal : NORMAL;     
-    float3 tangent : TANGENT;  
+    float3 pos : POSITION; //12
+    float2 uv: TEXCOORD;  //8
+    float3 normal : NORMAL;   //12   
 };
 
 VS_OUT VS_Main(VS_IN input)
@@ -44,7 +43,6 @@ void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
         
         output.uv = uvCoords[i];
         output.normal = normal;
-        output.tangent = normal;
 
         outputStream.Append(output);
     }
