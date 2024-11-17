@@ -269,10 +269,19 @@ float3 getPixel(float2 uv, float time)
 // main
 float4 PS_Main(VS_OUT input) : SV_TARGET
 {
-    float mouseX = 1.0;
-    float time = iTime * 0.3 + mouseX * 0.01;
-	
-    float3 color = getPixel(input.uv, time);
+
+    float time = iTime * 0.3 + 1.0 * 0.01;
+    float3 color;
+    
+    if(intparams1==0)
+    {
+        color = getPixel(input.uv, time);
+    }
+    
+    else
+    {
+        color = getPixel(input.uv, 0.2f);
+    }
     
     // post
     return float4(pow(color, float3(0.65, 0.65, 0.65)), 1.0);
