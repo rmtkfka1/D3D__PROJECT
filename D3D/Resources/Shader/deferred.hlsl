@@ -12,14 +12,25 @@ cbuffer TEST_B1 : register(b2)
 
 cbuffer materialparams : register(b3)
 {
+    
     int enemyDraw;
     int intparams2;
+    int intparams3;
+    int intparams4;
+    
     float floatparams1;
     float floatparams2;
+    float floatparams3;
+    float floatparams4;
+    float floatparams5;
+    
     int diffuseOn;
     int NormalOn;
     int specon;
-    int padding;
+
+    
+ 
+
 };
 
 Texture2D diffuseTexture : register(t0);

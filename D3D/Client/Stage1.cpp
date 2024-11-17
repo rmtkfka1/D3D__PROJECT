@@ -276,25 +276,38 @@ void Stage1::BulidForward()
 	}
 
 
+	//{
+	//	shared_ptr<Sea> gameobject = make_shared<Sea>();
+	//	gameobject->SetFrustumCuling(false);
+	//	gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
+
+	//	shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"sea.jpg");
+
+	//	ShaderInfo info;
+	//	info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+	//	info.blendType = BLEND_TYPE::ONE_TO_ONE_BLEND;
+	//	//info.depthStencilType = DEPTH_STENCIL_TYPE::DPTH_TEST_NO_WRITE;
+	//	shared_ptr<Shader> shader = make_shared<Shader>();
+	//	shader->Init(L"blendingsea.hlsl", info);
+
+	//	gameobject->GetTransform()->SetLocalPosition(vec3(0, -2700.0f, 0));
+
+	//	gameobject->SetShader(shader);
+	//	gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+	//	AddGameObject(gameobject, RenderingType::Forward);
+	//}
+
 	{
+
 		shared_ptr<Sea> gameobject = make_shared<Sea>();
 		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"sea.hlsl"));
+		
 
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"sea.jpg");
-
-		ShaderInfo info;
-		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
-		info.blendType = BLEND_TYPE::ONE_TO_ONE_BLEND;
-		//info.depthStencilType = DEPTH_STENCIL_TYPE::DPTH_TEST_NO_WRITE;
-		shared_ptr<Shader> shader = make_shared<Shader>();
-		shader->Init(L"blendingsea.hlsl", info);
-
-		gameobject->GetTransform()->SetLocalPosition(vec3(0, -2700.0f, 0));
-
-		gameobject->SetShader(shader);
-		gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
+		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, 0));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
 

@@ -37,7 +37,6 @@ void BilboardObject::Init()
 		_soData.binit = true;
 	}
 
-
 	int randomTexture = random_texture(dre2);
 
 	switch (randomTexture)

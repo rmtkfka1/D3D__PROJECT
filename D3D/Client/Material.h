@@ -9,10 +9,9 @@ struct MaterialParams
 	void Setfloat(uint8 index, float value) { floatParams[index] = value; }
 	void SetTexon(uint8 index, int value) { TextureParams[index] = value; }
 
-	array<int32, 2> intParams{0};
-	array<float, 2> floatParams{0};
+	array<int32, 4> intParams{0};
+	array<float, 5> floatParams{0};
 	array<int, 3> TextureParams{0};
-	int padding=1;
 };
 
 
@@ -32,7 +31,6 @@ public:
 
 	void Pushdata();
 
-	void AllPadingInverse() { _params.padding *= -1; }
 
 private:
 	shared_ptr<Texture> _diffuseTexture;

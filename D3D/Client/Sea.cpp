@@ -18,11 +18,11 @@ void Sea::Init()
 
 void Sea::Update()
 {
-	static float f = 0;
+	static float time = 0;
 
-	GetMaterial()->SetFloat(0, f);
+	GetMaterial()->SetFloat(4, time);
 
-	f += 0.02f * TimeManager::GetInstance()->GetDeltaTime();
+	time += TimeManager::GetInstance()->GetDeltaTime();
 
 	Super::Update();
 }
