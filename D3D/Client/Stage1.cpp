@@ -184,20 +184,20 @@ void Stage1::BulidDeferred()
 		AddGameObject(object, RenderingType::Deferred);
 	}
 
-	{
-		shared_ptr<Enemy> enemy = make_shared<Enemy>();
-		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
-		data->SetIntValue(0, 1);
-		enemy->SetModel(data);
-		enemy->SetPlayer(_player);
-		enemy->GetTransform()->SetLocalScale(vec3(70.0f, 70.0f, 70.0f));
-		enemy->GetTransform()->SetLocalPosition(vec3(2000.0f, 5000.0f, 0));
-		//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
-		enemy->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"deferred.hlsl"));
-		//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
-		enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active,vec3(-2.0f,-0.5,0));
-		AddGameObject(enemy, RenderingType::Deferred);
-	}
+	//{
+	//	shared_ptr<Enemy> enemy = make_shared<Enemy>();
+	//	shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
+	//	data->SetIntValue(0, 1);
+	//	enemy->SetModel(data);
+	//	enemy->SetPlayer(_player);
+	//	enemy->GetTransform()->SetLocalScale(vec3(70.0f, 70.0f, 70.0f));
+	//	enemy->GetTransform()->SetLocalPosition(vec3(2000.0f, 5000.0f, 0));
+	//	//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
+	//	enemy->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"deferred.hlsl"));
+	//	//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
+	//	enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active,vec3(-2.0f,-0.5,0));
+	//	AddGameObject(enemy, RenderingType::Deferred);
+	//}
 
 
 	{
@@ -315,16 +315,59 @@ void Stage1::BulidForward()
 	{
 
 		shared_ptr<Sea> gameobject = make_shared<Sea>();
-		gameobject->SetMove(false);
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"sea.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest.hlsl"));
 
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, 4000.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, 5000.0f));
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
+
+	{
+
+		shared_ptr<Sea> gameobject = make_shared<Sea>();
+
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest2.hlsl"));
+
+
+		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, -5000.0f));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 180.0f));
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
+
+	{
+
+		shared_ptr<Sea> gameobject = make_shared<Sea>();
+
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest2Blend.hlsl"));
+
+
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, -3000.0f, -500.0));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
+
+
+	//½Ã¿¬¿ë
+	{
+
+		shared_ptr<Sea> gameobject = make_shared<Sea>();
+
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest2.hlsl"));
+
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, -10000.0f, -500.0));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
+
 
 
 	{

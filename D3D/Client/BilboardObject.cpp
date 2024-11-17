@@ -32,7 +32,7 @@ void BilboardObject::Init()
 	if (_soData.binit == false)
 	{
 		_soData.SOBuffer = make_shared<StreamOutputBuffer>();
-		_soData.SOBuffer->Init(32*6);
+		_soData.SOBuffer->Init(44*6);
 		_soData.SOShader = ResourceManager::GetInstance()->Get<Shader>(L"BilboardStreamOutput.hlsl");
 		_soData.binit = true;
 	}

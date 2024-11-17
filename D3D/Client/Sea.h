@@ -12,10 +12,8 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 
-	void SetMove(bool bMove) { _bMove = bMove; }
 private:
 
-	bool _bMove = true;
 
 };
 

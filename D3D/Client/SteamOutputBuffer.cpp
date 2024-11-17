@@ -84,7 +84,7 @@ void StreamOutputBuffer::Render()
 
     D3D12_VERTEX_BUFFER_VIEW VertexView;
     VertexView.BufferLocation = _StreamOutputBuffer->GetGPUVirtualAddress();
-    VertexView.StrideInBytes =32;
+    VertexView.StrideInBytes =44;
     VertexView.SizeInBytes = filledSize; 
 
     auto commandList = core->GetCmdLIst();
@@ -92,7 +92,7 @@ void StreamOutputBuffer::Render()
     commandList->IASetVertexBuffers(0, 1, &VertexView);
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    uint32 vertexCount = filledSize / 32;
+    uint32 vertexCount = filledSize / 44;
     commandList->DrawInstanced(vertexCount, 1, 0, 0);
 
 

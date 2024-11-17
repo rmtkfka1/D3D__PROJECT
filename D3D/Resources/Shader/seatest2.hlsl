@@ -246,9 +246,9 @@ float3 getPixel(float2 uv, float time)
     //uv.x *= iResolution.x / iResolution.y;
         
     // ray
-    float3 ang = float3(sin(time * 3.0) * 0.1, sin(time) * 0.2 + 0.3, time);
-    float3 ori = float3(0.0, 3.5, time * 5.0);
-    float3 dir = normalize(float3(uv.xy, -2.0));
+    float3 ang = float3(0, 30, 0.0); // 카메라 각도를 위에서 아래로 (45도) 조정
+    float3 ori = float3(0.0, 50.0, 0.0); // 카메라 위치를 위로 올림
+    float3 dir = normalize(float3(uv.xy, -1.0));
     dir.z += length(uv) * 0.14;
     dir = mul(normalize(dir), fromEuler(ang));
     
@@ -273,10 +273,9 @@ float4 PS_Main(VS_OUT input) : SV_TARGET
     float time = iTime * 0.3 + 1.0 * 0.01;
     float3 color;
     
- 
+
     color = getPixel(input.uv, time);
     
- 
     // post
     return float4(pow(color, float3(0.65, 0.65, 0.65)), 1.0);
 }

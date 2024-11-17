@@ -32,6 +32,34 @@ void ResourceManager::CreateDefaultShader()
 		ShaderInfo info;
 		info.shaderType = ShaderType::FORWARD;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		shader->Init(L"seatest2.hlsl", info);
+		Add<Shader>(L"seatest2.hlsl", shader);
+	}
+
+	{
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.blendType = BLEND_TYPE::ONE_TO_ONE_BLEND;
+		shader->Init(L"seatest2.hlsl", info);
+		Add<Shader>(L"seatest2Blend.hlsl", shader);
+	}
+
+	{
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		shader->Init(L"seatest.hlsl", info);
+		Add<Shader>(L"seatest.hlsl", shader);
+	}
+
+	{
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		shader->Init(L"sea.hlsl", info);
 		Add<Shader>(L"sea.hlsl", shader);
 	}

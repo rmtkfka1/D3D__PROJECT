@@ -411,6 +411,12 @@
     <FxCompile Include="..\Resources\Shader\sea.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\seatest.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\seatest2.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">
