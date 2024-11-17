@@ -29,7 +29,7 @@ struct GS_OUT
     float4 pos : SV_Position;
     float3 worldPos : POSITION;
     float3 normal : NORMAL;
-    float2 uv: TEXCOORD;
+    float2 uv : TEXCOORD;
 };
 
 struct PS_OUT
@@ -50,7 +50,7 @@ VS_OUT VS_Main(VS_IN input)
     return output;
 }
 
-[maxvertexcount(6)]
+[maxvertexcount(4)]
 void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
 {
    
@@ -59,71 +59,34 @@ void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
     float2 uvCoords[4] = { float2(0, 0), float2(1, 0), float2(0, 1), float2(1, 1) };
     float2 offsets[4] = { float2(-hw, hw), float2(hw, hw), float2(-hw, -hw), float2(hw, -hw) };
 
+    // 공통 노멀 계산
     float3 normal = float3(0, 0, 1.0f);
+    normal = normalize(mul(float4(normal, 0.0f), WorldMat).xyz);
 
-    // 첫 번째 삼각형
-    output.pos = input[0].pos;
-    output.pos.xy += offsets[0];
-    output.pos = mul(output.pos, WorldMat);
-    output.worldPos = output.pos.xyz;
-    output.pos = mul(output.pos, ViewMat);
-    output.pos = mul(output.pos, ProjMat);
-    output.uv = uvCoords[0];
-    output.normal = normal;
-    outputStream.Append(output);
-    
-    output.pos = input[0].pos;
-    output.pos.xy += offsets[1];
-    output.pos = mul(output.pos, WorldMat);
-    output.worldPos = output.pos.xyz;
-    output.pos = mul(output.pos, ViewMat);
-    output.pos = mul(output.pos, ProjMat);
-    output.uv = uvCoords[1];
-    output.normal = normal;
-    outputStream.Append(output);
-    
-    output.pos = input[0].pos;
-    output.pos.xy += offsets[2];
-    output.pos = mul(output.pos, WorldMat);
-    output.worldPos = output.pos.xyz;
-    output.pos = mul(output.pos, ViewMat);
-    output.pos = mul(output.pos, ProjMat);
-    output.uv = uvCoords[2];
-    output.normal = normal;
-    outputStream.Append(output);
+    for (int i = 0; i < 4; ++i)
+    {
+        // 버텍스 위치 설정
+        output.pos = input[0].pos;
+        output.pos.xy += offsets[i]; // 오프셋 적용
+        
+        // 월드 좌표 계산
+        float4 WorldPos = mul(output.pos, WorldMat);
+        output.worldPos = WorldPos.xyz;
 
-    // 두 번째 삼각형 (새로운 스트립을 시작하지 않고 연결)
-    outputStream.RestartStrip();
-    
-    output.pos = input[0].pos;
-    output.pos.xy += offsets[2];
-    output.pos = mul(output.pos, WorldMat);
-    output.worldPos = output.pos.xyz;
-    output.pos = mul(output.pos, ViewMat);
-    output.pos = mul(output.pos, ProjMat);
-    output.uv = uvCoords[2];
-    output.normal = normal;
-    outputStream.Append(output);
-    
-    output.pos = input[0].pos;
-    output.pos.xy += offsets[1];
-    output.pos = mul(output.pos, WorldMat);
-    output.worldPos = output.pos.xyz;
-    output.pos = mul(output.pos, ViewMat);
-    output.pos = mul(output.pos, ProjMat);
-    output.uv = uvCoords[1];
-    output.normal = normal;
-    outputStream.Append(output);
-    
-    output.pos = input[0].pos;
-    output.pos.xy += offsets[3];
-    output.pos = mul(output.pos, WorldMat);
-    output.worldPos = output.pos.xyz;
-    output.pos = mul(output.pos, ViewMat);
-    output.pos = mul(output.pos, ProjMat);
-    output.uv = uvCoords[3];
-    output.normal = normal;
-    outputStream.Append(output);
+        // UV 좌표 설정
+        output.uv = uvCoords[i];
+
+        // 노멀 설정 (공통으로 계산된 노멀 사용)
+        output.normal = normal;
+
+        // 클립 공간 변환
+        output.pos = mul(WorldPos, ViewMat);
+        output.pos = mul(output.pos, ProjMat);
+
+        // 스트림 추가
+        outputStream.Append(output);
+    }
+   
    
 }
 

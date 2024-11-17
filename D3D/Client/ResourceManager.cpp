@@ -64,28 +64,40 @@ void ResourceManager::CreateDefaultShader()
 		Add<Shader>(L"sea.hlsl", shader);
 	}
 
-	{
-		shared_ptr<Shader> shader = make_shared<Shader>();
-		ShaderInfo info;
-		info.shaderType = ShaderType::DEFREED;
-		info.bActiveGSShader = false;
-		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
-		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-		shader->Init(L"BilboardRender.hlsl",info);
-		Add<Shader>(L"BilboardRender.hlsl", shader);
-	}
 
 	{
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		ShaderInfo info;
-		info.shaderType = ShaderType::FORWARD;
-		info.bActvieStreamOutput = true;
-		info.bActiveGSShader = true;
+		info.shaderType = ShaderType::DEFREED;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-		shader->Init(L"BilboardStreamOutput.hlsl", info);
-		Add<Shader>(L"BilboardStreamOutput.hlsl", shader);
+		info.bActiveGSShader = true;
+		shader->Init(L"Bilboard.hlsl",info);
+		Add<Shader>(L"Bilboard.hlsl", shader);
 	}
+
+	//{
+	//	shared_ptr<Shader> shader = make_shared<Shader>();
+	//	ShaderInfo info;
+	//	info.shaderType = ShaderType::DEFREED;
+	//	info.bActiveGSShader = false;
+	//	info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+	//	info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	//	shader->Init(L"BilboardRender.hlsl",info);
+	//	Add<Shader>(L"BilboardRender.hlsl", shader);
+	//}
+
+	//{
+	//	shared_ptr<Shader> shader = make_shared<Shader>();
+	//	ShaderInfo info;
+	//	info.shaderType = ShaderType::FORWARD;
+	//	info.bActvieStreamOutput = true;
+	//	info.bActiveGSShader = true;
+	//	info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+	//	info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+	//	shader->Init(L"BilboardStreamOutput.hlsl", info);
+	//	Add<Shader>(L"BilboardStreamOutput.hlsl", shader);
+	//}
 
 	{
 		shared_ptr<Shader> shader = make_shared<Shader>();

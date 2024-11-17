@@ -29,13 +29,13 @@ BilboardObject::~BilboardObject()
 
 void BilboardObject::Init()
 {
-	if (_soData.binit == false)
+	/*if (_soData.binit == false)
 	{
 		_soData.SOBuffer = make_shared<StreamOutputBuffer>();
 		_soData.SOBuffer->Init(44*6);
 		_soData.SOShader = ResourceManager::GetInstance()->Get<Shader>(L"BilboardStreamOutput.hlsl");
 		_soData.binit = true;
-	}
+	}*/
 
 	int randomTexture = random_texture(dre2);
 
@@ -121,7 +121,7 @@ void BilboardObject::Update()
 void BilboardObject::Render()
 {
 
-	if (_soData._bStreamRender == false)
+	/*if (_soData._bStreamRender == false)
 	{
 		_soData.SOShader->SetPipelineState();
 		_soData.SOBuffer->Bind();
@@ -129,16 +129,18 @@ void BilboardObject::Render()
 		_soData.SOBuffer->UnBind();
 		_soData._bStreamRender = true;
 
-	}
+	}*/
 
-	else
-	{
+	//else
+	//{
 		_shader->SetPipelineState();
 		_transform->PushData();
 		_material->Pushdata();
 		core->GetTableHeap()->SetGraphicsRootDescriptorTable();
-		_soData.SOBuffer->Render();
-	}
+		//_soData.SOBuffer->Render();
+		_mesh->RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+	//}
 
 	
 

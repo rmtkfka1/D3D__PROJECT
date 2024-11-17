@@ -200,43 +200,41 @@ void Stage1::BulidDeferred()
 	//}
 
 
+	for (int i = 0; i < 50; ++i)
 	{
+		shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
+		gameobject->_useWithHeightMap = true;
 
-		for (int i = 0; i < 50; ++i)
-		{
-			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
-			gameobject->_useWithHeightMap = true;
-			gameobject->SetFrustumCuling(true);
-			vector<Vertex> v;
-			v.push_back(Vertex(vec3(0, 0, 0.0f)));
-			gameobject->GetMesh()->Init(v);
-		
+		vector<Vertex> v;
 
-			int randomValueX = random_xz(dre);
-			int randomValueZ = random_xz(dre);
-
-			vec3 Pos = _terrain->GetHeight(vec3(randomValueX, 0, randomValueZ));
-			gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x, Pos.y + 250.0f, Pos.z));
-			gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
-			gameobject->AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 5.0f, 2.0f), vec3(0, 0, 0));
-			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"BilboardRender.hlsl"));
-
-			AddGameObject(gameobject, RenderingType::Deferred);
-		}
-
-		for (int i = 0; i < 10; ++i)
-		{
-			shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
+		v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
+		gameobject->GetMesh()->Init(v);
 
 
-			vector<Vertex> v;
-			v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
-			gameobject->GetMesh()->Init(v);
+		int randomValueX = random_xz(dre);
+		int randomValueZ = random_xz(dre);
 
-			gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"BilboardRender.hlsl"));
+		vec3 Pos = _terrain->GetHeight(vec3(randomValueX, 0, randomValueZ));
+		gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x, Pos.y + 250.0f, Pos.z));
+		gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
+		gameobject->AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 5.0f, 2.0f), vec3(0, 0, 0));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
 
-			AddGameObject(gameobject, RenderingType::Deferred);
-		}
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
+
+
+		vector<Vertex> v;
+		v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
+		gameobject->GetMesh()->Init(v);
+
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
+
+		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
 	//temp

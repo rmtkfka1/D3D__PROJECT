@@ -3,7 +3,7 @@
 #include "Core.h"
 #include "RootSignature.h"
 
-Shader::Shader():ResourceBase(ResourceType::Shader)
+Shader::Shader() :ResourceBase(ResourceType::Shader)
 {
 
 }
@@ -12,18 +12,14 @@ Shader::~Shader()
 
 }
 
-void Shader::Init(const wstring& path, ShaderInfo info )
+void Shader::Init(const wstring& path, ShaderInfo info)
 {
 
 	wstring finalPath = _path + path;
 	_info = info;
 
 	CreateVertexShader(finalPath, "VS_Main", "vs_5_0");
-
-	if (info.bActvieStreamOutput == false)
-	{
-		CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
-	}
+	CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
 
 	if (info.bActiveGSShader)
 	{
@@ -39,7 +35,6 @@ void Shader::Init(const wstring& path, ShaderInfo info )
 		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
-	
 	_pipelineDesc.InputLayout = { desc, _countof(desc) };
 	_pipelineDesc.pRootSignature = core->GetRootSignature()->GetSignature().Get();
 
@@ -52,7 +47,6 @@ void Shader::Init(const wstring& path, ShaderInfo info )
 	_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_pipelineDesc.SampleDesc.Count = 1;
 	_pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	
 
 	switch (info.shaderType)
 	{
@@ -144,35 +138,6 @@ void Shader::Init(const wstring& path, ShaderInfo info )
 		rt.DestBlend = D3D12_BLEND_ONE;
 		break;
 	}
-
-	if (info.bActvieStreamOutput)
-	{
-
-		D3D12_SO_DECLARATION_ENTRY entry[] =
-		{
-			{0, "POSITION", 0, 0, 3, 0},  // Stream 0: POSITION (3 컴포넌트)
-			{0, "TEXCOORD", 0, 0, 2, 0},  // Stream 0: TEXCOORD (2 컴포넌트)
-			{0, "NORMAL", 0, 0, 3, 0},    // Stream 0: NORMAL (3 컴포넌트)
-			{0, "TANGENT", 0, 0, 3, 0}    // Stream 0: TANGENT (3 컴포넌트)
-		};
-
-		// 버퍼 스트라이드는 4의 배수여야 하며, 요소들의 크기를 합산한 값이어야 합니다.
-		// POSITION(12바이트) + TEXCOORD(8바이트) + NORMAL(12바이트) + TANGENT(12바이트) = 44바이트
-		UINT strides[] = { 44 };  // 각 스트림의 스트라이드 값은 44바이트
-
-		// 스트림 출력 설명자
-		D3D12_STREAM_OUTPUT_DESC soDesc = {};
-		soDesc.pSODeclaration = entry;  // 선언된 스트림 출력 엔트리 배열
-		soDesc.NumEntries = _countof(entry);  // 엔트리 수 (4개)
-		soDesc.pBufferStrides = strides;  // 스트라이드 배열
-		soDesc.NumStrides = _countof(strides); // 스트라이드 개수 (1개)
-		soDesc.RasterizedStream = D3D12_SO_NO_RASTERIZED_STREAM;  // 래스터화된 스트림은 없음
-
-		// 파이프라인 설명자에 스트림 출력 설정 적용
-		_pipelineDesc.StreamOutput = soDesc;
-	}
-
-
 
 	core->GetDevice()->CreateGraphicsPipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));
 }
