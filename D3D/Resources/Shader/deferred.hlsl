@@ -1,13 +1,3 @@
-#include "Light.hlsl"
-
-#define MAX_LIGHTS 5
-
-cbuffer lighting : register(b0)
-{
-    float3 g_eyeWorld;
-    int g_lightCount;
-    Light g_lights[MAX_LIGHTS];
-};
 
 cbuffer TEST_B0 : register(b1)
 {
