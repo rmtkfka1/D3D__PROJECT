@@ -19,10 +19,10 @@ void Sea::Init()
 void Sea::Update()
 {
 
-	static float time = 0;
 
-	GetMaterial()->SetFloat(4, time);
-	time += TimeManager::GetInstance()->GetDeltaTime();
+
+	GetMaterial()->SetFloat(0, _time);
+	_time += TimeManager::GetInstance()->GetDeltaTime();
 
 
 	Super::Update();

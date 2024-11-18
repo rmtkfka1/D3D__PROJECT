@@ -10,8 +10,8 @@ struct MaterialParams
 	void SetTexon(uint8 index, int value) { TextureParams[index] = value; }
 
 	array<int32, 4> intParams{0};
-	array<float, 5> floatParams{0};
-	array<int, 3> TextureParams{0};
+	array<float, 4> floatParams{0};
+	array<int, 4> TextureParams{0};
 };
 
 

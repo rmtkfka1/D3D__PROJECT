@@ -17,15 +17,15 @@ cbuffer materialparams : register(b3)
     int intparams3;
     int intparams4;
     
+    float iTime;
     float dx;
     float dy;
-    float threshold;
     float strength;
-    float iTime;
-    
+
     int texon1;
     int texon2;
     int texon3;
+    int texon4;
 
 };
 
@@ -61,7 +61,7 @@ VS_OUT VS_Main(VS_IN input)
 static const int NUM_STEPS = 8;
 static const float PI = 3.141592;
 static const float EPSILON = 1e-3;
-#define EPSILON_NRM (0.1 / 1280.0)
+#define EPSILON_NRM (0.1 / 1200.0)
 #define AA
 
 // sea
@@ -270,11 +270,11 @@ float3 getPixel(float2 uv, float time)
 float4 PS_Main(VS_OUT input) : SV_TARGET
 {
 
-    float time = iTime * 0.3 + 1.0 * 0.01;
+    float time =  iTime * 0.3 + 0.5 * 0.01;
     float3 color;
     
 
-    color = getPixel(input.uv, time);
+    color = getPixel(input.uv, 2.0 *time);
     
     // post
     return float4(pow(color, float3(0.65, 0.65, 0.65)), 1.0);

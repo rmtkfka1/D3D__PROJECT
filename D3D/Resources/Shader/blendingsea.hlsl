@@ -33,11 +33,11 @@ cbuffer materialparams : register(b3)
     float floatparams2;
     float floatparams3;
     float floatparams4;
-    float floatparams5;
     
     int texon1;
     int texon2;
     int texon3;
+    int texon4;
 };
 
 

@@ -14,6 +14,6 @@ public:
 
 private:
 
-
+	float _time = 0;
 };
 
