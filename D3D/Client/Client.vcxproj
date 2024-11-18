@@ -295,6 +295,7 @@
     <ResourceCompile Include="Client.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\Resources\Texture\earth\1_earth_8k.dds" />
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
   </ItemGroup>

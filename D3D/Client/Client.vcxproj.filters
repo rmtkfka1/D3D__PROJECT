@@ -221,6 +221,9 @@
     <Image Include="Client.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\Resources\Texture\earth\1_earth_8k.dds">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">

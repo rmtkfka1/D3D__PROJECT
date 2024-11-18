@@ -2,7 +2,7 @@
 <Materials>
     <Material>
         <Name>DefaultMaterial</Name>
-        <DiffuseFile>Bricks075A_1K-PNG_Color.png</DiffuseFile>
+        <DiffuseFile>Bricks075A_1K-PNG_Color.dds</DiffuseFile>
         <NormalFile>Bricks075A_1K-PNG_NormalDX.png</NormalFile>
         <SpecularFile></SpecularFile>
         <Ambient R="0" G="0" B="0" A="1"/>

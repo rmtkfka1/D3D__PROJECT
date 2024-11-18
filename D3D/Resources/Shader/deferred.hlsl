@@ -1,3 +1,13 @@
+#include "Light.hlsl"
+
+#define MAX_LIGHTS 5
+
+cbuffer lighting : register(b0)
+{
+    float3 g_eyeWorld;
+    int g_lightCount;
+    Light g_lights[MAX_LIGHTS];
+};
 
 cbuffer TEST_B0 : register(b1)
 {
@@ -99,9 +109,13 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     PS_OUT output;
     
  
-    
     output.position = float4(input.worldPos, 1.0f);
-    output.color = diffuseTexture.Sample(g_sam_0, input.uv);
+    
+     output.color = diffuseTexture.Sample(g_sam_0, input.uv);
+    
+
+    // 기본 색상 텍스처 샘플링
+    
     
     if (enemyDraw)
     {

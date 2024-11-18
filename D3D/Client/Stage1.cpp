@@ -170,6 +170,7 @@ void Stage1::BulidDeferred()
 		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
 		object->AddBoxColliderWithModel("block",ColliderBehave::Passive);
 		AddGameObject(object, RenderingType::Deferred);
+
 	}
 
 
