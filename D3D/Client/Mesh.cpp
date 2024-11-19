@@ -25,7 +25,7 @@ void Mesh::Init(vector<Vertex>& vec)
 
 void Mesh::Render(D3D_PRIMITIVE_TOPOLOGY topolgy)
 {
-	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
+	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetGraphics()->GetCmdLIst();
 	cmdlist->IASetPrimitiveTopology(topolgy);
 	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView);
 	cmdlist->IASetIndexBuffer(& _indexBufferView); 
@@ -34,7 +34,7 @@ void Mesh::Render(D3D_PRIMITIVE_TOPOLOGY topolgy)
 
 void Mesh::RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY topolgy)
 {
-	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetCmdLIst();
+	ComPtr<ID3D12GraphicsCommandList>& cmdlist = core->GetGraphics()->GetCmdLIst();
 	cmdlist->IASetPrimitiveTopology(topolgy);
 	cmdlist->IASetVertexBuffers(0, 1, &_vertexBufferView); 
 	cmdlist->DrawInstanced(_vertexCount, 1, 0, 0);

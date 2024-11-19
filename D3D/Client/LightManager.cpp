@@ -15,7 +15,7 @@ void LightManager::PushLight(Light light)
 void LightManager::SetData()
 {
 	Update();
-	core->GetLIghtBufferPool()->SetData(0,&_lightParmas, sizeof(LightParams));
+	core->GetBufferManager()->GetLIghtBufferPool()->SetData(0,&_lightParmas, sizeof(LightParams));
 }
 
 void LightManager::Update()

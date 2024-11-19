@@ -127,10 +127,10 @@ void StartScene::MouseUpdate()
 
 void StartScene::Run()
 {
-	core->GetRenderTarget()->ClearDepth();
-	core->GetRenderTarget()->RenderBegin();
+	core->GetGraphics()->GetRenderTarget()->ClearDepth();
+	core->GetGraphics()->GetRenderTarget()->RenderBegin();
 	UiRender();
-	core->GetRenderTarget()->RenderEnd();
+	core->GetGraphics()->GetRenderTarget()->RenderEnd();
 }
 
 void StartScene::LateUpdate()

@@ -109,7 +109,7 @@ void RenderTargets::CreateDepthStencil(DWORD WndWidth, DWORD WndHeight)
 
 void RenderTargets::RenderBegin()
 {
-	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdLIst();
+	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdLIst();
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_RenderTargets[_RenderTargetIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
 	const float BackColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -122,14 +122,14 @@ void RenderTargets::RenderBegin()
 
 void RenderTargets::RenderEnd()
 {
-	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdLIst();
+	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdLIst();
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_RenderTargets[_RenderTargetIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 	cmdList->Close();
 }
 
 void RenderTargets::ClearDepth()
 {
-	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdLIst();
+	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdLIst();
 	cmdList->ClearDepthStencilView(_dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
@@ -303,7 +303,7 @@ void GBuffer::Init(ComPtr<ID3D12DescriptorHeap> DSVHeap)
 
 void GBuffer::RenderBegin()
 {
-	auto& list =core->GetCmdLIst();
+	auto& list = core->GetGraphics()->GetCmdLIst();
 	float arrFloat[4] = {1, 1, 1, 1 };
 
 	for (uint32 i = 0; i < _count; i++)
@@ -324,7 +324,7 @@ void GBuffer::RenderBegin()
 
 void GBuffer::RenderEnd()
 {
-	auto& list = core->GetCmdLIst();
+	auto& list = core->GetGraphics()->GetCmdLIst();
 
 	for (uint32 i = 0; i < _count; i++)
 	{

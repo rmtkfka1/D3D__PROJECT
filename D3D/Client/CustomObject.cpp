@@ -46,7 +46,7 @@ void CustomObject::Render()
 	_shader->SetPipelineState();
 	_transform->PushData();
 	_material->Pushdata();
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
+	core->GetBufferManager()->GetTableHeap()->SetGraphicsRootDescriptorTable();
 	_mesh->Render();
 
 }

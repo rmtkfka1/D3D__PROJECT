@@ -34,7 +34,7 @@ Camera::~Camera()
 void Camera::SetData()
 {
 	Update(); //각자의 업데이트를 호출
-	auto& bufferPool = core->GetCameraBufferPool();
+	auto& bufferPool = core->GetBufferManager()->GetCameraBufferPool();
 	bufferPool->SetData(1,&_params,sizeof(_params));
 }
 

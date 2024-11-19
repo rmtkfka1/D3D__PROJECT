@@ -123,6 +123,6 @@ extern unique_ptr<class Core> core;
 #include "Scene.h"
 #include "ResourceManager.h"
 #include "CollisonManager.h"
-
+#include "BufferManager.h"
 
 

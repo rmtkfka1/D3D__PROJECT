@@ -43,26 +43,26 @@ void StreamOutputBuffer::Init(uint64 bufferSize)
 
 void StreamOutputBuffer::Bind()
 {   
-	core->GetCmdLIst()->SOSetTargets(0,1,&_SOBufferView);
+    core->GetGraphics()->GetCmdLIst()->SOSetTargets(0,1,&_SOBufferView);
 }
 
 void StreamOutputBuffer::UnBind()
 {
-	core->GetCmdLIst()->SOSetTargets(0, 0, nullptr);
+    core->GetGraphics()->GetCmdLIst()->SOSetTargets(0, 0, nullptr);
 }
 
 void StreamOutputBuffer::Render()
 {
     
-    core->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
+    core->GetGraphics()->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
         _FilledSizeBuffer.Get(),
         D3D12_RESOURCE_STATE_STREAM_OUT,
         D3D12_RESOURCE_STATE_COPY_SOURCE
     ));
 
-    core->GetCmdLIst()->CopyResource(_FilledSizeReadbackBuffer.Get(), _FilledSizeBuffer.Get());
+    core->GetGraphics()->GetCmdLIst()->CopyResource(_FilledSizeReadbackBuffer.Get(), _FilledSizeBuffer.Get());
 
-    core->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
+    core->GetGraphics()->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
         _FilledSizeBuffer.Get(),
         D3D12_RESOURCE_STATE_COPY_SOURCE,
         D3D12_RESOURCE_STATE_STREAM_OUT
@@ -87,7 +87,7 @@ void StreamOutputBuffer::Render()
     VertexView.StrideInBytes =44;
     VertexView.SizeInBytes = filledSize; 
 
-    auto commandList = core->GetCmdLIst();
+    auto commandList = core->GetGraphics()->GetCmdLIst();
 
     commandList->IASetVertexBuffers(0, 1, &VertexView);
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

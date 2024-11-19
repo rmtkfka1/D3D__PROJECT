@@ -8,7 +8,7 @@
 #include "LightManager.h"
 #include "ResourceManager.h"
 #include "Material.h"
-#include "SteamOutputBuffer.h"
+#include "BufferManager.h"
 
 
 Graphics::Graphics()
@@ -20,12 +20,13 @@ Graphics::~Graphics()
 
 };
 
-void Graphics::Init(HWND hwnd, ComPtr<ID3D12Device5> device , ComPtr<IDXGIFactory4> factory)
+void Graphics::Init(HWND hwnd, ComPtr<ID3D12Device5> device , ComPtr<IDXGIFactory4> factory, shared_ptr<BufferManager> bufferManager)
 {
 
 	_hwnd = hwnd;
 	_device = device;
 	_factory = factory;
+	_bufferManager = bufferManager;
 
 	RECT rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 
@@ -35,11 +36,9 @@ void Graphics::Init(HWND hwnd, ComPtr<ID3D12Device5> device , ComPtr<IDXGIFactor
 	CreateCmdQueue();
 	CreateSwapChain();
 	CreateFence();
-	CreateBufferPool();
 	CreateRootSignature();
 
-	_resourceManager = make_shared<D3D12ResourceManager>();
-	_resourceManager->Init();
+
 
 
 };
@@ -129,7 +128,7 @@ void Graphics::RenderBegin()
 	ThrowIfFailed(cmdList->Reset(cmdMemory, nullptr));
 
 	cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
-	cmdList->SetDescriptorHeaps(1, _table[_currentContextIndex]->GetDescriptorHeap().GetAddressOf());
+	cmdList->SetDescriptorHeaps(1, _bufferManager->GetTableHeap()->GetDescriptorHeap().GetAddressOf());
 
 };
 
@@ -160,15 +159,16 @@ void Graphics::Present()
 
 	HRESULT hr = _swapChain->Present(uiSyncInterval, uiPresentFlags);
 
-	_renderTargets->SetIndex(_swapChain->GetCurrentBackBufferIndex());
+	int index = _swapChain->GetCurrentBackBufferIndex();
+
+	_renderTargets->SetIndex(index);
+
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
 	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
 
-	_WorldBufferPool[nextContextIndex]->Clear();
-	_CameraBufferPool[nextContextIndex]->Clear();
-	_table[nextContextIndex]->Clear();
-	_materialParamsBufferPool[nextContextIndex]->Clear();
 	_currentContextIndex = nextContextIndex;
+	_bufferManager->Clear(_currentContextIndex);
+	_bufferManager->SetIndex(_currentContextIndex);
 
 };
 
@@ -274,45 +274,6 @@ void Graphics::CreateRootSignature()
 
 };
 
-void Graphics::CreateBufferPool()
-{
 
-	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
-	{
-		_table[i] = make_shared<DescriptorTable>();
-		_table[i]->Init(255);
-	}
-
-	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
-	{
-		_CameraBufferPool[i] = make_shared<ConstantBufferPool>();
-		_CameraBufferPool[i]->Init(CBV_REGISTER::b2, sizeof(CameraParams), 50); //b2 는 계산에 이용되지않음
-	}
-
-	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
-	{
-		_lightBufferPool[i] = make_shared<ConstantBufferPool>();
-		_lightBufferPool[i]->Init(CBV_REGISTER::b2, sizeof(LightParams), 1); //b2 는 계산에 이용되지않음
-	}
-
-	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
-	{
-		_WorldBufferPool[i] = make_shared<ConstantBufferPool>();
-		_WorldBufferPool[i]->Init(CBV_REGISTER::b2, sizeof(TransformParams), 255);
-	}
-
-
-	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
-	{
-		_materialParamsBufferPool[i] = make_shared<ConstantBufferPool>();
-		_materialParamsBufferPool[i]->Init(CBV_REGISTER::b3, sizeof(MaterialParams), 255); //b0 는 계산에 이용되지않음
-	}
-
-	_textureBufferPool = make_shared<TextureBufferPool>();
-	_textureBufferPool->Init(255);
-
-
-
-};
 
 

@@ -10,7 +10,7 @@
 #include "Material.h"
 #include "SteamOutputBuffer.h"
 #include "Graphics.h"
-
+#include "BufferManager.h"
 
 
 Core::Core()
@@ -24,13 +24,18 @@ Core::~Core()
 
 void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 {
+	_hwnd = hwnd;
 
 	CreateDevice(EnableDebugLayer, EnableGBV);
 
-	_hwnd = hwnd;
-	_graphics = make_shared<Graphics>();
-	_graphics->Init(hwnd,_device,_factory);
+	_bufferManager = make_shared<BufferManager>();
+	_bufferManager->Init();
 
+	_graphics = make_shared<Graphics>();
+	_graphics->Init(hwnd,_device,_factory, _bufferManager);
+
+	_resourceManager = make_shared<D3D12ResourceManager>();
+	_resourceManager->Init();
 
 }
 
@@ -163,6 +168,12 @@ void Core::SetDebugLayerInfo(ComPtr<ID3D12Device> pD3DDevice)
 }
 
 
+namespace Grahpic
+{
+	ComPtr<ID3D12GraphicsCommandList>& GetCmdList() { return core->GetGraphics()->GetCmdLIst(); }
+	shared_ptr<RootSignature>& GetRootSignature() { return core->GetGraphics()->GetRootSignature(); }
+	shared_ptr<RenderTargets>& GetRenderTarget() { return core->GetGraphics()->GetRenderTarget(); }
+}
 
 
 

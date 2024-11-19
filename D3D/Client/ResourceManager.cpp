@@ -147,9 +147,9 @@ void ResourceManager::CreateDefaultMaterial()
 
 	shared_ptr<Material> material = make_shared<Material>();
 	material->SetName(L"finalMaterial");
-	material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
-	material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
-	material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2));
+	material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
+	material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
+	material->SetSpecularTexture(core->GetGraphics()->GetGBuffer()->GetTexture(2));
 	Add<Material>(L"finalMaterial", material);
 
 }

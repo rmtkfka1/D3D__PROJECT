@@ -47,7 +47,7 @@ void BoxCollider::Render()
 	
 	GetOwner()->GetTransform()->PushData();
 	_shader->SetPipelineState();
-	core->GetTableHeap()->SetGraphicsRootDescriptorTable();
+	core->GetBufferManager()->GetTableHeap()->SetGraphicsRootDescriptorTable();
 	_mesh->Render();
 };
 

@@ -108,7 +108,7 @@ void Texture::Init(const wstring& path,TextureType type)
     ResourceManager->Fence();
     ResourceManager->WaitForFenceValue();
 
-    core->GetTextureBufferPool()->AllocDescriptorHandle(&_srvHandle);
+    core->GetBufferManager()->GetTextureBufferPool()->AllocDescriptorHandle(&_srvHandle);
 
     D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 

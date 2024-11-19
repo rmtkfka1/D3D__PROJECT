@@ -6,11 +6,10 @@ public:
 	ComPtr<ID3D12GraphicsCommandList>  GetCmdList() { return _cmdList; }
 	ComPtr<ID3D12CommandQueue> GetCmdQueue() { return _cmdQueue; }
 	ComPtr<ID3D12CommandAllocator> GetCmdMemory() { return _cmdMemory; }
-public:
 
+public:
 	void Fence();
 	void WaitForFenceValue();
-
 
 private:
 

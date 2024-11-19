@@ -164,6 +164,7 @@
     <ClInclude Include="BilboardObject.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="BufferManager.h" />
     <ClInclude Include="BufferPool.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="BilboardObject.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="BufferManager.cpp" />
     <ClCompile Include="BufferPool.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />

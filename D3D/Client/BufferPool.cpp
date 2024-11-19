@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "BufferPool.h"
 #include "Core.h"
-
+#include "BufferManager.h"
 void ConstantBufferPool::Init(CBV_REGISTER reg, uint32 size, uint32 count)
 {
 	_reg = reg;
@@ -51,7 +51,7 @@ void ConstantBufferPool::PushData(void* buffer, uint32 size)
 
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(_cpuHandleBegin, _currentIndex * _handleIncrementSize);
 
-	core->GetTableHeap()->CopyCBV(cpuHandle, _reg);
+	core->GetBufferManager()->GetTableHeap()->CopyCBV(cpuHandle, _reg);
 
 	_currentIndex++;
 }
@@ -64,7 +64,7 @@ void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
 	if (index == 0) //라이팅에 연산될것이므로 한번셋팅하고 건들지않는다.
 	{
 		::memcpy(&_mappedBuffer[0], buffer, size);
-		core->GetCmdLIst()->SetGraphicsRootConstantBufferView(0, _cbvBufferPool->GetGPUVirtualAddress());
+		core->GetGraphics()->GetCmdLIst()->SetGraphicsRootConstantBufferView(0, _cbvBufferPool->GetGPUVirtualAddress());
 	}
 
 	else if(index ==1) //카메라 계산에 연산될것이므로 오프셋 계산필요함.
@@ -72,7 +72,7 @@ void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
 		::memcpy(&_mappedBuffer[_currentIndex * _elementSize], buffer, size);
 		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = _cbvBufferPool->GetGPUVirtualAddress();
 		objCBAddress += _currentIndex * _elementSize;
-		core->GetCmdLIst()->SetGraphicsRootConstantBufferView(1, objCBAddress);
+		core->GetGraphics()->GetCmdLIst()->SetGraphicsRootConstantBufferView(1, objCBAddress);
 		_currentIndex++;
 	}
 
@@ -201,7 +201,7 @@ void DescriptorTable::SetGraphicsRootDescriptorTable()
 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
-	core->GetCmdLIst()->SetGraphicsRootDescriptorTable(2, handle);
+	core->GetGraphics()->GetCmdLIst()->SetGraphicsRootDescriptorTable(2, handle);
 	_currentGroupIndex++;
 }
 

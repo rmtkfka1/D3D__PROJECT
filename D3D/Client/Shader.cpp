@@ -36,7 +36,7 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 	};
 
 	_pipelineDesc.InputLayout = { desc, _countof(desc) };
-	_pipelineDesc.pRootSignature = core->GetRootSignature()->GetSignature().Get();
+	_pipelineDesc.pRootSignature = core->GetGraphics()->GetRootSignature()->GetSignature().Get();
 
 	_pipelineDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	_pipelineDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
@@ -145,7 +145,7 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 
 void Shader::SetPipelineState()
 {
-	core->GetCmdLIst()->SetPipelineState(_pipelineState.Get());
+	core->GetGraphics()->GetCmdLIst()->SetPipelineState(_pipelineState.Get());
 }
 
 void Shader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
