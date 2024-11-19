@@ -53,6 +53,9 @@
     <Filter Include="리소스 파일\Utils">
       <UniqueIdentifier>{df27f001-bb9d-491c-a9a8-ccd65aeb2505}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Core\core">
+      <UniqueIdentifier>{46a8a73e-4fa0-4f7f-a58e-8c24c4ee95ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -72,9 +75,6 @@
     </ClInclude>
     <ClInclude Include="tinyxml2.h">
       <Filter>리소스 파일\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h">
-      <Filter>02.Core</Filter>
     </ClInclude>
     <ClInclude Include="RootSignature.h">
       <Filter>02.Core</Filter>
@@ -208,14 +208,17 @@
     <ClInclude Include="SteamOutputBuffer.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>02.Core</Filter>
-    </ClInclude>
     <ClInclude Include="BufferManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
     <ClInclude Include="Compute.h">
-      <Filter>02.Core</Filter>
+      <Filter>02.Core\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>02.Core\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>02.Core\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,9 +246,6 @@
     </ClCompile>
     <ClCompile Include="tinyxml2.cpp">
       <Filter>리소스 파일\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="RootSignature.cpp">
       <Filter>02.Core</Filter>
@@ -379,14 +379,17 @@
     <ClCompile Include="SteamOutputBuffer.cpp">
       <Filter>03.Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>02.Core</Filter>
-    </ClCompile>
     <ClCompile Include="BufferManager.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>02.Core\core</Filter>
+    </ClCompile>
     <ClCompile Include="Compute.cpp">
-      <Filter>02.Core</Filter>
+      <Filter>02.Core\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>02.Core\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

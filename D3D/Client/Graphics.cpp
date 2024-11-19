@@ -9,7 +9,7 @@
 #include "ResourceManager.h"
 #include "Material.h"
 #include "BufferManager.h"
-
+#include "Core.h"
 
 Graphics::Graphics()
 {
@@ -36,7 +36,7 @@ void Graphics::Init(HWND hwnd, ComPtr<ID3D12Device5> device , ComPtr<IDXGIFactor
 	CreateCmdQueue();
 	CreateSwapChain();
 	CreateFence();
-	CreateRootSignature();
+
 
 
 };
@@ -125,7 +125,7 @@ void Graphics::RenderBegin()
 	ThrowIfFailed(cmdMemory->Reset());
 	ThrowIfFailed(cmdList->Reset(cmdMemory, nullptr));
 
-	cmdList->SetGraphicsRootSignature(_rootsignature->GetSignature().Get());
+	cmdList->SetGraphicsRootSignature(core->GetRootSignature()->GetGraphicsRootSignature().Get());
 	cmdList->SetDescriptorHeaps(1, _bufferManager->GetTableHeap()->GetDescriptorHeap().GetAddressOf());
 
 };
@@ -265,12 +265,7 @@ void Graphics::CreateFence()
 	_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 };
 
-void Graphics::CreateRootSignature()
-{
-	_rootsignature = make_shared<RootSignature>();
-	_rootsignature->Init();
 
-};
 
 
 

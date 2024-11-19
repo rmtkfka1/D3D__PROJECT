@@ -445,16 +445,21 @@ void Stage1::UiObjectRender()
 
 void Stage1::FinalRender()
 {
+	{
 
-	auto& list = GRAPHIC->GetCmdLIst();
 
-	ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
-	shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
-	shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
 
-	material->Pushdata();
-	core->GetBufferManager()->GetTableHeap()->SetGraphicsRootDescriptorTable();
-	mesh->Render();
+	}
+
+	{
+		auto& list = GRAPHICS->GetCmdLIst();
+		ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
+		shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
+		shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
+		material->Pushdata();
+		core->GetBufferManager()->GetTableHeap()->SetGraphicsRootDescriptorTable();
+		mesh->Render();
+	}
 
 }
 

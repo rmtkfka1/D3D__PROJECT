@@ -107,13 +107,13 @@ void TextureBufferPool::Init(int32 count)
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;  // Ensure shader visibility if needed
 
-	ThrowIfFailed(core->GetDevice()->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&_srvHeap)));
+	ThrowIfFailed(core->GetDevice()->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&_heap)));
 
 }
 
 void TextureBufferPool::Free(D3D12_CPU_DESCRIPTOR_HANDLE handle)
 {
-	D3D12_CPU_DESCRIPTOR_HANDLE start = _srvHeap->GetCPUDescriptorHandleForHeapStart();
+	D3D12_CPU_DESCRIPTOR_HANDLE start = _heap->GetCPUDescriptorHandleForHeapStart();
 	DWORD index = (DWORD)(handle.ptr - start.ptr) / _handleIncrementSize;
 
 	assert(index >= 0);
@@ -133,7 +133,7 @@ void TextureBufferPool::AllocDescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE* handl
 		throw std::runtime_error("No free descriptor handles available");
 	}
 
-	CD3DX12_CPU_DESCRIPTOR_HANDLE DescriptorHandle(_srvHeap->GetCPUDescriptorHandleForHeapStart(), index, _handleIncrementSize);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE DescriptorHandle(_heap->GetCPUDescriptorHandleForHeapStart(), index, _handleIncrementSize);
 	*handle = DescriptorHandle;
 	_currentIndex++;
 
@@ -152,6 +152,11 @@ int32 TextureBufferPool::Alloc()
 
 	return -1;  // No available slots
 }
+///////////////////////////////////////////////////////////
+
+
+
+
 
 
 /*************************
@@ -222,3 +227,4 @@ D3D12_CPU_DESCRIPTOR_HANDLE DescriptorTable::GetCPUHandle(uint32 reg)
 	handle.ptr += reg * _handleSize;
 	return handle;
 }
+

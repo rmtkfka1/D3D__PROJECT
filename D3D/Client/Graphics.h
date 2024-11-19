@@ -34,7 +34,7 @@ public:
 	HWND GetWindowHandle() { return _hwnd; }
 
 	ComPtr<ID3D12GraphicsCommandList>& GetCmdLIst() { return _cmdList[_currentContextIndex]; }
-	shared_ptr<RootSignature>& GetRootSignature() { return _rootsignature; }
+
 	shared_ptr<RenderTargets>& GetRenderTarget() { return _renderTargets; }
 	shared_ptr<GBuffer>& GetGBuffer() { return _GBuffer; }
 
@@ -46,7 +46,7 @@ private:
 	void CreateCmdQueue();
 	void CreateSwapChain();
 	void CreateFence();
-	void CreateRootSignature();
+	
 
 
 private:
@@ -66,7 +66,6 @@ private:
 	uint64  _currentContextIndex = 0;
 
 private:
-	shared_ptr<RootSignature> _rootsignature;
 	ComPtr<IDXGISwapChain3> _swapChain = nullptr;
 	HANDLE	_fenceEvent = nullptr;
 	ComPtr<ID3D12Fence> _fence = nullptr;

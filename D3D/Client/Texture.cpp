@@ -18,12 +18,6 @@ Texture::~Texture()
 void Texture::Init(const wstring& path,TextureType type)
 {
  
-
-    if(path == L"Box\\Bricks075A_1K-PNG_Color.dds")
-    {
-        int a = 5;
-    }
-
     wstring finalPath = _path + path;
 
     wstring ext = fs::path(finalPath).extension();

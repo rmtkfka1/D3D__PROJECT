@@ -15,7 +15,7 @@ public:
 	void Init(const wstring& path,TextureType type = TextureType::Texture2D);
 
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle() { return _srvHandle; }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVCpuHandle() { return _srvHandle; }
 
 public:
 	//FOR GBUFFER
@@ -26,5 +26,6 @@ private:
 	ScratchImage			 		_image;
 	ComPtr<ID3D12Resource>			_resource;
 	D3D12_CPU_DESCRIPTOR_HANDLE		_srvHandle{};
+	D3D12_CPU_DESCRIPTOR_HANDLE		_uavHandle{};
 };
 

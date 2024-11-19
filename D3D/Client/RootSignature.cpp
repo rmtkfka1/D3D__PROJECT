@@ -4,6 +4,12 @@
 #include "BufferPool.h"
 void RootSignature::Init()
 {
+	CreateGraphicsRootSignature();
+	CreateComputeRootSignature();
+}
+
+void RootSignature::CreateGraphicsRootSignature()
+{
 	// 정적 샘플러 설정
 	D3D12_STATIC_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
@@ -27,7 +33,7 @@ void RootSignature::Init()
 		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 0) //t0,t1,t2
 	};
 
-	
+
 	CD3DX12_ROOT_PARAMETER param[3];
 	param[0].InitAsConstantBufferView(0);  //라이팅 b0
 	param[1].InitAsConstantBufferView(1);  //카메라 b1
@@ -43,10 +49,31 @@ void RootSignature::Init()
 		| D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT;
 
 
-
-
 	ComPtr<ID3DBlob> signature;
 	ComPtr<ID3DBlob> error;
 	D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signature, &error);
-	core->GetDevice()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&_signature));
+	core->GetDevice()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&_graphicsRootSignature));
+}
+
+void RootSignature::CreateComputeRootSignature()
+{
+	CD3DX12_DESCRIPTOR_RANGE ranges[] =
+	{
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 2, 2),//b2,b3
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 3, 0), //t0,t1,t2
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, 3, 0), // u0,u1,u2
+	};
+
+
+	CD3DX12_ROOT_PARAMETER param[1];
+	param[0].InitAsDescriptorTable(_countof(ranges), ranges);
+
+	D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(_countof(param), param);
+	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_NONE;
+
+	ComPtr<ID3DBlob> blobSignature;
+	ComPtr<ID3DBlob> blobError;
+	::D3D12SerializeRootSignature(&sigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &blobSignature, &blobError);
+	core->GetDevice()->CreateRootSignature(0, blobSignature->GetBufferPointer(), blobSignature->GetBufferSize(), IID_PPV_ARGS(&_computeRootSignature));
+
 }

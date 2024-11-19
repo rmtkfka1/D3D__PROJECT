@@ -1,16 +1,11 @@
 #pragma once
 #include "Graphics.h"
 
-class RootSignature;
-class RenderTargets;
-class GBuffer;
-class D3D12ResourceManager;
-
-class DescriptorTable;
-class TextureBufferPool;
-class ConstantBufferPool;
+class Graphics;
+class Compute;
 class BufferManager;
-
+class D3D12ResourceManager;
+class RootSignature;
 
 
 
@@ -32,9 +27,11 @@ public:
 	HWND GetWindowHandle() { return _hwnd; }
 	ComPtr<ID3D12Device5>& GetDevice() { return _device; }
 	shared_ptr<D3D12ResourceManager>& GetResourceManager() { return _resourceManager; }
-	shared_ptr<Graphics>& GetGraphics() { return _graphics; }
 	shared_ptr<BufferManager>& GetBufferManager() { return _bufferManager; }
+	shared_ptr<RootSignature>& GetRootSignature() { return _rootsignature; }
 
+	shared_ptr<Graphics>& GetGraphics() { return _graphics; }
+	shared_ptr<Compute>& GetCompute() { return _compute; }
 
 private:
 	HWND _hwnd = nullptr;
@@ -46,9 +43,11 @@ private:
 	DXGI_ADAPTER_DESC1	_adapterDesc = {};
 	shared_ptr<BufferManager> _bufferManager = nullptr;
 	shared_ptr<D3D12ResourceManager> _resourceManager=nullptr;
+	shared_ptr<RootSignature> _rootsignature;
 
-	//Graphics
+
 	shared_ptr<Graphics> _graphics;
+	shared_ptr<Compute> _compute;
 
 
 public:

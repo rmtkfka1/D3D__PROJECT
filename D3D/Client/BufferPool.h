@@ -70,12 +70,16 @@ private:
 
 private:
 	vector<uint32> _indexGenerator;
-	ComPtr<ID3D12DescriptorHeap>	_srvHeap;
+	ComPtr<ID3D12DescriptorHeap> _heap;
 
 	int32 _heapSize = 0;
 	int32 _handleIncrementSize = 0;
 	int32 _currentIndex = 0;
 };
+
+
+
+
 
 
 /*************************
