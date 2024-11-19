@@ -22,8 +22,13 @@ public:
 
 	void Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV);
 
+	void CreateDevice(bool EnableDebugLayer, bool EnableGBV);
+	void SetDebugLayerInfo(ComPtr<ID3D12Device> pD3DDevice);
+
+
 	HWND GetWindowHandle() { return _hwnd; }
-	ComPtr<ID3D12Device5>& GetDevice() { return _graphics->GetDevice(); }
+	ComPtr<ID3D12Device5>& GetDevice() { return _device; }
+
 	ComPtr<ID3D12GraphicsCommandList>& GetCmdLIst() { return _graphics->GetCmdLIst(); }
 	shared_ptr<RootSignature>& GetRootSignature() { return _graphics->GetRootSignature(); }
 	shared_ptr<RenderTargets>& GetRenderTarget() { return _graphics->GetRenderTarget(); }
@@ -38,9 +43,14 @@ public:
 	shared_ptr<Graphics>& GetGraphics() { return _graphics; }
 
 
-
 private:
-	HWND _hwnd =nullptr;
+	HWND _hwnd = nullptr;
+
+	ComPtr<ID3D12Device5> _device = nullptr;
+	ComPtr<IDXGIFactory4> _factory = nullptr;
+	D3D_FEATURE_LEVEL	_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	DXGI_ADAPTER_DESC1	_adapterDesc = {};
+
 	shared_ptr<Graphics> _graphics = nullptr;
 
 };

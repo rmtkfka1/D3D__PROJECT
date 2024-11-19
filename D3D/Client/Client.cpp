@@ -172,7 +172,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_SIZE:
     {
-       /* if (core->GetWindowHandle())
+   /*     if (core->GetWindowHandle())
         {
             RECT	rect;
             GetClientRect(hWnd, &rect);

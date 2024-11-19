@@ -17,7 +17,7 @@ public:
 	Graphics();
 	~Graphics();
 
-	void Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV);
+	void Init(HWND hwnd, ComPtr<ID3D12Device5> device, ComPtr<IDXGIFactory4> factory);
 	void Fence();
 	void WaitForFenceValue(uint64 ExpectedFenceValue);
 	void WaitForAllFence();
@@ -31,7 +31,7 @@ public:
 	void UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight);
 
 	HWND GetWindowHandle() { return _hwnd; }
-	ComPtr<ID3D12Device5>& GetDevice() { return _device; }
+
 	ComPtr<ID3D12GraphicsCommandList>& GetCmdLIst() { return _cmdList[_currentContextIndex]; }
 	shared_ptr<RootSignature>& GetRootSignature() { return _rootsignature; }
 	shared_ptr<RenderTargets>& GetRenderTarget() { return _renderTargets; }
@@ -49,13 +49,12 @@ public:
 
 private:
 
-	void CreateDevice(bool EnableDebugLayer, bool EnableGBV);
 	void CreateCmdQueue();
 	void CreateSwapChain();
 	void CreateFence();
 	void CreateRootSignature();
 	void CreateBufferPool();
-	void SetDebugLayerInfo(ComPtr<ID3D12Device> pD3DDevice);
+
 
 private:
 	bool FullScreen = false;
@@ -70,8 +69,8 @@ private:
 	uint64  _lastFenceValue[MAX_FRAME_COUNT] = { 0 };
 	uint64	_fenceValue = 0;
 
-	D3D_FEATURE_LEVEL	_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
-	DXGI_ADAPTER_DESC1	_adapterDesc = {};
+	//D3D_FEATURE_LEVEL	_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	//DXGI_ADAPTER_DESC1	_adapterDesc = {};
 	UINT	_swapChainFlags = 0;
 	uint64  _currentContextIndex = 0;
 
