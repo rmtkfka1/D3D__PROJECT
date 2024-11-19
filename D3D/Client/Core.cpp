@@ -37,6 +37,8 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 	_resourceManager = make_shared<D3D12ResourceManager>();
 	_resourceManager->Init();
 
+
+	_bInit = true;
 }
 
 void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
@@ -165,14 +167,6 @@ void Core::SetDebugLayerInfo(ComPtr<ID3D12Device> pD3DDevice)
 		pInfoQueue->Release();
 		pInfoQueue = nullptr;
 	}
-}
-
-
-namespace Grahpic
-{
-	ComPtr<ID3D12GraphicsCommandList>& GetCmdList() { return core->GetGraphics()->GetCmdLIst(); }
-	shared_ptr<RootSignature>& GetRootSignature() { return core->GetGraphics()->GetRootSignature(); }
-	shared_ptr<RenderTargets>& GetRenderTarget() { return core->GetGraphics()->GetRenderTarget(); }
 }
 
 

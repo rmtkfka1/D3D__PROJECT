@@ -214,6 +214,9 @@
     <ClInclude Include="BufferManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
+    <ClInclude Include="Compute.h">
+      <Filter>02.Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -380,6 +383,9 @@
       <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="BufferManager.cpp">
+      <Filter>02.Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Compute.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
   </ItemGroup>

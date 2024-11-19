@@ -125,4 +125,5 @@ extern unique_ptr<class Core> core;
 #include "CollisonManager.h"
 #include "BufferManager.h"
 
+#define GRAPHIC core->GetGraphics()
 

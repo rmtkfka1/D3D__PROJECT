@@ -172,14 +172,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_SIZE:
     {
-   /*     if (core->GetWindowHandle())
+        if (core->_bInit)
         {
             RECT	rect;
             GetClientRect(hWnd, &rect);
             DWORD	WndWidth = rect.right - rect.left;
             DWORD	WndHeight = rect.bottom - rect.top;
             core->GetGraphics()->UpdateWindowSize(WndWidth, WndHeight);
-        }*/
+        }
     };
     break;
     case WM_DESTROY:

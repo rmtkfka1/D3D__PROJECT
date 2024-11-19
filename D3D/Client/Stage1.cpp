@@ -446,7 +446,7 @@ void Stage1::UiObjectRender()
 void Stage1::FinalRender()
 {
 
-	auto& list = core->GetGraphics()->GetCmdLIst();
+	auto& list = GRAPHIC->GetCmdLIst();
 
 	ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
 	shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");

@@ -31,8 +31,6 @@ public:
 
 	HWND GetWindowHandle() { return _hwnd; }
 	ComPtr<ID3D12Device5>& GetDevice() { return _device; }
-
-
 	shared_ptr<D3D12ResourceManager>& GetResourceManager() { return _resourceManager; }
 	shared_ptr<Graphics>& GetGraphics() { return _graphics; }
 	shared_ptr<BufferManager>& GetBufferManager() { return _bufferManager; }
@@ -51,6 +49,10 @@ private:
 
 	//Graphics
 	shared_ptr<Graphics> _graphics;
+
+
+public:
+	bool _bInit = false;
 
 };
 
