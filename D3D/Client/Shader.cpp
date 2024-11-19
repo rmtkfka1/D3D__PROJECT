@@ -3,16 +3,16 @@
 #include "Core.h"
 #include "RootSignature.h"
 
-Shader::Shader() :ResourceBase(ResourceType::Shader)
+GraphicsShader::GraphicsShader() :ResourceBase(ResourceType::Shader)
 {
 
 }
-Shader::~Shader()
+GraphicsShader::~GraphicsShader()
 {
 
 }
 
-void Shader::Init(const wstring& path, ShaderInfo info)
+void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 {
 
 	wstring finalPath = _path + path;
@@ -143,12 +143,12 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 }
 
 
-void Shader::SetPipelineState()
+void GraphicsShader::SetPipelineState()
 {
 	core->GetGraphics()->GetCmdLIst()->SetPipelineState(_pipelineState.Get());
 }
 
-void Shader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
+void GraphicsShader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
 {
 	uint32 compileFlag = 0;
 #ifdef _DEBUG
@@ -164,17 +164,62 @@ void Shader::CreateShader(const wstring& path, const string& name, const string&
 	shaderByteCode = { blob->GetBufferPointer(), blob->GetBufferSize() };
 }
 
-void Shader::CreateVertexShader(const wstring& path, const string& name, const string& version)
+void GraphicsShader::CreateVertexShader(const wstring& path, const string& name, const string& version)
 {
 	CreateShader(path, name, version, _vsBlob, _pipelineDesc.VS);
 }
 
-void Shader::CreatePixelShader(const wstring& path, const string& name, const string& version)
+void GraphicsShader::CreatePixelShader(const wstring& path, const string& name, const string& version)
 {
 	CreateShader(path, name, version, _psBlob, _pipelineDesc.PS);
 }
 
-void Shader::CreateGeometryShader(const wstring& path, const string& name, const string& version)
+void GraphicsShader::CreateGeometryShader(const wstring& path, const string& name, const string& version)
 {
 	CreateShader(path, name, version, _gsBlob, _pipelineDesc.GS);
+}
+
+//ComputeShader
+ComputeShader::ComputeShader() :ResourceBase(ResourceType::Shader)
+{
+
+}
+
+ComputeShader::~ComputeShader()
+{
+}
+
+void ComputeShader::Init(const wstring& path)
+{
+	wstring finalPath = _path + path;
+
+	CreateShader(path, "CS_Main", "cs_5_0", _csBlob, _pipelineDesc.CS);
+
+	_pipelineDesc.pRootSignature = core->GetRootSignature()->GetComputeRootSignature().Get();
+
+	HRESULT hr = core->GetDevice()->CreateComputePipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));
+	assert(SUCCEEDED(hr));
+}
+
+void ComputeShader::SetPipelineState()
+{
+	COMPUTE->GetCmdList()->SetPipelineState(_pipelineState.Get());
+}
+
+void ComputeShader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
+{
+	uint32 compileFlag = 0;
+#ifdef _DEBUG
+	compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif
+
+	if (FAILED(::D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+		, name.c_str(), version.c_str(), compileFlag, 0, &blob, &_errBlob)))
+	{
+		std::string errorMsg = "Shader Create Failed!";
+		errorMsg = std::string((char*)_errBlob->GetBufferPointer(), _errBlob->GetBufferSize());
+		::MessageBoxA(nullptr, errorMsg.c_str(), "Shader Compilation Error", MB_OK | MB_ICONERROR);
+	}
+
+	shaderByteCode = { blob->GetBufferPointer(), blob->GetBufferSize() };
 }

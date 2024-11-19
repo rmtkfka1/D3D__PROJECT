@@ -2,7 +2,7 @@
 
 class Material;
 class Mesh;
-class Shader;
+class GraphicsShader;
 
 struct ModelBone
 {

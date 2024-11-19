@@ -31,7 +31,7 @@ void StartScene::BulidObject()
 		object->GetTransform()->SetLocalPosition(vec3(0, 0, 30.0f));
 		object->GetTransform()->SetLocalScale(vec3(1000.0f, 550.0f, 0.0f));
 		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"startScene.jpg"));
-		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishader.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishader.hlsl"));
 		AddGameObject(object, RenderingType::Ui);
 	}
 
@@ -42,7 +42,7 @@ void StartScene::BulidObject()
 		object->GetTransform()->SetLocalScale(vec3(300.0f, 300.0f, 0.0f));
 		object->GetMaterial()->SetInt(0, 0);
 		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"start.jpg"));
-		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishaderclip.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishaderclip.hlsl"));
 		AddGameObject(object, RenderingType::Ui);
 
 	}
@@ -54,7 +54,7 @@ void StartScene::BulidObject()
 		object->GetTransform()->SetLocalScale(vec3(100.0f, 100.0f, 0.0f));
 		object->GetMaterial()->SetInt(0, 1);
 		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"Info-Button.png"));
-		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishaderclip.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishaderclip.hlsl"));
 		AddGameObject(object, RenderingType::Ui);
 	}
 
@@ -66,7 +66,7 @@ void StartScene::BulidObject()
 		object->GetTransform()->SetLocalScale(vec3(600.0f, 400.0f, 0.0f));
 		object->SetFrustumCuling(false);
 		object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"info.png"));
-		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishader.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishader.hlsl"));
 		AddGameObject(object, RenderingType::Ui);
 	}
 

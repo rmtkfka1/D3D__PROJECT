@@ -53,7 +53,7 @@ void ModelObject::Render()
 			data->material->Pushdata();
 		}
 
-		core->GetBufferManager()->GetTableHeap()->SetGraphicsRootDescriptorTable();
+		core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
 
 		data->meshes->Render();
 

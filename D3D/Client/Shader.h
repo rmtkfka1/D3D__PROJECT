@@ -48,11 +48,11 @@ struct ShaderInfo
 	bool bActvieStreamOutput = false;
 };
 
-class Shader :public ResourceBase
+class GraphicsShader :public ResourceBase
 {
 public:
-	Shader();
-	virtual ~Shader();
+	GraphicsShader();
+	virtual ~GraphicsShader();
 
 	void Init(const wstring& path, ShaderInfo info = ShaderInfo());
 	void SetPipelineState();
@@ -75,6 +75,34 @@ private:
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC  _pipelineDesc = {};
 
 	wstring _path = L"../Resources/Shader/";
-
 };
+
+
+
+class ComputeShader :public ResourceBase
+{
+public:
+	ComputeShader();
+	virtual ~ComputeShader();
+
+	void Init(const wstring& path);
+	void SetPipelineState();
+
+private:
+	void CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode);
+
+private:
+
+	ComPtr<ID3DBlob>					_csBlob;
+	ComPtr<ID3DBlob>					_errBlob;
+
+	ComPtr<ID3D12PipelineState>			_pipelineState;
+	D3D12_COMPUTE_PIPELINE_STATE_DESC   _pipelineDesc = {};
+
+	wstring _path = L"../Resources/Shader/";
+};
+
+
+
+
 

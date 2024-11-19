@@ -10,6 +10,7 @@
 #include "Material.h"
 #include "BufferManager.h"
 #include "Core.h"
+#include "Compute.h"
 
 Graphics::Graphics()
 {
@@ -126,7 +127,8 @@ void Graphics::RenderBegin()
 	ThrowIfFailed(cmdList->Reset(cmdMemory, nullptr));
 
 	cmdList->SetGraphicsRootSignature(core->GetRootSignature()->GetGraphicsRootSignature().Get());
-	cmdList->SetDescriptorHeaps(1, _bufferManager->GetTableHeap()->GetDescriptorHeap().GetAddressOf());
+	cmdList->SetDescriptorHeaps(1, _bufferManager->GetGraphicsTableHeap()->GetDescriptorHeap().GetAddressOf());
+	COMPUTE->_cmdList->SetDescriptorHeaps(1, _bufferManager->GetComputeTableHeap()->GetDescriptorHeap().GetAddressOf());
 
 };
 

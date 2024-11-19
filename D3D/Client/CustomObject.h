@@ -7,7 +7,7 @@ class Mesh;
 class Material;
 class Transform;
 class BaseCollider;
-class Shader;
+class GraphicsShader;
 
 class CustomObject :public GameObject
 {

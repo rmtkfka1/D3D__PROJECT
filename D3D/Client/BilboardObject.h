@@ -3,12 +3,12 @@
 
 class Texture;
 class StreamOutputBuffer;
-class Shader;
+class GraphicsShader;
 
 struct StreamOutputData
 {
 	bool binit = false;
-	shared_ptr<Shader> SOShader;
+	shared_ptr<GraphicsShader> SOShader;
 	shared_ptr<StreamOutputBuffer> SOBuffer;
 	bool _bStreamRender = false;
 };

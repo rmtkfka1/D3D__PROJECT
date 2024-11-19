@@ -1,6 +1,6 @@
 #pragma once
 #include "ResourceBase.h"
-class Shader;
+class GraphicsShader;
 class Texture;
 
 struct MaterialParams

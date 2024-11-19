@@ -4,7 +4,7 @@
 class Model;
 class TransformTree;
 class Transform;
-class Shader;
+class GraphicsShader;
 class Material;
 
 class HireacyObject :public GameObject

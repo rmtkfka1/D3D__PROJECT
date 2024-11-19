@@ -3,6 +3,7 @@
 #include "BufferPool.h"
 #include "LightManager.h"
 #include "Material.h"
+
 BufferManager::BufferManager()
 {
 }
@@ -13,9 +14,13 @@ BufferManager::~BufferManager()
 
 void BufferManager::Init()
 {
+
+	_computeTable = make_shared<ComputeDescriptorTable>();
+	_computeTable->Init();
+
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
-		_table[i] = make_shared<DescriptorTable>();
+		_table[i] = make_shared<GraphicsDescriptorTable>();
 		_table[i]->Init(255);
 	}
 

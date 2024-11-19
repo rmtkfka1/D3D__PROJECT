@@ -108,7 +108,7 @@ void Enemy::Shot()
 		auto& pos = this->GetTransform()->GetLocalPosition() + GetTransform()->GetLook() * 100.0f;
 		object->GetTransform()->SetLocalPosition(pos);
 		object->GetTransform()->SetLocalScale(vec3(0.1f, 0.1f, 0.1f));
-		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
 		object->AddBoxColliderWithModel("enemyBullet",ColliderBehave::Active);
 		SceneManager::GetInstance()->GetCurrentScene()->ReserveAddGameObject(object, RenderingType::Deferred);
     }

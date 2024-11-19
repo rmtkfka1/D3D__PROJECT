@@ -14,6 +14,12 @@ enum class SRV_REGISTER : uint8
 	t2
 };
 
+enum class UAV_REGISTER : uint8
+{
+	u0 = 5,
+	u1,
+	u2
+};
 
 
 /*************************
@@ -82,14 +88,14 @@ private:
 
 
 
-/*************************
-*                        *
-*    DescriptorTable     *
-*                        *
-**************************/
+/*********************************
+*                                *
+*    GraphicsDescriptorTable     *
+*                                *
+**********************************/
 
 
-class DescriptorTable
+class GraphicsDescriptorTable
 {
 
 public:
@@ -115,7 +121,36 @@ private:
 	uint64					_groupCount = 0;
 	uint32					_currentGroupIndex = 0;
 
+};
 
+/*********************************
+*                                *
+*    ComputeDescriptorTable      *
+*                                *
+**********************************/
+
+class ComputeDescriptorTable
+{
+public:
+	void Init();
+
+	void CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg);
+	void CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTER reg);
+	void CopyUAV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, UAV_REGISTER reg);
+
+	void SetComputeRootDescriptorTable();
+	ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return _descHeap; }
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(CBV_REGISTER reg);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(SRV_REGISTER reg);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(UAV_REGISTER reg);
+
+private:
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(uint32 reg);
+
+private:
+	ComPtr<ID3D12DescriptorHeap> _descHeap;
+	uint64						_handleSize = 0;
 };
 
 

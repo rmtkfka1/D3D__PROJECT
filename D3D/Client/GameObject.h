@@ -3,7 +3,7 @@
 class MeshRenderer;
 class Transform;
 class BaseCollider;
-class Shader;
+class GraphicsShader;
 class Material;
 
 enum class GameObjectType
@@ -52,14 +52,14 @@ public:
 
 	void SetFrustumCuling(bool checkFrustum) { _checkFrustum = checkFrustum; }
 	bool GetFrustumCuling() { return _checkFrustum; }
-	void SetShader(shared_ptr<Shader> shader) { _shader = shader; }
+	void SetShader(shared_ptr<GraphicsShader> shader) { _shader = shader; }
 
 protected:
 	GameObjectType _type;
 	PlayerType _playerType =PlayerType::Default;
 	vector<shared_ptr<BaseCollider>> _colliders;
 
-	shared_ptr<Shader> _shader;
+	shared_ptr<GraphicsShader> _shader;
 
 	bool _checkFrustum = true;
 

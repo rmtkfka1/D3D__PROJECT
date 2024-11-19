@@ -5,7 +5,7 @@
 class Model;
 class Transform;
 class BaseCollider;
-class Shader;
+class GraphicsShader;
 
 class ModelObject : public GameObject
 {

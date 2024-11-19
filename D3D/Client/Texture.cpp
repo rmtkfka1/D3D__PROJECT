@@ -122,8 +122,45 @@ void Texture::Init(const wstring& path,TextureType type)
         break;
     }
 
-
     core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
+}
+
+
+void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height)
+{
+    D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
+    desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
+	auto hr = core->GetDevice()->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&desc,
+		D3D12_RESOURCE_STATE_COMMON,
+		nullptr,
+		IID_PPV_ARGS(&_resource));
+
+    if (FAILED(hr))
+    {
+        throw std::runtime_error("Failed to create texture resource.");
+    }
+
+	core->GetBufferManager()->GetTextureBufferPool()->AllocDescriptorHandle(&_srvHandle);
+    core->GetBufferManager()->GetTextureBufferPool()->AllocDescriptorHandle(&_uavHandle);
+
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+    srvDesc.Format = format;
+    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    srvDesc.Texture2D.MipLevels = 1;
+
+    D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+    uavDesc.Format = format;
+    uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+
+	core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
+	core->GetDevice()->CreateUnorderedAccessView(_resource.Get(), nullptr, &uavDesc, _uavHandle);
+
+
 }
 
 

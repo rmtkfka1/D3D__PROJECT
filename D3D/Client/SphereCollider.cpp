@@ -8,17 +8,17 @@
 #include "ResourceManager.h"
 #include "Core.h"
 #include "BufferPool.h"
-std::shared_ptr<Shader> SphereCollider::_shader = nullptr;
+std::shared_ptr<GraphicsShader> SphereCollider::_shader = nullptr;
 
 SphereCollider::SphereCollider() :BaseCollider(ColliderType::Sphere)
 {
 
     if (!_shader)  
     {
-        _shader = make_shared<Shader>();
+        _shader = make_shared<GraphicsShader>();
         ShaderInfo info;
         info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
-        _shader = ResourceManager::GetInstance()->Load<Shader>(L"boundingbox.hlsl", info);
+        _shader = ResourceManager::GetInstance()->Load<GraphicsShader>(L"boundingbox.hlsl", info);
     }
 }
 
@@ -45,7 +45,7 @@ void SphereCollider::Render()
 {
     GetOwner()->GetTransform()->PushData();
     _shader->SetPipelineState();
-    core->GetBufferManager()->GetTableHeap()->SetGraphicsRootDescriptorTable();
+    core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
     _mesh->Render();
 
 }

@@ -137,7 +137,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Player> player = make_shared<Player>();
 
 		player->SetModel(data);
-		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
 		player->SetShader(shader);
 
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
@@ -167,7 +167,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box",L"Box");
 		object->SetModel(data);
-		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
 		object->AddBoxColliderWithModel("block",ColliderBehave::Passive);
 		AddGameObject(object, RenderingType::Deferred);
 
@@ -180,7 +180,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Sphere> object = make_shared<Sphere>();
 		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth",L"Earth");
 		object->SetModel(data);
-		object->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"deferred.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
 		object->AddSphereColliderWithModel("earth", ColliderBehave::Passive);
 		AddGameObject(object, RenderingType::Deferred);
 	}
@@ -219,7 +219,7 @@ void Stage1::BulidDeferred()
 		gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x, Pos.y + 250.0f, Pos.z));
 		gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
 		gameobject->AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 5.0f, 2.0f), vec3(0, 0, 0));
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"Bilboard.hlsl"));
 
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
@@ -233,7 +233,7 @@ void Stage1::BulidDeferred()
 		v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
 		gameobject->GetMesh()->Init(v);
 
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"Bilboard.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"Bilboard.hlsl"));
 
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
@@ -251,7 +251,7 @@ void Stage1::BulidForward()
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 		ResourceManager::GetInstance()->Add<GameObject>(L"gbufferUi"+i, object);
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
-		object->SetShader(ResourceManager::GetInstance()->Load<Shader>(L"uishader.hlsl"));
+		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishader.hlsl"));
 		object->GetMaterial()->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(i));
 		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
 		object->GetTransform()->SetLocalPosition(vec3(-850.0f + 200.0f * i, 400.0f, 1.0f));
@@ -266,7 +266,7 @@ void Stage1::BulidForward()
 
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
 
-		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"sky.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
 
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
@@ -302,7 +302,7 @@ void Stage1::BulidForward()
 		shared_ptr<Sea> gameobject = make_shared<Sea>();
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"sea.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"sea.hlsl"));
 		
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, 0));
@@ -316,7 +316,7 @@ void Stage1::BulidForward()
 		shared_ptr<Sea> gameobject = make_shared<Sea>();
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest.hlsl"));
 
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, 5000.0f));
@@ -330,7 +330,7 @@ void Stage1::BulidForward()
 
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest2.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest2.hlsl"));
 
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, -5000.0f));
@@ -344,7 +344,7 @@ void Stage1::BulidForward()
 
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest2Blend.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest2Blend.hlsl"));
 
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(0, -3000.0f, -500.0));
@@ -360,7 +360,7 @@ void Stage1::BulidForward()
 
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<Shader>(L"seatest2.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest2.hlsl"));
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(0, -10000.0f, -500.0));
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
@@ -376,7 +376,7 @@ void Stage1::BulidForward()
 
 		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
 
-		shared_ptr<Shader> shader = ResourceManager::GetInstance()->Get<Shader>(L"sky.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
 
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
@@ -445,19 +445,14 @@ void Stage1::UiObjectRender()
 
 void Stage1::FinalRender()
 {
-	{
-
-
-
-	}
-
+	
 	{
 		auto& list = GRAPHICS->GetCmdLIst();
-		ResourceManager::GetInstance()->Get<Shader>(L"final.hlsl")->SetPipelineState();
+		ResourceManager::GetInstance()->Get<GraphicsShader>(L"final.hlsl")->SetPipelineState();
 		shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
 		shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
 		material->Pushdata();
-		core->GetBufferManager()->GetTableHeap()->SetGraphicsRootDescriptorTable();
+		core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
 		mesh->Render();
 	}
 

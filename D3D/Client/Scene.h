@@ -1,7 +1,7 @@
 #pragma once
 #include "CameraManager.h"
 class GameObject;
-class Shader;
+class GraphicsShader;
 class Mesh;
 class Material;
 class Transform;

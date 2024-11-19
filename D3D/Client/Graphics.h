@@ -5,7 +5,7 @@ class RenderTargets;
 class GBuffer;
 class D3D12ResourceManager;
 
-class DescriptorTable;
+class GraphicsDescriptorTable;
 class TextureBufferPool;
 class ConstantBufferPool;
 class BufferManager;

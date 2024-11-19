@@ -2,7 +2,7 @@
 #include "BaseCollider.h"
 #include "Material.h"
 class Mesh;
-class Shader;
+class GraphicsShader;
 
 
 
@@ -34,7 +34,7 @@ private:
 	shared_ptr<Mesh> _mesh; //디버깅용 그려주는 박스
 	vec3 _totalSize;
 
-	static shared_ptr<Shader> _shader;
+	static shared_ptr<GraphicsShader> _shader;
 
 public:
 

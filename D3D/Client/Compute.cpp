@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Compute.h"
-
+#include "Core.h"
+#include "RootSignature.h"
 void Compute::Init(ComPtr<ID3D12Device5> device)
 {
 	_device = device;
@@ -12,8 +13,6 @@ void Compute::Init(ComPtr<ID3D12Device5> device)
 
 	device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_COMPUTE, IID_PPV_ARGS(&_cmdAlloc));
 	device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_COMPUTE, _cmdAlloc.Get(), nullptr, IID_PPV_ARGS(&_cmdList));
-
-	device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_fence));
 
 
 	device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_fence));
@@ -37,6 +36,7 @@ void Compute::WaitSync()
 
 void Compute::Excute()
 {
+	_cmdList->SetComputeRootSignature(core->GetRootSignature()->GetComputeRootSignature().Get());
 	_cmdList->Close();
 
 	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
@@ -49,6 +49,5 @@ void Compute::Excute()
 	_cmdAlloc->Reset();
 	_cmdList->Reset(_cmdAlloc.Get(), nullptr);
 
-	//COMPUTE->SetComputeRootSignature(COMPUTE_ROOT_SIGNATURE.Get());
-
+	
 }

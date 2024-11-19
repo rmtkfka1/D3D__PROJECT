@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseCollider.h"
-class Shader;
+class GraphicsShader;
 class Mesh;
 
 class SphereCollider : public BaseCollider
@@ -30,6 +30,6 @@ private:
 	BoundingSphere _orginsphere;
 	float _totalRadius{};
 
-	static shared_ptr<Shader> _shader;
+	static shared_ptr<GraphicsShader> _shader;
 };
 

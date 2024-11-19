@@ -29,9 +29,6 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 
 	CreateDevice(EnableDebugLayer, EnableGBV);
 
-	_rootsignature = make_shared<RootSignature>();
-	_rootsignature->Init();
-
 	_bufferManager = make_shared<BufferManager>();
 	_bufferManager->Init();
 
@@ -40,6 +37,9 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 
 	_compute = make_shared<Compute>();
 	_compute->Init(_device);
+
+	_rootsignature = make_shared<RootSignature>();
+	_rootsignature->Init();
 
 	_resourceManager = make_shared<D3D12ResourceManager>();
 	_resourceManager->Init();
