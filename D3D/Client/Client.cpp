@@ -77,7 +77,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-    core->Exit();
+    core->GetGraphics()->Exit();
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     return (int) msg.wParam;
@@ -140,7 +140,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
             case IDM_EXIT:
-                core->Exit();
+                core->GetGraphics()->Exit();
                 DestroyWindow(hWnd);
                 break;
             default:
@@ -161,30 +161,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (wParam == VK_F9)
         {
-            core->SetFullScreen();
+            core->GetGraphics()->SetFullScreen();
         }
 
         if (wParam == VK_ESCAPE) 
         {
-            core->Exit();
+            core->GetGraphics()->Exit();
             DestroyWindow(hWnd);
         }
         break;
     case WM_SIZE:
     {
-
-        if (core->GetDevice())
+       /* if (core->GetWindowHandle())
         {
             RECT	rect;
             GetClientRect(hWnd, &rect);
             DWORD	WndWidth = rect.right - rect.left;
             DWORD	WndHeight = rect.bottom - rect.top;
-            core->UpdateWindowSize(WndWidth, WndHeight);
-        }
+            core->GetGraphics()->UpdateWindowSize(WndWidth, WndHeight);
+        }*/
     };
     break;
     case WM_DESTROY:
-        core->WaitForAllFence();
+        core->GetGraphics()->WaitForAllFence();
         PostQuitMessage(0);
         break;
     default:

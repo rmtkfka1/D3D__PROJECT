@@ -57,9 +57,9 @@ void Game::Update()
 void Game::Render()
 {
 
-	core->RenderBegin();
+	core->GetGraphics()->RenderBegin();
 	SceneManager::GetInstance()->Run();
-	core->RenderEnd();
+	core->GetGraphics()->RenderEnd();
 	SceneManager::GetInstance()->LateUpdate();
 	CollisonManager::GetInstance()->Update();
 

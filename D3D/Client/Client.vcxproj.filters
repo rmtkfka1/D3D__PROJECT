@@ -208,6 +208,9 @@
     <ClInclude Include="SteamOutputBuffer.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>02.Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -369,6 +372,9 @@
     </ClCompile>
     <ClCompile Include="SteamOutputBuffer.cpp">
       <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>02.Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
