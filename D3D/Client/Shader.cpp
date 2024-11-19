@@ -193,7 +193,7 @@ void ComputeShader::Init(const wstring& path)
 {
 	wstring finalPath = _path + path;
 
-	CreateShader(path, "CS_Main", "cs_5_0", _csBlob, _pipelineDesc.CS);
+	CreateShader(finalPath, "CS_Main", "cs_5_0", _csBlob, _pipelineDesc.CS);
 
 	_pipelineDesc.pRootSignature = core->GetRootSignature()->GetComputeRootSignature().Get();
 

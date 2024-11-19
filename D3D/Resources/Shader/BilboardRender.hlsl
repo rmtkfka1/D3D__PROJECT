@@ -1,4 +1,5 @@
 
+
 cbuffer TEST_B0 : register(b1)
 {
     row_major matrix ViewMat;
