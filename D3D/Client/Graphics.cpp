@@ -38,8 +38,6 @@ void Graphics::Init(HWND hwnd, ComPtr<ID3D12Device5> device , ComPtr<IDXGIFactor
 	CreateSwapChain();
 	CreateFence();
 
-
-
 };
 
 void Graphics::Fence()

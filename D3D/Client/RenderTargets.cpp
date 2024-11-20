@@ -2,6 +2,8 @@
 #include "RenderTargets.h"
 #include "Core.h"
 #include "Texture.h"
+#include "BufferManager.h"
+#include "BufferPool.h"
 RenderTargets::RenderTargets()
 {
 }
@@ -23,6 +25,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 
 	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
 	{
+		core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_rtvHandle[n]);
 		_RenderTargets[n].Reset();
 	}
 
@@ -32,16 +35,16 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	}
 
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
-	int32 rtvHeapSize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _RTVHeap->GetCPUDescriptorHandleForHeapStart();
 
+	//int32 rtvHeapSize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _RTVHeap->GetCPUDescriptorHandleForHeapStart();
 
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 		swapchain->GetBuffer(i, IID_PPV_ARGS(&_RenderTargets[i]));
 
-	for (int i = 0; i < SWAP_CHAIN_FRAME_COUNT; ++i)
+	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; ++i)
 	{
-		_rtvHandle[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeapBegin, i * rtvHeapSize);
+		core->GetBufferManager()->GetTextureBufferPool()->AllocRTVDescriptorHandle(&_rtvHandle[i]);
 		core->GetDevice()->CreateRenderTargetView(_RenderTargets[i].Get(), nullptr, _rtvHandle[i]);
 	}
 
@@ -51,27 +54,27 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 
 void RenderTargets::CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3> swapchain)
 {
-	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = SWAP_CHAIN_FRAME_COUNT;
-	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	//D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+	//rtvHeapDesc.NumDescriptors = SWAP_CHAIN_FRAME_COUNT;
+	//rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+	//rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-	ThrowIfFailed((core->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&_RTVHeap))));
+	//ThrowIfFailed((core->GetDevice()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&_RTVHeap))));
 
 
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WndWidth),static_cast<float>(WndHeight), 0,1.0f };
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WndWidth),static_cast<LONG>(WndHeight) };
 
 
-	int32 rtvHeapSize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _RTVHeap->GetCPUDescriptorHandleForHeapStart();
+	//int32 rtvHeapSize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _RTVHeap->GetCPUDescriptorHandleForHeapStart();
 
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 		swapchain->GetBuffer(i, IID_PPV_ARGS(&_RenderTargets[i]));
 
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 	{
-		_rtvHandle[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeapBegin, i * rtvHeapSize);
+		core->GetBufferManager()->GetTextureBufferPool()->AllocRTVDescriptorHandle(&_rtvHandle[i]);
 		core->GetDevice()->CreateRenderTargetView(_RenderTargets[i].Get(), nullptr, _rtvHandle[i]);
 	}
 

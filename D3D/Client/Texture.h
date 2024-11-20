@@ -6,6 +6,23 @@ enum class TextureType
 	CubeMap
 };
 
+enum class TextureUsageFlags : uint32_t 
+{
+	None = 0,
+	RTV = 1 << 0,   // Render Target View
+	SRV = 1 << 1,   // Shader Resource View
+	UAV = 1 << 2,    // Unordered Access View
+	DSV = 1 << 3    // Unordered Access View
+};
+
+inline TextureUsageFlags operator|(TextureUsageFlags a, TextureUsageFlags b) {
+	return static_cast<TextureUsageFlags>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
+}
+
+inline bool HasFlag(TextureUsageFlags value, TextureUsageFlags flag) {
+	return (static_cast<uint32_t>(value) & static_cast<uint32_t>(flag)) != 0;
+}
+
 class Texture :public ResourceBase
 {
 public:
@@ -13,7 +30,7 @@ public:
 	virtual ~Texture();
 
 	void Init(const wstring& path,TextureType type = TextureType::Texture2D);
-	void CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height);
+	void CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, TextureUsageFlags usageFlags);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVCpuHandle() { return _srvHandle; }
 

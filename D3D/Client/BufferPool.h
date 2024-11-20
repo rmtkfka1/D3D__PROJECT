@@ -60,28 +60,38 @@ private:
 *                        *
 **************************/
 
+struct heapStructure
+{
+	vector<uint32> indexGenator;
+	ComPtr<ID3D12DescriptorHeap> heap;
+
+	int32 heapSize = 0;
+	int32 handleIncrementSize = 0;
+	int32 currentIndex = 0;
+};
 
 
 class TextureBufferPool
 {
 
 public:
-	void Init(int32 count);
-	void Free(D3D12_CPU_DESCRIPTOR_HANDLE handle);
-	void AllocDescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE* hanlde);
-
-
-private:
-	int32 Alloc();
+	void Init(int32 SrvUavCount , int32 RTVCount);
+	void FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
+	void FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
+	void AllocSRVDescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE* hanlde);
+	void AllocRTVDescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE* hanlde);
 
 private:
-	vector<uint32> _indexGenerator;
-	ComPtr<ID3D12DescriptorHeap> _heap;
+	int32 AllocSRV();
+	int32 AllocRTV();
 
-	int32 _heapSize = 0;
-	int32 _handleIncrementSize = 0;
-	int32 _currentIndex = 0;
+private:
+	heapStructure _srvHeap;
+	heapStructure _rtvHeap;
+
 };
+
+
 
 
 

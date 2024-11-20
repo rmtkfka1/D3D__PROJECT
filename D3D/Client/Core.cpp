@@ -68,6 +68,7 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 			pDebugController->EnableDebugLayer();
 		}
 
+
 		dwCreateFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
 
 		if (EnableGBV)

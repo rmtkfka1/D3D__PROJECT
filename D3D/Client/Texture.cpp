@@ -102,7 +102,7 @@ void Texture::Init(const wstring& path,TextureType type)
     ResourceManager->Fence();
     ResourceManager->WaitForFenceValue();
 
-    core->GetBufferManager()->GetTextureBufferPool()->AllocDescriptorHandle(&_srvHandle);
+    core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_srvHandle);
 
     D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -126,26 +126,47 @@ void Texture::Init(const wstring& path,TextureType type)
 }
 
 
-void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height)
+void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, TextureUsageFlags usageFlags)
 {
     D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
-    desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+    desc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
+    if (HasFlag(usageFlags, TextureUsageFlags::RTV)) {
+        desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+    }
+    if (HasFlag(usageFlags, TextureUsageFlags::UAV)) {
+        desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+    }
+
+    //RTV 전용
+    D3D12_CLEAR_VALUE clearValue = {};
+    if (HasFlag(usageFlags, TextureUsageFlags::RTV)) 
+    {
+        clearValue.Format = format;
+        clearValue.Color[0] = 1.0f;
+        clearValue.Color[1] = 1.0f;
+        clearValue.Color[2] = 1.0f;
+        clearValue.Color[3] = 1.0f;
+    }
+
+
+    //리소스생성
 	auto hr = core->GetDevice()->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&desc,
-		D3D12_RESOURCE_STATE_COMMON,
-		nullptr,
+        HasFlag(usageFlags, TextureUsageFlags::RTV) ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_COMMON,
+        HasFlag(usageFlags, TextureUsageFlags::RTV) ? &clearValue : nullptr,
 		IID_PPV_ARGS(&_resource));
 
     if (FAILED(hr))
     {
-        throw std::runtime_error("Failed to create texture resource.");
+        throw std::runtime_error("텍스쳐 생성 실패");
     }
 
-	core->GetBufferManager()->GetTextureBufferPool()->AllocDescriptorHandle(&_srvHandle);
-    core->GetBufferManager()->GetTextureBufferPool()->AllocDescriptorHandle(&_uavHandle);
+	core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_srvHandle);
+    core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_uavHandle);
+    //core->GetBufferManager()->GEt()->AllocDescriptorHandle(&_uavHandle);
 
     D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
     srvDesc.Format = format;
