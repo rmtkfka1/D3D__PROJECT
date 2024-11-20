@@ -61,6 +61,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
     
     float3 toEye = normalize(g_eyeWorld - worldPos.xyz);
     
+   
     for (int i = 0; i < g_lightCount; ++i)
     {
    
@@ -68,8 +69,6 @@ float4 PS_Main(VS_OUT input) : SV_Target
         {
         
             color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, WolrdNormal.xyz, toEye);
-        
-            
         }
         else if (g_lights[i].mateiral.lightType == 1)
         {

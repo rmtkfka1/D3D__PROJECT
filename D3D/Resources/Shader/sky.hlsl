@@ -55,7 +55,7 @@ PS_OUT PS_Main(VS_OUT input)
     PS_OUT output;
     
     output.position = input.pos;
-    output.normal = float4(0, 0, 0, 0);
+    output.normal = float4(0, 0.1f, 0.1f, 0);
     output.color = g_tex_0.Sample(g_sam_0, input.localPos);
     
     return output;
