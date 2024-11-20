@@ -5,6 +5,7 @@ class Compute
 public:
 	void Init(ComPtr<ID3D12Device5> device);
 	void WaitSync();
+	void PrePareExcute();
 	void Excute();
 
 public:

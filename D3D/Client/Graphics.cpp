@@ -126,7 +126,6 @@ void Graphics::RenderBegin()
 
 	cmdList->SetGraphicsRootSignature(core->GetRootSignature()->GetGraphicsRootSignature().Get());
 	cmdList->SetDescriptorHeaps(1, _bufferManager->GetGraphicsTableHeap()->GetDescriptorHeap().GetAddressOf());
-	COMPUTE->_cmdList->SetDescriptorHeaps(1, _bufferManager->GetComputeTableHeap()->GetDescriptorHeap().GetAddressOf());
 
 };
 

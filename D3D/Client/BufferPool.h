@@ -69,9 +69,7 @@ struct heapStructure
 	int32 handleIncrementSize = 0;
 	int32 currentIndex = 0;
 
-
 };
-
 
 
 class TextureBufferPool

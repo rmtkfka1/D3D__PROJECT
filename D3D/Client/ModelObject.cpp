@@ -50,7 +50,7 @@ void ModelObject::Render()
 
 		if (data->material)
 		{
-			data->material->Pushdata();
+			data->material->PushGraphicsdata();
 		}
 
 		core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();

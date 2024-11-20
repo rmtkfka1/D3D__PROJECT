@@ -2,6 +2,8 @@
 #include "Compute.h"
 #include "Core.h"
 #include "RootSignature.h"
+#include "BufferPool.h"
+#include "BufferManager.h"
 void Compute::Init(ComPtr<ID3D12Device5> device)
 {
 	_device = device;
@@ -34,9 +36,15 @@ void Compute::WaitSync()
 	}
 }
 
+void Compute::PrePareExcute()
+{
+	_cmdList->SetDescriptorHeaps(1, core->GetBufferManager()->GetComputeTableHeap()->GetDescriptorHeap().GetAddressOf());
+	_cmdList->SetComputeRootSignature(core->GetRootSignature()->GetComputeRootSignature().Get());
+}
+
+
 void Compute::Excute()
 {
-	_cmdList->SetComputeRootSignature(core->GetRootSignature()->GetComputeRootSignature().Get());
 	_cmdList->Close();
 
 	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
@@ -47,7 +55,5 @@ void Compute::Excute()
 	WaitSync();
 
 	_cmdAlloc->Reset();
-	_cmdList->Reset(_cmdAlloc.Get(), nullptr);
-
-	
+	_cmdList->Reset(_cmdAlloc.Get(), nullptr);	
 }

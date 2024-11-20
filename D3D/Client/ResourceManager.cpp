@@ -8,7 +8,8 @@
 #include "RenderTargets.h"
 #include "GameObject.h"
 #include "CustomObject.h"
-
+#include "Texture.h"
+#include "BufferPool.h"
 void ResourceManager::Init()
 {
 	CreateDefaultShader();
@@ -27,11 +28,7 @@ void ResourceManager::CreateDefaultMesh()
 void ResourceManager::CreateDefaultShader()
 {
 
-	{
-		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
-		shader->Init(L"compute.hlsl");
-		Add<ComputeShader>(L"compute.hlsl", shader);
-	}
+	
 
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
@@ -150,13 +147,31 @@ void ResourceManager::CreateDefaultShader()
 
 void ResourceManager::CreateDefaultMaterial()
 {
+	{
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetName(L"finalMaterial");
+		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
+		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
+		material->SetSpecularTexture(core->GetGraphics()->GetGBuffer()->GetTexture(2));
+		Add<Material>(L"finalMaterial", material);
+	}
 
-	shared_ptr<Material> material = make_shared<Material>();
-	material->SetName(L"finalMaterial");
-	material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
-	material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
-	material->SetSpecularTexture(core->GetGraphics()->GetGBuffer()->GetTexture(2));
-	Add<Material>(L"finalMaterial", material);
+	{
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetName(L"TestCS");
+
+		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
+		shader->Init(L"compute.hlsl");
+
+		shared_ptr<Texture> texture = make_shared<Texture>();
+		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
+		
+		shader->SetPipelineState();
+		
+		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
+		material->Dispatch(1, 1024, 1);
+		Add<Texture>(L"TestCS", texture);
+	}
 
 }
 

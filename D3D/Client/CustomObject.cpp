@@ -45,7 +45,7 @@ void CustomObject::Render()
 {
 	_shader->SetPipelineState();
 	_transform->PushData();
-	_material->Pushdata();
+	_material->PushGraphicsdata();
 	core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
 	_mesh->Render();
 
