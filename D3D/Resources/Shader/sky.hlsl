@@ -20,10 +20,9 @@ cbuffer TransformParams : register(b2)
     row_major matrix WorldMatrix;
 };
 
-
-
 TextureCube g_tex_0 : register(t0);
 SamplerState g_sam_0 : register(s0);
+
 
 VS_OUT VS_Main(VS_IN input)
 {
@@ -42,9 +41,22 @@ VS_OUT VS_Main(VS_IN input)
     return output;
 }
 
-float4 PS_Main(VS_OUT input) : SV_Target
+
+struct PS_OUT
 {
-    // 큐브맵 텍스처를 로컬 좌표를 사용하여 샘플링
-    float4 color = g_tex_0.Sample(g_sam_0, input.localPos);
-    return color;
+    float4 position : SV_Target0;
+    float4 normal : SV_Target1;
+    float4 color : SV_Target2;
+};
+
+
+PS_OUT PS_Main(VS_OUT input)
+{    
+    PS_OUT output;
+    
+    output.position = input.pos;
+    output.normal = float4(0, 0, 0, 0);
+    output.color = g_tex_0.Sample(g_sam_0, input.localPos);
+    
+    return output;
 }

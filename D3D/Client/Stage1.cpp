@@ -172,6 +172,7 @@ void Stage1::BulidDeferred()
 		AddGameObject(object, RenderingType::Deferred);
 
 	}
+	
 
 
 
@@ -238,6 +239,23 @@ void Stage1::BulidDeferred()
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
+
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
+
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
+
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
+
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
+
+
 	//temp
 	Model::ReadData(L"playerBullet/playerBullet", L"playerBullet");
 }
@@ -267,21 +285,7 @@ void Stage1::BulidForward()
 		AddGameObject(object, RenderingType::Ui);
 	}
 
-	{
-
-		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
-
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
-
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
-
-		gameobject->SetShader(shader);
-		gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
-		AddGameObject(gameobject,RenderingType::Forward);
-	}
+	
 
 
 	//{
@@ -378,20 +382,6 @@ void Stage1::BulidForward()
 
 
 
-	{
-		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
-
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
-
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
-
-		gameobject->SetShader(shader);
-		gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
-		AddGameObject(gameobject, RenderingType::Forward);
-	}
 
 	
 

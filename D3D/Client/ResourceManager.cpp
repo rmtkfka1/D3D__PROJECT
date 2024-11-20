@@ -119,6 +119,7 @@ void ResourceManager::CreateDefaultShader()
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
 		ShaderInfo info;
+		info.shaderType = ShaderType::DEFREED;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
 
