@@ -30,6 +30,7 @@ void ResourceManager::CreateDefaultShader()
 	{
 		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
 		shader->Init(L"compute.hlsl");
+		Add<ComputeShader>(L"compute.hlsl", shader);
 	}
 
 	{

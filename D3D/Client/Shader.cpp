@@ -3,7 +3,35 @@
 #include "Core.h"
 #include "RootSignature.h"
 
-GraphicsShader::GraphicsShader() :ResourceBase(ResourceType::Shader)
+Shader::Shader() :ResourceBase(ResourceType::Shader)
+{
+
+
+}
+
+Shader::~Shader()
+{
+}
+
+void Shader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
+{
+	
+	uint32 compileFlag = 0;
+#ifdef _DEBUG
+	compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif
+
+	if (FAILED(::D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
+		, name.c_str(), version.c_str(), compileFlag, 0, &blob, &_errBlob)))
+	{
+		::MessageBoxA(nullptr, "Shader Create Failed !", nullptr, MB_OK);
+	}
+
+	shaderByteCode = { blob->GetBufferPointer(), blob->GetBufferSize() };
+}
+
+
+GraphicsShader::GraphicsShader() 
 {
 
 }
@@ -148,21 +176,7 @@ void GraphicsShader::SetPipelineState()
 	core->GetGraphics()->GetCmdLIst()->SetPipelineState(_pipelineState.Get());
 }
 
-void GraphicsShader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
-{
-	uint32 compileFlag = 0;
-#ifdef _DEBUG
-	compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
 
-	if (FAILED(::D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
-		, name.c_str(), version.c_str(), compileFlag, 0, &blob, &_errBlob)))
-	{
-		::MessageBoxA(nullptr, "Shader Create Failed !", nullptr, MB_OK);
-	}
-
-	shaderByteCode = { blob->GetBufferPointer(), blob->GetBufferSize() };
-}
 
 void GraphicsShader::CreateVertexShader(const wstring& path, const string& name, const string& version)
 {
@@ -180,7 +194,7 @@ void GraphicsShader::CreateGeometryShader(const wstring& path, const string& nam
 }
 
 //ComputeShader
-ComputeShader::ComputeShader() :ResourceBase(ResourceType::Shader)
+ComputeShader::ComputeShader() 
 {
 
 }
@@ -206,20 +220,4 @@ void ComputeShader::SetPipelineState()
 	COMPUTE->GetCmdList()->SetPipelineState(_pipelineState.Get());
 }
 
-void ComputeShader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
-{
-	uint32 compileFlag = 0;
-#ifdef _DEBUG
-	compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
 
-	if (FAILED(::D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
-		, name.c_str(), version.c_str(), compileFlag, 0, &blob, &_errBlob)))
-	{
-		std::string errorMsg = "Shader Create Failed!";
-		errorMsg = std::string((char*)_errBlob->GetBufferPointer(), _errBlob->GetBufferSize());
-		::MessageBoxA(nullptr, errorMsg.c_str(), "Shader Compilation Error", MB_OK | MB_ICONERROR);
-	}
-
-	shaderByteCode = { blob->GetBufferPointer(), blob->GetBufferSize() };
-}

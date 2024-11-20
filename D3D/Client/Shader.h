@@ -48,7 +48,22 @@ struct ShaderInfo
 	bool bActvieStreamOutput = false;
 };
 
-class GraphicsShader :public ResourceBase
+
+class Shader :public ResourceBase
+{
+
+public:
+	Shader();
+	virtual ~Shader();
+
+protected:
+	void CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode);
+
+	ComPtr<ID3D12PipelineState>			_pipelineState;
+	ComPtr<ID3DBlob>					_errBlob;
+};
+
+class GraphicsShader :public Shader
 {
 public:
 	GraphicsShader();
@@ -58,7 +73,7 @@ public:
 	void SetPipelineState();
 
 private:
-	void CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode);
+
 	void CreateVertexShader(const wstring& path, const string& name, const string& version);
 	void CreatePixelShader(const wstring& path, const string& name, const string& version);
 	void CreateGeometryShader(const wstring& path, const string& name, const string& version);
@@ -69,17 +84,14 @@ private:
 	ComPtr<ID3DBlob>					_vsBlob;
 	ComPtr<ID3DBlob>					_psBlob;
 	ComPtr<ID3DBlob>					_gsBlob;
-	ComPtr<ID3DBlob>					_errBlob;
 
-	ComPtr<ID3D12PipelineState>			_pipelineState;
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC  _pipelineDesc = {};
 
 	wstring _path = L"../Resources/Shader/";
 };
 
 
-
-class ComputeShader :public ResourceBase
+class ComputeShader :public Shader
 {
 public:
 	ComputeShader();
@@ -89,16 +101,9 @@ public:
 	void SetPipelineState();
 
 private:
-	void CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode);
-
-private:
 
 	ComPtr<ID3DBlob>					_csBlob;
-	ComPtr<ID3DBlob>					_errBlob;
-
-	ComPtr<ID3D12PipelineState>			_pipelineState;
 	D3D12_COMPUTE_PIPELINE_STATE_DESC   _pipelineDesc = {};
-
 	wstring _path = L"../Resources/Shader/";
 };
 

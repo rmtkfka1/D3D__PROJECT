@@ -3,6 +3,7 @@
 class Material;
 class Mesh;
 class GraphicsShader;
+class ComputeShader;
 class Texture;
 class Model;
 class GameObject;
@@ -32,8 +33,8 @@ public:
     void Add(const wstring& key, shared_ptr<T> object);
 
 private:
-    unordered_map<wstring, shared_ptr<GraphicsShader>> _shaderMap;
-
+    unordered_map<wstring, shared_ptr<GraphicsShader>> _graphicsShaderMap;
+    unordered_map<wstring, shared_ptr<ComputeShader>> _computeShaderMap;
     unordered_map<wstring, shared_ptr<Mesh>> _meshMap;
     unordered_map<wstring, shared_ptr<Texture>> _textureMap;
     unordered_map<wstring, shared_ptr<Model>> _modelMap;
@@ -85,7 +86,11 @@ unordered_map<wstring, shared_ptr<T>>& ResourceManager::GetResourceMap()
 {
     if constexpr (is_same_v<T, GraphicsShader>)
     {
-        return _shaderMap;
+        return _graphicsShaderMap;
+    }
+    else if constexpr (is_same_v<T, ComputeShader>)
+    {
+        return _computeShaderMap;
     }
     else if constexpr (is_same_v<T, Mesh>)
     {
