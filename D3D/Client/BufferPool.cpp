@@ -227,6 +227,7 @@ void TextureBufferPool::AllocDSVDescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE* ha
 }
 
 
+
 int32 TextureBufferPool::AllocSRV()
 {
 	for (int i = 0; i < _srvHeap.indexGenator.size(); ++i)
