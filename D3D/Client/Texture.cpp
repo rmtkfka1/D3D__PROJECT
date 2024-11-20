@@ -5,6 +5,8 @@
 #include "BufferPool.h"
 #include "D3D12ResourceManager.h"
 
+D3D12_CPU_DESCRIPTOR_HANDLE Texture::_dsvHandle;
+
 Texture::Texture():ResourceBase(ResourceType::Texture)
 {
 
@@ -138,49 +140,74 @@ void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, Tex
         desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
     }
 
-    //RTV 전용
+    if (HasFlag(usageFlags, TextureUsageFlags::DSV)) {
+        desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+    }
+
+
     D3D12_CLEAR_VALUE clearValue = {};
-    if (HasFlag(usageFlags, TextureUsageFlags::RTV)) 
-    {
+    auto initialState = D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
+
+	if (HasFlag(usageFlags, TextureUsageFlags::RTV))
+	{
+		initialState = D3D12_RESOURCE_STATE_RENDER_TARGET;
         clearValue.Format = format;
         clearValue.Color[0] = 1.0f;
         clearValue.Color[1] = 1.0f;
         clearValue.Color[2] = 1.0f;
         clearValue.Color[3] = 1.0f;
-    }
+	}
 
+	if (HasFlag(usageFlags, TextureUsageFlags::DSV))
+	{
+		initialState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+        clearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
+	}
 
-    //리소스생성
-	auto hr = core->GetDevice()->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-		D3D12_HEAP_FLAG_NONE,
-		&desc,
-        HasFlag(usageFlags, TextureUsageFlags::RTV) ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_COMMON,
-        HasFlag(usageFlags, TextureUsageFlags::RTV) ? &clearValue : nullptr,
-		IID_PPV_ARGS(&_resource));
+    auto hr = core->GetDevice()->CreateCommittedResource(
+        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+        D3D12_HEAP_FLAG_NONE,
+        &desc,
+        initialState,
+        HasFlag(usageFlags, TextureUsageFlags::RTV)|| HasFlag(usageFlags, TextureUsageFlags::DSV) ?  &clearValue : nullptr,
+        IID_PPV_ARGS(&_resource));
 
     if (FAILED(hr))
     {
         throw std::runtime_error("텍스쳐 생성 실패");
     }
 
-	core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_srvHandle);
-    core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_uavHandle);
-    //core->GetBufferManager()->GEt()->AllocDescriptorHandle(&_uavHandle);
+    if (HasFlag(usageFlags, TextureUsageFlags::RTV))
+    {
+        core->GetBufferManager()->GetTextureBufferPool()->AllocRTVDescriptorHandle(&_rtvHandle);
+        core->GetDevice()->CreateRenderTargetView(_resource.Get(), nullptr, _rtvHandle);
+    }
 
-    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-    srvDesc.Format = format;
-    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-    srvDesc.Texture2D.MipLevels = 1;
+    if (HasFlag(usageFlags, TextureUsageFlags::SRV))
+    {
+        core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_srvHandle);
+        D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+        srvDesc.Format = format;
+        srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+        srvDesc.Texture2D.MipLevels = 1;
+        core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
+    }
 
-    D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
-    uavDesc.Format = format;
-    uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+    if (HasFlag(usageFlags, TextureUsageFlags::UAV))
+    {
+        core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_uavHandle);
+        D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+        uavDesc.Format = format;
+        uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+        core->GetDevice()->CreateUnorderedAccessView(_resource.Get(), nullptr, &uavDesc, _uavHandle);
+    }
 
-	core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
-	core->GetDevice()->CreateUnorderedAccessView(_resource.Get(), nullptr, &uavDesc, _uavHandle);
-
+    if (HasFlag(usageFlags, TextureUsageFlags::DSV))
+    {
+        core->GetBufferManager()->GetTextureBufferPool()->AllocDSVDescriptorHandle(&_dsvHandle);
+        core->GetDevice()->CreateDepthStencilView(_resource.Get(), nullptr, _dsvHandle);
+    }
 
 }
 
