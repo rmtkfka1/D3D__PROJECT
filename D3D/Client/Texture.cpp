@@ -128,8 +128,10 @@ void Texture::Init(const wstring& path,TextureType type)
 }
 
 
-void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, TextureUsageFlags usageFlags)
+void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, TextureUsageFlags usageFlags ,bool jump)
 {
+
+ 
     D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
     desc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
@@ -143,38 +145,39 @@ void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, Tex
     if (HasFlag(usageFlags, TextureUsageFlags::DSV)) {
         desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
     }
-
-
-    D3D12_CLEAR_VALUE clearValue = {};
-    auto initialState = D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
-
-	if (HasFlag(usageFlags, TextureUsageFlags::RTV))
-	{
-		initialState = D3D12_RESOURCE_STATE_RENDER_TARGET;
-        clearValue.Format = format;
-        clearValue.Color[0] = 1.0f;
-        clearValue.Color[1] = 1.0f;
-        clearValue.Color[2] = 1.0f;
-        clearValue.Color[3] = 1.0f;
-	}
-
-	if (HasFlag(usageFlags, TextureUsageFlags::DSV))
-	{
-		initialState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
-        clearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
-	}
-
-    auto hr = core->GetDevice()->CreateCommittedResource(
-        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-        D3D12_HEAP_FLAG_NONE,
-        &desc,
-        initialState,
-        HasFlag(usageFlags, TextureUsageFlags::RTV)|| HasFlag(usageFlags, TextureUsageFlags::DSV) ?  &clearValue : nullptr,
-        IID_PPV_ARGS(&_resource));
-
-    if (FAILED(hr))
+     
+	if (jump==false) //SwapChain 에서 GetBuffer 로 가져올떄는 이미 생성된 리소스를 사용하므로 생성하지 않는다.
     {
-        throw std::runtime_error("텍스쳐 생성 실패");
+        D3D12_CLEAR_VALUE clearValue = {};
+        auto initialState = D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
+
+        if (HasFlag(usageFlags, TextureUsageFlags::RTV))
+        {
+            clearValue.Format = format;
+            clearValue.Color[0] = 1.0f;
+            clearValue.Color[1] = 1.0f;
+            clearValue.Color[2] = 1.0f;
+            clearValue.Color[3] = 1.0f;
+        }
+
+        if (HasFlag(usageFlags, TextureUsageFlags::DSV))
+        {
+            initialState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+            clearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
+        }
+
+        auto hr = core->GetDevice()->CreateCommittedResource(
+            &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+            D3D12_HEAP_FLAG_NONE,
+            &desc,
+            initialState,
+            HasFlag(usageFlags, TextureUsageFlags::RTV) || HasFlag(usageFlags, TextureUsageFlags::DSV) ? &clearValue : nullptr,
+            IID_PPV_ARGS(&_resource));
+
+        if (FAILED(hr))
+        {
+            throw std::runtime_error("텍스쳐 생성 실패");
+        }
     }
 
     if (HasFlag(usageFlags, TextureUsageFlags::RTV))

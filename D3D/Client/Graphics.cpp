@@ -186,7 +186,7 @@ void Graphics::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 	KeyManager::GetInstance()->SetCenterPos(point);
 
 	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
-	_GBuffer->Init(_renderTargets->GetDSVHeap());
+	_GBuffer->Init();
 };
 
 
@@ -251,7 +251,8 @@ void Graphics::CreateSwapChain()
 	_renderTargets->Init(WINDOW_WIDTH, WINDOW_HEIGHT, _swapChain);
 
 	_GBuffer = make_shared<GBuffer>();
-	_GBuffer->Init(_renderTargets->GetDSVHeap());
+	_GBuffer->Init();
+
 
 };
 
