@@ -66,8 +66,8 @@ void Stage1::Run()
 
 	core->GetGraphics()->GetRenderTarget()->RenderBegin();
 	FinalRender();
-	BoundingBoxRender();
 	ForwardRender();
+	BoundingBoxRender();
 	UiObjectRender();
 	core->GetGraphics()->GetRenderTarget()->RenderEnd();
 

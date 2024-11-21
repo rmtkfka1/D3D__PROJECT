@@ -55,7 +55,7 @@ void Mesh::CreateVertexBuffer(vector<Vertex>& vec)
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
-		D3D12_RESOURCE_STATE_COPY_DEST,
+		D3D12_RESOURCE_STATE_COMMON,
 		nullptr,
 		IID_PPV_ARGS(&_vertexBuffer));
 
@@ -85,6 +85,7 @@ void Mesh::CreateVertexBuffer(vector<Vertex>& vec)
 
 	//복사작업
 
+	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_vertexBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
 	cmdList->CopyBufferRegion(_vertexBuffer.Get(), 0, uploadBuffer, 0, bufferSize);
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 
@@ -122,7 +123,7 @@ void Mesh::CreateIndexBuffer(vector<uint32>& vec)
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
-		D3D12_RESOURCE_STATE_COPY_DEST,
+		D3D12_RESOURCE_STATE_COMMON,
 		nullptr,
 		IID_PPV_ARGS(&_IndexBuffer));
 
@@ -151,7 +152,7 @@ void Mesh::CreateIndexBuffer(vector<uint32>& vec)
 	uploadBuffer->Unmap(0, nullptr);
 
 	//복사작업
-
+	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_IndexBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
 	cmdList->CopyBufferRegion(_IndexBuffer.Get(), 0, uploadBuffer, 0, bufferSize);
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_IndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER));
 

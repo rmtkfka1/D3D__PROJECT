@@ -70,7 +70,7 @@ void Texture::Init(const wstring& path,TextureType type)
             _image.GetMetadata().height,
             _image.GetMetadata().arraySize,
             _image.GetMetadata().mipLevels),
-        D3D12_RESOURCE_STATE_GENERIC_READ,
+        D3D12_RESOURCE_STATE_COMMON,
         nullptr,
         IID_PPV_ARGS(&_resource));
 
@@ -86,7 +86,7 @@ void Texture::Init(const wstring& path,TextureType type)
     memory->Reset();
     list->Reset(memory.Get(), nullptr);
 
-    list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_RESOURCE_STATE_COPY_DEST));
+    list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
 
     ::UpdateSubresources(list.Get(),
         _resource.Get(),

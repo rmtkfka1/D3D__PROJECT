@@ -43,8 +43,6 @@ void GameObject::AddSphereCollider(string name, ColliderBehave behave, float rad
 
 void GameObject::BoundingRender()
 {
-
-
 	for (auto& ele : _colliders)
 	{
 		ele->Render();
