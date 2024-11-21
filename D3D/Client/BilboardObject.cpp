@@ -135,7 +135,7 @@ void BilboardObject::Render()
 	//{
 		_shader->SetPipelineState();
 		_transform->PushData();
-		_material->PushGraphicsdata();
+		_material->PushData();
 		core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
 		//_soData.SOBuffer->Render();
 		_mesh->RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);

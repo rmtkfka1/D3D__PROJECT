@@ -264,22 +264,16 @@ void Stage1::BulidForward()
 {
 
 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 		ResourceManager::GetInstance()->Add<GameObject>(L"gbufferUi"+i, object);
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
 		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishader.hlsl"));
 
-		if (i < 3)
-		{
-			object->GetMaterial()->SetDiffuseTexture(GRAPHICS->GetGBuffer()->GetTexture(i));
-		}
-		else
-		{
-			object->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Get<Texture>(L"TestCS"));
-		}
-
+	
+		object->GetMaterial()->SetDiffuseTexture(GRAPHICS->GetGBuffer()->GetTexture(i));
+		
 		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
 		object->GetTransform()->SetLocalPosition(vec3(-850.0f + 200.0f * i, 400.0f, 1.0f));
 		AddGameObject(object, RenderingType::Ui);
@@ -366,19 +360,19 @@ void Stage1::BulidForward()
 	}
 
 
-	//시연용
-	{
+	////시연용
+	//{
 
-		shared_ptr<Sea> gameobject = make_shared<Sea>();
+	//	shared_ptr<Sea> gameobject = make_shared<Sea>();
 
-		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest2.hlsl"));
+	//	gameobject->SetFrustumCuling(false);
+	//	gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
+	//	gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest2.hlsl"));
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(0, -10000.0f, -500.0));
-		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
-		AddGameObject(gameobject, RenderingType::Forward);
-	}
+	//	gameobject->GetTransform()->SetLocalPosition(vec3(0, -10000.0f, -500.0));
+	//	gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
+	//	AddGameObject(gameobject, RenderingType::Forward);
+	//}
 
 
 
@@ -450,7 +444,7 @@ void Stage1::FinalRender()
 		ResourceManager::GetInstance()->Get<GraphicsShader>(L"final.hlsl")->SetPipelineState();
 		shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
 		shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
-		material->PushGraphicsdata();
+		material->PushData();
 		core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
 		mesh->Render();
 	}

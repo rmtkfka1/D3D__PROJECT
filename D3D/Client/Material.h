@@ -28,9 +28,8 @@ public:
 	void SetNormalTexture(shared_ptr<Texture> texture) { _normalTexture = texture; }
 	void SetSpecularTexture(shared_ptr<Texture> texture) { _SpecularTexture = texture; }
 
-	void PushGraphicsdata();
-	void PushComputeData();
-	void Dispatch(int x, int y, int z);
+	void PushData();
+
 
 
 private:

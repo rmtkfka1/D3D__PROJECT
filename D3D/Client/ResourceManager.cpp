@@ -157,22 +157,22 @@ void ResourceManager::CreateDefaultMaterial()
 		Add<Material>(L"finalMaterial", material);
 	}
 
-	{
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetName(L"TestCS");
+	//{
+	//	shared_ptr<Material> material = make_shared<Material>();
+	//	material->SetName(L"TestCS");
 
-		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
-		shader->Init(L"compute.hlsl");
+	//	shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
+	//	shader->Init(L"compute.hlsl");
 
-		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
-		
-		shader->SetPipelineState();
-		
-		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
-		material->Dispatch(1, 1024, 1);
-		Add<Texture>(L"TestCS", texture);
-	}
+	//	shared_ptr<Texture> texture = make_shared<Texture>();
+	//	texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
+	//	
+	//	shader->SetPipelineState();
+	//	
+	//	core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
+	//	material->Dispatch(1, 1024, 1);
+	//	Add<Texture>(L"TestCS", texture);
+	//}
 
 }
 

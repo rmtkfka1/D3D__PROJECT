@@ -61,7 +61,7 @@ void Terrain::Render()
 {
     _shader->SetPipelineState();
     _transform->PushData();
-    _material->PushGraphicsdata();
+    _material->PushData();
     core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
     _mesh->Render();
 }
