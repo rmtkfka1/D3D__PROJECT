@@ -64,30 +64,7 @@ void Stage1::Run()
 	DeferredRender();
 	core->GetGraphics()->GetGBuffer()->RenderEnd();
 
-	////////Computeshader 로 텍스쳐 넘겨서 기록.
-	//core->GetGraphics()->Fence();
-	//core->GetGraphics()->WaitForAllFence();
-	
-	{
-		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
-		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
-			D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-	}
-	{
-		ResourceManager::GetInstance()->Get<ComputeShader>(L"compute.hlsl")->SetPipelineState();
-		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")->GetUAVCpuHandle(), UAV_REGISTER::u0);
-		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
-		core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
-		COMPUTE->GetCmdList()->Dispatch(1, 1024, 1);
-		COMPUTE->Excute();
-	}
-
-	{
-		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
-		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
-			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
-	}
-
+	ComputePass();
 	
 	core->GetGraphics()->GetRenderTarget()->RenderBegin();
 	FinalRender();
@@ -514,4 +491,37 @@ void Stage1::CameraControl()
 
 
 	CameraManager::GetInstance()->SetData();
-};
+}
+void Stage1::ComputePass()
+{
+	{
+		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
+		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
+			D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+
+	}
+	{
+		ResourceManager::GetInstance()->Get<ComputeShader>(L"compute.hlsl")->SetPipelineState();
+		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")->GetUAVCpuHandle(), UAV_REGISTER::u0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
+		core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
+
+		int threadGroupSizeX = 16;
+		int threadGroupSizeY = 16;
+
+		// Dispatch 크기 계산
+		int dispatchX = (WINDOW_WIDTH + threadGroupSizeX - 1) / threadGroupSizeX;
+		int dispatchY = (WINDOW_HEIGHT + threadGroupSizeY - 1) / threadGroupSizeY;
+
+		COMPUTE->GetCmdList()->Dispatch(dispatchX, dispatchY, 1);
+		COMPUTE->Excute();
+	}
+
+	{
+		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
+		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
+	}
+
+}
+;

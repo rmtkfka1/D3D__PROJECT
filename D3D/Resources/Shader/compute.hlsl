@@ -3,7 +3,7 @@ RWTexture2D<float4> result : register(u0);
 Texture2D g_tex_0 : register(t0);
 
 
-[numthreads(1024, 1, 1)]
+[numthreads(16, 16, 1)]
 void CS_Main(int3 threadIndex : SV_DispatchThreadID)
 {
     

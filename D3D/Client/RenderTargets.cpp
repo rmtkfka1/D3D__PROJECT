@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "BufferManager.h"
 #include "BufferPool.h"
+#include "Material.h"
 RenderTargets::RenderTargets()
 {
 }
@@ -39,6 +40,22 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 
 void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPtr<IDXGISwapChain3> swapchain , UINT	_swapChainFlags )
 {
+
+	{
+		shared_ptr<Texture> texture = make_shared<Texture>();
+		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+		ResourceManager::GetInstance()->Add<Texture>(L"TestCS", texture);
+	}
+
+	{
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetName(L"finalMaterial");
+		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
+		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
+		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")); //ALBEDO
+		ResourceManager::GetInstance()->Add<Material>(L"finalMaterial", material);
+	}
+
 
 	core->GetBufferManager()->GetTextureBufferPool()->FreeDSVHandle(_DSTexture->GetDSVCpuHandle());
 

@@ -34,5 +34,6 @@ private:
 	void FinalRender();
 	void BoundingBoxRender();
 	void CameraControl();
+	void ComputePass();
 };
 

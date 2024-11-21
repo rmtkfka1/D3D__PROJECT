@@ -157,11 +157,9 @@ void ResourceManager::CreateDefaultMaterial()
 	
 
 	{
-	
 		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
+		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
 		Add<Texture>(L"TestCS", texture);
-
 	}
 
 	{
