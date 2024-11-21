@@ -14,7 +14,6 @@ void D3D12ResourceManager::Init()
 	ThrowIfFailed(_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&_cmdMemory)));
 	ThrowIfFailed(_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, _cmdMemory.Get(), nullptr, IID_PPV_ARGS(&_cmdList)));
 
-	_cmdList->Close();
 
 	///Create Fence
 
@@ -42,5 +41,20 @@ void D3D12ResourceManager::WaitForFenceValue()
 		_fence->SetEventOnCompletion(ExpectedFenceValue, _fenceEvent);
 		WaitForSingleObject(_fenceEvent, INFINITE);
 	}
+}
+
+void D3D12ResourceManager::Excute()
+{
+	_cmdList->Close();
+
+	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
+	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
+
+	Fence();
+	WaitForFenceValue();
+
+	_cmdMemory->Reset();
+	_cmdList->Reset(_cmdMemory.Get(), nullptr);
+
 }
 

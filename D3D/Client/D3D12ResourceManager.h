@@ -10,6 +10,7 @@ public:
 public:
 	void Fence();
 	void WaitForFenceValue();
+	void Excute();
 
 private:
 

@@ -80,12 +80,7 @@ void Texture::Init(const wstring& path,TextureType type)
     auto ResourceManager = core->GetResourceManager();
 
     auto list = ResourceManager->GetCmdList();
-    auto queue = ResourceManager->GetCmdQueue();
-    auto memory = ResourceManager->GetCmdMemory();
-
-    memory->Reset();
-    list->Reset(memory.Get(), nullptr);
-
+  
     list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
 
     ::UpdateSubresources(list.Get(),
@@ -96,13 +91,8 @@ void Texture::Init(const wstring& path,TextureType type)
         subResources.data());
 
     list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
-    list->Close();
-
-    ID3D12CommandList* cmdListArr[] = { list.Get() };
-    queue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
-
-    ResourceManager->Fence();
-    ResourceManager->WaitForFenceValue();
+   
+    ResourceManager->Excute();
 
     core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_srvHandle);
 

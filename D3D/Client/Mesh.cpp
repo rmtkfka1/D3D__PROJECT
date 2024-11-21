@@ -44,8 +44,7 @@ void Mesh::CreateVertexBuffer(vector<Vertex>& vec)
 {
 	shared_ptr<D3D12ResourceManager>& _resourceManager = core->GetResourceManager();
 	ComPtr<ID3D12GraphicsCommandList>& cmdList = _resourceManager->GetCmdList();
-	ComPtr<ID3D12CommandQueue>& cmdQueue = _resourceManager->GetCmdQueue();
-	ComPtr<ID3D12CommandAllocator>& cmdMemory = _resourceManager->GetCmdMemory();
+
 
 	_vertexCount = static_cast<uint32>(vec.size());
 	uint32 bufferSize = _vertexCount * sizeof(Vertex);
@@ -61,8 +60,8 @@ void Mesh::CreateVertexBuffer(vector<Vertex>& vec)
 
 	ThrowIfFailed(hr);
 
-	cmdMemory->Reset();
-	cmdList->Reset(cmdMemory.Get(), nullptr);
+	//cmdMemory->Reset();
+	//cmdList->Reset(cmdMemory.Get(), nullptr);
 
 	//UPLOAD 滚欺 积己
 	ID3D12Resource* uploadBuffer = nullptr;
@@ -89,13 +88,7 @@ void Mesh::CreateVertexBuffer(vector<Vertex>& vec)
 	cmdList->CopyBufferRegion(_vertexBuffer.Get(), 0, uploadBuffer, 0, bufferSize);
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_vertexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 
-	cmdList->Close();
-
-	ID3D12CommandList* ppCommandLists[] = { cmdList.Get() };
-	cmdQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-
-	_resourceManager->Fence();
-	_resourceManager->WaitForFenceValue();
+	_resourceManager->Excute();
 
 	_vertexBufferView.BufferLocation = _vertexBuffer->GetGPUVirtualAddress();
 	_vertexBufferView.StrideInBytes = sizeof(Vertex);
@@ -112,8 +105,7 @@ void Mesh::CreateIndexBuffer(vector<uint32>& vec)
 {
 	shared_ptr<D3D12ResourceManager>& _resourceManager = core->GetResourceManager();
 	ComPtr<ID3D12GraphicsCommandList>& cmdList = _resourceManager->GetCmdList();
-	ComPtr<ID3D12CommandQueue>& cmdQueue = _resourceManager->GetCmdQueue();
-	ComPtr<ID3D12CommandAllocator>& cmdMemory = _resourceManager->GetCmdMemory();
+
 
 	_indexCount = static_cast<uint32>(vec.size());
 	uint32 bufferSize = _indexCount * sizeof(uint32);
@@ -129,8 +121,7 @@ void Mesh::CreateIndexBuffer(vector<uint32>& vec)
 
 	ThrowIfFailed(hr);
 
-	cmdMemory->Reset();
-	cmdList->Reset(cmdMemory.Get(), nullptr);
+
 
 	//UPLOAD 滚欺 积己
 	ID3D12Resource* uploadBuffer = nullptr;
@@ -156,13 +147,7 @@ void Mesh::CreateIndexBuffer(vector<uint32>& vec)
 	cmdList->CopyBufferRegion(_IndexBuffer.Get(), 0, uploadBuffer, 0, bufferSize);
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_IndexBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER));
 
-	cmdList->Close();
-
-	ID3D12CommandList* ppCommandLists[] = { cmdList.Get() };
-	cmdQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-
-	_resourceManager->Fence();
-	_resourceManager->WaitForFenceValue();
+	_resourceManager->Excute();
 
 	_indexBufferView.BufferLocation = _IndexBuffer->GetGPUVirtualAddress();
 	_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
