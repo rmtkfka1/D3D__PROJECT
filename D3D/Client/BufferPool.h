@@ -33,7 +33,8 @@ class ConstantBufferPool
 {
 public:
 	void Init(CBV_REGISTER reg, uint32 size, uint32 count);
-	void PushData(void* buffer, uint32 size);
+	void PushGraphicsData(void* buffer, uint32 size);
+	void PushComputeData(void* buffer, uint32 size);
 	void SetData(int index ,void* buffer, uint32 size);
 
 	void Clear();

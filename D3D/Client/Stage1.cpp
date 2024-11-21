@@ -258,6 +258,8 @@ void Stage1::BulidDeferred()
 	}
 
 
+
+
 	//temp
 	Model::ReadData(L"playerBullet/playerBullet", L"playerBullet");
 }
@@ -494,16 +496,32 @@ void Stage1::CameraControl()
 }
 void Stage1::ComputePass()
 {
+
+	static int PostProcess = 1;
+
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Q))
+	{
+		PostProcess *= -1;
+	}
+
 	{
 		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
 		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
 			D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-
 	}
+
 	{
 		ResourceManager::GetInstance()->Get<ComputeShader>(L"compute.hlsl")->SetPipelineState();
 		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")->GetUAVCpuHandle(), UAV_REGISTER::u0);
 		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
+
+		auto& material = ResourceManager::GetInstance()->Get<Material>(L"TestMaterial");
+
+		material->SetInt(0, WINDOW_WIDTH);
+		material->SetInt(1, WINDOW_HEIGHT);
+		material->SetInt(2, PostProcess);
+
+		material->PushComputeData();
 		core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
 
 		int threadGroupSizeX = 16;

@@ -29,8 +29,8 @@ public:
 	void SetSpecularTexture(shared_ptr<Texture> texture) { _SpecularTexture = texture; }
 
 	void PushData();
+	void PushComputeData();
 
-	
 
 private:
 	shared_ptr<Texture> _diffuseTexture;

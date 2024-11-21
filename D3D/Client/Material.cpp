@@ -54,8 +54,14 @@ void Material::PushData()
 	}
 
 
-	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushData(&_params, sizeof(_params));
+	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushGraphicsData(&_params, sizeof(_params));
 	
+}
+
+void Material::PushComputeData()
+{
+	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushComputeData(&_params, sizeof(_params));
+
 }
 
 

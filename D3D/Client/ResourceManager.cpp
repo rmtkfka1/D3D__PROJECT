@@ -170,5 +170,12 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")); //ALBEDO
 		Add<Material>(L"finalMaterial", material);
 	}
+
+
+	{
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetName(L"TestMaterial");
+		Add<Material>(L"TestMaterial", material);
+	}
 }
 

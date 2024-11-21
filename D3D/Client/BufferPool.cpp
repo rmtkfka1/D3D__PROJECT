@@ -43,7 +43,7 @@ void ConstantBufferPool::Init(CBV_REGISTER reg, uint32 size, uint32 count)
 
 }
 
-void ConstantBufferPool::PushData(void* buffer, uint32 size)
+void ConstantBufferPool::PushGraphicsData(void* buffer, uint32 size)
 {
 	assert(_currentIndex < _elementCount);
 
@@ -54,6 +54,20 @@ void ConstantBufferPool::PushData(void* buffer, uint32 size)
 	core->GetBufferManager()->GetGraphicsTableHeap()->CopyCBV(cpuHandle, _reg);
 
 	_currentIndex++;
+}
+
+void ConstantBufferPool::PushComputeData(void* buffer, uint32 size)
+{
+	assert(_currentIndex < _elementCount);
+
+	::memcpy(&_mappedBuffer[_currentIndex * _elementSize], buffer, size);
+
+	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(_cpuHandleBegin, _currentIndex * _handleIncrementSize);
+
+	core->GetBufferManager()->GetComputeTableHeap()->CopyCBV(cpuHandle, _reg);
+
+	_currentIndex++;
+
 }
 
 void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
