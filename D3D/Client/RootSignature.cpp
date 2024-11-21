@@ -84,6 +84,7 @@ void RootSignature::CreateComputeRootSignature()
 	CD3DX12_ROOT_PARAMETER param[1];
 	param[0].InitAsDescriptorTable(_countof(ranges), ranges);
 
+
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
 	rootSignatureDesc.NumParameters = _countof(param);
 	rootSignatureDesc.pParameters = param;
