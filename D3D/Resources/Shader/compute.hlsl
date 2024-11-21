@@ -1,16 +1,15 @@
-#ifndef _COMPUTE_FX_
-#define _COMPUTE_FX_
 
-RWTexture2D<float4> g_tex : register(u0);
+RWTexture2D<float4> result : register(u0);
+Texture2D g_tex_0 : register(t0);
 
 
 [numthreads(1024, 1, 1)]
 void CS_Main(int3 threadIndex : SV_DispatchThreadID)
 {
-    if (threadIndex.y % 2 == 0)
-        g_tex[threadIndex.xy] = float4(1.f, 0.f, 0.f, 1.f);
-    else
-        g_tex[threadIndex.xy] = float4(0.f, 1.f, 0.f, 1.f);
+    
+    float4 texValue = g_tex_0[threadIndex.xy];
+
+    // result에 수정된 값 기록
+    result[threadIndex.xy] = texValue;
 }
 
-#endif

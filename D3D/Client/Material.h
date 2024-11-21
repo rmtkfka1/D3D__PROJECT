@@ -30,7 +30,7 @@ public:
 
 	void PushData();
 
-
+	
 
 private:
 	shared_ptr<Texture> _diffuseTexture;

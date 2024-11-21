@@ -63,7 +63,7 @@ public:
 	void RenderBegin();
 	void RenderEnd();
 
-	shared_ptr<Texture> GetTexture(int32 index);
+	shared_ptr<Texture>& GetTexture(int32 index);
 
 
 private:

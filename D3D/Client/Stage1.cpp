@@ -64,6 +64,31 @@ void Stage1::Run()
 	DeferredRender();
 	core->GetGraphics()->GetGBuffer()->RenderEnd();
 
+	////////Computeshader 로 텍스쳐 넘겨서 기록.
+	//core->GetGraphics()->Fence();
+	//core->GetGraphics()->WaitForAllFence();
+	
+	{
+		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
+		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
+			D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+	}
+	{
+		ResourceManager::GetInstance()->Get<ComputeShader>(L"compute.hlsl")->SetPipelineState();
+		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")->GetUAVCpuHandle(), UAV_REGISTER::u0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
+		core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
+		COMPUTE->GetCmdList()->Dispatch(1, 1024, 1);
+		COMPUTE->Excute();
+	}
+
+	{
+		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
+		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
+			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
+	}
+
+	
 	core->GetGraphics()->GetRenderTarget()->RenderBegin();
 	FinalRender();
 	ForwardRender();

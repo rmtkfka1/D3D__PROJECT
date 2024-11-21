@@ -351,7 +351,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE GraphicsDescriptorTable::GetCPUHandle(uint32 reg)
 void ComputeDescriptorTable::Init()
 {
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.NumDescriptors = 15;
+	desc.NumDescriptors = 50;
 	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 

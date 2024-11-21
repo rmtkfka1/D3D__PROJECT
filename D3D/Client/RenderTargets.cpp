@@ -127,6 +127,7 @@ void GBuffer::Init()
 		{
 			core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_textures[i]->GetRTVCpuHandle());
 			core->GetBufferManager()->GetTextureBufferPool()->FreeSRVHandle(_textures[i]->GetSRVCpuHandle());
+			core->GetBufferManager()->GetTextureBufferPool()->FreeSRVHandle(_textures[i]->GetUAVCpuHandle());
 		}
 	}
 
@@ -139,11 +140,11 @@ void GBuffer::Init()
 	}
 	
 	//position 정보
-	_textures[0]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT,TextureUsageFlags::RTV| TextureUsageFlags::SRV, false);
+	_textures[0]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT,TextureUsageFlags::RTV| TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 	//normal 정보
-	_textures[1]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV, false);
+	_textures[1]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 	//color 정보
-	_textures[2]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV, false);
+	_textures[2]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
 }
 
@@ -179,7 +180,7 @@ void GBuffer::RenderEnd()
 }
 
 
-shared_ptr<Texture> GBuffer::GetTexture(int32 index)
+shared_ptr<Texture>& GBuffer::GetTexture(int32 index)
 {
 	assert(index < _count);
 

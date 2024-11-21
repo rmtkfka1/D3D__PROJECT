@@ -27,6 +27,12 @@ void ResourceManager::CreateDefaultMesh()
 
 void ResourceManager::CreateDefaultShader()
 {
+	{
+
+		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
+		shader->Init(L"compute.hlsl");
+		Add<ComputeShader>(L"compute.hlsl", shader);
+	}
 
 	
 
@@ -148,31 +154,23 @@ void ResourceManager::CreateDefaultShader()
 
 void ResourceManager::CreateDefaultMaterial()
 {
+	
+
+	{
+	
+		shared_ptr<Texture> texture = make_shared<Texture>();
+		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
+		Add<Texture>(L"TestCS", texture);
+
+	}
+
 	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetName(L"finalMaterial");
 		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
-		material->SetSpecularTexture(core->GetGraphics()->GetGBuffer()->GetTexture(2));
+		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")); //ALBEDO
 		Add<Material>(L"finalMaterial", material);
 	}
-
-	//{
-	//	shared_ptr<Material> material = make_shared<Material>();
-	//	material->SetName(L"TestCS");
-
-	//	shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
-	//	shader->Init(L"compute.hlsl");
-
-	//	shared_ptr<Texture> texture = make_shared<Texture>();
-	//	texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
-	//	
-	//	shader->SetPipelineState();
-	//	
-	//	core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
-	//	material->Dispatch(1, 1024, 1);
-	//	Add<Texture>(L"TestCS", texture);
-	//}
-
 }
 

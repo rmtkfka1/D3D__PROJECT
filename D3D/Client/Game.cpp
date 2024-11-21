@@ -23,7 +23,6 @@ void Game::Init(HWND hwnd)
 
 	//다이렉트 코어 초기화
 	core->Init(hwnd, true, true);
-	COMPUTE->PrePareExcute();
 	ResourceManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init(hwnd);
 	SceneManager::GetInstance()->ChangeScene(SceneType::StartScene);
@@ -57,9 +56,8 @@ void Game::Update()
 
 void Game::Render()
 {
-
+	COMPUTE->PrePareExcute();
 	GRAPHICS->RenderBegin();
-	//COMPUTE->PrePareExcute();
 	SceneManager::GetInstance()->Run();
 	GRAPHICS->RenderEnd();
 	SceneManager::GetInstance()->LateUpdate();
