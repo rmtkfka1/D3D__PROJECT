@@ -184,8 +184,9 @@ void Graphics::UpdateWindowSize(DWORD BackBufferWidth, DWORD BackBufferHeight)
 	POINT point{ BackBufferWidth / 2, BackBufferHeight / 2 };
 	KeyManager::GetInstance()->SetCenterPos(point);
 
-	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
 	_GBuffer->Init();
+	_renderTargets->Resize(BackBufferWidth, BackBufferHeight, _swapChain, _swapChainFlags);
+	
 };
 
 

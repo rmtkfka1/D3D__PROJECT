@@ -152,7 +152,6 @@ void ResourceManager::CreateDefaultMaterial()
 	{
 		shared_ptr<BloomEffect> bloom = make_shared<BloomEffect>();
 		bloom->GenTexture();
-		bloom->SetGBufferTextrue(GRAPHICS->GetGBuffer()->GetTexture(2));
 		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
 		shader->Init(L"compute.hlsl");
 		bloom->SetShader(shader);
