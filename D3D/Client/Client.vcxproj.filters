@@ -453,6 +453,9 @@
     <FxCompile Include="..\Resources\Shader\compute.hlsl">
       <Filter>04.HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\test.hlsl">
+      <Filter>04.HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">
