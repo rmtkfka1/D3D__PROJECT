@@ -444,7 +444,7 @@ void Stage1::FinalRender()
 {
 	
 	{
-		auto& list = GRAPHICS->GetCmdLIst();
+		auto& list = GRAPHICS->GetCmdList();
 		ResourceManager::GetInstance()->Get<GraphicsShader>(L"final.hlsl")->SetPipelineState();
 		shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
 		shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
@@ -503,5 +503,5 @@ void Stage1::ComputePass()
 	int dispatchX = (WINDOW_WIDTH + threadGroupSizeX - 1) / threadGroupSizeX;
 	int dispatchY = (WINDOW_HEIGHT + threadGroupSizeY - 1) / threadGroupSizeY;
 
-	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->Excute(dispatchX, dispatchY, 1);
+	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->FirstRender(dispatchX, dispatchY, 1);
 };

@@ -10,14 +10,16 @@ class BloomEffect
 
 public:
 	void GenTexture();
+
+	void FirstRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+
 	void SetShader(shared_ptr<ComputeShader> shader) { _shader = shader; }
-	void Excute(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 	void SetGBufferTextrue(shared_ptr<Texture> GbufferTexture){_GBufferTexture = GbufferTexture; }
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
 
 private:
-	void PushData();
+	
 
 
 private:

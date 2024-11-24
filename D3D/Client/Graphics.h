@@ -33,7 +33,7 @@ public:
 
 	HWND GetWindowHandle() { return _hwnd; }
 
-	ComPtr<ID3D12GraphicsCommandList>& GetCmdLIst() { return _cmdList[_currentContextIndex]; }
+	ComPtr<ID3D12GraphicsCommandList>& GetCmdList() { return _cmdList[_currentContextIndex]; }
 
 	shared_ptr<RenderTargets>& GetRenderTarget() { return _renderTargets; }
 	shared_ptr<GBuffer>& GetGBuffer() { return _GBuffer; }

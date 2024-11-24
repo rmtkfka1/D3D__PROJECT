@@ -14,23 +14,14 @@ void BloomEffect::GenTexture()
 		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
 	ResourceManager::GetInstance()->Add<Texture>(L"BloomTexture", _texture);
+
 }
 
-void BloomEffect::Excute(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
-{
-	PushData();
-
-	COMPUTE->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
-	COMPUTE->Excute();
-
-	
-}
-
-void BloomEffect::PushData()
+void BloomEffect::FirstRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	_shader->SetPipelineState();
 
-	GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
+	GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
 		_texture->GetResource().Get(), D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
 
 	core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
@@ -51,14 +42,12 @@ void BloomEffect::PushData()
 
 	core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
 
-	GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
+	COMPUTE->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
+	COMPUTE->Excute();
+
+	GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
 		_texture->GetResource().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
 }
 
-void BloomEffect::PushData2()
-{
-
-	_shader->SetPipelineState();
 
 
-}

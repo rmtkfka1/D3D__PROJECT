@@ -38,7 +38,7 @@ void ModelObject::Update()
 
 void ModelObject::Render()
 {
-	auto& list = core->GetGraphics()->GetCmdLIst();
+	auto& list = core->GetGraphics()->GetCmdList();
 
 	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
 
