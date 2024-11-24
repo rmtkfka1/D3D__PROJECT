@@ -58,11 +58,7 @@ void Material::PushData()
 	
 }
 
-void Material::PushComputeData()
-{
-	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushComputeData(&_params, sizeof(_params));
 
-}
 
 
 

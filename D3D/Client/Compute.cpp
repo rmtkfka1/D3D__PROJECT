@@ -38,8 +38,9 @@ void Compute::WaitSync()
 
 void Compute::PrePareExcute()
 {
-	_cmdList->SetDescriptorHeaps(1, core->GetBufferManager()->GetComputeTableHeap()->GetDescriptorHeap().GetAddressOf());
 	_cmdList->SetComputeRootSignature(core->GetRootSignature()->GetComputeRootSignature().Get());
+	_cmdList->SetDescriptorHeaps(1, core->GetBufferManager()->GetComputeTableHeap()->GetDescriptorHeap().GetAddressOf());
+
 }
 
 

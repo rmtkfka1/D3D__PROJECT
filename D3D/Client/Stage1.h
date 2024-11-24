@@ -27,7 +27,6 @@ public:
 	shared_ptr<Player> _player;
 	shared_ptr<Terrain> _terrain; //temp
 
-
 private:
 	void DeferredRender();
 	void ForwardRender();

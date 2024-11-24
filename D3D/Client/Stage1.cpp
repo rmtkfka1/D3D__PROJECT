@@ -503,5 +503,5 @@ void Stage1::ComputePass()
 	int dispatchX = (WINDOW_WIDTH + threadGroupSizeX - 1) / threadGroupSizeX;
 	int dispatchY = (WINDOW_HEIGHT + threadGroupSizeY - 1) / threadGroupSizeY;
 
-	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->FirstRender(dispatchX, dispatchY, 1);
+	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->Render(dispatchX, dispatchY, 1);
 };

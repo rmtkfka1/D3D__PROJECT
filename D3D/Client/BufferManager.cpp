@@ -15,13 +15,13 @@ BufferManager::~BufferManager()
 void BufferManager::Init()
 {
 
-	_computeTable = make_shared<ComputeDescriptorTable>();
-	_computeTable->Init();
-
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_table[i] = make_shared<GraphicsDescriptorTable>();
 		_table[i]->Init(255);
+
+		_computeTable[i] = make_shared<ComputeDescriptorTable>();
+		_computeTable[i]->Init(255);
 	}
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
@@ -61,6 +61,7 @@ void BufferManager::Clear(int nextValue)
 	_WorldBufferPool[nextValue]->Clear();
 	_CameraBufferPool[nextValue]->Clear();
 	_table[nextValue]->Clear();
+	_computeTable[nextValue]->Clear();
 	_materialParamsBufferPool[nextValue]->Clear();
 }
 

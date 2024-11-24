@@ -56,7 +56,7 @@ void Game::Update()
 
 void Game::Render()
 {
-	COMPUTE->PrePareExcute();
+
 	GRAPHICS->RenderBegin();
 	SceneManager::GetInstance()->Run();
 	GRAPHICS->RenderEnd();
