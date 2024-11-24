@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BilboardObject.h" />
+    <ClInclude Include="BloomEffect.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BufferManager.h" />
@@ -228,6 +229,7 @@
   <ItemGroup>
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BilboardObject.cpp" />
+    <ClCompile Include="BloomEffect.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BufferManager.cpp" />

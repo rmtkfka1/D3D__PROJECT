@@ -29,6 +29,7 @@
 #include "Enemy.h"
 #include "BilboardObject.h"
 #include <random>
+#include "BloomEffect.h"
 
 static default_random_engine dre;
 static uniform_int_distribution<int> random_xz(-3800, 3800);
@@ -380,7 +381,6 @@ void Stage1::BulidForward()
 
 
 
-
 	
 
 }
@@ -496,50 +496,12 @@ void Stage1::CameraControl()
 }
 void Stage1::ComputePass()
 {
+	int threadGroupSizeX = 16;
+	int threadGroupSizeY = 16;
 
-	static int PostProcess = 1;
+	// Dispatch 크기 계산
+	int dispatchX = (WINDOW_WIDTH + threadGroupSizeX - 1) / threadGroupSizeX;
+	int dispatchY = (WINDOW_HEIGHT + threadGroupSizeY - 1) / threadGroupSizeY;
 
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Q))
-	{
-		PostProcess *= -1;
-	}
-
-	{
-		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
-		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
-			D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
-	}
-
-	{
-		ResourceManager::GetInstance()->Get<ComputeShader>(L"compute.hlsl")->SetPipelineState();
-		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")->GetUAVCpuHandle(), UAV_REGISTER::u0);
-		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
-
-		auto& material = ResourceManager::GetInstance()->Get<Material>(L"TestMaterial");
-
-		material->SetInt(0, WINDOW_WIDTH);
-		material->SetInt(1, WINDOW_HEIGHT);
-		material->SetInt(2, PostProcess);
-
-		material->PushComputeData();
-		core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
-
-		int threadGroupSizeX = 16;
-		int threadGroupSizeY = 16;
-
-		// Dispatch 크기 계산
-		int dispatchX = (WINDOW_WIDTH + threadGroupSizeX - 1) / threadGroupSizeX;
-		int dispatchY = (WINDOW_HEIGHT + threadGroupSizeY - 1) / threadGroupSizeY;
-
-		COMPUTE->GetCmdList()->Dispatch(dispatchX, dispatchY, 1);
-		COMPUTE->Excute();
-	}
-
-	{
-		shared_ptr<Texture>& texture = ResourceManager::GetInstance()->Get<Texture>(L"TestCS");
-		GRAPHICS->GetCmdLIst()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(texture->GetResource().Get(),
-			D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
-	}
-
-}
-;
+	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->Excute(dispatchX, dispatchY, 1);
+};

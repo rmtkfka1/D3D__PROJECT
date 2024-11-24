@@ -31,7 +31,6 @@ public:
 	void PushData();
 	void PushComputeData();
 
-
 private:
 	shared_ptr<Texture> _diffuseTexture;
 	shared_ptr<Texture> _normalTexture;

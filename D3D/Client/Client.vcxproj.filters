@@ -56,6 +56,9 @@
     <Filter Include="02.Core\core">
       <UniqueIdentifier>{46a8a73e-4fa0-4f7f-a58e-8c24c4ee95ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.GameObject\04.PostProcess">
+      <UniqueIdentifier>{e5afacb5-cb0f-409b-9edd-b370d434838b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -219,6 +222,9 @@
     </ClInclude>
     <ClInclude Include="Graphics.h">
       <Filter>02.Core\core</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomEffect.h">
+      <Filter>05.GameObject\04.PostProcess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +396,9 @@
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
       <Filter>02.Core\core</Filter>
+    </ClCompile>
+    <ClCompile Include="BloomEffect.cpp">
+      <Filter>05.GameObject\04.PostProcess</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

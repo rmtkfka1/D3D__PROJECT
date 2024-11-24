@@ -10,6 +10,7 @@
 #include "CustomObject.h"
 #include "Texture.h"
 #include "BufferPool.h"
+#include "BloomEffect.h"
 void ResourceManager::Init()
 {
 	CreateDefaultShader();
@@ -27,15 +28,8 @@ void ResourceManager::CreateDefaultMesh()
 
 void ResourceManager::CreateDefaultShader()
 {
-	{
-
-		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
-		shader->Init(L"compute.hlsl");
-		Add<ComputeShader>(L"compute.hlsl", shader);
-	}
-
 	
-
+	
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
 		ShaderInfo info;
@@ -155,27 +149,25 @@ void ResourceManager::CreateDefaultShader()
 void ResourceManager::CreateDefaultMaterial()
 {
 	
-
 	{
-		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::SRV | TextureUsageFlags::UAV,false);
-		Add<Texture>(L"TestCS", texture);
-	}
+		shared_ptr<BloomEffect> bloom = make_shared<BloomEffect>();
+		bloom->GenTexture();
+		bloom->SetGBufferTextrue(GRAPHICS->GetGBuffer()->GetTexture(2));
+		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
+		shader->Init(L"compute.hlsl");
+		bloom->SetShader(shader);
+		Add<BloomEffect>(L"Bloom", bloom);
+	};
 
 	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetName(L"finalMaterial");
 		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
-		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")); //ALBEDO
+		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"BloomTexture")); //ALBEDO
 		Add<Material>(L"finalMaterial", material);
 	}
 
 
-	{
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetName(L"TestMaterial");
-		Add<Material>(L"TestMaterial", material);
-	}
 }
 

@@ -5,6 +5,7 @@
 #include "BufferManager.h"
 #include "BufferPool.h"
 #include "Material.h"
+#include "BloomEffect.h"
 RenderTargets::RenderTargets()
 {
 }
@@ -42,9 +43,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 {
 
 	{
-		shared_ptr<Texture> texture = make_shared<Texture>();
-		texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
-		ResourceManager::GetInstance()->Add<Texture>(L"TestCS", texture);
+		ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->GenTexture();
 	}
 
 	{
@@ -52,7 +51,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 		material->SetName(L"finalMaterial");
 		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
-		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"TestCS")); //ALBEDO
+		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"BloomTexture")); //ALBEDO
 		ResourceManager::GetInstance()->Add<Material>(L"finalMaterial", material);
 	}
 

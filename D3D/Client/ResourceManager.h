@@ -7,7 +7,7 @@ class ComputeShader;
 class Texture;
 class Model;
 class GameObject;
-
+class BloomEffect;
 
 class ResourceManager
 {
@@ -40,7 +40,7 @@ private:
     unordered_map<wstring, shared_ptr<Model>> _modelMap;
     unordered_map<wstring, shared_ptr<Material>> _materialMap;
     unordered_map<wstring, shared_ptr<GameObject>> _gameObjectMap;
-
+    unordered_map<wstring, shared_ptr<BloomEffect>> _BloomEffectMap; //temp
     template<typename T>
     unordered_map<wstring, shared_ptr<T>>& GetResourceMap();
 };
@@ -111,6 +111,10 @@ unordered_map<wstring, shared_ptr<T>>& ResourceManager::GetResourceMap()
     else if constexpr (is_same_v<T, GameObject>)
     {
         return _gameObjectMap;
+    }
+    else if constexpr (is_same_v<T, BloomEffect>)
+    {
+        return _BloomEffectMap;
     }
     else
     {
