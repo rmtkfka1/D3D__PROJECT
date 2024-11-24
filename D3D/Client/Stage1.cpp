@@ -365,20 +365,6 @@ void Stage1::BulidForward()
 	}
 
 
-	////½Ã¿¬¿ë
-	//{
-
-	//	shared_ptr<Sea> gameobject = make_shared<Sea>();
-
-	//	gameobject->SetFrustumCuling(false);
-	//	gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
-	//	gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest2.hlsl"));
-
-	//	gameobject->GetTransform()->SetLocalPosition(vec3(0, -10000.0f, -500.0));
-	//	gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
-	//	AddGameObject(gameobject, RenderingType::Forward);
-	//}
-
 
 
 	

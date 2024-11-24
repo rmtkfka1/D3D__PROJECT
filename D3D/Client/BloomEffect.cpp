@@ -22,16 +22,18 @@ void BloomEffect::GenTexture()
 void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 
-	COMPUTE->PrePareExcute();
+	static int count = 1;
 
-	_shader->SetPipelineState();
-
-	for (int i = 0; i < 10; ++i)
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Q))
 	{
-		PingPongRender(disPatchX, disPatchY, disPatchZ);
+		count *= -1;
 	}
 
-	COMPUTE->Excute();
+	if (count == 1)
+		PostProcess(disPatchX, disPatchY, disPatchZ);
+	else
+		JustRender();
+
 }
 
 void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
@@ -55,8 +57,6 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 	}
 
 	{
-		COMPUTE->PrePareExcute();
-		
 		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 		GRAPHICS->GetGBuffer()->GetTexture(2)->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
@@ -72,6 +72,38 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 	
 		GRAPHICS->GetGBuffer()->GetTexture(2)->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 	}
+
+}
+
+
+void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
+{
+	COMPUTE->PrePareExcute();
+
+	_shader->SetPipelineState();
+
+	for (int i = 0; i < 10; ++i)
+	{
+		PingPongRender(disPatchX, disPatchY, disPatchZ);
+	}
+
+	COMPUTE->Excute();
+}
+
+void BloomEffect::JustRender()
+{
+
+	auto& sourceTexture = GRAPHICS->GetGBuffer()->GetTexture(2);
+	auto& destTexture = _texture;
+
+	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_SOURCE);
+	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_DEST);
+
+	GRAPHICS->GetCmdList()->CopyResource(destTexture->GetResource().Get(), sourceTexture->GetResource().Get());
+
+	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+
 
 }
 

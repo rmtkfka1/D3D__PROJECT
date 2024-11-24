@@ -19,7 +19,8 @@ public:
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
 
 private:
-	
+	void PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+	void JustRender();
 
 
 private:
