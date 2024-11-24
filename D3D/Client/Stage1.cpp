@@ -269,7 +269,7 @@ void Stage1::BulidForward()
 {
 
 
-	for (int i = 0; i < 3; ++i)
+	/*for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 		ResourceManager::GetInstance()->Add<GameObject>(L"gbufferUi"+i, object);
@@ -282,7 +282,7 @@ void Stage1::BulidForward()
 		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
 		object->GetTransform()->SetLocalPosition(vec3(-850.0f + 200.0f * i, 400.0f, 1.0f));
 		AddGameObject(object, RenderingType::Ui);
-	}
+	}*/
 
 	
 

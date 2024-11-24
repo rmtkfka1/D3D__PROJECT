@@ -10,13 +10,13 @@
 void BloomEffect::GenTexture()
 {
 	_texture = make_shared<Texture>();
-	_texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT,
+	_texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE ,WINDOW_WIDTH, WINDOW_HEIGHT,
 		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
 	ResourceManager::GetInstance()->Add<Texture>(L"BloomTexture", _texture);
-
 }
 
+//GBUFFER 의 내용을 복사.
 void BloomEffect::FirstRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	_shader->SetPipelineState();
@@ -48,6 +48,15 @@ void BloomEffect::FirstRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
 		_texture->GetResource().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
 }
+
+void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
+{
+	_shader->SetPipelineState();
+
+
+}
+
+
 
 
 

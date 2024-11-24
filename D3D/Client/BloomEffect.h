@@ -12,6 +12,8 @@ public:
 	void GenTexture();
 
 	void FirstRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+	void PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+
 
 	void SetShader(shared_ptr<ComputeShader> shader) { _shader = shader; }
 	void SetGBufferTextrue(shared_ptr<Texture> GbufferTexture){_GBufferTexture = GbufferTexture; }

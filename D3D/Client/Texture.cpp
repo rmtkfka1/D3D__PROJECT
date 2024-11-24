@@ -118,7 +118,7 @@ void Texture::Init(const wstring& path,TextureType type)
 }
 
 
-void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, TextureUsageFlags usageFlags ,bool jump)
+void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalState,uint32 width, uint32 height, TextureUsageFlags usageFlags ,bool jump)
 {
 
  
@@ -139,7 +139,6 @@ void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, Tex
 	if (jump==false) //SwapChain 에서 GetBuffer 로 가져올떄는 이미 생성된 리소스를 사용하므로 생성하지 않는다.
     {
         D3D12_CLEAR_VALUE clearValue = {};
-        auto initialState = D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
 
         if (HasFlag(usageFlags, TextureUsageFlags::RTV))
         {
@@ -152,7 +151,6 @@ void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, Tex
 
         if (HasFlag(usageFlags, TextureUsageFlags::DSV))
         {
-            initialState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
             clearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
         }
 
@@ -160,7 +158,7 @@ void Texture::CreateTexture(DXGI_FORMAT format, uint32 width, uint32 height, Tex
             &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
             D3D12_HEAP_FLAG_NONE,
             &desc,
-            initialState,
+            initalState,
             HasFlag(usageFlags, TextureUsageFlags::RTV) || HasFlag(usageFlags, TextureUsageFlags::DSV) ? &clearValue : nullptr,
             IID_PPV_ARGS(&_resource));
 

@@ -32,11 +32,11 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 	{
-		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
+		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM,D3D12_RESOURCE_STATE_RENDER_TARGET ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
 	}
 
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
-	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
+	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
 }
 
 void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPtr<IDXGISwapChain3> swapchain , UINT	_swapChainFlags )
@@ -78,13 +78,13 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; ++i)
 	{
 
-		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true);
+		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_RENDER_TARGET,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true);
 	}
 
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(BackBufferWidth),static_cast<float>(BackBufferHeight), 0,1.0f };
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(BackBufferWidth),static_cast<LONG>(BackBufferHeight) };
 
-	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
+	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT, D3D12_RESOURCE_STATE_DEPTH_WRITE,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
 
 }
 
@@ -156,11 +156,11 @@ void GBuffer::Init()
 	}
 	
 	//position 정보
-	_textures[0]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT,TextureUsageFlags::RTV| TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+	_textures[0]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE,WINDOW_WIDTH, WINDOW_HEIGHT,TextureUsageFlags::RTV| TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 	//normal 정보
-	_textures[1]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+	_textures[1]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 	//color 정보
-	_textures[2]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+	_textures[2]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
 }
 
