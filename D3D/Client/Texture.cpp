@@ -102,6 +102,8 @@ void Texture::Init(const wstring& path,TextureType type)
     srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
     srvDesc.Texture2D.MipLevels = _image.GetMetadata().mipLevels;
 
+    _state = D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
+
     switch (type)
     {
     case TextureType::Texture2D:
@@ -117,9 +119,19 @@ void Texture::Init(const wstring& path,TextureType type)
     core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
 }
 
+void Texture::ResourceBarrier(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+{
+    if (before != _state)
+        assert(false);
+ 
+    GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), before, after));
+    _state = after;
+}
+
 
 void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalState,uint32 width, uint32 height, TextureUsageFlags usageFlags ,bool jump)
 {
+
 
  
     D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
@@ -199,6 +211,8 @@ void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalStat
         core->GetBufferManager()->GetTextureBufferPool()->AllocDSVDescriptorHandle(&_dsvHandle);
         core->GetDevice()->CreateDepthStencilView(_resource.Get(), nullptr, _dsvHandle);
     }
+
+    _state = initalState;
 
 }
 

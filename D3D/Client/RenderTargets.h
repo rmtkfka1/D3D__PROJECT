@@ -65,7 +65,6 @@ public:
 
 	shared_ptr<Texture>& GetTexture(int32 index);
 
-
 private:
 	array<shared_ptr<Texture>, _count> _textures = { nullptr, };
 	D3D12_VIEWPORT _viewport;

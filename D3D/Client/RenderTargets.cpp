@@ -32,7 +32,7 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 	{
-		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM,D3D12_RESOURCE_STATE_RENDER_TARGET ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
+		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM,D3D12_RESOURCE_STATE_PRESENT ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
 	}
 
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
@@ -78,7 +78,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; ++i)
 	{
 
-		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_RENDER_TARGET,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true);
+		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_PRESENT,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true);
 	}
 
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(BackBufferWidth),static_cast<float>(BackBufferHeight), 0,1.0f };
@@ -93,7 +93,8 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 void RenderTargets::RenderBegin()
 {
 	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdList();
-	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_RenderTargets[_RenderTargetIndex]->GetResource().Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	_RenderTargets[_RenderTargetIndex]->ResourceBarrier(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	const float BackColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	cmdList->RSSetViewports(1, &_viewport);
@@ -106,7 +107,7 @@ void RenderTargets::RenderBegin()
 void RenderTargets::RenderEnd()
 {
 	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdList();
-	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_RenderTargets[_RenderTargetIndex]->GetResource().Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+	_RenderTargets[_RenderTargetIndex]->ResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	cmdList->Close();
 }
 
@@ -171,7 +172,7 @@ void GBuffer::RenderBegin()
 
 	for (uint32 i = 0; i < _count; i++)
 	{
-		list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_textures[i]->GetResource().Get(), D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET));
+		_textures[i]->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	}
 
 	for (uint32 i = 0; i < _count; i++)
@@ -191,7 +192,7 @@ void GBuffer::RenderEnd()
 
 	for (uint32 i = 0; i < _count; i++)
 	{
-		list->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_textures[i]->GetResource().Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
+		_textures[i]->ResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 	}
 }
 

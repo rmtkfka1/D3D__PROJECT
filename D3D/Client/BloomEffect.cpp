@@ -21,8 +21,7 @@ void BloomEffect::FirstRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	_shader->SetPipelineState();
 
-	GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
-		_texture->GetResource().Get(), D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS));
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 	core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
 	core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
@@ -45,8 +44,8 @@ void BloomEffect::FirstRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	COMPUTE->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
 	COMPUTE->Excute();
 
-	GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
-		_texture->GetResource().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE));
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+
 }
 
 void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
