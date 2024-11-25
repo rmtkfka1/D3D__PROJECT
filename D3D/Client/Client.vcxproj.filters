@@ -59,6 +59,12 @@
     <Filter Include="05.GameObject\04.PostProcess">
       <UniqueIdentifier>{e5afacb5-cb0f-409b-9edd-b370d434838b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.HLSL\compute">
+      <UniqueIdentifier>{fb2c783c-e848-4e8c-8e2f-993e8ae7ba21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.HLSL\graphics">
+      <UniqueIdentifier>{42c1b844-6eac-4c2e-b962-04e8954ac3fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -402,59 +408,62 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Resources\Shader\default.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\sky.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\terrain.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\light.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\boundingbox.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\deferred.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\final.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\blendingsea.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\uishader.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\uishaderClip.hlsl">
-      <Filter>04.HLSL</Filter>
+    <FxCompile Include="..\Resources\Shader\xblur.hlsl">
+      <Filter>04.HLSL\compute</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\Bilboard.hlsl">
-      <Filter>04.HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Resources\Shader\BilboardStreamOutput.hlsl">
-      <Filter>04.HLSL</Filter>
+      <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\BilboardRender.hlsl">
-      <Filter>04.HLSL</Filter>
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\BilboardStreamOutput.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\blendingsea.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\boundingbox.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\default.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\deferred.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\final.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\light.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\sea.hlsl">
-      <Filter>04.HLSL</Filter>
+      <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\seatest.hlsl">
-      <Filter>04.HLSL</Filter>
+      <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\seatest2.hlsl">
-      <Filter>04.HLSL</Filter>
+      <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
-    <FxCompile Include="..\Resources\Shader\compute.hlsl">
-      <Filter>04.HLSL</Filter>
+    <FxCompile Include="..\Resources\Shader\sky.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\terrain.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\test.hlsl">
-      <Filter>04.HLSL</Filter>
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\uishader.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\uishaderClip.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\yblur.hlsl">
+      <Filter>04.HLSL\compute</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

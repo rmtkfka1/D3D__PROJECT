@@ -165,11 +165,9 @@ void ResourceManager::CreateDefaultMaterial()
 	{
 		shared_ptr<BloomEffect> bloom = make_shared<BloomEffect>();
 		bloom->GenTexture();
-		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
-		shader->Init(L"compute.hlsl");
-		bloom->SetShader(shader);
 		Add<BloomEffect>(L"Bloom", bloom);
 	};
+
 
 	{
 		shared_ptr<Material> material = make_shared<Material>();

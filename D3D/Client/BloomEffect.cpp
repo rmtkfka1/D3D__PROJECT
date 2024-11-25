@@ -7,6 +7,23 @@
 #include "Texture.h"
 #include "Graphics.h"
 #include "RenderTargets.h"
+BloomEffect::BloomEffect()
+{
+	{
+		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
+		shader->Init(L"xblur.hlsl");
+		_xblurShader = shader;
+	}
+	{
+		shared_ptr<ComputeShader> shader = make_shared<ComputeShader>();
+		shader->Init(L"yblur.hlsl");
+		_yblurShader = shader;
+	}
+}
+BloomEffect::~BloomEffect()
+{
+
+}
 void BloomEffect::GenTexture()
 {
 	_texture = make_shared<Texture>();
@@ -40,7 +57,8 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 {
 
 	{
-		
+		_xblurShader->SetPipelineState();
+
 		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
@@ -57,6 +75,9 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 	}
 
 	{
+
+		_yblurShader->SetPipelineState();
+
 		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 		GRAPHICS->GetGBuffer()->GetTexture(2)->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
@@ -80,7 +101,7 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	COMPUTE->PrePareExcute();
 
-	_shader->SetPipelineState();
+
 
 	for (int i = 0; i < 10; ++i)
 	{

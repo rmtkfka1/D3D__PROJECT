@@ -9,12 +9,15 @@ class BloomEffect
 {
 
 public:
+
+	BloomEffect();
+	~BloomEffect();
+
 	void GenTexture();
 
 	void Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 	void PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 
-	void SetShader(shared_ptr<ComputeShader> shader) { _shader = shader; }
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
 
@@ -24,7 +27,8 @@ private:
 
 
 private:
-	shared_ptr<ComputeShader>		_shader;
+	shared_ptr<ComputeShader>		_xblurShader;
+	shared_ptr<ComputeShader>		_yblurShader;
 	MaterialParams					_params;
 	
 	shared_ptr<Texture>             _texture;
