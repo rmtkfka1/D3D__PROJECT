@@ -27,7 +27,7 @@ BloomEffect::~BloomEffect()
 void BloomEffect::GenTexture()
 {
 	_texture = make_shared<Texture>();
-	_texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE ,WINDOW_WIDTH, WINDOW_HEIGHT,
+	_texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON ,WINDOW_WIDTH, WINDOW_HEIGHT,
 		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
 	_GBufferTexture = GRAPHICS->GetGBuffer()->GetTexture(2);
@@ -55,14 +55,13 @@ void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 
 void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
+	// Common 으로 만들면 드라이버가 자동으로잡아주나???
 
 	{
 		_xblurShader->SetPipelineState();
 
-		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-
 		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
-		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_GBufferTexture->GetSRVCpuHandle(), SRV_REGISTER::t0);
 
 		SetInt(0, WINDOW_WIDTH);
 		SetInt(1, WINDOW_HEIGHT);
@@ -78,10 +77,7 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 
 		_yblurShader->SetPipelineState();
 
-		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
-		GRAPHICS->GetGBuffer()->GetTexture(2)->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
-
-		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetUAVCpuHandle(), UAV_REGISTER::u0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_GBufferTexture->GetUAVCpuHandle(), UAV_REGISTER::u0);
 		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_texture->GetUAVCpuHandle(), SRV_REGISTER::t0);
 		SetInt(0, WINDOW_WIDTH);
 		SetInt(1, WINDOW_HEIGHT);
@@ -91,7 +87,6 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 
 		COMPUTE->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
 	
-		GRAPHICS->GetGBuffer()->GetTexture(2)->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 	}
 
 }
@@ -114,16 +109,16 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 void BloomEffect::JustRender()
 {
 
-	auto& sourceTexture = GRAPHICS->GetGBuffer()->GetTexture(2);
+	auto& sourceTexture = _GBufferTexture;
 	auto& destTexture = _texture;
 
-	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_SOURCE);
-	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_DEST);
+	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
+	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
 
 	GRAPHICS->GetCmdList()->CopyResource(destTexture->GetResource().Get(), sourceTexture->GetResource().Get());
 
-	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
-	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
+	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
 
 
 }

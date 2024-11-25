@@ -65,7 +65,7 @@ void Stage1::Run()
 	DeferredRender();
 	core->GetGraphics()->GetGBuffer()->RenderEnd();
 
-	ComputePass();
+	//ComputePass();
 	
 	core->GetGraphics()->GetRenderTarget()->RenderBegin();
 	FinalRender();

@@ -121,10 +121,16 @@ void Texture::Init(const wstring& path,TextureType type)
 
 void Texture::ResourceBarrier(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
 {
-    if (before != _state)
-        assert(false);
+    //if (before != _state)
+    //    assert(false);
  
     GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), before, after));
+    _state = after;
+}
+
+void Texture::ResourceBarrier(D3D12_RESOURCE_STATES after)
+{
+    GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), _state, after));
     _state = after;
 }
 
@@ -135,6 +141,7 @@ void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalStat
 
  
     D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
+    desc.MipLevels = 1;
     desc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
     if (HasFlag(usageFlags, TextureUsageFlags::RTV)) {

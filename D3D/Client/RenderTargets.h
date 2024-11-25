@@ -19,21 +19,19 @@ public:
 	void Init(DWORD WndWidth, DWORD WndHeight , ComPtr<IDXGISwapChain3> swapchain);
 	void Resize(DWORD BackBufferWidth, DWORD BackBufferHeight, ComPtr<IDXGISwapChain3> swapchain, UINT	_swapChainFlags);
 
-	void CreateRenderTarget(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3> swapchain);
-	void CreateDepthStencil(DWORD WndWidth, DWORD WndHeight);
-
 	void RenderBegin();
 	void RenderEnd();
 	void ClearDepth();
 
 	void SetIndex(UINT index) { _RenderTargetIndex = index; }
 
-	
+	//[디퍼드렌더링,포워드렌더링] -> [ 중간텍스쳐 ] -> [렌더타겟]
 
 private:
 
-	shared_ptr<Texture> _RenderTargets[SWAP_CHAIN_FRAME_COUNT];
+	shared_ptr<Texture> _RenderTargets[SWAP_CHAIN_FRAME_COUNT];  // [렌더타겟]
 	shared_ptr<Texture> _DSTexture;
+	shared_ptr<Texture> _InterMediateTexture; //[ 중간텍스쳐 ]
 
 	D3D12_VIEWPORT	_viewport = {};
 	D3D12_RECT		_scissorRect = {};

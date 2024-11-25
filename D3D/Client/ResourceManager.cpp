@@ -174,7 +174,7 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetName(L"finalMaterial");
 		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
-		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"BloomTexture")); //ALBEDO
+		material->SetSpecularTexture(core->GetGraphics()->GetGBuffer()->GetTexture(2)); //ALBEDO
 		Add<Material>(L"finalMaterial", material);
 	}
 
