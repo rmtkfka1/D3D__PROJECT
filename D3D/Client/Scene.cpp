@@ -81,8 +81,6 @@ void Scene::ReserveDeleteGameObject(const shared_ptr<GameObject>& object,Renderi
 }
 
 
-
-
 void Scene::AddGameObject(const shared_ptr<GameObject>& object, RenderingType type)
 {
 	switch (type)

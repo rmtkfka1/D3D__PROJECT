@@ -25,7 +25,6 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 	_DSTexture = make_shared<Texture>();
 	_InterMediateTexture = make_shared<Texture>();
 
-
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WndWidth),static_cast<float>(WndHeight), 0,1.0f };
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WndWidth),static_cast<LONG>(WndHeight) };
 
@@ -37,9 +36,7 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
 	}
 
-	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV|
-	TextureUsageFlags::SRV|TextureUsageFlags::UAV, false);
-
+	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
 	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
 }
@@ -48,21 +45,16 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 {
 
 	{
-		ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->GenTexture();
-	}
-
-	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetName(L"finalMaterial");
 		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
-		material->SetSpecularTexture(ResourceManager::GetInstance()->Get<Texture>(L"BloomTexture")); //ALBEDO
+		material->SetSpecularTexture(core->GetGraphics()->GetGBuffer()->GetTexture(2)); //ALBEDO
 		ResourceManager::GetInstance()->Add<Material>(L"finalMaterial", material);
 	}
 
-
 	core->GetBufferManager()->GetTextureBufferPool()->FreeDSVHandle(_DSTexture->GetDSVCpuHandle());
-
+	core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_InterMediateTexture->GetRTVCpuHandle());
 
 	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
 	{
@@ -86,8 +78,13 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true);
 	}
 
+
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(BackBufferWidth),static_cast<float>(BackBufferHeight), 0,1.0f };
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(BackBufferWidth),static_cast<LONG>(BackBufferHeight) };
+
+	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
+
+	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->GenTexture();
 
 	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT, D3D12_RESOURCE_STATE_DEPTH_WRITE,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
 

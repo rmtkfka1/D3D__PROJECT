@@ -110,7 +110,6 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
 	GRAPHICS->GetCmdList()->CopyResource(_texture->GetResource().Get(), _interMediateTexture->GetResource().Get());
 
-
 	for (int i = 0; i < 10; ++i)
 	{
 		PingPongRender(disPatchX, disPatchY, disPatchZ);
