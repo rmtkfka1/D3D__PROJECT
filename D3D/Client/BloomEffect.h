@@ -32,7 +32,6 @@ private:
 	MaterialParams					_params;
 	
 	shared_ptr<Texture>             _texture;
-	//shared_ptr<Texture>             _texture2;
 	shared_ptr<Texture>				_GBufferTexture;
 };
 

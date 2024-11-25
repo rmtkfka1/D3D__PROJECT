@@ -26,6 +26,8 @@ static const float weights[11] =
 
 static const int blurRadius = 5;
 
+
+
 [numthreads(16, 16, 1)]
 void CS_Main(int3 threadIndex : SV_DispatchThreadID)
 {
