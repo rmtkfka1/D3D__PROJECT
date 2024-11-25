@@ -161,11 +161,12 @@ void Graphics::Present()
 	_renderTargets->SetIndex(index);
 
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
-	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
+	WaitForFenceValue(_lastFenceValue[_currentContextIndex]);
 
-	_currentContextIndex = nextContextIndex;
 	_bufferManager->Clear(_currentContextIndex);
 	_bufferManager->SetIndex(_currentContextIndex);
+
+	//_currentContextIndex = nextContextIndex;
 
 };
 

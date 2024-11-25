@@ -79,9 +79,9 @@ class TextureBufferPool
 public:
 	void Init(int32 SrvUavCount , int32 RTVCount , int32 DSVCount);
 
-	void FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
-	void FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
-	void FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
+	void FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
+	void FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
+	void FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
 
 
 	void AllocSRVDescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE* hanlde);

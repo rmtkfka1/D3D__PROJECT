@@ -22,24 +22,24 @@ public:
 	void RenderBegin();
 	void RenderEnd();
 	void ClearDepth();
-	shared_ptr<Texture>& GetInterMediateTexture() { return _InterMediateTexture; }
+	shared_ptr<Texture>& GetInterMediateTexture() { return _InterMediateTexture[_index]; }
 
-	void SetIndex(UINT index) { _RenderTargetIndex = index; }
+	void SetIndex(UINT index) { _index = index; }
 
 	//[디퍼드렌더링,포워드렌더링] -> [ 중간텍스쳐 ] -> [렌더타겟]
 
 private:
 
 	shared_ptr<Texture> _RenderTargets[SWAP_CHAIN_FRAME_COUNT];  // [렌더타겟]
+	shared_ptr<Texture> _InterMediateTexture[SWAP_CHAIN_FRAME_COUNT]; //[ 중간텍스쳐 ]
 	shared_ptr<Texture> _DSTexture;
-	shared_ptr<Texture> _InterMediateTexture; //[ 중간텍스쳐 ]
 
 	D3D12_VIEWPORT	_viewport = {};
 	D3D12_RECT		_scissorRect = {};
 	DWORD			_Width = 0;
 	DWORD			_height = 0;
 
-	uint32	_RenderTargetIndex = 0;
+	uint32	_index = 0;
 
 };
 

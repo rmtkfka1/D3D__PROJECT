@@ -77,6 +77,9 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 		core->GetBufferManager()->GetMaterialParamsBufferPool()->PushComputeData(&_params, sizeof(_params));
 		core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
 
+		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+		_texture2->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+
 		COMPUTE->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
 		
 	}
@@ -93,6 +96,9 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 
 		core->GetBufferManager()->GetMaterialParamsBufferPool()->PushComputeData(&_params, sizeof(_params));
 		core->GetBufferManager()->GetComputeTableHeap()->SetComputeRootDescriptorTable();
+
+		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+		_texture2->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 
 		COMPUTE->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
 	

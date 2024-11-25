@@ -156,35 +156,41 @@ void TextureBufferPool::Init(int32 SrvUavCount, int32 RTVCount ,int32 DSVCount)
 
 }
 
-void TextureBufferPool::FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
+void TextureBufferPool::FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE start = _srvHeap.heap->GetCPUDescriptorHandleForHeapStart();
 	DWORD index = (DWORD)(handle.ptr - start.ptr) / _srvHeap.handleIncrementSize;
 
 	assert(index >= 0);
 
+	handle.ptr = NULL;
+
 	_srvHeap.indexGenator[index] = -1;
 	_srvHeap.currentIndex--;
 }
 
-void TextureBufferPool::FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
+void TextureBufferPool::FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE start = _rtvHeap.heap->GetCPUDescriptorHandleForHeapStart();
 	DWORD index = (DWORD)(handle.ptr - start.ptr) / _rtvHeap.handleIncrementSize;
 
 	assert(index >= 0);
 
+	handle.ptr = NULL;
+
 	_rtvHeap.indexGenator[index] = -1;
 	_rtvHeap.currentIndex--;
 
 }
 
-void TextureBufferPool::FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
+void TextureBufferPool::FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE start = _dsvHeap.heap->GetCPUDescriptorHandleForHeapStart();
 	DWORD index = (DWORD)(handle.ptr - start.ptr) / _dsvHeap.handleIncrementSize;
 
 	assert(index >= 0);
+
+	handle.ptr = NULL;
 
 	_dsvHeap.indexGenator[index] = -1;
 	_dsvHeap.currentIndex--;
