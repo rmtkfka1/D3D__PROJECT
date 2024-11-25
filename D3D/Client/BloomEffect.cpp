@@ -62,7 +62,7 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
 		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
-		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_GBufferTexture->GetSRVCpuHandle(), SRV_REGISTER::t0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetSRVCpuHandle(), SRV_REGISTER::t0);
 
 		SetInt(0, WINDOW_WIDTH);
 		SetInt(1, WINDOW_HEIGHT);
@@ -79,9 +79,9 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 		_yblurShader->SetPipelineState();
 
 		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
-		_GBufferTexture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+		GRAPHICS->GetGBuffer()->GetTexture(2)->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
-		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_GBufferTexture->GetUAVCpuHandle(), UAV_REGISTER::u0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(GRAPHICS->GetGBuffer()->GetTexture(2)->GetUAVCpuHandle(), UAV_REGISTER::u0);
 		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_texture->GetUAVCpuHandle(), SRV_REGISTER::t0);
 		SetInt(0, WINDOW_WIDTH);
 		SetInt(1, WINDOW_HEIGHT);
@@ -91,7 +91,7 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 
 		COMPUTE->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
 	
-		_GBufferTexture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+		GRAPHICS->GetGBuffer()->GetTexture(2)->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 	}
 
 }
@@ -100,6 +100,8 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	COMPUTE->PrePareExcute();
+
+
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -112,7 +114,7 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 void BloomEffect::JustRender()
 {
 
-	auto& sourceTexture = _GBufferTexture;
+	auto& sourceTexture = GRAPHICS->GetGBuffer()->GetTexture(2);
 	auto& destTexture = _texture;
 
 	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_SOURCE);

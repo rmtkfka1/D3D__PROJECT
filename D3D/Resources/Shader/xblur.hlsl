@@ -48,8 +48,7 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
         float3 color = inputTexture.Load(int3(sampleCoord, 0)).rgb;
         
         blurColor += weights[i + blurRadius] * color;
-        
-     
+  
     };
 
     // 결과 텍스처에 쓰기
