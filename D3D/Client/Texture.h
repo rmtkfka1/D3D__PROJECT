@@ -30,7 +30,7 @@ public:
 	virtual ~Texture();
 
 	void Init(const wstring& path,TextureType type = TextureType::Texture2D);
-	void ResourceBarrier(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
+	//void ResourceBarrier(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 	void ResourceBarrier(D3D12_RESOURCE_STATES after);
 	void CreateTexture(DXGI_FORMAT format,D3D12_RESOURCE_STATES initalState ,uint32 width, uint32 height, TextureUsageFlags usageFlags , bool Jump);
 	D3D12_CPU_DESCRIPTOR_HANDLE GetRTVCpuHandle() { return _rtvHandle; }

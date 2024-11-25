@@ -22,6 +22,7 @@ public:
 	void RenderBegin();
 	void RenderEnd();
 	void ClearDepth();
+	shared_ptr<Texture>& GetInterMediateTexture() { return _InterMediateTexture; }
 
 	void SetIndex(UINT index) { _RenderTargetIndex = index; }
 

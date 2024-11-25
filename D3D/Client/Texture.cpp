@@ -119,17 +119,22 @@ void Texture::Init(const wstring& path,TextureType type)
     core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
 }
 
-void Texture::ResourceBarrier(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
-{
-    //if (before != _state)
-    //    assert(false);
- 
-    GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), before, after));
-    _state = after;
-}
+//void Texture::ResourceBarrier(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+//{
+//    //if (before != _state)
+//    //    assert(false);
+// 
+//    GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), before, after));
+//    _state = after;
+//}
 
 void Texture::ResourceBarrier(D3D12_RESOURCE_STATES after)
 {
+    if (_state == after)
+    {
+        return;
+    }
+
     GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), _state, after));
     _state = after;
 }

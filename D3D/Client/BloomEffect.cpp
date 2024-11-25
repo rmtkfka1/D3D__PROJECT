@@ -30,14 +30,17 @@ void BloomEffect::GenTexture()
 	_texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON ,WINDOW_WIDTH, WINDOW_HEIGHT,
 		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
-	_GBufferTexture = GRAPHICS->GetGBuffer()->GetTexture(2);
+	_texture2 = make_shared<Texture>();
+	_texture2->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT,
+		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
-	ResourceManager::GetInstance()->Add<Texture>(L"BloomTexture", _texture);
+	_interMediateTexture = GRAPHICS->GetRenderTarget()->GetInterMediateTexture();
 }
 
-//GBUFFER 의 내용을 복사.
+
 void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
+
 
 	static int count = 1;
 
@@ -47,10 +50,15 @@ void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	}
 
 	if (count == 1)
+	{
 		PostProcess(disPatchX, disPatchY, disPatchZ);
+	}
 	else
-		JustRender();
+	{
+		return;
+	}
 
+	
 }
 
 void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
@@ -60,8 +68,8 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 	{
 		_xblurShader->SetPipelineState();
 
-		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
-		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_GBufferTexture->GetSRVCpuHandle(), SRV_REGISTER::t0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture2->GetUAVCpuHandle(), UAV_REGISTER::u0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_texture->GetSRVCpuHandle(), SRV_REGISTER::t0);
 
 		SetInt(0, WINDOW_WIDTH);
 		SetInt(1, WINDOW_HEIGHT);
@@ -77,8 +85,9 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 
 		_yblurShader->SetPipelineState();
 
-		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_GBufferTexture->GetUAVCpuHandle(), UAV_REGISTER::u0);
-		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_texture->GetUAVCpuHandle(), SRV_REGISTER::t0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopyUAV(_texture->GetUAVCpuHandle(), UAV_REGISTER::u0);
+		core->GetBufferManager()->GetComputeTableHeap()->CopySRV(_texture2->GetSRVCpuHandle(), SRV_REGISTER::t0);
+
 		SetInt(0, WINDOW_WIDTH);
 		SetInt(1, WINDOW_HEIGHT);
 
@@ -96,6 +105,10 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	COMPUTE->PrePareExcute();
 
+	//_texture 에 여태까지 그려왔던 정보들복사.
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
+	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
+	GRAPHICS->GetCmdList()->CopyResource(_texture->GetResource().Get(), _interMediateTexture->GetResource().Get());
 
 
 	for (int i = 0; i < 10; ++i)
@@ -104,25 +117,15 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	}
 
 	COMPUTE->Excute();
-}
 
-void BloomEffect::JustRender()
-{
-
-	auto& sourceTexture = _GBufferTexture;
-	auto& destTexture = _texture;
-
-	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
-	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
-
-	GRAPHICS->GetCmdList()->CopyResource(destTexture->GetResource().Get(), sourceTexture->GetResource().Get());
-
-	sourceTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
-	destTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
-
+	//계산된 결과를  _interMediateTexture 에 다시복사
+	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
+	_texture2->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
+	GRAPHICS->GetCmdList()->CopyResource(_interMediateTexture->GetResource().Get(), _texture2->GetResource().Get());
+	_texture2->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
+	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
 
 }
-
 
 
 

@@ -65,13 +65,14 @@ void Stage1::Run()
 	DeferredRender();
 	core->GetGraphics()->GetGBuffer()->RenderEnd();
 
-	//ComputePass();
+
 	
 	core->GetGraphics()->GetRenderTarget()->RenderBegin();
 	FinalRender();
 	ForwardRender();
 	BoundingBoxRender();
 	UiObjectRender();
+	ComputePass();
 	core->GetGraphics()->GetRenderTarget()->RenderEnd();
 
 
