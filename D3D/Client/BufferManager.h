@@ -19,7 +19,6 @@ public:
 	void Init();
 	void Clear(int nextValue);
 
-	shared_ptr<ComputeDescriptorTable>& GetComputeTableHeap() { return _computeTable[_currentContextIndex]; }
 	shared_ptr<GraphicsDescriptorTable>& GetGraphicsTableHeap() { return _table[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetWorldBufferPool() { return _WorldBufferPool[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetCameraBufferPool() { return _CameraBufferPool[_currentContextIndex]; }
@@ -30,7 +29,6 @@ public:
 private:
 	//Buffer pool
 	array<shared_ptr<GraphicsDescriptorTable>, MAX_FRAME_COUNT>  _table;
-	array<shared_ptr<ComputeDescriptorTable>, MAX_FRAME_COUNT>_computeTable;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _lightBufferPool;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _WorldBufferPool;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _CameraBufferPool;

@@ -35,9 +35,6 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 	_graphics = make_shared<Graphics>();
 	_graphics->Init(hwnd,_device,_factory, _bufferManager);
 
-	_compute = make_shared<Compute>();
-	_compute->Init(_device);
-
 	_rootsignature = make_shared<RootSignature>();
 	_rootsignature->Init();
 

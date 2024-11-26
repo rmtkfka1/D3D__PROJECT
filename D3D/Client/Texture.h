@@ -54,7 +54,5 @@ private:
 	static D3D12_CPU_DESCRIPTOR_HANDLE _dsvHandle;
 
 	D3D12_RESOURCE_STATES _state; // ÃßÀû¿ë
-
-
 };
 

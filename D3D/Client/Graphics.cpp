@@ -124,6 +124,7 @@ void Graphics::RenderBegin()
 	ThrowIfFailed(cmdMemory->Reset());
 	ThrowIfFailed(cmdList->Reset(cmdMemory, nullptr));
 
+	cmdList->SetComputeRootSignature(core->GetRootSignature()->GetGraphicsRootSignature().Get());
 	cmdList->SetGraphicsRootSignature(core->GetRootSignature()->GetGraphicsRootSignature().Get());
 	cmdList->SetDescriptorHeaps(1, _bufferManager->GetGraphicsTableHeap()->GetDescriptorHeap().GetAddressOf());
 
@@ -161,12 +162,11 @@ void Graphics::Present()
 	_renderTargets->SetIndex(index);
 
 	uint64 nextContextIndex = (_currentContextIndex + 1) % MAX_FRAME_COUNT;
-	WaitForFenceValue(_lastFenceValue[_currentContextIndex]);
+	WaitForFenceValue(_lastFenceValue[nextContextIndex]);
 
+	_currentContextIndex = nextContextIndex;
 	_bufferManager->Clear(_currentContextIndex);
 	_bufferManager->SetIndex(_currentContextIndex);
-
-	//_currentContextIndex = nextContextIndex;
 
 };
 

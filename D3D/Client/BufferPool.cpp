@@ -56,20 +56,6 @@ void ConstantBufferPool::PushGraphicsData(void* buffer, uint32 size)
 	_currentIndex++;
 }
 
-void ConstantBufferPool::PushComputeData(void* buffer, uint32 size)
-{
-	assert(_currentIndex < _elementCount);
-
-	::memcpy(&_mappedBuffer[_currentIndex * _elementSize], buffer, size);
-
-	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(_cpuHandleBegin, _currentIndex * _handleIncrementSize);
-
-	core->GetBufferManager()->GetComputeTableHeap()->CopyCBV(cpuHandle, _reg);
-
-	_currentIndex++;
-
-}
-
 void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
 {
 
@@ -156,41 +142,35 @@ void TextureBufferPool::Init(int32 SrvUavCount, int32 RTVCount ,int32 DSVCount)
 
 }
 
-void TextureBufferPool::FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle)
+void TextureBufferPool::FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE start = _srvHeap.heap->GetCPUDescriptorHandleForHeapStart();
 	DWORD index = (DWORD)(handle.ptr - start.ptr) / _srvHeap.handleIncrementSize;
 
 	assert(index >= 0);
 
-	handle.ptr = NULL;
-
 	_srvHeap.indexGenator[index] = -1;
 	_srvHeap.currentIndex--;
 }
 
-void TextureBufferPool::FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle)
+void TextureBufferPool::FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE start = _rtvHeap.heap->GetCPUDescriptorHandleForHeapStart();
 	DWORD index = (DWORD)(handle.ptr - start.ptr) / _rtvHeap.handleIncrementSize;
 
 	assert(index >= 0);
 
-	handle.ptr = NULL;
-
 	_rtvHeap.indexGenator[index] = -1;
 	_rtvHeap.currentIndex--;
 
 }
 
-void TextureBufferPool::FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle)
+void TextureBufferPool::FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE start = _dsvHeap.heap->GetCPUDescriptorHandleForHeapStart();
 	DWORD index = (DWORD)(handle.ptr - start.ptr) / _dsvHeap.handleIncrementSize;
 
 	assert(index >= 0);
-
-	handle.ptr = NULL;
 
 	_dsvHeap.indexGenator[index] = -1;
 	_dsvHeap.currentIndex--;
@@ -305,7 +285,7 @@ void GraphicsDescriptorTable::Init(uint32 count)
 {
 	_groupCount = count;
 
-	int32 RegisterCount = 5;
+	int32 RegisterCount = 8;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.NumDescriptors = count * RegisterCount;
@@ -338,12 +318,27 @@ void GraphicsDescriptorTable::CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV
 	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, srcHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
+void GraphicsDescriptorTable::CopyUAV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, UAV_REGISTER reg)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE destHandle = GetCPUHandle(reg);
+
+	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, srcHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+
 void GraphicsDescriptorTable::SetGraphicsRootDescriptorTable()
 {
 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
 	core->GetGraphics()->GetCmdList()->SetGraphicsRootDescriptorTable(2, handle);
+	_currentGroupIndex++;
+}
+
+void GraphicsDescriptorTable::SetComputeRootDescriptorTable()
+{
+	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
+	handle.ptr += _currentGroupIndex * _groupSize;
+	core->GetGraphics()->GetCmdList()->SetComputeRootDescriptorTable(2, handle);
 	_currentGroupIndex++;
 }
 
@@ -357,6 +352,11 @@ D3D12_CPU_DESCRIPTOR_HANDLE GraphicsDescriptorTable::GetCPUHandle(SRV_REGISTER r
 	return GetCPUHandle(static_cast<uint32>(reg));
 }
 
+D3D12_CPU_DESCRIPTOR_HANDLE GraphicsDescriptorTable::GetCPUHandle(UAV_REGISTER reg)
+{
+	return GetCPUHandle(static_cast<uint32>(reg));
+}
+
 D3D12_CPU_DESCRIPTOR_HANDLE GraphicsDescriptorTable::GetCPUHandle(uint32 reg)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = _descHeap->GetCPUDescriptorHandleForHeapStart();
@@ -364,86 +364,5 @@ D3D12_CPU_DESCRIPTOR_HANDLE GraphicsDescriptorTable::GetCPUHandle(uint32 reg)
 	handle.ptr += reg * _handleSize;
 	return handle;
 }
-
-/// <summary>
-/// ///////////////////////
-/// </summary>
-/// 
-void ComputeDescriptorTable::Init(uint32 count)
-{
-	_groupCount = count;
-
-	int32 RegisterCount = 5;
-
-	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.NumDescriptors = count * RegisterCount;
-	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-
-	core->GetDevice()->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&_descHeap));
-
-	_handleSize = core->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	_groupSize = _handleSize * (RegisterCount);
-
-
-}
-
-void ComputeDescriptorTable::Clear()
-{
-	_currentGroupIndex = 0;
-}
-
-void ComputeDescriptorTable::CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg)
-{
-	D3D12_CPU_DESCRIPTOR_HANDLE destHandle = GetCPUHandle(reg);
-
-	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, srcHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-}
-
-void ComputeDescriptorTable::CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTER reg)
-{
-	D3D12_CPU_DESCRIPTOR_HANDLE destHandle = GetCPUHandle(reg);
-
-	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, srcHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-}
-
-void ComputeDescriptorTable::CopyUAV(D3D12_CPU_DESCRIPTOR_HANDLE uavHandle, UAV_REGISTER reg)
-{
-	D3D12_CPU_DESCRIPTOR_HANDLE destHandle = GetCPUHandle(reg);
-
-	core->GetDevice()->CopyDescriptorsSimple(1, destHandle, uavHandle, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-}
-
-void ComputeDescriptorTable::SetComputeRootDescriptorTable()
-{
-	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
-	handle.ptr += _currentGroupIndex * _groupSize;
-	COMPUTE->_cmdList->SetComputeRootDescriptorTable(0, handle);
-	_currentGroupIndex++;
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE ComputeDescriptorTable::GetCPUHandle(CBV_REGISTER reg)
-{
-	return GetCPUHandle(static_cast<uint32>(reg));
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE ComputeDescriptorTable::GetCPUHandle(SRV_REGISTER reg)
-{
-	return GetCPUHandle(static_cast<uint32>(reg));
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE ComputeDescriptorTable::GetCPUHandle(UAV_REGISTER reg)
-{
-	return GetCPUHandle(static_cast<uint32>(reg));
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE ComputeDescriptorTable::GetCPUHandle(uint32 reg)
-{
-	D3D12_CPU_DESCRIPTOR_HANDLE handle = _descHeap->GetCPUDescriptorHandleForHeapStart();
-	handle.ptr += _currentGroupIndex * _groupSize;
-	handle.ptr += reg * _handleSize;
-	return handle;
-}
-
 
 

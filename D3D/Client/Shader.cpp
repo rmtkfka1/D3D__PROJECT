@@ -209,7 +209,7 @@ void ComputeShader::Init(const wstring& path)
 
 	CreateShader(finalPath, "CS_Main", "cs_5_0", _csBlob, _pipelineDesc.CS);
 
-	_pipelineDesc.pRootSignature = core->GetRootSignature()->GetComputeRootSignature().Get();
+	_pipelineDesc.pRootSignature = core->GetRootSignature()->GetGraphicsRootSignature().Get();
 
 	HRESULT hr = core->GetDevice()->CreateComputePipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));
 	assert(SUCCEEDED(hr));
@@ -217,7 +217,7 @@ void ComputeShader::Init(const wstring& path)
 
 void ComputeShader::SetPipelineState()
 {
-	COMPUTE->GetCmdList()->SetPipelineState(_pipelineState.Get());
+	GRAPHICS->GetCmdList()->SetPipelineState(_pipelineState.Get());
 }
 
 

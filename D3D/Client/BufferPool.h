@@ -34,7 +34,7 @@ class ConstantBufferPool
 public:
 	void Init(CBV_REGISTER reg, uint32 size, uint32 count);
 	void PushGraphicsData(void* buffer, uint32 size);
-	void PushComputeData(void* buffer, uint32 size);
+
 	void SetData(int index ,void* buffer, uint32 size);
 
 	void Clear();
@@ -79,9 +79,9 @@ class TextureBufferPool
 public:
 	void Init(int32 SrvUavCount , int32 RTVCount , int32 DSVCount);
 
-	void FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
-	void FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
-	void FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
+	void FreeSRVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
+	void FreeRTVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
+	void FreeDSVHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle);
 
 
 	void AllocSRVDescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE* hanlde);
@@ -124,49 +124,17 @@ public:
 	void Clear();
 	void CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg);
 	void CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTER reg);
+	void CopyUAV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, UAV_REGISTER reg);
+
 	void SetGraphicsRootDescriptorTable();
+	void SetComputeRootDescriptorTable();
 	ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return _descHeap; }
 
 
 private:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(CBV_REGISTER reg);
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(SRV_REGISTER reg);
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(uint32 reg);
-
-private:
-	ComPtr<ID3D12DescriptorHeap> _descHeap;
-
-	uint64					_handleSize = 0;
-	uint64					_groupSize = 0;
-	uint64					_groupCount = 0;
-	uint32					_currentGroupIndex = 0;
-
-};
-
-/*********************************
-*                                *
-*    ComputeDescriptorTable      *
-*                                *
-**********************************/
-
-class ComputeDescriptorTable
-{
-public:
-	void Init(uint32 count);
-	void Clear();
-
-	void CopyCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg);
-	void CopySRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTER reg);
-	void CopyUAV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, UAV_REGISTER reg);
-
-	void SetComputeRootDescriptorTable();
-	ComPtr<ID3D12DescriptorHeap>& GetDescriptorHeap() { return _descHeap; }
-
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(CBV_REGISTER reg);
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(SRV_REGISTER reg);
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(UAV_REGISTER reg);
-
-private:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(uint32 reg);
 
 private:
@@ -176,13 +144,6 @@ private:
 	uint64					_groupSize = 0;
 	uint64					_groupCount = 0;
 	uint32					_currentGroupIndex = 0;
+
 };
-
-
-
-
-
-
-
-
 

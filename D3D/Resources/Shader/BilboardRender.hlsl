@@ -57,6 +57,10 @@ VS_OUT VS_Main(VS_IN input)
     return output;
 }
 
+//[큐]
+//[그래픽스큐] [컴퓨트큐]
+
+//-> [] ->[] -> []
 PS_OUT PS_Main(VS_OUT input)
 {
   

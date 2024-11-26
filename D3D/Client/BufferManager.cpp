@@ -19,9 +19,6 @@ void BufferManager::Init()
 	{
 		_table[i] = make_shared<GraphicsDescriptorTable>();
 		_table[i]->Init(255);
-
-		_computeTable[i] = make_shared<ComputeDescriptorTable>();
-		_computeTable[i]->Init(255);
 	}
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
@@ -50,7 +47,7 @@ void BufferManager::Init()
 	}
 
 	_textureBufferPool = make_shared<TextureBufferPool>();
-	_textureBufferPool->Init(255,SWAP_CHAIN_FRAME_COUNT*2+3,1);
+	_textureBufferPool->Init(255,SWAP_CHAIN_FRAME_COUNT + 4,1);
 
 
 
@@ -61,7 +58,6 @@ void BufferManager::Clear(int nextValue)
 	_WorldBufferPool[nextValue]->Clear();
 	_CameraBufferPool[nextValue]->Clear();
 	_table[nextValue]->Clear();
-	_computeTable[nextValue]->Clear();
 	_materialParamsBufferPool[nextValue]->Clear();
 }
 

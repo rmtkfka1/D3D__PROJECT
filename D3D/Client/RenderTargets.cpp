@@ -20,11 +20,10 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 	{
 		_RenderTargets[i] = make_shared<Texture>();
-		_InterMediateTexture[i] = make_shared<Texture>();
 	}
 
 	_DSTexture = make_shared<Texture>();
-
+	_InterMediateTexture = make_shared<Texture>();
 
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WndWidth),static_cast<float>(WndHeight), 0,1.0f };
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WndWidth),static_cast<LONG>(WndHeight) };
@@ -35,10 +34,10 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 	{
 		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
-		_InterMediateTexture[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
 	}
 
-	_index = swapchain->GetCurrentBackBufferIndex();
+	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
+	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
 	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
 }
 
@@ -55,12 +54,11 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	}
 
 	core->GetBufferManager()->GetTextureBufferPool()->FreeDSVHandle(_DSTexture->GetDSVCpuHandle());
-
+	core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_InterMediateTexture->GetRTVCpuHandle());
 
 	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
 	{
 		core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_RenderTargets[n]->GetRTVCpuHandle());
-		core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_InterMediateTexture[n]->GetRTVCpuHandle());
 		_RenderTargets[n]->GetResource().Reset();
 	}
 
@@ -69,7 +67,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 		__debugbreak();
 	}
 
-	_index = swapchain->GetCurrentBackBufferIndex();
+	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
 
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 		swapchain->GetBuffer(i, IID_PPV_ARGS(&_RenderTargets[i]->GetResource()));
@@ -78,14 +76,13 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	{
 
 		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true);
-		_InterMediateTexture[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
 	}
 
 
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(BackBufferWidth),static_cast<float>(BackBufferHeight), 0,1.0f };
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(BackBufferWidth),static_cast<LONG>(BackBufferHeight) };
 
-
+	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
 
 	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->GenTexture();
 
@@ -99,13 +96,13 @@ void RenderTargets::RenderBegin()
 {
 	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdList();
 
-	_InterMediateTexture[_index]->ResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET);
+	_InterMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 	const float BackColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	cmdList->RSSetViewports(1, &_viewport);
 	cmdList->RSSetScissorRects(1, &_scissorRect);
-	cmdList->ClearRenderTargetView(_InterMediateTexture[_index]->GetRTVCpuHandle(), BackColor, 0, nullptr);
-	cmdList->OMSetRenderTargets(1, &_InterMediateTexture[_index]->GetRTVCpuHandle(), FALSE, &_InterMediateTexture[_index]->GetDSVCpuHandle());
+	cmdList->ClearRenderTargetView(_InterMediateTexture->GetRTVCpuHandle(), BackColor, 0, nullptr);
+	cmdList->OMSetRenderTargets(1, &_InterMediateTexture->GetRTVCpuHandle(), FALSE, &_InterMediateTexture->GetDSVCpuHandle());
 
 }
 
@@ -113,12 +110,12 @@ void RenderTargets::RenderEnd()
 {
 	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdList();
 
-	_RenderTargets[_index]->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
-	_InterMediateTexture[_index]->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
+	_RenderTargets[_RenderTargetIndex]->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
+	_InterMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
 
-	cmdList->CopyResource(_RenderTargets[_index]->GetResource().Get(), _InterMediateTexture[_index]->GetResource().Get());
+	cmdList->CopyResource(_RenderTargets[_RenderTargetIndex]->GetResource().Get(), _InterMediateTexture->GetResource().Get());
 
-	_RenderTargets[_index]->ResourceBarrier(D3D12_RESOURCE_STATE_PRESENT);
+	_RenderTargets[_RenderTargetIndex]->ResourceBarrier(D3D12_RESOURCE_STATE_PRESENT);
 	cmdList->Close();
 }
 

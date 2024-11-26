@@ -31,7 +31,6 @@ public:
 	shared_ptr<RootSignature>& GetRootSignature() { return _rootsignature; }
 
 	shared_ptr<Graphics>& GetGraphics() { return _graphics; }
-	shared_ptr<Compute>& GetCompute() { return _compute; }
 
 private:
 	HWND _hwnd = nullptr;
@@ -44,10 +43,8 @@ private:
 	shared_ptr<BufferManager> _bufferManager = nullptr;
 	shared_ptr<D3D12ResourceManager> _resourceManager=nullptr;
 	shared_ptr<RootSignature> _rootsignature;
-
-
 	shared_ptr<Graphics> _graphics;
-	shared_ptr<Compute> _compute;
+
 
 
 public:

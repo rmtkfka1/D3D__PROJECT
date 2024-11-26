@@ -14,20 +14,7 @@ Texture::Texture():ResourceBase(ResourceType::Texture)
 
 Texture::~Texture()
 {
-    if (_srvHandle.ptr)
-    {
-        core->GetBufferManager()->GetTextureBufferPool()->FreeSRVHandle(_srvHandle);
-    }
-
-    if (_uavHandle.ptr)
-    {
-        core->GetBufferManager()->GetTextureBufferPool()->FreeSRVHandle(_uavHandle);
-    }
-
-    if (_rtvHandle.ptr)
-    {
-        core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_rtvHandle);
-    }
+	
 }
 
 void Texture::Init(const wstring& path,TextureType type)
@@ -151,7 +138,6 @@ void Texture::ResourceBarrier(D3D12_RESOURCE_STATES after)
     GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), _state, after));
     _state = after;
 }
-
 
 
 void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalState,uint32 width, uint32 height, TextureUsageFlags usageFlags ,bool jump)
