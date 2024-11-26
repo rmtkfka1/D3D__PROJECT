@@ -20,7 +20,7 @@ cbuffer materialparams : register(b3)
 };
 
 static float Luminance[3] = { 0.2126f, 0.7152f, 0.072f };
-static float th = 0.3f;
+static float th = 0.9f;
 
 [numthreads(16, 16, 1)]
 void CS_Main(int3 threadIndex : SV_DispatchThreadID)

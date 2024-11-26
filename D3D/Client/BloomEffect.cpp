@@ -51,7 +51,6 @@ void BloomEffect::GenTexture()
 	_bloomTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT,
 		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
-	
 }
 
 
@@ -93,7 +92,7 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 		Blurring(disPatchX, disPatchY, disPatchZ);
 	}
 	
-	////////블룸효과처리
+	//////////블룸효과처리
 	BloomProcess(disPatchX,disPatchY,disPatchZ);
 
 	//계산된 결과를  _interMediateTexture 에 다시복사
