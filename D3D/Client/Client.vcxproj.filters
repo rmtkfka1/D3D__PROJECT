@@ -450,6 +450,12 @@
     <FxCompile Include="..\Resources\Shader\yblur.hlsl">
       <Filter>04.HLSL\compute</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\blackShader.hlsl">
+      <Filter>04.HLSL\compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\bloomShader.hlsl">
+      <Filter>04.HLSL\compute</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">

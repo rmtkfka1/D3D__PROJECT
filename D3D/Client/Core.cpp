@@ -255,19 +255,15 @@ void Core::Fence()
 	_cmdQueue->Signal(_fence.Get(), _fenceValue);
 	_lastFenceValue[_currentContextIndex] = _fenceValue;
 
-};
-
-
-void Core::WaitForFenceValue(uint64 ExpectedFenceValue)
+}
+void Core::WaitForFenceValue(uint64_t ExpectedFenceValue)
 {
-
 	if (_fence->GetCompletedValue() < ExpectedFenceValue)
 	{
 		_fence->SetEventOnCompletion(ExpectedFenceValue, _fenceEvent);
 
 		::WaitForSingleObject(_fenceEvent, INFINITE);
 	}
-
 };
 
 void Core::WaitForAllFence()
@@ -335,7 +331,7 @@ void Core::RenderBegin()
 
 	cmdList->SetComputeRootSignature(core->GetRootSignature()->GetGraphicsRootSignature().Get());
 	cmdList->SetGraphicsRootSignature(core->GetRootSignature()->GetGraphicsRootSignature().Get());
-	cmdList->SetDescriptorHeaps(1, _bufferManager->GetGraphicsTableHeap()->GetDescriptorHeap().GetAddressOf());
+	cmdList->SetDescriptorHeaps(1, _bufferManager->GetTable()->GetDescriptorHeap().GetAddressOf());
 
 };
 

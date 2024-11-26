@@ -45,7 +45,7 @@ void Transform::PushData()
     TransformParams transformParams = {};
     transformParams.matWorld = _matWorld;
 
-    core->GetBufferManager()->GetWorldBufferPool()->PushGraphicsData(&transformParams, sizeof(transformParams));
+    core->GetBufferManager()->GetWorldBufferPool()->PushData(&transformParams, sizeof(transformParams));
 }
 
 void Transform::AddMove(const vec3& shift)

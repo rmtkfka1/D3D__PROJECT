@@ -23,7 +23,7 @@ void Material::PushData()
 	if (_diffuseTexture)
 	{
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t0));
-		core->GetBufferManager()->GetGraphicsTableHeap()->CopySRV(_diffuseTexture->GetSRVCpuHandle(), reg);
+		core->GetBufferManager()->GetTable()->CopySRV(_diffuseTexture->GetSRVCpuHandle(), reg);
 		_params.SetTexon(0, 1);
 	}
 	else
@@ -34,7 +34,7 @@ void Material::PushData()
 	if (_normalTexture)
 	{
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t1));
-		core->GetBufferManager()->GetGraphicsTableHeap()->CopySRV(_normalTexture->GetSRVCpuHandle(), reg);
+		core->GetBufferManager()->GetTable()->CopySRV(_normalTexture->GetSRVCpuHandle(), reg);
 		_params.SetTexon(1, 1);
 	}
 	else
@@ -45,7 +45,7 @@ void Material::PushData()
 	if (_SpecularTexture)
 	{
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t2));
-		core->GetBufferManager()->GetGraphicsTableHeap()->CopySRV(_SpecularTexture->GetSRVCpuHandle(), reg);
+		core->GetBufferManager()->GetTable()->CopySRV(_SpecularTexture->GetSRVCpuHandle(), reg);
 		_params.SetTexon(2, 1);
 	}
 	else
@@ -54,7 +54,7 @@ void Material::PushData()
 	}
 
 
-	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushGraphicsData(&_params, sizeof(_params));
+	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushData(&_params, sizeof(_params));
 	
 }
 

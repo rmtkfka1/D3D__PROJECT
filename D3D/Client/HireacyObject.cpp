@@ -54,7 +54,7 @@ void HireacyObject::Render()
 			data->material->PushData();
 		}
 
-		core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
+		core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
 
 		data->meshes->Render();
 	}

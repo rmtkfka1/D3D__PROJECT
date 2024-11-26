@@ -17,8 +17,8 @@ void BufferManager::Init()
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
-		_table[i] = make_shared<GraphicsDescriptorTable>();
-		_table[i]->Init(255);
+		_table[i] = make_shared<DescriptorTable>();
+		_table[i]->Init(10000);
 	}
 
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
@@ -43,7 +43,7 @@ void BufferManager::Init()
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_materialParamsBufferPool[i] = make_shared<ConstantBufferPool>();
-		_materialParamsBufferPool[i]->Init(CBV_REGISTER::b3, sizeof(MaterialParams), 255); //b0 는 계산에 이용되지않음
+		_materialParamsBufferPool[i]->Init(CBV_REGISTER::b3, sizeof(MaterialParams), 10000); //b0 는 계산에 이용되지않음
 	}
 
 	_textureBufferPool = make_shared<TextureBufferPool>();

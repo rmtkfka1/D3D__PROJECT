@@ -36,7 +36,9 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
 	}
 
-	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
+	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV
+		|TextureUsageFlags::SRV, false);
+
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
 	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
 }
@@ -82,7 +84,8 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(BackBufferWidth),static_cast<float>(BackBufferHeight), 0,1.0f };
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(BackBufferWidth),static_cast<LONG>(BackBufferHeight) };
 
-	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, false);
+	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV
+		|TextureUsageFlags::SRV, false);
 
 	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->GenTexture();
 

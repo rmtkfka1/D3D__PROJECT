@@ -16,23 +16,26 @@ public:
 	void GenTexture();
 
 	void Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
-	void PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
-
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
 
 private:
 	void PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
-	void JustRender();
-
+	void Blurring(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+	void Black(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+	void BloomProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 
 private:
 	shared_ptr<ComputeShader>		_xblurShader;
 	shared_ptr<ComputeShader>		_yblurShader;
-	MaterialParams					_params;
+	shared_ptr<ComputeShader>       _blackShader;
+	shared_ptr<ComputeShader>       _bloomShader;
 	
-	shared_ptr<Texture>             _texture;
+	shared_ptr<Texture>             _texture; 
 	shared_ptr<Texture>             _texture2;
+	shared_ptr<Texture>             _bloomTexture;
 	shared_ptr<Texture>				_interMediateTexture;
+
+	MaterialParams					_params;
 };
 

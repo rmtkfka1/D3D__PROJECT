@@ -33,7 +33,7 @@ class ConstantBufferPool
 {
 public:
 	void Init(CBV_REGISTER reg, uint32 size, uint32 count);
-	void PushGraphicsData(void* buffer, uint32 size);
+	void PushData(void* buffer, uint32 size);
 
 	void SetData(int index ,void* buffer, uint32 size);
 
@@ -115,7 +115,7 @@ private:
 **********************************/
 
 
-class GraphicsDescriptorTable
+class DescriptorTable
 {
 
 public:

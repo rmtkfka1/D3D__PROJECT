@@ -257,20 +257,20 @@ void Stage1::BulidDeferred()
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
-	//{
-	//	shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-	//	gameobject->SetFrustumCuling(false);
-	//	gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1.0f);
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1.0f);
 
-	//	shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"image_1.jpg", TextureType::Texture2D);
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"image_1.jpg", TextureType::Texture2D);
 
-	//	shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"test.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"test.hlsl");
 
-	//	gameobject->SetShader(shader);
-	//	gameobject->GetMaterial()->SetDiffuseTexture(texture);
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
-	//	AddGameObject(gameobject, RenderingType::Deferred);
-	//}
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
 
 
 
@@ -448,7 +448,7 @@ void Stage1::FinalRender()
 		shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
 		shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
 		material->PushData();
-		core->GetBufferManager()->GetGraphicsTableHeap()->SetGraphicsRootDescriptorTable();
+		core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
 		mesh->Render();
 	}
 

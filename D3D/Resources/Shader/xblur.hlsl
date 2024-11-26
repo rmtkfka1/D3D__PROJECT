@@ -24,6 +24,11 @@ static const float weights[11] =
     0.05f, 0.05f, 0.1f, 0.1f, 0.1f, 0.2f, 0.1f, 0.1f, 0.1f, 0.05f, 0.05f,
 };
 
+//static const float weights[5] =
+//{
+//    0.0545f, 0.2442f, 0.4026f, 0.2442f, 0.0545f
+//};
+
 static const int blurRadius = 5;
 
 [numthreads(16, 16, 1)]
