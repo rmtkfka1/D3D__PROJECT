@@ -220,9 +220,6 @@
     <ClInclude Include="BufferManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
-    <ClInclude Include="Compute.h">
-      <Filter>02.Core\core</Filter>
-    </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>02.Core\core</Filter>
     </ClInclude>
@@ -395,9 +392,6 @@
       <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp">
-      <Filter>02.Core\core</Filter>
-    </ClCompile>
-    <ClCompile Include="Compute.cpp">
       <Filter>02.Core\core</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">

@@ -10,7 +10,7 @@
 #include "Material.h"
 #include "BufferManager.h"
 #include "Core.h"
-#include "Compute.h"
+
 
 Graphics::Graphics()
 {

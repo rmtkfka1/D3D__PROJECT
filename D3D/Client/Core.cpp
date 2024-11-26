@@ -11,7 +11,7 @@
 #include "SteamOutputBuffer.h"
 #include "Graphics.h"
 #include "BufferManager.h"
-#include "Compute.h"
+
 
 
 Core::Core()

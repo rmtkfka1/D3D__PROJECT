@@ -171,7 +171,6 @@
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="CollisonManager.h" />
-    <ClInclude Include="Compute.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="CustomObject.h" />
     <ClInclude Include="D3D12ResourceManager.h" />
@@ -238,7 +237,6 @@
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CollisonManager.cpp" />
-    <ClCompile Include="Compute.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CustomObject.cpp" />
     <ClCompile Include="D3D12ResourceManager.cpp" />
