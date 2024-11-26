@@ -53,9 +53,6 @@
     <Filter Include="리소스 파일\Utils">
       <UniqueIdentifier>{df27f001-bb9d-491c-a9a8-ccd65aeb2505}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Core\core">
-      <UniqueIdentifier>{46a8a73e-4fa0-4f7f-a58e-8c24c4ee95ca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.GameObject\04.PostProcess">
       <UniqueIdentifier>{e5afacb5-cb0f-409b-9edd-b370d434838b}</UniqueIdentifier>
     </Filter>
@@ -220,11 +217,11 @@
     <ClInclude Include="BufferManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core.h">
-      <Filter>02.Core\core</Filter>
-    </ClInclude>
     <ClInclude Include="BloomEffect.h">
       <Filter>05.GameObject\04.PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>02.Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -388,11 +385,11 @@
     <ClCompile Include="BufferManager.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>02.Core\core</Filter>
-    </ClCompile>
     <ClCompile Include="BloomEffect.cpp">
       <Filter>05.GameObject\04.PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>02.Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

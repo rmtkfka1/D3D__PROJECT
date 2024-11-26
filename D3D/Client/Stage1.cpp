@@ -65,8 +65,6 @@ void Stage1::Run()
 	DeferredRender();
 	core->GetGBuffer()->RenderEnd();
 
-
-	
 	core->GetRenderTarget()->RenderBegin();
 	FinalRender();
 	ForwardRender();
