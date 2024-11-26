@@ -51,7 +51,7 @@ void Scene::LateUpdate()
 
 	if (_reserveAddQueue.empty() == false || _reserveDeleteQueue.empty() == false)
 	{
-		core->GetGraphics()->WaitForAllFence();
+		core->WaitForAllFence();
 	}
 
 	while (!_reserveAddQueue.empty())

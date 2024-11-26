@@ -173,7 +173,7 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 
 void GraphicsShader::SetPipelineState()
 {
-	core->GetGraphics()->GetCmdList()->SetPipelineState(_pipelineState.Get());
+	core->GetCmdList()->SetPipelineState(_pipelineState.Get());
 }
 
 
@@ -217,7 +217,7 @@ void ComputeShader::Init(const wstring& path)
 
 void ComputeShader::SetPipelineState()
 {
-	GRAPHICS->GetCmdList()->SetPipelineState(_pipelineState.Get());
+	core->GetCmdList()->SetPipelineState(_pipelineState.Get());
 }
 
 

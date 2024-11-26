@@ -47,9 +47,9 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	{
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetName(L"finalMaterial");
-		material->SetDiffuseTexture(core->GetGraphics()->GetGBuffer()->GetTexture(0));
-		material->SetNormalTexture(core->GetGraphics()->GetGBuffer()->GetTexture(1));
-		material->SetSpecularTexture(core->GetGraphics()->GetGBuffer()->GetTexture(2)); //ALBEDO
+		material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
+		material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
+		material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2)); //ALBEDO
 		ResourceManager::GetInstance()->Add<Material>(L"finalMaterial", material);
 	}
 
@@ -94,7 +94,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 
 void RenderTargets::RenderBegin()
 {
-	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdList();
+	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdList();
 
 	_InterMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET);
 
@@ -108,7 +108,7 @@ void RenderTargets::RenderBegin()
 
 void RenderTargets::RenderEnd()
 {
-	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdList();
+	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdList();
 
 	_RenderTargets[_RenderTargetIndex]->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
 	_InterMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
@@ -121,7 +121,7 @@ void RenderTargets::RenderEnd()
 
 void RenderTargets::ClearDepth()
 {
-	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetGraphics()->GetCmdList();
+	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdList();
 	cmdList->ClearDepthStencilView(_DSTexture->GetDSVCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
@@ -175,7 +175,7 @@ void GBuffer::Init()
 
 void GBuffer::RenderBegin()
 {
-	auto& list = core->GetGraphics()->GetCmdList();
+	auto& list = core->GetCmdList();
 	float arrFloat[4] = {1, 1, 1, 1 };
 
 	for (uint32 i = 0; i < _count; i++)
@@ -196,7 +196,7 @@ void GBuffer::RenderBegin()
 
 void GBuffer::RenderEnd()
 {
-	auto& list = core->GetGraphics()->GetCmdList();
+	auto& list = core->GetCmdList();
 
 	for (uint32 i = 0; i < _count; i++)
 	{

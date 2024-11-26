@@ -135,7 +135,7 @@ void Texture::ResourceBarrier(D3D12_RESOURCE_STATES after)
         return;
     }
 
-    GRAPHICS->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), _state, after));
+    core->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(_resource.Get(), _state, after));
     _state = after;
 }
 

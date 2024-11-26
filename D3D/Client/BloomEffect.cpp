@@ -5,7 +5,6 @@
 #include "BufferPool.h"
 #include "BufferManager.h"
 #include "Texture.h"
-#include "Graphics.h"
 #include "RenderTargets.h"
 BloomEffect::BloomEffect()
 {
@@ -34,7 +33,7 @@ void BloomEffect::GenTexture()
 	_texture2->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT,
 		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
 
-	_interMediateTexture = GRAPHICS->GetRenderTarget()->GetInterMediateTexture();
+	_interMediateTexture = core->GetRenderTarget()->GetInterMediateTexture();
 }
 
 
@@ -71,7 +70,7 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
 	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
 
-	GRAPHICS->GetCmdList()->CopyResource(_texture->GetResource().Get(), _interMediateTexture->GetResource().Get());
+	core->GetCmdList()->CopyResource(_texture->GetResource().Get(), _interMediateTexture->GetResource().Get());
 
 
 	for (int i = 0; i < 10; ++i)
@@ -82,7 +81,7 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	//계산된 결과를  _interMediateTexture 에 다시복사
 	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
 	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
-	GRAPHICS->GetCmdList()->CopyResource(_interMediateTexture->GetResource().Get(), _texture->GetResource().Get());
+	core->GetCmdList()->CopyResource(_interMediateTexture->GetResource().Get(), _texture->GetResource().Get());
 	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
 	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
 
@@ -107,7 +106,7 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 		core->GetBufferManager()->GetMaterialParamsBufferPool()->PushGraphicsData(&_params, sizeof(_params));
 		core->GetBufferManager()->GetGraphicsTableHeap()->SetComputeRootDescriptorTable();
 
-		GRAPHICS->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
+		core->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
 
 	}
 
@@ -127,7 +126,7 @@ void BloomEffect::PingPongRender(int32 disPatchX, int32 disPatchY, int32 disPatc
 		_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 		_texture2->ResourceBarrier(D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);
 
-		GRAPHICS->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
+		core->GetCmdList()->Dispatch(disPatchX, disPatchY, disPatchZ);
 	
 	}
 

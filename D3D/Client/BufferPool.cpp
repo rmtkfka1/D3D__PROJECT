@@ -64,7 +64,7 @@ void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
 	if (index == 0) //라이팅에 연산될것이므로 한번셋팅하고 건들지않는다.
 	{
 		::memcpy(&_mappedBuffer[0], buffer, size);
-		core->GetGraphics()->GetCmdList()->SetGraphicsRootConstantBufferView(0, _cbvBufferPool->GetGPUVirtualAddress());
+		core->GetCmdList()->SetGraphicsRootConstantBufferView(0, _cbvBufferPool->GetGPUVirtualAddress());
 	}
 
 	else if(index ==1) //카메라 계산에 연산될것이므로 오프셋 계산필요함.
@@ -72,7 +72,7 @@ void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
 		::memcpy(&_mappedBuffer[_currentIndex * _elementSize], buffer, size);
 		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = _cbvBufferPool->GetGPUVirtualAddress();
 		objCBAddress += _currentIndex * _elementSize;
-		core->GetGraphics()->GetCmdList()->SetGraphicsRootConstantBufferView(1, objCBAddress);
+		core->GetCmdList()->SetGraphicsRootConstantBufferView(1, objCBAddress);
 		_currentIndex++;
 	}
 
@@ -330,7 +330,7 @@ void GraphicsDescriptorTable::SetGraphicsRootDescriptorTable()
 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
-	core->GetGraphics()->GetCmdList()->SetGraphicsRootDescriptorTable(2, handle);
+	core->GetCmdList()->SetGraphicsRootDescriptorTable(2, handle);
 	_currentGroupIndex++;
 }
 
@@ -338,7 +338,7 @@ void GraphicsDescriptorTable::SetComputeRootDescriptorTable()
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
-	core->GetGraphics()->GetCmdList()->SetComputeRootDescriptorTable(2, handle);
+	core->GetCmdList()->SetComputeRootDescriptorTable(2, handle);
 	_currentGroupIndex++;
 }
 

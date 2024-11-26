@@ -58,22 +58,22 @@ void Stage1::Run()
 	LightManager::GetInstnace()->SetData();
 	Scene::Run();
 
-	core->GetGraphics()->GetRenderTarget()->ClearDepth();
+	core->GetRenderTarget()->ClearDepth();
 	CameraControl();
 
-	core->GetGraphics()->GetGBuffer()->RenderBegin();
+	core->GetGBuffer()->RenderBegin();
 	DeferredRender();
-	core->GetGraphics()->GetGBuffer()->RenderEnd();
+	core->GetGBuffer()->RenderEnd();
 
 
 	
-	core->GetGraphics()->GetRenderTarget()->RenderBegin();
+	core->GetRenderTarget()->RenderBegin();
 	FinalRender();
 	ForwardRender();
 	BoundingBoxRender();
 	UiObjectRender();
 	ComputePass();
-	core->GetGraphics()->GetRenderTarget()->RenderEnd();
+	core->GetRenderTarget()->RenderEnd();
 
 
 
@@ -290,7 +290,7 @@ void Stage1::BulidForward()
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
 		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishader.hlsl"));
 
-		object->GetMaterial()->SetDiffuseTexture(GRAPHICS->GetGBuffer()->GetTexture(i));
+		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
 		
 		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
 		object->GetTransform()->SetLocalPosition(vec3(-850.0f + 200.0f * i, 400.0f, 1.0f));
@@ -445,7 +445,7 @@ void Stage1::FinalRender()
 {
 	
 	{
-		auto& list = GRAPHICS->GetCmdList();
+		auto& list = core->GetCmdList();
 		ResourceManager::GetInstance()->Get<GraphicsShader>(L"final.hlsl")->SetPipelineState();
 		shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
 		shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");

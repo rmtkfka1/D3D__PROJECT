@@ -39,7 +39,7 @@ void HireacyObject::Update()
 
 void HireacyObject::Render()
 {
-	auto& list = core->GetGraphics()->GetCmdList();
+	auto& list = core->GetCmdList();
 
 	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
 
