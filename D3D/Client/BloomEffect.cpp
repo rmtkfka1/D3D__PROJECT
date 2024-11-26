@@ -6,6 +6,17 @@
 #include "BufferManager.h"
 #include "Texture.h"
 #include "RenderTargets.h"
+
+namespace ENUM
+{
+	enum PostProceesType
+	{
+		None,
+		Bloom,
+		Blurring
+	};
+};
+
 BloomEffect::BloomEffect()
 {
 	{
@@ -56,27 +67,39 @@ void BloomEffect::GenTexture()
 
 void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
+	
+	static ENUM::PostProceesType type=ENUM::PostProceesType::None;
 
-	static int count = 0;
 
-	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Q))
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::SEVEN))
 	{
-		count = (count + 1) % 3;;
+		type = ENUM::None;
 	}
 
-	if (count == 0)
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::EIGHT))
+	{
+		type = ENUM::Bloom;
+	}
+
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::NINE))
+	{
+		type = ENUM::Blurring;
+	}
+
+
+	if (type== ENUM::None)
 	{
 		return;
 	}
-	else if(count==1)
+
+	else if (type == ENUM::Bloom)
 	{
 		Bloom(disPatchX, disPatchY, disPatchZ);
 	}
-	else if (count == 2)
+	else if (type == ENUM::Blurring)
 	{
 		Blurring(disPatchX, disPatchY, disPatchZ);
 	}
-
 	
 }
 
@@ -89,7 +112,7 @@ void BloomEffect::Bloom(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	//원복테스쳐 블랙색상으로 
 	BlackProcess(disPatchX, disPatchY, disPatchZ);
 
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 50; ++i)
 	{
 		BlurringProcess(disPatchX, disPatchY, disPatchZ);
 	}

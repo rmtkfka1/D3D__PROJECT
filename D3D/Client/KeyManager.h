@@ -19,6 +19,10 @@ enum class KEY_TYPE
 	ONE = '1',
 	TWO = '2',
 	THREE = '3',
+
+	SEVEN = '7',
+	EIGHT ='8',
+	NINE = '9',
 	SPACE = VK_SPACE,
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
