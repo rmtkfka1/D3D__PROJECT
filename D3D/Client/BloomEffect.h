@@ -20,9 +20,11 @@ public:
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
 
 private:
-	void PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+	void Bloom(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 	void Blurring(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
-	void Black(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+
+	void BlurringProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
+	void BlackProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 	void BloomProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 
 private:

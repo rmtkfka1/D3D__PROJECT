@@ -94,5 +94,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
 
     result += g_tex_2.Sample(g_sam_0, input.uv * 0.20f);
     
+    result = clamp(result, 0, 1.0f);
+    
     return result;
 }

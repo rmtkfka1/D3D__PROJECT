@@ -20,7 +20,7 @@ cbuffer materialparams : register(b3)
 };
 
 
-static float weight = 1.0f;
+static float weight = 0.8f;
 
 [numthreads(16, 16, 1)]
 void CS_Main(int3 threadIndex : SV_DispatchThreadID)

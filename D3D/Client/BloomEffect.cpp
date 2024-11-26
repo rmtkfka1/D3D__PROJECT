@@ -57,22 +57,24 @@ void BloomEffect::GenTexture()
 void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 
-	static int count = -1;
+	static int count = 0;
 
 	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::Q))
 	{
-		count *= -1;
+		count = (count + 1) % 3;;
 	}
 
-
-
-	if (count == 1)
-	{
-		PostProcess(disPatchX, disPatchY, disPatchZ);
-	}
-	else
+	if (count == 0)
 	{
 		return;
+	}
+	else if(count==1)
+	{
+		Bloom(disPatchX, disPatchY, disPatchZ);
+	}
+	else if (count == 2)
+	{
+		Blurring(disPatchX, disPatchY, disPatchZ);
 	}
 
 	
@@ -81,15 +83,15 @@ void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 
 
 
-void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
+void BloomEffect::Bloom(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 
 	//원복테스쳐 블랙색상으로 
-	Black(disPatchX, disPatchY, disPatchZ);
+	BlackProcess(disPatchX, disPatchY, disPatchZ);
 
 	for (int i = 0; i < 20; ++i)
 	{
-		Blurring(disPatchX, disPatchY, disPatchZ);
+		BlurringProcess(disPatchX, disPatchY, disPatchZ);
 	}
 	
 	//////////블룸효과처리
@@ -102,9 +104,24 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 
 }
 
-
-
 void BloomEffect::Blurring(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
+{
+
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
+	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
+	core->GetCmdList()->CopyResource(_texture->GetResource().Get(), _interMediateTexture->GetResource().Get());
+
+	for (int i = 0; i < 20; ++i)
+	{
+		BlurringProcess(disPatchX, disPatchY, disPatchZ);
+	}
+
+	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
+	core->GetCmdList()->CopyResource(_interMediateTexture->GetResource().Get(), _texture->GetResource().Get());
+}
+
+void BloomEffect::BlurringProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	// Common 으로 만들면 드라이버가 자동으로잡아주나???
 
@@ -149,7 +166,7 @@ void BloomEffect::Blurring(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 
 }
 
-void BloomEffect::Black(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
+void BloomEffect::BlackProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE);

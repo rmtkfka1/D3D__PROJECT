@@ -247,7 +247,7 @@ void Stage1::BulidDeferred()
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/result.dds", TextureType::CubeMap);
 
 		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
 
@@ -257,20 +257,23 @@ void Stage1::BulidDeferred()
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
-	//{
-	//	shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-	//	gameobject->SetFrustumCuling(false);
-	//	gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1.0f);
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1000.0f);
 
-	//	shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"image_2.jpg", TextureType::Texture2D);
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"bloomTest1.jpg", TextureType::Texture2D);
 
-	//	shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"test.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
 
-	//	gameobject->SetShader(shader);
-	//	gameobject->GetMaterial()->SetDiffuseTexture(texture);
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
-	//	AddGameObject(gameobject, RenderingType::Deferred);
-	//}
+		gameobject->GetTransform()->SetLocalPosition(vec3(6000.0f, 2000.0f, 4000.0f));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
 
 
 
@@ -324,11 +327,11 @@ void Stage1::BulidForward()
 
 		shared_ptr<Sea> gameobject = make_shared<Sea>();
 		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1000.0f);
 		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"sea.hlsl"));
 		
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, 0));
+		gameobject->GetTransform()->SetLocalPosition(vec3(6000.0f, 2000.0f, 0));
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
@@ -338,11 +341,11 @@ void Stage1::BulidForward()
 
 		shared_ptr<Sea> gameobject = make_shared<Sea>();
 		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1000.0f);
 		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest.hlsl"));
 
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, 5000.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(6000.0f, 2000.0f, 2000.0f));
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
@@ -352,11 +355,11 @@ void Stage1::BulidForward()
 		shared_ptr<Sea> gameobject = make_shared<Sea>();
 
 		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(2000.0f);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1000.0f);
 		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"seatest2.hlsl"));
 
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(9000.0f, 2000.0f, -5000.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(6000.0f, 2000.0f, -2000.0f));
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 180.0f));
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
