@@ -81,9 +81,9 @@ void BloomEffect::PostProcess(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 
 	//계산된 결과를  _interMediateTexture 에 다시복사
 	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_DEST);
-	_texture2->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
-	GRAPHICS->GetCmdList()->CopyResource(_interMediateTexture->GetResource().Get(), _texture2->GetResource().Get());
-	_texture2->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
+	GRAPHICS->GetCmdList()->CopyResource(_interMediateTexture->GetResource().Get(), _texture->GetResource().Get());
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_COMMON);
 	_interMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_COPY_SOURCE);
 
 }
