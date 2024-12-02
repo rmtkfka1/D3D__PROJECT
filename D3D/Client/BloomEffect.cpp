@@ -112,7 +112,7 @@ void BloomEffect::Bloom(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 	//원복테스쳐 블랙색상으로 
 	BlackProcess(disPatchX, disPatchY, disPatchZ);
 
-	for (int i = 0; i < 50; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		BlurringProcess(disPatchX, disPatchY, disPatchZ);
 	}

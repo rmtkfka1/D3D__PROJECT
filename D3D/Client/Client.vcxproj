@@ -299,7 +299,6 @@
     <ResourceCompile Include="Client.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Resources\Texture\earth\1_earth_8k.dds" />
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
@@ -589,6 +588,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Text>
+    <Text Include="텍스트.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -202,9 +202,6 @@
     <ClInclude Include="PlayerBullet.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClInclude>
-    <ClInclude Include="StartScene.h">
-      <Filter>07.Manager</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyBullet.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClInclude>
@@ -223,6 +220,9 @@
     <ClInclude Include="Core.h">
       <Filter>02.Core</Filter>
     </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>06.Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -234,9 +234,6 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="Client.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="..\Resources\Texture\earth\1_earth_8k.dds">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
@@ -466,5 +463,6 @@
     <Text Include="memo.txt">
       <Filter>리소스 파일\Utils</Filter>
     </Text>
+    <Text Include="텍스트.txt" />
   </ItemGroup>
 </Project>

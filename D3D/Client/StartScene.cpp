@@ -110,7 +110,7 @@ void StartScene::MouseUpdate()
 			temp->SetFrustumCuling(true);
 		}
 
-		if (normalizedX >= 0.61f && normalizedX <= 0.72f && normalizedY >= 0.14f && normalizedY <= 0.52f)
+		if (normalizedX >= 0.52f && normalizedX <= 0.72f && normalizedY >= 0.14f && normalizedY <= 0.71f)
 		{
 			temp->SetFrustumCuling(false);
 		}

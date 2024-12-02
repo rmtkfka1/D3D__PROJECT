@@ -44,6 +44,8 @@ void Player::Update()
 	AnimateUpdate();
 	Shot();
 	Super::Update();
+
+	CameraManager::GetInstance()->SetData();
 }
 
 void Player::Render()
