@@ -33,14 +33,14 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; i++)
 	{
-		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true);
+		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV, true, true);
 	}
 
 	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV
-		|TextureUsageFlags::SRV, false);
+		|TextureUsageFlags::SRV, false, true);
 
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
-	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
+	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false, true);
 }
 
 void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPtr<IDXGISwapChain3> swapchain , UINT	_swapChainFlags )
@@ -55,7 +55,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 		ResourceManager::GetInstance()->Add<Material>(L"finalMaterial", material);
 	}
 
-	core->GetBufferManager()->GetTextureBufferPool()->FreeDSVHandle(_DSTexture->GetDSVCpuHandle());
+	core->GetBufferManager()->GetTextureBufferPool()->FreeDSVHandle(_DSTexture->GetSharedDSVHandle());
 	core->GetBufferManager()->GetTextureBufferPool()->FreeRTVHandle(_InterMediateTexture->GetRTVCpuHandle());
 
 	for (UINT n = 0; n < SWAP_CHAIN_FRAME_COUNT; n++)
@@ -77,7 +77,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	for (int32 i = 0; i < SWAP_CHAIN_FRAME_COUNT; ++i)
 	{
 
-		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true);
+		_RenderTargets[i]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV,true,true);
 	}
 
 
@@ -85,11 +85,11 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(BackBufferWidth),static_cast<LONG>(BackBufferHeight) };
 
 	_InterMediateTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV
-		|TextureUsageFlags::SRV, false);
+		|TextureUsageFlags::SRV, false,true);
 
 	ResourceManager::GetInstance()->Get<BloomEffect>(L"Bloom")->GenTexture();
 
-	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT, D3D12_RESOURCE_STATE_DEPTH_WRITE,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false);
+	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT, D3D12_RESOURCE_STATE_DEPTH_WRITE,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false,true);
 
 }
 
@@ -101,11 +101,11 @@ void RenderTargets::RenderBegin()
 
 	_InterMediateTexture->ResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET);
 
-	const float BackColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const float BackColor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	cmdList->RSSetViewports(1, &_viewport);
 	cmdList->RSSetScissorRects(1, &_scissorRect);
 	cmdList->ClearRenderTargetView(_InterMediateTexture->GetRTVCpuHandle(), BackColor, 0, nullptr);
-	cmdList->OMSetRenderTargets(1, &_InterMediateTexture->GetRTVCpuHandle(), FALSE, &_InterMediateTexture->GetDSVCpuHandle());
+	cmdList->OMSetRenderTargets(1, &_InterMediateTexture->GetRTVCpuHandle(), FALSE, &_InterMediateTexture->GetSharedDSVHandle());
 
 }
 
@@ -125,7 +125,7 @@ void RenderTargets::RenderEnd()
 void RenderTargets::ClearDepth()
 {
 	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdList();
-	cmdList->ClearDepthStencilView(_DSTexture->GetDSVCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	cmdList->ClearDepthStencilView(_DSTexture->GetSharedDSVHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
 
@@ -168,18 +168,18 @@ void GBuffer::Init()
 	}
 	
 	//position 정보
-	_textures[0]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT,TextureUsageFlags::RTV| TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+	_textures[0]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT,TextureUsageFlags::RTV| TextureUsageFlags::SRV | TextureUsageFlags::UAV, false, true);
 	//normal 정보
-	_textures[1]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+	_textures[1]->CreateTexture(DXGI_FORMAT_R32G32B32A32_FLOAT, D3D12_RESOURCE_STATE_COMMON,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false,true);
 	//color 정보
-	_textures[2]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+	_textures[2]->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::RTV | TextureUsageFlags::SRV | TextureUsageFlags::UAV, false, true);
 
 }
 
 void GBuffer::RenderBegin()
 {
 	auto& list = core->GetCmdList();
-	float arrFloat[4] = {1, 1, 1, 1 };
+	float arrFloat[4] = {0, 0, 0, 0 };
 
 	for (uint32 i = 0; i < _count; i++)
 	{
@@ -193,7 +193,7 @@ void GBuffer::RenderBegin()
 
 	list->RSSetViewports(1, &_viewport);
 	list->RSSetScissorRects(1, &_scissorRect);
-	list->OMSetRenderTargets(_count, &_textures[0]->GetRTVCpuHandle(), TRUE, &_textures[0]->GetDSVCpuHandle()); //다중셋
+	list->OMSetRenderTargets(_count, &_textures[0]->GetRTVCpuHandle(), TRUE, &_textures[0]->GetSharedDSVHandle()); //다중셋
 
 }
 
@@ -213,4 +213,57 @@ shared_ptr<Texture>& GBuffer::GetTexture(int32 index)
 	assert(index < _count);
 
 	return _textures[index];
+}
+
+Shadow::Shadow()
+{
+}
+
+Shadow::~Shadow()
+{
+}
+
+void Shadow::Init()
+{
+
+	_texture = make_shared<Texture>();
+
+
+	_texture->CreateTexture(
+		DXGI_FORMAT_D32_FLOAT,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		WINDOW_WIDTH,
+		WINDOW_HEIGHT,
+		TextureUsageFlags::DSV,
+		false,
+		false,
+		vec4(0.0f, 0, 0, 0)
+		);
+
+	_texture->CreateTexture(
+		DXGI_FORMAT_R32_FLOAT,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		WINDOW_WIDTH,
+		WINDOW_HEIGHT,
+		TextureUsageFlags::SRV,
+		true,
+		false,
+		vec4(1.0f, 0, 0, 0)
+	);
+
+}
+
+void Shadow::RenderBegin()
+{
+	auto& list = core->GetCmdList();
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_DEPTH_WRITE);
+	list->ClearDepthStencilView(_texture->GetDSVCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	list->OMSetRenderTargets(0, nullptr, FALSE, &_texture->GetDSVCpuHandle());
+
+}
+
+void Shadow::RenderEnd()
+{
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+
 }

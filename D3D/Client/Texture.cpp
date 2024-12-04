@@ -5,7 +5,7 @@
 #include "BufferPool.h"
 #include "D3D12ResourceManager.h"
 
-D3D12_CPU_DESCRIPTOR_HANDLE Texture::_dsvHandle;
+D3D12_CPU_DESCRIPTOR_HANDLE Texture::_SharedDSVHandle;
 
 Texture::Texture():ResourceBase(ResourceType::Texture)
 {
@@ -140,11 +140,9 @@ void Texture::ResourceBarrier(D3D12_RESOURCE_STATES after)
 }
 
 
-void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalState,uint32 width, uint32 height, TextureUsageFlags usageFlags ,bool jump)
+void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalState,uint32 width, uint32 height, TextureUsageFlags usageFlags ,bool jump,bool detphShared, vec4 clearValue )
 {
 
-
- 
     D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
     desc.MipLevels = 1;
     desc.Flags = D3D12_RESOURCE_FLAG_NONE;
@@ -162,20 +160,17 @@ void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalStat
      
 	if (jump==false) //SwapChain 에서 GetBuffer 로 가져올떄는 이미 생성된 리소스를 사용하므로 생성하지 않는다.
     {
-        D3D12_CLEAR_VALUE clearValue = {};
+        D3D12_CLEAR_VALUE cvalue = {};
 
         if (HasFlag(usageFlags, TextureUsageFlags::RTV))
         {
-            clearValue.Format = format;
-            clearValue.Color[0] = 1.0f;
-            clearValue.Color[1] = 1.0f;
-            clearValue.Color[2] = 1.0f;
-            clearValue.Color[3] = 1.0f;
+            float arrFloat[4] = { clearValue.x, clearValue.y, clearValue.z, clearValue.w };
+            cvalue = CD3DX12_CLEAR_VALUE(format, arrFloat);
         }
 
         if (HasFlag(usageFlags, TextureUsageFlags::DSV))
         {
-            clearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
+            cvalue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
         }
 
         auto hr = core->GetDevice()->CreateCommittedResource(
@@ -183,7 +178,7 @@ void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalStat
             D3D12_HEAP_FLAG_NONE,
             &desc,
             initalState,
-            HasFlag(usageFlags, TextureUsageFlags::RTV) || HasFlag(usageFlags, TextureUsageFlags::DSV) ? &clearValue : nullptr,
+            HasFlag(usageFlags, TextureUsageFlags::RTV) || HasFlag(usageFlags, TextureUsageFlags::DSV) ? &cvalue : nullptr,
             IID_PPV_ARGS(&_resource));
 
         if (FAILED(hr))
@@ -220,8 +215,16 @@ void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalStat
 
     if (HasFlag(usageFlags, TextureUsageFlags::DSV))
     {
-        core->GetBufferManager()->GetTextureBufferPool()->AllocDSVDescriptorHandle(&_dsvHandle);
-        core->GetDevice()->CreateDepthStencilView(_resource.Get(), nullptr, _dsvHandle);
+        if (detphShared)
+        {
+            core->GetBufferManager()->GetTextureBufferPool()->AllocDSVDescriptorHandle(&_SharedDSVHandle);
+            core->GetDevice()->CreateDepthStencilView(_resource.Get(), nullptr, _SharedDSVHandle);
+        }
+        else
+        {
+            core->GetBufferManager()->GetTextureBufferPool()->AllocDSVDescriptorHandle(&_dsvHandle);
+            core->GetDevice()->CreateDepthStencilView(_resource.Get(), nullptr, _dsvHandle);
+        }
     }
 
     _state = initalState;

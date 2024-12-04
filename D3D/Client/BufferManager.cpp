@@ -47,7 +47,7 @@ void BufferManager::Init()
 	}
 
 	_textureBufferPool = make_shared<TextureBufferPool>();
-	_textureBufferPool->Init(255,SWAP_CHAIN_FRAME_COUNT + 4,1);
+	_textureBufferPool->Init(255,SWAP_CHAIN_FRAME_COUNT + 5,5);
 
 
 

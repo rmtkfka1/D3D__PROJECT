@@ -237,6 +237,10 @@ void Core::CreateSwapChain()
 
 	_GBuffer = make_shared<GBuffer>();
 	_GBuffer->Init();
+
+	_shadow = make_shared<Shadow>();
+	_shadow->Init();
+	
 }
 
 void Core::CreateFence()

@@ -62,6 +62,27 @@ void HireacyObject::Render()
 
 }
 
+void HireacyObject::ShadowRender()
+{
+	auto& list = core->GetCmdList();
+
+	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
+
+	for (auto& data : meshData)
+	{
+		_transform->findByName(data->name)->PushData();
+
+		if (data->material)
+		{
+			data->material->PushData();
+		}
+
+		core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
+
+		data->meshes->Render();
+	}
+}
+
 
 
 shared_ptr<Transform> HireacyObject::GetTransform()

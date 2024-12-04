@@ -63,6 +63,28 @@ void ModelObject::Render()
 
 }
 
+void ModelObject::ShadowRender()
+{
+	auto& list = core->GetCmdList();
+
+	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
+
+	for (auto& data : meshData)
+	{
+		_transform->PushData();
+
+		if (data->material)
+		{
+			data->material->PushData();
+		}
+
+		core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
+
+		data->meshes->Render();
+
+	}
+}
+
 
 void ModelObject::AddBoxColliderWithModel(string name, ColliderBehave behave, vec3 offsetSize, vec3 offsetCeneter)
 {

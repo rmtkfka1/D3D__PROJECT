@@ -70,5 +70,26 @@ private:
 	D3D12_RECT _scissorRect;
 };
 
+class Shadow
+{
+
+public:
+
+	Shadow();
+	~Shadow();
+
+	void Init();
+	void RenderBegin();
+	void RenderEnd();
+
+	shared_ptr<Texture>& GetTexture() { return _texture; }
+
+private:
+	shared_ptr<Texture>  _texture = nullptr;
+	//D3D12_VIEWPORT _viewport;
+	//D3D12_RECT _scissorRect;
+
+};
+
 
 

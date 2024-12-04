@@ -50,17 +50,17 @@ void BloomEffect::GenTexture()
 {
 	_texture = make_shared<Texture>();
 	_texture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON ,WINDOW_WIDTH, WINDOW_HEIGHT,
-		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false,true);
 
 	_texture2 = make_shared<Texture>();
 	_texture2->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT,
-		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false,true);
 
 	_interMediateTexture = core->GetRenderTarget()->GetInterMediateTexture();
 
 	_bloomTexture = make_shared<Texture>();
 	_bloomTexture->CreateTexture(DXGI_FORMAT_R8G8B8A8_UNORM, D3D12_RESOURCE_STATE_COMMON, WINDOW_WIDTH, WINDOW_HEIGHT,
-		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false);
+		TextureUsageFlags::SRV | TextureUsageFlags::UAV, false,true);
 
 }
 

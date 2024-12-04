@@ -7,6 +7,7 @@ class D3D12ResourceManager;
 class RootSignature;
 class RenderTargets;
 class GBuffer;
+class Shadow;
 
 class Core
 {
@@ -46,6 +47,7 @@ public:
     ComPtr<ID3D12GraphicsCommandList>& GetCmdList() { return _cmdList[_currentContextIndex]; }
     shared_ptr<RenderTargets>& GetRenderTarget() { return _renderTargets; }
     shared_ptr<GBuffer>& GetGBuffer() { return _GBuffer; }
+    shared_ptr<Shadow>& GetShadow() { return _shadow; }
     uint64_t GetCurrentFrameIndex() const { return _currentContextIndex; }
     ComPtr<ID3D12Device5>& GetDevice() { return _device; }
     shared_ptr<D3D12ResourceManager>& GetResourceManager() { return _resourceManager; }
@@ -68,6 +70,7 @@ private:
     shared_ptr<D3D12ResourceManager> _resourceManager = nullptr;
     shared_ptr<RootSignature> _rootsignature = nullptr;
     shared_ptr<RenderTargets> _renderTargets = nullptr;
+    shared_ptr<Shadow> _shadow = nullptr;
     shared_ptr<GBuffer> _GBuffer = nullptr;
 
     // Command Queue and List

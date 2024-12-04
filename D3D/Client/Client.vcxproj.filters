@@ -453,6 +453,12 @@
     <FxCompile Include="..\Resources\Shader\bloomShader.hlsl">
       <Filter>04.HLSL\compute</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\depthwrite.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\depthrender.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">

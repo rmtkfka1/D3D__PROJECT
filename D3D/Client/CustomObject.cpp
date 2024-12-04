@@ -51,6 +51,14 @@ void CustomObject::Render()
 
 }
 
+void CustomObject::ShadowRender()
+{
+	_transform->PushData();
+	_material->PushData();
+	core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
+	_mesh->Render();
+}
+
 
 
 void CustomObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)

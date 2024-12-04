@@ -84,6 +84,10 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		_pipelineDesc.RTVFormats[1] = DXGI_FORMAT_R32G32B32A32_FLOAT; //NORMAL
 		_pipelineDesc.RTVFormats[2] = DXGI_FORMAT_R8G8B8A8_UNORM; //COLOR
 		break;
+	case ShaderType::SHADOW:
+		_pipelineDesc.NumRenderTargets = 0;
+		_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
+		break;
 	default:
 		_pipelineDesc.NumRenderTargets = 1;
 		_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;

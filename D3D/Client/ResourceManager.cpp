@@ -29,6 +29,15 @@ void ResourceManager::CreateDefaultMesh()
 void ResourceManager::CreateDefaultShader()
 {
 	
+	{
+		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::SHADOW;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		shader->Init(L"depthwrite.hlsl", info);
+		Add<GraphicsShader>(L"depthwrite.hlsl", shader);
+	}
+
 	
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();

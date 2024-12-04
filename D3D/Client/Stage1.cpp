@@ -61,9 +61,14 @@ void Stage1::Run()
 	core->GetRenderTarget()->ClearDepth();
 	CameraControl();
 
+
 	core->GetGBuffer()->RenderBegin();
 	DeferredRender();
 	core->GetGBuffer()->RenderEnd();
+
+	core->GetShadow()->RenderBegin();
+	ShaodwRender();
+	core->GetShadow()->RenderEnd();
 
 	core->GetRenderTarget()->RenderBegin();
 	FinalRender();
@@ -289,39 +294,26 @@ void Stage1::BulidForward()
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
 		ResourceManager::GetInstance()->Add<GameObject>(L"gbufferUi"+i, object);
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
-		object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishader.hlsl"));
+	
 
-		object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
+		if (i < 2)
+		{
+			object->GetMaterial()->SetDiffuseTexture(core->GetGBuffer()->GetTexture(i));
+			object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"uishader.hlsl"));
+		}
+
+		else
+		{
+			object->GetMaterial()->SetDiffuseTexture(core->GetShadow()->GetTexture());
+			object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"depthrender.hlsl"));
+		}
 		
 		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
 		object->GetTransform()->SetLocalPosition(vec3(-850.0f + 200.0f * i, 400.0f, 1.0f));
 		AddGameObject(object, RenderingType::Ui);
 	}
 
-	
 
-
-	//{
-	//	shared_ptr<Sea> gameobject = make_shared<Sea>();
-	//	gameobject->SetFrustumCuling(false);
-	//	gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(4000.0f);
-
-	//	shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"sea.jpg");
-
-	//	ShaderInfo info;
-	//	info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
-	//	info.blendType = BLEND_TYPE::ONE_TO_ONE_BLEND;
-	//	//info.depthStencilType = DEPTH_STENCIL_TYPE::DPTH_TEST_NO_WRITE;
-	//	shared_ptr<Shader> shader = make_shared<Shader>();
-	//	shader->Init(L"blendingsea.hlsl", info);
-
-	//	gameobject->GetTransform()->SetLocalPosition(vec3(0, -2700.0f, 0));
-
-	//	gameobject->SetShader(shader);
-	//	gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
-	//	AddGameObject(gameobject, RenderingType::Forward);
-	//}
 
 	{
 
@@ -496,6 +488,44 @@ void Stage1::CameraControl()
 
 	CameraManager::GetInstance()->SetData();
 }
+void Stage1::ShaodwRender()
+{
+
+	ResourceManager::GetInstance()->Get<GraphicsShader>(L"depthwrite.hlsl")->SetPipelineState();
+
+	for (auto& ele : _deferredObjects)
+	{
+		ele->Update();
+
+		if (ele->GetFrustumCuling())
+		{
+			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
+			{
+				continue;
+			}
+		}
+
+		ele->ShadowRender();
+	}
+
+	for (auto& ele : _forwardObjects)
+	{
+		ele->Update();
+
+		if (ele->GetFrustumCuling())
+		{
+			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
+			{
+				continue;
+			}
+		}
+
+		ele->ShadowRender();
+	}
+
+
+}
+
 void Stage1::ComputePass()
 {
 	int threadGroupSizeX = 16;

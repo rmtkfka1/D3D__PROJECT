@@ -5,6 +5,7 @@ enum class ShaderType
 {
 	FORWARD,
 	DEFREED,
+	SHADOW
 };
 
 enum class RASTERIZER_TYPE
