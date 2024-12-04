@@ -41,5 +41,5 @@ float4 PS_Main(VS_OUT input) : SV_Target
 {
     
     float depth = g_tex_0.Sample(g_sam_0, input.uv).r;
-    return float4(depth, depth, depth, depth);
+    return float4(depth, depth, depth, 1.0f);
 }

@@ -279,5 +279,4 @@ void Shadow::RenderBegin()
 void Shadow::RenderEnd()
 {
 	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-
 }

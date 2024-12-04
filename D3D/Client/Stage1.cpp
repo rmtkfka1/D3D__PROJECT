@@ -70,8 +70,6 @@ void Stage1::Run()
 	DeferredRender();
 	core->GetGBuffer()->RenderEnd();
 
-
-
 	core->GetRenderTarget()->RenderBegin();
 	FinalRender();
 	ForwardRender();
@@ -264,23 +262,7 @@ void Stage1::BulidDeferred()
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
-	{
-		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1000.0f);
 
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"bloomTest1.jpg", TextureType::Texture2D);
-
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
-
-		gameobject->SetShader(shader);
-		gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
-		gameobject->GetTransform()->SetLocalPosition(vec3(6000.0f, 2000.0f, 4000.0f));
-		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
-
-		AddGameObject(gameobject, RenderingType::Deferred);
-	}
 
 
 
@@ -315,6 +297,23 @@ void Stage1::BulidForward()
 		AddGameObject(object, RenderingType::Ui);
 	}
 
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1000.0f);
+
+		shared_ptr<Texture> texture = core->GetShadow()->GetTexture();
+
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"depthrender.hlsl");
+
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+		gameobject->GetTransform()->SetLocalPosition(vec3(6000.0f, 2000.0f, 4000.0f));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
+
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
 
 
 	{
