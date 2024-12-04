@@ -56,19 +56,21 @@ void Stage1::Init()
 void Stage1::Run()
 {
 	LightManager::GetInstnace()->SetData();
-	Scene::Run();
+
 
 	core->GetRenderTarget()->ClearDepth();
 	CameraControl();
 
 
+	core->GetShadow()->RenderBegin();
+	ShaodwRender();
+	core->GetShadow()->RenderEnd();
+
 	core->GetGBuffer()->RenderBegin();
 	DeferredRender();
 	core->GetGBuffer()->RenderEnd();
 
-	core->GetShadow()->RenderBegin();
-	ShaodwRender();
-	core->GetShadow()->RenderEnd();
+
 
 	core->GetRenderTarget()->RenderBegin();
 	FinalRender();

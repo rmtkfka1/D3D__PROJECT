@@ -228,42 +228,56 @@ void Shadow::Init()
 
 	_texture = make_shared<Texture>();
 
+	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R32_TYPELESS, WINDOW_WIDTH, WINDOW_HEIGHT);
+	desc.MipLevels = 1;
+	desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
-	_texture->CreateTexture(
-		DXGI_FORMAT_D32_FLOAT,
-		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
-		TextureUsageFlags::DSV,
-		false,
-		false,
-		vec4(0.0f, 0, 0, 0)
-		);
+	D3D12_CLEAR_VALUE cvalue= CD3DX12_CLEAR_VALUE(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
 
-	_texture->CreateTexture(
-		DXGI_FORMAT_R32_FLOAT,
+	auto hr = core->GetDevice()->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&desc,
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
-		TextureUsageFlags::SRV,
-		true,
-		false,
-		vec4(1.0f, 0, 0, 0)
-	);
+		&cvalue ,
+		IID_PPV_ARGS(&_texture->GetResource()));
+
+	if (FAILED(hr))
+	{
+		throw std::runtime_error("텍스쳐 생성 실패");
+	}
+
+
+	core->GetBufferManager()->GetTextureBufferPool()->AllocDSVDescriptorHandle(&_texture->GetDSVCpuHandle());
+	D3D12_DEPTH_STENCIL_VIEW_DESC depthDesc = {};
+	depthDesc.Format = DXGI_FORMAT_D32_FLOAT; 
+	depthDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	depthDesc.Flags = D3D12_DSV_FLAG_NONE;
+	core->GetDevice()->CreateDepthStencilView(_texture->GetResource().Get(), &depthDesc, _texture->GetDSVCpuHandle());
+
+	core->GetBufferManager()->GetTextureBufferPool()->AllocSRVDescriptorHandle(&_texture->GetSRVCpuHandle());
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.Texture2D.MipLevels = 1;
+	core->GetDevice()->CreateShaderResourceView(_texture->GetResource().Get(), &srvDesc, _texture->GetSRVCpuHandle());
+
+	_texture->_state = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 
 }
 
 void Shadow::RenderBegin()
 {
+	
 	auto& list = core->GetCmdList();
 	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_DEPTH_WRITE);
-	list->ClearDepthStencilView(_texture->GetDSVCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	list->OMSetRenderTargets(0, nullptr, FALSE, &_texture->GetDSVCpuHandle());
-
+	list->ClearDepthStencilView(_texture->GetDSVCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
 void Shadow::RenderEnd()
 {
-	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 }
