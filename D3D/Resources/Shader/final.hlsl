@@ -23,7 +23,7 @@ cbuffer TEST_B1 : register(b2)
 };
 
 cbuffer materialparams : register(b3)
-{
+{ 
     int intparams1;
     int intparams2;
     int intparams3;
@@ -41,8 +41,6 @@ cbuffer materialparams : register(b3)
 
     row_major float4x4 g_mat_0;
 };
-
-
 
 Texture2D PositionTexture : register(t0);
 Texture2D NormalTexture : register(t1);
@@ -76,7 +74,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
 {
    
    
-    float3 color;
+    float3 color = float3(0, 0, 0);
     
     float4 worldPos = PositionTexture.Sample(g_sam_0, input.uv);
     float4 WolrdNormal = normalize(NormalTexture.Sample(g_sam_0, input.uv));
@@ -104,19 +102,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
           
     }
     
-    matrix shadowCameraVP = g_mat_0;
-    float4 shadowClipPos = mul(worldPos, shadowCameraVP);
-    float depth = shadowClipPos.z / shadowClipPos.w;
-    float2 uv = shadowClipPos.xy / shadowClipPos.w;
-    uv.y = -uv.y;
-    uv = uv * 0.5 + 0.5;
-    
 
-    float shadowDepth = shadowTexture.Sample(g_sam_0, uv).x;
-    if (shadowDepth > 0 && depth > shadowDepth + 0.0001f)
-    {
-        color *= 0.5f;
-    }
     
     return float4(color, 1.0f) * AlbedoColor;
     

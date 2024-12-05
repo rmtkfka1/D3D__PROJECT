@@ -185,7 +185,7 @@ void Stage1::BulidDeferred()
 	}
 
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
 		shared_ptr<Model> data = Model::ReadData(L"Box/Box",L"Box");
@@ -199,7 +199,7 @@ void Stage1::BulidDeferred()
 
 
 
-	for (int i = 0; i < 10; ++i)
+	/*for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Sphere> object = make_shared<Sphere>();
 		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth",L"Earth");
@@ -207,25 +207,11 @@ void Stage1::BulidDeferred()
 		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
 		object->AddSphereColliderWithModel("earth", ColliderBehave::Passive);
 		AddGameObject(object, RenderingType::Deferred);
-	}
-
-	//{
-	//	shared_ptr<Enemy> enemy = make_shared<Enemy>();
-	//	shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
-	//	data->SetIntValue(0, 1);
-	//	enemy->SetModel(data);
-	//	enemy->SetPlayer(_player);
-	//	enemy->GetTransform()->SetLocalScale(vec3(70.0f, 70.0f, 70.0f));
-	//	enemy->GetTransform()->SetLocalPosition(vec3(2000.0f, 5000.0f, 0));
-	//	//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
-	//	enemy->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"deferred.hlsl"));
-	//	//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
-	//	enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active,vec3(-2.0f,-0.5,0));
-	//	AddGameObject(enemy, RenderingType::Deferred);
-	//}
+	}*/
 
 
-	for (int i = 0; i < 50; ++i)
+
+	/*for (int i = 0; i < 50; ++i)
 	{
 		shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
 		gameobject->_useWithHeightMap = true;
@@ -260,7 +246,7 @@ void Stage1::BulidDeferred()
 		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"Bilboard.hlsl"));
 
 		AddGameObject(gameobject, RenderingType::Deferred);
-	}
+	}*/
 
 
 	{
@@ -279,6 +265,20 @@ void Stage1::BulidDeferred()
 	}
 
 
+	//{
+	//	shared_ptr<Enemy> enemy = make_shared<Enemy>();
+	//	shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter", L"EnemyHelicopter");
+	//	data->SetIntValue(0, 1);
+	//	enemy->SetModel(data);
+	//	enemy->SetPlayer(_player);
+	//	enemy->GetTransform()->SetLocalScale(vec3(70.0f, 70.0f, 70.0f));
+	//	enemy->GetTransform()->SetLocalPosition(vec3(2000.0f, 5000.0f, 0));
+	//	//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
+	//	enemy->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"deferred.hlsl"));
+	//	//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
+	//	enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active, vec3(-2.0f, -0.5, 0));
+	//	AddGameObject(enemy, RenderingType::Deferred);
+	//}
 
 
 
@@ -459,11 +459,12 @@ void Stage1::FinalRender()
 		ResourceManager::GetInstance()->Get<GraphicsShader>(L"final.hlsl")->SetPipelineState();
 		shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->Get<Mesh>(L"finalMesh");
 		shared_ptr<Material> material = ResourceManager::GetInstance()->Get<Material>(L"finalMaterial");
+
+		auto& vpMatrix = static_pointer_cast<ShadowCamera>(CameraManager::GetInstance()->GetCamera(CameraType::SHADOW))->GetVpMatrix();
+		material->SetMartix(vpMatrix);
 		material->PushData();
 
-		auto& vpMatrix	= static_pointer_cast<ShadowCamera>(CameraManager::GetInstance()->GetCamera(CameraType::SHADOW))->GetVpMatrix();
-
-		material->SetMartix(vpMatrix);
+	
 
 		core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
 		mesh->Render();
@@ -517,20 +518,20 @@ void Stage1::ShaodwRender()
 	CameraManager::GetInstance()->SetActiveCamera(CameraType::SHADOW);
 	CameraManager::GetInstance()->SetData();
 
+
+
+	//for (auto& ele : _forwardObjects)
+	//{
+	//	ele->Update();
+	//	ele->ShadowRender();
+	//}
+
 	for (auto& ele : _deferredObjects)
 	{
 		ele->Update();
-
-
 		ele->ShadowRender();
 	}
 
-	for (auto& ele : _forwardObjects)
-	{
-		ele->Update();
-
-		ele->ShadowRender();
-	}
 
 
 }

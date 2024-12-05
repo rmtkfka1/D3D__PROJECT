@@ -22,6 +22,7 @@ struct VS_IN
 struct VS_OUT
 {
     float4 pos : SV_Position;
+    float4 clipPos : POSITION;
 
 };
 
@@ -31,11 +32,14 @@ VS_OUT VS_Main(VS_IN input)
     float4 worldPos = mul(float4(input.pos, 1.0f), WorldMat);
     float4 viewPos = mul(worldPos, ViewMat);
     output.pos = mul(viewPos, ProjMat);
+    
+    output.clipPos = output.pos;
+
     return output;
 }
 
 float4 PS_Main(VS_OUT input) : SV_Target
 {
 
-    return float4(input.pos.z, 1.0f, 1.0f, 1.0f);
+    return float4(input.clipPos.z / input.clipPos.w, 1.0f, 1.0f, 1.0f);
 }

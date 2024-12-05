@@ -53,6 +53,8 @@ void Terrain::Init()
 
     {
         _material->SetShdoawTexture(core->GetShadow()->GetTexture());
+        auto& vpMatrix = static_pointer_cast<ShadowCamera>(CameraManager::GetInstance()->GetCamera(CameraType::SHADOW))->GetVpMatrix();
+       _material->SetMartix(vpMatrix);
     }
 
 }
