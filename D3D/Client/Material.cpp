@@ -53,6 +53,17 @@ void Material::PushData()
 		_params.SetTexon(2, 0);
 	}
 
+	if (_shadowTexture)
+	{
+		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t3));
+		core->GetBufferManager()->GetTable()->CopySRV(_SpecularTexture->GetSRVCpuHandle(), reg);
+		_params.SetTexon(3, 1);
+	}
+	else
+	{
+		_params.SetTexon(3, 0);
+	}
+
 
 	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushData(&_params, sizeof(_params));
 	

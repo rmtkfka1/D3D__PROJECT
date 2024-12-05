@@ -285,7 +285,7 @@ void DescriptorTable::Init(uint32 count)
 {
 	_groupCount = count;
 
-	int32 RegisterCount = 8;
+	int32 RegisterCount = 9;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
 	desc.NumDescriptors = count * RegisterCount;

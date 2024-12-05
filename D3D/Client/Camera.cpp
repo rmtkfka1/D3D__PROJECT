@@ -287,9 +287,9 @@ void ShadowCamera::GenViewMatrix()
 
 void ShadowCamera::GenProjMatrix()
 {
-	_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
-
 	_params.matProjection = XMMatrixOrthographicLH(15000.0f, 15000.0f, _near, _far);
+
+
 }
 
 void ShadowCamera::GenBoundingFrustum()
@@ -303,4 +303,5 @@ void ShadowCamera::Update()
 	GenViewMatrix();
 	GenProjMatrix();
 	GenBoundingFrustum();
+	_VPMatrix = _params.matView * _params.matProjection;
 }

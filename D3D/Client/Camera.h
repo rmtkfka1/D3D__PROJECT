@@ -153,12 +153,15 @@ public:
 	ShadowCamera();
 	virtual ~ShadowCamera();
 
+	Matrix& GetVpMatrix() { return _VPMatrix; }
+
 private:
 	virtual void GenViewMatrix() override;
 	virtual void GenProjMatrix() override;
 	virtual void GenBoundingFrustum() override;
 	virtual void Update() override;
 
+	
 private:
-
+	Matrix _VPMatrix = Matrix::Identity;
 };
