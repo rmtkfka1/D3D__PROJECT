@@ -59,12 +59,12 @@ void Stage1::Run()
 
 
 	core->GetRenderTarget()->ClearDepth();
-	CameraControl();
-
 
 	core->GetShadow()->RenderBegin();
 	ShaodwRender();
 	core->GetShadow()->RenderEnd();
+
+	CameraControl();
 
 	core->GetGBuffer()->RenderBegin();
 	DeferredRender();
@@ -79,6 +79,20 @@ void Stage1::Run()
 	core->GetRenderTarget()->RenderEnd();
 
 
+	//WCHAR wchTxt[100];
+	//swprintf_s(wchTxt, 100, L"pos.x: %.2f, pos.y: %.2f, pos.z: %.2f, look.x: % .2f, look.y : % .2f, look.z : % .2f",
+	//	_player->GetTransform()->GetLocalPosition().x,
+	//	_player->GetTransform()->GetLocalPosition().y,
+	//	_player->GetTransform()->GetLocalPosition().z,
+
+	//	_player->GetTransform()->GetLook().x,
+	//	_player->GetTransform()->GetLook().y,
+	//	_player->GetTransform()->GetLook().z
+	//);
+
+
+	//SetWindowText(core->GetWindowHandle(), wchTxt);
+
 
 }
 
@@ -90,20 +104,20 @@ void Stage1::LateUpdate()
 void Stage1::BulidLight()
 {
 	{
-		Light light;
-		light.direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
-		light.fallOffStart = 0.0f;
-		light.position = _player->GetTransform()->GetWorldPosition();
-		light.fallOffEnd = 5000.0f;
-		light.spotPower = 200.0f;
-		light.material.ambient = vec3(0.0f, 0, 0);
-		light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
-		light.material.specular = vec3(1.0f, 1.0f, 1.0f);
-		light.material.shininess = 15.0f;
-		light.material.lightType = static_cast<int32>(LIGHT_TYPE::SPOT_LIGHT);
-		light.strength = vec3(8.0f, 8.0f, 8.0f);
-		LightManager::GetInstnace()->PushLight(light);
-		LightManager::GetInstnace()->SetPlayer(_player);
+	Light light;
+	light.direction = CameraManager::GetInstance()->GetActiveCamera()->GetCameraLook();
+	light.fallOffStart = 0.0f;
+	light.position = _player->GetTransform()->GetWorldPosition();
+	light.fallOffEnd = 5000.0f;
+	light.spotPower = 200.0f;
+	light.material.ambient = vec3(0.0f, 0, 0);
+	light.material.diffuse = vec3(1.0f, 1.0f, 1.0f);
+	light.material.specular = vec3(1.0f, 1.0f, 1.0f);
+	light.material.shininess = 15.0f;
+	light.material.lightType = static_cast<int32>(LIGHT_TYPE::SPOT_LIGHT);
+	light.strength = vec3(8.0f, 8.0f, 8.0f);
+	LightManager::GetInstnace()->PushLight(light);
+	LightManager::GetInstnace()->SetPlayer(_player);
 	}
 
 	{
@@ -133,14 +147,16 @@ void Stage1::BulidCamera()
 
 	shared_ptr<UiCamera> uicamera = make_shared<UiCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::UI, uicamera);
-	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+
+	shared_ptr<ShadowCamera> shadowCamera = make_shared<ShadowCamera>();
+	CameraManager::GetInstance()->AddCamera(CameraType::SHADOW, shadowCamera);
 };
 
 void Stage1::BulidDeferred()
 {
 
 	{
-		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter", L"helicopter");
+		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"helicopter");
 		shared_ptr<Player> player = make_shared<Player>();
 
 		player->SetModel(data);
@@ -150,7 +166,7 @@ void Stage1::BulidDeferred()
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
 		player->GetTransform()->SetLocalPosition(vec3(100.0f, 0, 0));
 
-		player->AddBoxColliderWithModel("this", ColliderBehave::Active, vec3(-2.5f, -1.0f, -0.5f));
+		player->AddBoxColliderWithModel("this", ColliderBehave::Active,vec3(-2.5f, -1.0f, -0.5f));
 		player->AddBoxCollider("raycheck", ColliderBehave::Active, vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
 
 		player->SetThirdPersonCamera(static_pointer_cast<ThirdPersonCamera>(CameraManager::GetInstance()->GetCamera(CameraType::THIRDVIEW)));
@@ -162,7 +178,7 @@ void Stage1::BulidDeferred()
 		player->SetTerrain(terrain);
 
 		AddGameObject(player, RenderingType::Deferred);
-		AddGameObject(terrain, RenderingType::Forward);
+		AddGameObject(terrain,RenderingType::Forward);
 
 		_player = player;
 
@@ -172,21 +188,21 @@ void Stage1::BulidDeferred()
 	for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
-		shared_ptr<Model> data = Model::ReadData(L"Box/Box", L"Box");
+		shared_ptr<Model> data = Model::ReadData(L"Box/Box",L"Box");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
-		object->AddBoxColliderWithModel("block", ColliderBehave::Passive);
+		object->AddBoxColliderWithModel("block",ColliderBehave::Passive);
 		AddGameObject(object, RenderingType::Deferred);
 
 	}
-
+	
 
 
 
 	for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Sphere> object = make_shared<Sphere>();
-		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth", L"Earth");
+		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth",L"Earth");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
 		object->AddSphereColliderWithModel("earth", ColliderBehave::Passive);
@@ -195,7 +211,7 @@ void Stage1::BulidDeferred()
 
 	{
 		shared_ptr<Enemy> enemy = make_shared<Enemy>();
-		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter", L"EnemyHelicopter");
+		shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
 		data->SetIntValue(0, 1);
 		enemy->SetModel(data);
 		enemy->SetPlayer(_player);
@@ -204,7 +220,7 @@ void Stage1::BulidDeferred()
 		//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
 		enemy->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"deferred.hlsl"));
 		//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
-		enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active, vec3(-2.0f, -0.5, 0));
+		enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active,vec3(-2.0f,-0.5,0));
 		AddGameObject(enemy, RenderingType::Deferred);
 	}
 
@@ -276,9 +292,9 @@ void Stage1::BulidForward()
 	for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<CustomObject> object = make_shared<CustomObject>();
-		ResourceManager::GetInstance()->Add<GameObject>(L"gbufferUi" + i, object);
+		ResourceManager::GetInstance()->Add<GameObject>(L"gbufferUi"+i, object);
 		object->GetMesh() = GeoMetryHelper::LoadRectangleMesh(30.0f);
-
+	
 
 		if (i < 2)
 		{
@@ -291,7 +307,7 @@ void Stage1::BulidForward()
 			object->GetMaterial()->SetDiffuseTexture(core->GetShadow()->GetTexture());
 			object->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"depthrender.hlsl"));
 		}
-
+		
 		object->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
 		object->GetTransform()->SetLocalPosition(vec3(-850.0f + 200.0f * i, 400.0f, 1.0f));
 		AddGameObject(object, RenderingType::Ui);
@@ -322,7 +338,7 @@ void Stage1::BulidForward()
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1000.0f);
 		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"sea.hlsl"));
-
+		
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(6000.0f, 2000.0f, 0));
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
@@ -374,15 +390,15 @@ void Stage1::BulidForward()
 
 
 
-
-
-
+	
 
 }
 
 
 void Stage1::DeferredRender()
 {
+
+
 
 	static int count = 0;
 	for (auto& ele : _deferredObjects)
@@ -437,7 +453,7 @@ void Stage1::UiObjectRender()
 
 void Stage1::FinalRender()
 {
-
+	
 	{
 		auto& list = core->GetCmdList();
 		ResourceManager::GetInstance()->Get<GraphicsShader>(L"final.hlsl")->SetPipelineState();
@@ -485,26 +501,27 @@ void Stage1::CameraControl()
 	{
 		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
 	}
-
-
 	CameraManager::GetInstance()->SetData();
+
 }
 void Stage1::ShaodwRender()
 {
 
 	ResourceManager::GetInstance()->Get<GraphicsShader>(L"depthwrite.hlsl")->SetPipelineState();
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::SHADOW);
+	CameraManager::GetInstance()->SetData();
 
 	for (auto& ele : _deferredObjects)
 	{
 		ele->Update();
 
-		if (ele->GetFrustumCuling())
-		{
-			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
-			{
-				continue;
-			}
-		}
+		//if (ele->GetFrustumCuling())
+		//{
+		//	if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
+		//	{
+		//		continue;
+		//	}
+		//}
 
 		ele->ShadowRender();
 	}
@@ -513,13 +530,13 @@ void Stage1::ShaodwRender()
 	{
 		ele->Update();
 
-		if (ele->GetFrustumCuling())
+	/*	if (ele->GetFrustumCuling())
 		{
 			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
 			{
 				continue;
 			}
-		}
+		}*/
 
 		ele->ShadowRender();
 	}
