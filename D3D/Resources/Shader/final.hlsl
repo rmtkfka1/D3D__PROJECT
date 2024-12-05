@@ -104,7 +104,6 @@ float4 PS_Main(VS_OUT input) : SV_Target
           
     }
     
-    
     matrix shadowCameraVP = g_mat_0;
     float4 shadowClipPos = mul(worldPos, shadowCameraVP);
     float depth = shadowClipPos.z / shadowClipPos.w;
