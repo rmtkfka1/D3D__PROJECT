@@ -84,7 +84,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
     
     float3 toEye = normalize(g_eyeWorld - worldPos.xyz);
     
-   
+  
     for (int i = 0; i < g_lightCount; ++i)
     {
    
@@ -105,22 +105,20 @@ float4 PS_Main(VS_OUT input) : SV_Target
     }
     
     
-    //matrix shadowCameraVP = g_mat_0;
-    //float4 shadowClipPos = mul(worldPos, shadowCameraVP);
-    //float depth = shadowClipPos.z / shadowClipPos.w;
-    //float2 uv = shadowClipPos.xy / shadowClipPos.w;
-    //uv.y = -uv.y;
-    //uv = uv * 0.5 + 0.5;
+    matrix shadowCameraVP = g_mat_0;
+    float4 shadowClipPos = mul(worldPos, shadowCameraVP);
+    float depth = shadowClipPos.z / shadowClipPos.w;
+    float2 uv = shadowClipPos.xy / shadowClipPos.w;
+    uv.y = -uv.y;
+    uv = uv * 0.5 + 0.5;
     
-    //if (0 < uv.x && uv.x < 1 && 0 < uv.y && uv.y < 1)
-    //{
-    //    float shadowDepth = g_tex_2.Sample(g_sam_0, uv).x;
-    //    if (shadowDepth > 0 && depth > shadowDepth + 0.00001f)
-    //    {
-    //        color *= 0.5f;
-    //    }
-    //}
 
+    float shadowDepth = shadowTexture.Sample(g_sam_0, uv).x;
+    if (shadowDepth > 0 && depth > shadowDepth + 0.0001f)
+    {
+        color *= 0.5f;
+    }
+    
     return float4(color, 1.0f) * AlbedoColor;
     
-}
+};

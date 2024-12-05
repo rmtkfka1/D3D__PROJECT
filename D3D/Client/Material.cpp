@@ -56,7 +56,7 @@ void Material::PushData()
 	if (_shadowTexture)
 	{
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t3));
-		core->GetBufferManager()->GetTable()->CopySRV(_SpecularTexture->GetSRVCpuHandle(), reg);
+		core->GetBufferManager()->GetTable()->CopySRV(_shadowTexture->GetSRVCpuHandle(), reg);
 		_params.SetTexon(3, 1);
 	}
 	else

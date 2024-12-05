@@ -52,6 +52,7 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 		material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
 		material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2)); //ALBEDO
+		material->SetShdoawTexture(core->GetShadow()->GetTexture());
 		ResourceManager::GetInstance()->Add<Material>(L"finalMaterial", material);
 	}
 
