@@ -8,6 +8,7 @@ enum CameraType
 	FIRSTVIEW,
 	THIRDVIEW,
 	OBSERVE,
+	SHADOW,
 	UI,
 	NONE
 };
@@ -142,5 +143,22 @@ private:
 private:
 	float _cameraSpeed = 50.0f;
 
+
+};
+
+class ShadowCamera :public Camera
+{
+
+public:
+	ShadowCamera();
+	virtual ~ShadowCamera();
+
+private:
+	virtual void GenViewMatrix() override;
+	virtual void GenProjMatrix() override;
+	virtual void GenBoundingFrustum() override;
+	virtual void Update() override;
+
+private:
 
 };

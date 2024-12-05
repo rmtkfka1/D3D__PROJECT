@@ -267,3 +267,38 @@ void UiCamera::GenBoundingFrustum()
 {
 }
 
+ShadowCamera::ShadowCamera():Camera(CameraType::SHADOW)
+{
+	_cameraPos = vec3(340.0f, 1700.0f,-410.0f);
+	_cameraLook = vec3(-0.94f, 0.09f , -0.34f);
+	_cameraUp = vec3(0, 1.0f, 0);
+	_near = 1.0f;
+	_far = 20000.0f;
+}
+
+ShadowCamera::~ShadowCamera()
+{
+}
+
+void ShadowCamera::GenViewMatrix()
+{
+	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
+}
+
+void ShadowCamera::GenProjMatrix()
+{
+	_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
+}
+
+void ShadowCamera::GenBoundingFrustum()
+{
+	_boundingFrsutum.CreateFromMatrix(_boundingFrsutum, _params.matProjection);
+	_boundingFrsutum.Transform(_boundingFrsutum, _params.matView.Invert());
+}
+
+void ShadowCamera::Update()
+{
+	GenViewMatrix();
+	GenProjMatrix();
+	GenBoundingFrustum();
+}

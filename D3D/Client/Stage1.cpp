@@ -61,7 +61,6 @@ void Stage1::Run()
 	core->GetRenderTarget()->ClearDepth();
 	CameraControl();
 
-
 	core->GetShadow()->RenderBegin();
 	ShaodwRender();
 	core->GetShadow()->RenderEnd();
@@ -78,6 +77,20 @@ void Stage1::Run()
 	ComputePass();
 	core->GetRenderTarget()->RenderEnd();
 
+
+	WCHAR wchTxt[100];
+	swprintf_s(wchTxt, 100, L"pos.x: %.2f, pos.y: %.2f, pos.z: %.2f, look.x: % .2f, look.y : % .2f, look.z : % .2f",
+		_player->GetTransform()->GetLocalPosition().x,
+		_player->GetTransform()->GetLocalPosition().y,
+		_player->GetTransform()->GetLocalPosition().z,
+
+		_player->GetTransform()->GetLook().x,
+		_player->GetTransform()->GetLook().y,
+		_player->GetTransform()->GetLook().z
+	);
+
+
+	SetWindowText(core->GetWindowHandle(), wchTxt);
 
 
 }
@@ -133,7 +146,9 @@ void Stage1::BulidCamera()
 
 	shared_ptr<UiCamera> uicamera = make_shared<UiCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::UI, uicamera);
-	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+
+	shared_ptr<ShadowCamera> shadowCamera = make_shared<ShadowCamera>();
+	CameraManager::GetInstance()->AddCamera(CameraType::SHADOW, shadowCamera);
 };
 
 void Stage1::BulidDeferred()
@@ -374,8 +389,6 @@ void Stage1::BulidForward()
 
 
 
-
-
 	
 
 }
@@ -383,6 +396,9 @@ void Stage1::BulidForward()
 
 void Stage1::DeferredRender()
 {
+
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
+	CameraManager::GetInstance()->SetData();
 
 	static int count = 0;
 	for (auto& ele : _deferredObjects)
@@ -485,26 +501,27 @@ void Stage1::CameraControl()
 	{
 		CameraManager::GetInstance()->SetActiveCamera(CameraType::THIRDVIEW);
 	}
-
-
 	CameraManager::GetInstance()->SetData();
+
 }
 void Stage1::ShaodwRender()
 {
 
 	ResourceManager::GetInstance()->Get<GraphicsShader>(L"depthwrite.hlsl")->SetPipelineState();
+	CameraManager::GetInstance()->SetActiveCamera(CameraType::SHADOW);
+	CameraManager::GetInstance()->SetData();
 
 	for (auto& ele : _deferredObjects)
 	{
 		ele->Update();
 
-		if (ele->GetFrustumCuling())
-		{
-			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
-			{
-				continue;
-			}
-		}
+		//if (ele->GetFrustumCuling())
+		//{
+		//	if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
+		//	{
+		//		continue;
+		//	}
+		//}
 
 		ele->ShadowRender();
 	}
@@ -513,13 +530,13 @@ void Stage1::ShaodwRender()
 	{
 		ele->Update();
 
-		if (ele->GetFrustumCuling())
+	/*	if (ele->GetFrustumCuling())
 		{
 			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
 			{
 				continue;
 			}
-		}
+		}*/
 
 		ele->ShadowRender();
 	}
