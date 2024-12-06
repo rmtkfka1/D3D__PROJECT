@@ -28,7 +28,7 @@ cbuffer materialparams : register(b3)
     int specon;
     int texon4;
 
-    row_major float4x4 g_mat_0;
+    row_major float4x4 shadowCameraVP;
  
 
 };
@@ -127,7 +127,6 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     }
    
     
-    matrix shadowCameraVP = g_mat_0;
     float4 shadowClipPos = mul(float4(input.worldPos,1.0f), shadowCameraVP);
     float depth = shadowClipPos.z / shadowClipPos.w;
     float2 uv = shadowClipPos.xy / shadowClipPos.w;

@@ -37,5 +37,5 @@ VS_OUT VS_Main(VS_IN input)
 float4 PS_Main(VS_OUT input) : SV_Target
 {
 
-    return float4(input.pos.z, 1.0f, 1.0f, 1.0f);
+    return float4(1.0f, 1.0f, 1.0f, 1.0f);
 }

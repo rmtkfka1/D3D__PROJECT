@@ -122,22 +122,22 @@ float4 PS_Main(VS_OUT input) : SV_Target
     
     result = clamp(result, 0, 1.0f);
     
-    //matrix shadowCameraVP = g_mat_0;
-    //float4 shadowClipPos = mul(float4(input.worldPos, 1.0f), shadowCameraVP);
-    //float depth = shadowClipPos.z / shadowClipPos.w;
-    //float2 uv = shadowClipPos.xy / shadowClipPos.w;
-    //uv.y = -uv.y;
-    //uv = uv * 0.5 + 0.5;
+    matrix shadowCameraVP = g_mat_0;
+    float4 shadowClipPos = mul(float4(input.worldPos, 1.0f), shadowCameraVP);
+    float depth = shadowClipPos.z / shadowClipPos.w;
+    float2 uv = shadowClipPos.xy / shadowClipPos.w;
+    uv.y = -uv.y;
+    uv = uv * 0.5 + 0.5;
     
-    //float shadowDepth = shadowTexture.Sample(g_sam_1, uv).r;
+    float shadowDepth = shadowTexture.Sample(g_sam_1, uv).r;
     
-    //if(uv.x>=0 && uv.x <=1.0f && uv.y >=0 && uv.y <= 1.0f )
-    //{
-    //    if (shadowDepth >= 0 && depth > shadowDepth + 0.003f)
-    //    {
-    //        result *= 0.5f;
-    //    }
-    //}
+    if (uv.x >= 0 && uv.x <= 1.0f && uv.y >= 0 && uv.y <= 1.0f)
+    {
+        if (shadowDepth > 0 && depth > shadowDepth + 0.003f)
+        {
+            result *= 0.2f;
+        }
+    }
     
     return result;
 }

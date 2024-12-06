@@ -273,7 +273,7 @@ ShadowCamera::ShadowCamera():Camera(CameraType::SHADOW)
 	_cameraLook = vec3(0, -1.0f, 0.00f);
 	_cameraUp = vec3(1.0f, 0, 0);
 	_near = 1.0f;
-	_far = 50000.0f;
+	_far = 30000.0f;
 }
 
 ShadowCamera::~ShadowCamera()
@@ -289,6 +289,7 @@ void ShadowCamera::GenViewMatrix()
 
 	_cameraPos = it->GetTransform()->GetLocalPosition(); 
 	_cameraLook = it->GetTransform()->GetLook();
+	//_cameraPos -= _cameraLook * 200.0f;
 	_cameraUp = it->GetTransform()->GetUp();
 
 	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
@@ -297,16 +298,15 @@ void ShadowCamera::GenViewMatrix()
 void ShadowCamera::GenProjMatrix()
 {
 
-	// 직교 투영 매트릭스 생성 (Near Plane 크기 사용)
 	_params.matProjection = XMMatrixOrthographicLH(
 		10000.0f,   // 가로 크기
 		10000.0f,  // 세로 크기
 		_near,            // Near
 		_far              // Far
 	);
-	
-	/*_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);*/
-	//_params.matProjection = XMMatrixOrthographicLH(15000.0f, 15000.0f, _near, _far);
+	//
+	//_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
+
 }
 
 void ShadowCamera::GenBoundingFrustum()

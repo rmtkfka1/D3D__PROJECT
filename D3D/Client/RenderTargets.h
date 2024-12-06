@@ -87,11 +87,9 @@ public:
 private:
 
 	shared_ptr<Texture>  _texture = nullptr;
-	shared_ptr<Texture>  _depthTexture = nullptr;
 	D3D12_VIEWPORT _viewport;
 	D3D12_RECT _scissorRect;
 
 };
-
 
 
