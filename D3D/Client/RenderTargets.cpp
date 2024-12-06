@@ -226,15 +226,15 @@ Shadow::~Shadow()
 void Shadow::Init()
 {
 
-	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(4096),static_cast<float>(4096), 0,1.0f };
-	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(4096),static_cast<LONG>(4096) };
+	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT), 0,1.0f };
+	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH),static_cast<LONG>(WINDOW_HEIGHT) };
 
 	_texture = make_shared<Texture>();
 
 	_texture->CreateTexture(DXGI_FORMAT_R32_FLOAT,
 		D3D12_RESOURCE_STATE_RENDER_TARGET,
-		4096,
-		4096,
+		WINDOW_WIDTH,
+		WINDOW_HEIGHT,
 		TextureUsageFlags::RTV | TextureUsageFlags::SRV,
 		false,
 		false
@@ -244,8 +244,8 @@ void Shadow::Init()
 
 	_depthTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		4096,
-		4096,
+		WINDOW_WIDTH,
+		WINDOW_HEIGHT,
 		TextureUsageFlags::DSV,
 		false,
 		false);

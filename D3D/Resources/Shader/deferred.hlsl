@@ -135,7 +135,7 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     uv = uv * 0.5 + 0.5;
     
     float shadowDepth = shadowTexture.Sample(g_sam_1, uv).x;
-    if (shadowDepth > 0 && depth > shadowDepth + 0.0001f)
+    if (shadowDepth > 0 && depth > shadowDepth + 0.003f)
     {
         output.color *= 0.5f;
     }

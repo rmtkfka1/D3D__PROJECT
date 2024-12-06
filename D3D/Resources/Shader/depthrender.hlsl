@@ -13,7 +13,7 @@ cbuffer TEST_B1 : register(b2)
 
 Texture2D g_tex_0 : register(t0);
 SamplerState g_sam_0 : register(s0);
-
+SamplerState g_sam_1 : register(s1);
 struct VS_IN
 {
     float3 pos : POSITION;
@@ -38,6 +38,6 @@ VS_OUT VS_Main(VS_IN input)
 
 float4 PS_Main(VS_OUT input) : SV_Target
 {
-    float depth = g_tex_0.Sample(g_sam_0, input.uv).r;
+    float depth = g_tex_0.Sample(g_sam_1, input.uv).r;
     return float4(depth, depth, depth, 1.0f);
 }
