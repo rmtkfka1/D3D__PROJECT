@@ -226,26 +226,27 @@ Shadow::~Shadow()
 void Shadow::Init()
 {
 
-	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT), 0,1.0f };
-	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH),static_cast<LONG>(WINDOW_HEIGHT) };
+	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WINDOW_WIDTH*3),static_cast<float>(WINDOW_WIDTH * 3), 0,1.0f };
+	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH * 3),static_cast<LONG>(WINDOW_WIDTH * 3) };
 
 	_texture = make_shared<Texture>();
 
 	_texture->CreateTexture(DXGI_FORMAT_R32_FLOAT,
 		D3D12_RESOURCE_STATE_RENDER_TARGET,
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
+		WINDOW_WIDTH * 3,
+		WINDOW_WIDTH * 3,
 		TextureUsageFlags::RTV | TextureUsageFlags::SRV,
 		false,
-		false
+		false,
+		vec4(1.0f,1.0f,1.0f,1.0f)
 	);
 
 	_depthTexture = make_shared<Texture>();
 
 	_depthTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
+		WINDOW_WIDTH * 3,
+		WINDOW_WIDTH * 3,
 		TextureUsageFlags::DSV,
 		false,
 		false);
@@ -255,7 +256,7 @@ void Shadow::Init()
 void Shadow::RenderBegin()
 {
 
-	const float BackColor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	const float BackColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	auto& list = core->GetCmdList();
 	_texture->ResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET);
 

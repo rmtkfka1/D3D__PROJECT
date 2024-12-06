@@ -79,15 +79,20 @@ void Stage1::Run()
 	core->GetRenderTarget()->RenderEnd();
 
 
-	WCHAR wchTxt[100];
-	swprintf_s(wchTxt, 100, L"pos.x: %.2f, pos.y: %.2f, pos.z: %.2f, look.x: % .2f, look.y : % .2f, look.z : % .2f",
+	WCHAR wchTxt[300];
+	swprintf_s(wchTxt, 300, L"pos.x: %.2f, pos.y: %.2f, pos.z: %.2f, look.x: % .2f, look.y : % .2f, look.z : % .2f [] up.x: % .2f, up.y : % .2f, up.z : % .2f"
+		,
 		_player->GetTransform()->GetLocalPosition().x,
 		_player->GetTransform()->GetLocalPosition().y,
 		_player->GetTransform()->GetLocalPosition().z,
 
 		_player->GetTransform()->GetLook().x,
 		_player->GetTransform()->GetLook().y,
-		_player->GetTransform()->GetLook().z
+		_player->GetTransform()->GetLook().z,
+
+		_player->GetTransform()->GetUp().x,
+		_player->GetTransform()->GetUp().y,
+		_player->GetTransform()->GetUp().z
 	);
 
 
