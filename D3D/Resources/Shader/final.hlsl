@@ -62,26 +62,26 @@ float4 PS_Main(VS_OUT input) : SV_Target
     float3 toEye = normalize(g_eyeWorld - worldPos.xyz);
     
   
-    //for (int i = 0; i < g_lightCount; ++i)
-    //{
+    for (int i = 0; i < g_lightCount; ++i)
+    {
    
-    //    if (g_lights[i].mateiral.lightType == 0)
-    //    {
+        if (g_lights[i].mateiral.lightType == 0)
+        {
         
-    //        color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, WolrdNormal.xyz, toEye);
-    //    }
-    //    else if (g_lights[i].mateiral.lightType == 1)
-    //    {
-    //        color += ComputePointLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
-    //    }
-    //    else if (g_lights[i].mateiral.lightType == 2)
-    //    {
-    //        color += ComputeSpotLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
-    //    }
+            color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, WolrdNormal.xyz, toEye);
+        }
+        else if (g_lights[i].mateiral.lightType == 1)
+        {
+            color += ComputePointLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
+        }
+        else if (g_lights[i].mateiral.lightType == 2)
+        {
+            color += ComputeSpotLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
+        }
           
-    //}
+    }
     
   
-    return /*float4(color, 1.0f) **/ AlbedoColor;
+    return float4(color, 1.0f) * AlbedoColor;
     
 };

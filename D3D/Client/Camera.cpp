@@ -269,9 +269,9 @@ void UiCamera::GenBoundingFrustum()
 
 ShadowCamera::ShadowCamera():Camera(CameraType::SHADOW)
 {
-	_cameraPos = vec3(-1000.0f, 10000.0f, 30.0f);
-	_cameraLook = vec3(0, -1.0f, 0.00f);
-	_cameraUp = vec3(1.0f, 0, 0);
+	_cameraPos = vec3(-443.58f, 7896.66f, 364.40f);
+	_cameraLook = vec3(0, -1.00f, 0.05f);
+	_cameraUp = vec3(-0.06f, -0.05f, -1.00f);
 	_near = 1.0f;
 	_far = 30000.0f;
 }
@@ -287,10 +287,10 @@ void ShadowCamera::GenViewMatrix()
 	if (it == nullptr)
 		return;
 
-	_cameraPos = it->GetTransform()->GetLocalPosition(); 
-	_cameraLook = it->GetTransform()->GetLook();
-	//_cameraPos -= _cameraLook * 200.0f;
-	_cameraUp = it->GetTransform()->GetUp();
+	//_cameraPos = it->GetTransform()->GetLocalPosition(); 
+	//_cameraLook = it->GetTransform()->GetLook();
+	////_cameraPos -= _cameraLook * 200.0f;
+	//_cameraUp = it->GetTransform()->GetUp();
 
 	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
 }

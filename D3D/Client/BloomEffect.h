@@ -15,6 +15,7 @@ public:
 
 	void GenTexture();
 
+	void DepthRender();
 	void Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ);
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }

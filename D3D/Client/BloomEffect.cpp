@@ -13,7 +13,8 @@ namespace ENUM
 	{
 		None,
 		Bloom,
-		Blurring
+		Blurring,
+		Depth
 	};
 };
 
@@ -65,6 +66,11 @@ void BloomEffect::GenTexture()
 }
 
 
+void BloomEffect::DepthRender()
+{
+
+}
+
 void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 {
 	
@@ -86,8 +92,17 @@ void BloomEffect::Render(int32 disPatchX, int32 disPatchY, int32 disPatchZ)
 		type = ENUM::Blurring;
 	}
 
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::SIX))
+	{
+		type = ENUM::Depth;
+	}
 
-	if (type== ENUM::None)
+	if (type == ENUM::Depth)
+	{
+		DepthRender();
+	}
+
+	else if (type== ENUM::None)
 	{
 		return;
 	}

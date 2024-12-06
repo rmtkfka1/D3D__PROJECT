@@ -549,6 +549,10 @@ void Stage1::ShaodwRender()
 
 void Stage1::ComputePass()
 {
+	
+
+
+
 	int threadGroupSizeX = 16;
 	int threadGroupSizeY = 16;
 

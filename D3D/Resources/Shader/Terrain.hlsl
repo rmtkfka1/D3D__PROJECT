@@ -132,7 +132,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
     float shadowDepth = shadowTexture.Sample(g_sam_1, uv).r;
     
     if (uv.x >= 0 && uv.x <= 1.0f && uv.y >= 0 && uv.y <= 1.0f)
-    {
+    { 
         if (shadowDepth > 0 && depth > shadowDepth + 0.003f)
         {
             result *= 0.2f;

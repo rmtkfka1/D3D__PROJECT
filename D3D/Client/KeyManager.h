@@ -20,6 +20,7 @@ enum class KEY_TYPE
 	TWO = '2',
 	THREE = '3',
 
+	SIX = '6',
 	SEVEN = '7',
 	EIGHT ='8',
 	NINE = '9',
