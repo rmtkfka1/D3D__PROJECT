@@ -22,30 +22,9 @@ cbuffer TEST_B1 : register(b2)
     row_major matrix WorldMat;
 };
 
-cbuffer materialparams : register(b3)
-{
-    int intparams1;
-    int intparams2;
-    int intparams3;
-    int intparams4;
-    
-    float iTime;
-    float dx;
-    float dy;
-    float strength;
-
-    int texon1;
-    int texon2;
-    int texon3;
-    int texon4;
-
-    row_major float4x4 g_mat_0;
-};
-
 Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
 Texture2D g_tex_2 : register(t2);
-Texture2D shadowTexture : register(t3);
 SamplerState g_sam_0 : register(s0);
 
 struct VS_IN
@@ -116,20 +95,6 @@ float4 PS_Main(VS_OUT input) : SV_Target
     result += g_tex_2.Sample(g_sam_0, input.uv * 0.20f);
     
     result = clamp(result, 0, 1.0f);
-    
-    matrix shadowCameraVP = g_mat_0;
-    float4 shadowClipPos = mul(float4(input.worldPos, 1.0f), shadowCameraVP);
-    float depth = shadowClipPos.z / shadowClipPos.w;
-    float2 uv = shadowClipPos.xy / shadowClipPos.w;
-    uv.y = -uv.y;
-    uv = uv * 0.5 + 0.5;
-   
-    float textureDepth = shadowTexture.Sample(g_sam_0, uv).x;
-    if (textureDepth > 0 && depth > textureDepth + 0.0001f)
-    {
-        result *= 0.5f;
-    }
-    
     
     return result;
 }

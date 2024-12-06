@@ -7,7 +7,6 @@
 #include "BufferPool.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "RenderTargets.h"
 /////////////////////////////////////////////////////////
 
 Terrain::Terrain():CustomObject(PlayerType::Terrain)
@@ -49,12 +48,6 @@ void Terrain::Init()
         shared_ptr<Texture> texture = make_shared<Texture>();
         texture->Init(L"heightMap/Lava(Emissive).dds");
         _material->SetSpecularTexture(texture);
-    }
-
-    {
-        _material->SetShdoawTexture(core->GetShadow()->GetTexture());
-        auto& vpMatrix = static_pointer_cast<ShadowCamera>(CameraManager::GetInstance()->GetCamera(CameraType::SHADOW))->GetVpMatrix();
-       _material->SetMartix(vpMatrix);
     }
 
 }

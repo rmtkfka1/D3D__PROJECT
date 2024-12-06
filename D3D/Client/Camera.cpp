@@ -269,9 +269,9 @@ void UiCamera::GenBoundingFrustum()
 
 ShadowCamera::ShadowCamera():Camera(CameraType::SHADOW)
 {
-	_cameraPos = vec3(1500.0f, 15000.0f, 29.99f);
+	_cameraPos = vec3(-1000.0f, 10000.0f, 30.0f);
 	_cameraLook = vec3(0, -1.0f, 0.00f);
-	_cameraUp = vec3(1.0f,0, 0);
+	_cameraUp = vec3(1.0f, 0, 0);
 	_near = 1.0f;
 	_far = 20000.0f;
 }
@@ -287,11 +287,8 @@ void ShadowCamera::GenViewMatrix()
 
 void ShadowCamera::GenProjMatrix()
 {
-	_params.matProjection = XMMatrixOrthographicLH(10000.0f, 10000.0f, _near, _far);
-
-	//_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
-
-	_VPMatrix = _params.matView * _params.matProjection;
+	
+	_params.matProjection = XMMatrixOrthographicLH(20000.0f, 20000.0f, _near, _far);
 }
 
 void ShadowCamera::GenBoundingFrustum()
@@ -305,4 +302,5 @@ void ShadowCamera::Update()
 	GenViewMatrix();
 	GenProjMatrix();
 	GenBoundingFrustum();
+	_vpMatrix = _params.matView *  _params.matProjection;
 }

@@ -75,8 +75,8 @@ void StartScene::BulidObject()
 void StartScene::BulidCamera()
 {
 
-	shared_ptr<ObserveCamera> observeCamera = make_shared<ObserveCamera>();
-	CameraManager::GetInstance()->AddCamera(CameraType::OBSERVE, observeCamera);
+	shared_ptr<ShadowCamera> shadow = make_shared<ShadowCamera>();
+	CameraManager::GetInstance()->AddCamera(CameraType::SHADOW, shadow);
 
 	shared_ptr<UiCamera> uicamera = make_shared<UiCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::UI, uicamera);

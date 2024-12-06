@@ -26,7 +26,6 @@ cbuffer materialparams : register(b3)
     int texon2;
     int texon3;
     int texon4;
-
     row_major float4x4 g_mat_0;
 };
 

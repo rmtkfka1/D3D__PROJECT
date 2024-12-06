@@ -52,7 +52,6 @@ void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPt
 		material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
 		material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2)); //ALBEDO
-		material->SetShdoawTexture(core->GetShadow()->GetTexture());
 		ResourceManager::GetInstance()->Add<Material>(L"finalMaterial", material);
 	}
 
@@ -227,15 +226,15 @@ Shadow::~Shadow()
 void Shadow::Init()
 {
 
-	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT), 0,1.0f };
-	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH),static_cast<LONG>(WINDOW_HEIGHT) };
+	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(4096),static_cast<float>(4096), 0,1.0f };
+	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(4096),static_cast<LONG>(4096) };
 
 	_texture = make_shared<Texture>();
 
 	_texture->CreateTexture(DXGI_FORMAT_R32_FLOAT,
 		D3D12_RESOURCE_STATE_RENDER_TARGET,
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
+		4096,
+		4096,
 		TextureUsageFlags::RTV | TextureUsageFlags::SRV,
 		false,
 		false
@@ -245,8 +244,8 @@ void Shadow::Init()
 
 	_depthTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
+		4096,
+		4096,
 		TextureUsageFlags::DSV,
 		false,
 		false);

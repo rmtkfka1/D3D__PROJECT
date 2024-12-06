@@ -30,13 +30,14 @@ cbuffer materialparams : register(b3)
     int specon;
     int texon4;
 
-    
     row_major float4x4 g_mat_0;
+ 
 
 };
 
 Texture2D diffuseTexture : register(t0);
 Texture2D normalTexture : register(t1);
+Texture2D shadowTexture : register(t3);
 SamplerState g_sam_0 : register(s0);
 
 struct VS_IN
@@ -56,7 +57,7 @@ struct VS_OUT
     float3 worldTangent : TANGENT;
     float3 worldBinormal : BINORMAL;
     float2 uv : TEXCOORD;
- 
+    float4 shadowCoord : TEXCOORD1; // 그림자 좌표 추가
 };
 
 
@@ -82,6 +83,12 @@ VS_OUT VS_Main(VS_IN input)
         //output.worldBinormal = normalize(cross(output.worldTangent, output.worldNormal));
     }
     
+    float4 lightSpacePos = mul(worldPos, g_mat_0);
+    // NDC -> 텍스처 좌표로 변환 ([0, 1] 범위)
+    output.shadowCoord = lightSpacePos / lightSpacePos.w; // Perspective Divide
+    output.shadowCoord.xy = output.shadowCoord.xy * 0.5f + 0.5f; // [0,1] 범위로 변환
+    output.shadowCoord.y *= -1;
+    
     return output;
 };
 
@@ -91,6 +98,7 @@ struct PS_OUT
     float4 normal : SV_Target1;
     float4 color : SV_Target2;
 };
+
 
 
 PS_OUT PS_Main(VS_OUT input) : SV_Target
@@ -115,7 +123,7 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
  
    
     
-    if (NormalOn )
+    if (NormalOn)
     {
         // [0,255] 범위에서 [0,1]로 변환
         float3 tangentSpaceNormal = normalTexture.Sample(g_sam_0, input.uv).xyz;
@@ -124,8 +132,13 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
         float3x3 matTBN = { input.worldTangent, input.worldBinormal, input.worldNormal };
         output.normal = float4(mul(tangentSpaceNormal, matTBN), 0.0f);
     }
-
-
+   
+    float shadowMapDepth = shadowTexture.Sample(g_sam_0, input.shadowCoord.xy).r;
+    float currentDepth = input.shadowCoord.z;
+    float shadow = currentDepth > shadowMapDepth + 0.011f ? 0.5f : 1.0f;
+    output.color.rgb *= shadow;
+    
+    
     return output;
 
-}
+};

@@ -22,30 +22,9 @@ cbuffer TEST_B1 : register(b2)
     row_major matrix WorldMat;
 };
 
-cbuffer materialparams : register(b3)
-{ 
-    int intparams1;
-    int intparams2;
-    int intparams3;
-    int intparams4;
-    
-    float iTime;
-    float dx;
-    float dy;
-    float strength;
-
-    int texon1;
-    int texon2;
-    int texon3;
-    int texon4;
-
-    row_major float4x4 g_mat_0;
-};
-
 Texture2D PositionTexture : register(t0);
 Texture2D NormalTexture : register(t1);
 Texture2D AlbedoTexture : register(t2);
-Texture2D shadowTexture : register(t3);
 SamplerState g_sam_0 : register(s0);
 
 struct VS_IN
@@ -74,7 +53,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
 {
    
    
-    float3 color = float3(0, 0, 0);
+    float3 color;
     
     float4 worldPos = PositionTexture.Sample(g_sam_0, input.uv);
     float4 WolrdNormal = normalize(NormalTexture.Sample(g_sam_0, input.uv));
@@ -82,28 +61,28 @@ float4 PS_Main(VS_OUT input) : SV_Target
     
     float3 toEye = normalize(g_eyeWorld - worldPos.xyz);
     
-  
-    for (int i = 0; i < g_lightCount; ++i)
-    {
    
-        if (g_lights[i].mateiral.lightType == 0)
-        {
+    //for (int i = 0; i < g_lightCount; ++i)
+    //{
+   
+    //    if (g_lights[i].mateiral.lightType == 0)
+    //    {
         
-            color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, WolrdNormal.xyz, toEye);
-        }
-        else if (g_lights[i].mateiral.lightType == 1)
-        {
-            color += ComputePointLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
-        }
-        else if (g_lights[i].mateiral.lightType == 2)
-        {
-            color += ComputeSpotLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
-        }
+    //        color += ComputeDirectionalLight(g_lights[i], g_lights[i].mateiral, WolrdNormal.xyz, toEye);
+    //    }
+    //    else if (g_lights[i].mateiral.lightType == 1)
+    //    {
+    //        color += ComputePointLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
+    //    }
+    //    else if (g_lights[i].mateiral.lightType == 2)
+    //    {
+    //        color += ComputeSpotLight(g_lights[i], g_lights[i].mateiral, worldPos.xyz, WolrdNormal.xyz, toEye);
+    //    }
           
-    }
+    //}
     
 
+
+    return  AlbedoColor;
     
-    return float4(color, 1.0f) * AlbedoColor;
-    
-};
+}

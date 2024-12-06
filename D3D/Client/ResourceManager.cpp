@@ -194,7 +194,6 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetDiffuseTexture(core->GetGBuffer()->GetTexture(0));
 		material->SetNormalTexture(core->GetGBuffer()->GetTexture(1));
 		material->SetSpecularTexture(core->GetGBuffer()->GetTexture(2)); //ALBEDO
-		material->SetShdoawTexture(core->GetShadow()->GetTexture()); //ALBEDO
 		Add<Material>(L"finalMaterial", material);
 	}
 

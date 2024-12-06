@@ -5,9 +5,9 @@
 
 
 default_random_engine dre;
-uniform_real_distribution<double> random_xz(-5000.0f, 5000.0f);
+uniform_real_distribution<double> random_xz(-3000, 3000.0f);
 uniform_real_distribution<double> random_y(3000.0f, 5000.0f);
-uniform_real_distribution<double> random_sclae(10.0f, 180.0f);
+uniform_real_distribution<double> random_sclae(30.0f, 30.0f);
 
 Box::Box():ModelObject(PlayerType::Box)
 {

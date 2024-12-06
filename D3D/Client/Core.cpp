@@ -31,8 +31,6 @@ void Core::Init(HWND hwnd, bool EnableDebugLayer, bool EnableGBV)
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 	::SetWindowPos(hwnd, 0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
-
-
 	CreateDevice(EnableDebugLayer, EnableGBV);
 
 	_bufferManager = make_shared<BufferManager>();

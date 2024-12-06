@@ -50,6 +50,7 @@ void ModelObject::Render()
 
 		if (data->material)
 		{
+
 			data->material->PushData();
 		}
 

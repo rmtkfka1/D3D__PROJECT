@@ -26,10 +26,8 @@ cbuffer materialparams : register(b3)
     int texon2;
     int texon3;
     int texon4;
-
     row_major float4x4 g_mat_0;
 };
-
 struct VS_IN
 {
     float3 pos : POSITION;

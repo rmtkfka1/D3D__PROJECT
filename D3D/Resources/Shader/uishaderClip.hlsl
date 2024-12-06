@@ -14,25 +14,25 @@ cbuffer TEST_B1 : register(b2)
 
 cbuffer materialparams : register(b3)
 {
+   
     int intparams1;
     int intparams2;
     int intparams3;
     int intparams4;
     
-    float iTime;
-    float dx;
-    float dy;
-    float strength;
-
-    int texon1;
-    int texon2;
-    int texon3;
-    int texon4;
+    float floatparams1;
+    float floatparams2;
+    float floatparams3;
+    float floatparams4;
     
+    int diffuseOn;
+    int NormalOn;
+    int specon;
+    int texon4;
+
     row_major float4x4 g_mat_0;
+ 
 };
-
-
 Texture2D g_tex_0 : register(t0);
 SamplerState g_sam_0 : register(s0);
 

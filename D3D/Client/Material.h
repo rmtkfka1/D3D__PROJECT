@@ -9,10 +9,10 @@ struct MaterialParams
 	void Setfloat(uint8 index, float value) { floatParams[index] = value; }
 	void SetTexon(uint8 index, int value) { TextureParams[index] = value; }
 	void SetMatrix(Matrix mat) { matrix = mat; }
-
 	array<int32, 4> intParams{0};
 	array<float, 4> floatParams{0};
 	array<int, 4> TextureParams{0};
+
 	Matrix matrix = Matrix::Identity;
 };
 
@@ -25,12 +25,11 @@ public:
 
 	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
 	void SetFloat(uint8 index, float value) { _params.Setfloat(index, value); }
-	void SetMartix(Matrix mat) { _params.SetMatrix(mat); }
-
+	void SetMatrix(Matrix mat) { _params.SetMatrix(mat); }
 	void SetDiffuseTexture(shared_ptr<Texture> texture) { _diffuseTexture = texture; }
 	void SetNormalTexture(shared_ptr<Texture> texture) { _normalTexture = texture; }
 	void SetSpecularTexture(shared_ptr<Texture> texture) { _SpecularTexture = texture; }
-	void SetShdoawTexture(shared_ptr<Texture> texture) { _shadowTexture = texture; }
+	void SetShadowTexture(shared_ptr<Texture> texture) { _shadowTexture = texture; }
 
 	void PushData();
 	

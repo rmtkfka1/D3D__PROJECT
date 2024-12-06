@@ -24,7 +24,10 @@ cbuffer TEST_B1 : register(b2)
 
 cbuffer materialparams : register(b3)
 {
-    int intparams1;
+    
+
+    
+    int enemyDraw;
     int intparams2;
     int intparams3;
     int intparams4;
@@ -34,12 +37,14 @@ cbuffer materialparams : register(b3)
     float floatparams3;
     float floatparams4;
     
-    int texon1;
-    int texon2;
-    int texon3;
+    int diffuseOn;
+    int NormalOn;
+    int specon;
     int texon4;
-    
+
     row_major float4x4 g_mat_0;
+ 
+
 };
 
 

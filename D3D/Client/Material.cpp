@@ -5,20 +5,23 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "GameObject.h"
+#include "RenderTargets.h"
+#include "Camera.h"
 
 Material::Material():ResourceBase(ResourceType::Material)
 {
-
-
+	_shadowTexture = core->GetShadow()->GetTexture();
 }
 Material::~Material()
 {
+
 }
-
-
 
 void Material::PushData()
 {
+	
+	auto& camera = CameraManager::GetInstance()->GetCamera(CameraType::SHADOW);
+	SetMatrix(static_pointer_cast<ShadowCamera>(camera)->GetVPMatrix());
 
 	if (_diffuseTexture)
 	{
@@ -63,7 +66,6 @@ void Material::PushData()
 	{
 		_params.SetTexon(3, 0);
 	}
-
 
 	core->GetBufferManager()->GetMaterialParamsBufferPool()->PushData(&_params, sizeof(_params));
 	
