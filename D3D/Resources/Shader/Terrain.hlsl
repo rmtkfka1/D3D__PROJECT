@@ -26,7 +26,7 @@ Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
 Texture2D g_tex_2 : register(t2);
 SamplerState g_sam_0 : register(s0);
-
+SamplerState g_sam_1 : register(s1);
 struct VS_IN
 {
     float3 pos : POSITION;

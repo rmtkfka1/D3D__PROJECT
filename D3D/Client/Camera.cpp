@@ -289,7 +289,7 @@ void ShadowCamera::GenViewMatrix()
 
 	_cameraPos = it->GetTransform()->GetLocalPosition();
 	_cameraLook = it->GetTransform()->GetLook();
-	_cameraPos -= _cameraLook * 70.0f;
+	_cameraPos -= _cameraLook * 90.0f;
 	_cameraUp = it->GetTransform()->GetUp();
 
 	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);

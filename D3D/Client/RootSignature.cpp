@@ -5,20 +5,34 @@
 void RootSignature::Init()
 {
 	// 정적 샘플러 설정
-	D3D12_STATIC_SAMPLER_DESC samplerDesc = {};
-	samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	samplerDesc.MipLODBias = 0;
-	samplerDesc.MaxAnisotropy = 0;
-	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	samplerDesc.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-	samplerDesc.MinLOD = 0.0f;
-	samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-	samplerDesc.ShaderRegister = 0;
-	samplerDesc.RegisterSpace = 0;
-	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	D3D12_STATIC_SAMPLER_DESC samplerDesc[2] = {};
+	samplerDesc[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[0].MipLODBias = 0;
+	samplerDesc[0].MaxAnisotropy = 0;
+	samplerDesc[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	samplerDesc[0].BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	samplerDesc[0].MinLOD = 0.0f;
+	samplerDesc[0].MaxLOD = D3D12_FLOAT32_MAX;
+	samplerDesc[0].ShaderRegister = 0;
+	samplerDesc[0].RegisterSpace = 0;
+	samplerDesc[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	samplerDesc[1].Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	samplerDesc[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	samplerDesc[1].MipLODBias = 0;
+	samplerDesc[1].MaxAnisotropy = 0;
+	samplerDesc[1].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	samplerDesc[1].BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	samplerDesc[1].MinLOD = 0.0f;
+	samplerDesc[1].MaxLOD = D3D12_FLOAT32_MAX;
+	samplerDesc[1].ShaderRegister = 1;
+	samplerDesc[1].RegisterSpace = 0;
+	samplerDesc[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 
 	CD3DX12_DESCRIPTOR_RANGE ranges[] =
@@ -41,8 +55,8 @@ void RootSignature::Init()
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};
 	rootSignatureDesc.NumParameters = _countof(param);
 	rootSignatureDesc.pParameters = param;
-	rootSignatureDesc.NumStaticSamplers = 1;
-	rootSignatureDesc.pStaticSamplers = &samplerDesc;
+	rootSignatureDesc.NumStaticSamplers = 2;
+	rootSignatureDesc.pStaticSamplers = samplerDesc;
 	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT
 		| D3D12_ROOT_SIGNATURE_FLAG_ALLOW_STREAM_OUTPUT;
 
