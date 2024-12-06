@@ -13,8 +13,6 @@ cbuffer TEST_B1 : register(b2)
 cbuffer materialparams : register(b3)
 {
     
-
-    
     int enemyDraw;
     int intparams2;
     int intparams3;
@@ -57,7 +55,7 @@ struct VS_OUT
     float3 worldTangent : TANGENT;
     float3 worldBinormal : BINORMAL;
     float2 uv : TEXCOORD;
-    float4 shadowCoord : TEXCOORD1; // 그림자 좌표 추가
+
 };
 
 
@@ -83,12 +81,7 @@ VS_OUT VS_Main(VS_IN input)
         //output.worldBinormal = normalize(cross(output.worldTangent, output.worldNormal));
     }
     
-    float4 lightSpacePos = mul(worldPos, g_mat_0);
-    // NDC -> 텍스처 좌표로 변환 ([0, 1] 범위)
-    output.shadowCoord = lightSpacePos / lightSpacePos.w; // Perspective Divide
-    output.shadowCoord.xy = output.shadowCoord.xy * 0.5f + 0.5f; // [0,1] 범위로 변환
-    output.shadowCoord.y *= -1;
-    
+  
     return output;
 };
 
@@ -133,10 +126,19 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
         output.normal = float4(mul(tangentSpaceNormal, matTBN), 0.0f);
     }
    
-    float shadowMapDepth = shadowTexture.Sample(g_sam_0, input.shadowCoord.xy).r;
-    float currentDepth = input.shadowCoord.z;
-    float shadow = currentDepth > shadowMapDepth + 0.011f ? 0.5f : 1.0f;
-    output.color.rgb *= shadow;
+    
+    matrix shadowCameraVP = g_mat_0;
+    float4 shadowClipPos = mul(float4(input.worldPos,1.0f), shadowCameraVP);
+    float depth = shadowClipPos.z / shadowClipPos.w;
+    float2 uv = shadowClipPos.xy / shadowClipPos.w;
+    uv.y = -uv.y;
+    uv = uv * 0.5 + 0.5;
+    
+    float shadowDepth = shadowTexture.Sample(g_sam_0, uv).x;
+    if (shadowDepth > 0 && depth > shadowDepth + 0.0001f)
+    {
+        output.color *= 0.5f;
+    }
     
     
     return output;

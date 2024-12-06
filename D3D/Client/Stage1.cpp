@@ -182,6 +182,8 @@ void Stage1::BulidDeferred()
 
 		_player = player;
 
+		ResourceManager::GetInstance()->Add<GameObject>(L"Player", _player);
+
 	}
 
 

@@ -282,13 +282,23 @@ ShadowCamera::~ShadowCamera()
 
 void ShadowCamera::GenViewMatrix()
 {
+	auto& it =ResourceManager::GetInstance()->Get<GameObject>(L"Player");
+
+	if (it == nullptr)
+		return;
+
+	_cameraPos = it->GetTransform()->GetLocalPosition();
+	_cameraLook = it->GetTransform()->GetLook();
+	_cameraPos -= _cameraLook * 70.0f;
+	_cameraUp = it->GetTransform()->GetUp();
+
 	_params.matView = XMMatrixLookToLH(_cameraPos, _cameraLook, _cameraUp);
 }
 
 void ShadowCamera::GenProjMatrix()
 {
-	
-	_params.matProjection = XMMatrixOrthographicLH(20000.0f, 20000.0f, _near, _far);
+	_params.matProjection = XMMatrixPerspectiveFovLH(_fov, WINDOW_WIDTH / WINDOW_HEIGHT, _near, _far);
+	//_params.matProjection = XMMatrixOrthographicLH(10000.0f, 10000.0f, _near, _far);
 }
 
 void ShadowCamera::GenBoundingFrustum()
