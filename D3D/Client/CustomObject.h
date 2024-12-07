@@ -19,7 +19,7 @@ public:
 	virtual void Init() override;;
 	virtual void Update() override;
 	virtual void Render() override;
-	virtual void ShadowRender() override;
+	virtual void ShaderNoSetRender() override;
 	virtual shared_ptr<Transform> GetTransform() override { return _transform; }
 
 

@@ -14,12 +14,12 @@ public:
 	HireacyObject(PlayerType type);
 	virtual ~HireacyObject();
 
-	virtual void Init() override;;
+	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Render() override;
-	virtual void ShadowRender() override;
+	virtual void ShaderNoSetRender() override;
 
-
+	vector<shared_ptr<Material>>& GetMatrial();
 	virtual shared_ptr<Transform> GetTransform() override;
 
 	void AddBoxColliderWithModel(string name, ColliderBehave behave , vec3 offsetSize = vec3(0, 0, 0), vec3 offsetCeneter = vec3(0, 0, 0));

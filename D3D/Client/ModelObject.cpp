@@ -54,7 +54,6 @@ void ModelObject::Render()
 
 		if (data->material)
 		{
-
 			data->material->PushData();
 		}
 
@@ -68,7 +67,7 @@ void ModelObject::Render()
 
 }
 
-void ModelObject::ShadowRender()
+void ModelObject::ShaderNoSetRender()
 {
 	auto& list = core->GetCmdList();
 
@@ -90,6 +89,11 @@ void ModelObject::ShadowRender()
 	}
 }
 
+
+vector<shared_ptr<Material>>& ModelObject::GetMaterial()
+{
+	return _model->GetMaterials();
+}
 
 void ModelObject::AddBoxColliderWithModel(string name, ColliderBehave behave, vec3 offsetSize, vec3 offsetCeneter)
 {

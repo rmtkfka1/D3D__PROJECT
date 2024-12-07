@@ -282,10 +282,6 @@ ShadowCamera::~ShadowCamera()
 
 void ShadowCamera::GenViewMatrix()
 {
-	auto& it =ResourceManager::GetInstance()->Get<GameObject>(L"Player");
-
-	if (it == nullptr)
-		return;
 
 	//_cameraPos = it->GetTransform()->GetLocalPosition(); 
 	//_cameraLook = it->GetTransform()->GetLook();
@@ -320,5 +316,5 @@ void ShadowCamera::Update()
 	GenViewMatrix();
 	GenProjMatrix();
 	GenBoundingFrustum();
-	_vpMatrix = _params.matView *  _params.matProjection;
+	_vpMatrix = _params.matView * _params.matProjection;
 }

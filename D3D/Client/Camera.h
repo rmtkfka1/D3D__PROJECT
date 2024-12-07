@@ -35,6 +35,7 @@ public:
 
 	bool IsInFrustum(shared_ptr<BaseCollider>& collider);
 
+public:
 	virtual void Update() = 0;
 
 	void AddMove(const vec3& shift);
@@ -154,7 +155,7 @@ public:
 	virtual ~ShadowCamera();
 
 	Matrix GetVPMatrix() { return _vpMatrix; }
-private:
+public:
 	virtual void GenViewMatrix() override;
 	virtual void GenProjMatrix() override;
 	virtual void GenBoundingFrustum() override;

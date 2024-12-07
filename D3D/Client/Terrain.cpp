@@ -50,6 +50,13 @@ void Terrain::Init()
         _material->SetSpecularTexture(texture);
     }
 
+
+    auto& camera = CameraManager::GetInstance()->GetCamera(CameraType::SHADOW);
+    Matrix mat = static_pointer_cast<ShadowCamera>(camera)->GetVPMatrix();
+    auto& ele =GetMaterial();
+    ele->SetMatrix(mat);
+    
+
 }
 
 void Terrain::Update()

@@ -13,8 +13,6 @@ GameObject::~GameObject()
 
 }
 
-
-
 void GameObject::AddBoxCollider(string name, ColliderBehave behave, vec3 size, vec3 center)
 {
 	shared_ptr<BoxCollider> box = make_shared<BoxCollider>();

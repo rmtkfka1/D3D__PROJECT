@@ -30,6 +30,7 @@
 #include "BilboardObject.h"
 #include <random>
 #include "BloomEffect.h"
+#include "Mirror.h"
 
 static default_random_engine dre;
 static uniform_int_distribution<int> random_xz(-3800, 3800);
@@ -155,6 +156,8 @@ void Stage1::BulidCamera()
 
 	shared_ptr<ShadowCamera> shadowCamera = make_shared<ShadowCamera>();
 	CameraManager::GetInstance()->AddCamera(CameraType::SHADOW, shadowCamera);
+
+	shadowCamera->Update();
 };
 
 void Stage1::BulidDeferred()
@@ -199,6 +202,16 @@ void Stage1::BulidDeferred()
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
 		object->AddBoxColliderWithModel("block",ColliderBehave::Passive);
+
+		auto& camera = CameraManager::GetInstance()->GetCamera(CameraType::SHADOW);
+		Matrix mat = static_pointer_cast<ShadowCamera>(camera)->GetVPMatrix();
+		auto& vec =object->GetMaterial();
+
+		for (auto& ele : vec)
+		{
+			ele->SetMatrix(mat);
+		}
+
 		AddGameObject(object, RenderingType::Deferred);
 
 	}
@@ -210,6 +223,16 @@ void Stage1::BulidDeferred()
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
 		object->AddSphereColliderWithModel("earth", ColliderBehave::Passive);
+
+		auto& camera = CameraManager::GetInstance()->GetCamera(CameraType::SHADOW);
+		Matrix mat = static_pointer_cast<ShadowCamera>(camera)->GetVPMatrix();
+		auto& vec = object->GetMaterial();
+
+		for (auto& ele : vec)
+		{
+			ele->SetMatrix(mat);
+		}
+
 		AddGameObject(object, RenderingType::Deferred);
 	}
 
@@ -295,21 +318,19 @@ void Stage1::BulidDeferred()
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
+
 	{
-		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
+		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
+		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
 		gameobject->SetFrustumCuling(false);
 		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
 		gameobject->SetModel(model);
 		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
 		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
-
 		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
 		gameobject->SetShader(shader);
-
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
-
-
 
 
 
@@ -544,12 +565,12 @@ void Stage1::ShaodwRender()
 
 	for (auto& ele : _deferredObjects)
 	{
-		ele->ShadowRender();
+		ele->ShaderNoSetRender();
 	}
 
 	for (auto& ele : _forwardObjects)
 	{
-		ele->ShadowRender();
+		ele->ShaderNoSetRender();
 	}
 
 

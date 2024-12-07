@@ -20,9 +20,6 @@ Material::~Material()
 void Material::PushData()
 {
 	
-	auto& camera = CameraManager::GetInstance()->GetCamera(CameraType::SHADOW);
-	SetMatrix(static_pointer_cast<ShadowCamera>(camera)->GetVPMatrix());
-
 	if (_diffuseTexture)
 	{
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t0));

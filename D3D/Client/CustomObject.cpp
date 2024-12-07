@@ -51,7 +51,7 @@ void CustomObject::Render()
 
 }
 
-void CustomObject::ShadowRender()
+void CustomObject::ShaderNoSetRender()
 {
 	_transform->PushData();
 	_material->PushData();

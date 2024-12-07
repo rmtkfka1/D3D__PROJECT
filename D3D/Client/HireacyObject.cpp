@@ -62,7 +62,7 @@ void HireacyObject::Render()
 
 }
 
-void HireacyObject::ShadowRender()
+void HireacyObject::ShaderNoSetRender()
 {
 	auto& list = core->GetCmdList();
 
@@ -84,6 +84,11 @@ void HireacyObject::ShadowRender()
 }
 
 
+
+vector<shared_ptr<Material>>& HireacyObject::GetMatrial()
+{
+	return _model->GetMaterials();
+}
 
 shared_ptr<Transform> HireacyObject::GetTransform()
 {
