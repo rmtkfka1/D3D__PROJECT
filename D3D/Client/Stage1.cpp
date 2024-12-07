@@ -439,7 +439,6 @@ void Stage1::BulidForward()
 		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
 		gameobject->SetModel(model);
 		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
-		gameobject->GetTransform()->SetLocalRotation(vec3(0, 180.0f, 0));
 		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
 		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"defaultBlend.hlsl");
 		gameobject->SetShader(shader);

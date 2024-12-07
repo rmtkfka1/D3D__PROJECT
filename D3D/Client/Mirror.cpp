@@ -9,6 +9,8 @@
 #include "Mesh.h"
 #include "HireacyObject.h"
 #include "RenderTargets.h"
+#include "CustomObject.h"
+#include "GeoMetryHelper.h"
 void Mirror::Init()
 {
 	ModelObject::Init();
@@ -29,7 +31,6 @@ void Mirror::Init()
 		_mirrorReadShader->Init(L"mirror.hlsl", info);
 	}
 
-
 	_plane = SimpleMath::Plane(vec3(51339.36f, 500014.73f, 49858.14f),
 		vec3(-1, 0, 0));
 
@@ -45,7 +46,15 @@ void Mirror::Init()
 		}
 	}
 
-
+	_glass = make_shared<CustomObject>();
+	_glass->SetFrustumCuling(false);
+	_glass->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1.0f);
+	_glass->GetTransform()->SetLocalPosition(vec3(51330.0f, 50120.0f, 49850.0f));
+	_glass->GetTransform()->SetLocalScale(vec3(248.0f, 320.0f, 250.0f));
+	_glass->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
+	_glass->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"default.hlsl"));
+	_glass->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Get<Texture>(L"info.png"));
+	_glass->GetTransform()->Update();
 }
 
 void Mirror::Update()
@@ -55,24 +64,28 @@ void Mirror::Update()
 
 void Mirror::Render()
 {
-	auto& list = core->GetCmdList();
+	//auto& list = core->GetCmdList();
 
-	//// 1. 스텐실버퍼에  거울의 스텐실 값을 기록하는단계 ( 실제렌더링 X) => 1값을 기록함
-	_mirrorWriteShader->SetPipelineState();
-	list->OMSetStencilRef(1);
-	ModelObject::ShaderNoSetRender();
+	////// 1. 스텐실버퍼에  거울의 스텐실 값을 기록하는단계 ( 실제렌더링 X) => 1값을 기록함
+	//_mirrorWriteShader->SetPipelineState();
+	//list->OMSetStencilRef(1);
+	//ModelObject::ShaderNoSetRender();
 
-	//// 2. 스텐실버퍼에 반사된 오브젝트 들은 렌더링  ( _mirrorReadShader 에는 반사행렬이 계산되있음)
-	_mirrorReadShader->SetPipelineState();
-
-	for (auto& ele : _mirrorObjects)
-	{
-		list->OMSetStencilRef(1);
-		ele->ShaderNoSetRender();
-	}
+	////// 2. 스텐실버퍼에 반사된 오브젝트 들은 렌더링  ( _mirrorReadShader 에는 반사행렬이 계산되있음)
 
 
+	//_mirrorReadShader->SetPipelineState();
+	////씬에서 반사되는 오브젝트만을 렌더
+	//for (auto& ele : _mirrorObjects)
+	//{
+	//	ele->ShaderNoSetRender();
+	//}
 
+	// 3 거울을 렌더링
+
+	ModelObject::Render();
+
+	_glass->Render();
 
 
 }

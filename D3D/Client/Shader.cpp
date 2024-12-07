@@ -155,6 +155,7 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		_pipelineDesc.DepthStencilState.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
 		_pipelineDesc.DepthStencilState.FrontFace.StencilFailOp  = D3D12_STENCIL_OP_KEEP;
 		_pipelineDesc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
+		_pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = 0;
 		break;
 
 	case DEPTH_STENCIL_TYPE::STENCILL_READ:
@@ -182,22 +183,25 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		break;
 	case BLEND_TYPE::ALPHA_BLEND:
 		rt.BlendEnable = TRUE;
-		rt.LogicOpEnable = FALSE;
+		rt.LogicOpEnable = D3D12_LOGIC_OP_NOOP;
 		rt.SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		rt.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 		break;
+
 	case BLEND_TYPE::ONE_TO_ONE_BLEND:
 		rt.BlendEnable = TRUE;
 		rt.LogicOpEnable = FALSE;
 		rt.SrcBlend = D3D12_BLEND_ONE;
 		rt.DestBlend = D3D12_BLEND_ONE;
 		break;
+
 	case BLEND_TYPE::BLEND_FACTOR:
-		rt.BlendEnable = FALSE;  // 블렌드 활성화
+		rt.BlendEnable = TRUE;  // 블렌드 활성화
+		rt.LogicOpEnable = FALSE;  // 논리 연산 사용 안 함
 		rt.SrcBlend = D3D12_BLEND_INV_BLEND_FACTOR;  // 소스 블렌드 팩터는 블렌드 팩터
 		rt.DestBlend = D3D12_BLEND_BLEND_FACTOR; // 대상 블렌드 팩터도 블렌드 팩터
 		rt.BlendOp = D3D12_BLEND_OP_ADD;  // 블렌드 연산은 더하기
-		rt.LogicOpEnable = FALSE;  // 논리 연산 사용 안 함
+		rt.RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 	}
 
