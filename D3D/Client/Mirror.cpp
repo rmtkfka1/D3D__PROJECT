@@ -47,14 +47,6 @@ void Mirror::Init()
 		}
 	}
 
-	_glass = make_shared<CustomObject>();
-	_glass->SetFrustumCuling(false);
-	_glass->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1.0f);
-	_glass->GetTransform()->SetLocalPosition(vec3(51330.0f, 50120.0f, 49850.0f));
-	_glass->GetTransform()->SetLocalScale(vec3(248.0f, 320.0f, 250.0f));
-	_glass->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
-
-	_glass->GetTransform()->Update();
 }
 
 void Mirror::Update()
@@ -69,7 +61,7 @@ void Mirror::Render()
 	//// 1. 스텐실버퍼에  거울의 스텐실 값을 기록하는단계 ( 실제렌더링 X) => 1값을 기록함
 	_mirrorWriteShader->SetPipelineState();
 	list->OMSetStencilRef(1);
-	_glass->ShaderNoSetRender();
+	ModelObject::ShaderNoSetRender();
 
 	//// 2. 스텐실버퍼에 반사된 오브젝트 들은 렌더링  ( _mirrorReadShader 에는 반사행렬이 계산되있음)
 

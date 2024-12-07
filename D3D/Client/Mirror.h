@@ -3,7 +3,6 @@
 
 class Shader;
 class GameObject;
-class CustomObject;
 
 class Mirror :public ModelObject
 {
@@ -24,7 +23,6 @@ private:
 
 private:
 
-	shared_ptr<CustomObject> _glass;
 	vector<shared_ptr<GameObject>> _mirrorObjects;
 	shared_ptr<GraphicsShader> _mirrorWriteShader;
 	shared_ptr<GraphicsShader> _mirrorReadShader;
