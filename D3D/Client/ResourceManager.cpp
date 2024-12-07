@@ -123,6 +123,15 @@ void ResourceManager::CreateDefaultShader()
 
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		//info.blendType = BLEND_TYPE::BLEND_FACTOR;
+		shader->Init(L"default.hlsl");
+		Add<GraphicsShader>(L"defaultBlend.hlsl", shader);
+	}
+
+
+	{
+		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
 		shader->Init(L"default.hlsl");
 		Add<GraphicsShader>(L"default.hlsl", shader);
 	}

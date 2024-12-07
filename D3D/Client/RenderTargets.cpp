@@ -40,7 +40,7 @@ void RenderTargets::Init(DWORD WndWidth, DWORD WndHeight, ComPtr<IDXGISwapChain3
 		|TextureUsageFlags::SRV, false, true);
 
 	_RenderTargetIndex = swapchain->GetCurrentBackBufferIndex();
-	_DSTexture->CreateTexture(DXGI_FORMAT_D32_FLOAT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false, true);
+	_DSTexture->CreateTexture(DXGI_FORMAT_D24_UNORM_S8_UINT,D3D12_RESOURCE_STATE_DEPTH_WRITE ,WINDOW_WIDTH, WINDOW_HEIGHT, TextureUsageFlags::DSV, false, true);
 }
 
 void RenderTargets::Resize(DWORD BackBufferWidth, DWORD BackBufferHeight , ComPtr<IDXGISwapChain3> swapchain , UINT	_swapChainFlags )
@@ -125,7 +125,8 @@ void RenderTargets::RenderEnd()
 void RenderTargets::ClearDepth()
 {
 	ComPtr<ID3D12GraphicsCommandList> cmdList = core->GetCmdList();
-	cmdList->ClearDepthStencilView(_DSTexture->GetSharedDSVHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	cmdList->ClearDepthStencilView(_DSTexture->GetSharedDSVHandle(), D3D12_CLEAR_FLAG_DEPTH
+	| D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 }
 
 

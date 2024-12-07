@@ -62,7 +62,7 @@ void Stage1::Run()
 	core->GetRenderTarget()->ClearDepth();
 
 	core->GetShadow()->RenderBegin();
-	ShaodwRender();
+	ShadowRender();
 	core->GetShadow()->RenderEnd();
 
 	CameraControl();
@@ -168,7 +168,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Player> player = make_shared<Player>();
 
 		player->SetModel(data);
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"default.hlsl");
 		player->SetShader(shader);
 
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
@@ -185,7 +185,7 @@ void Stage1::BulidDeferred()
 		terrain->SetFrustumCuling(false);
 		player->SetTerrain(terrain);
 
-		AddGameObject(player, RenderingType::Deferred);
+		AddGameObject(player, RenderingType::Forward);
 		AddGameObject(terrain,RenderingType::Forward);
 
 		_player = player;
@@ -304,33 +304,7 @@ void Stage1::BulidDeferred()
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
-	{
-		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
-		gameobject->SetFrustumCuling(false);
-		shared_ptr<Model> model = Model::ReadData(L"room/room",L"room");
-		gameobject->SetModel(model);
-		gameobject->GetTransform()->SetLocalScale(vec3(5000.0f, 5000.0f, 5000.0f));
-		gameobject->GetTransform()->SetLocalPosition(vec3(50000, 49000.0f, 50000));
 
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
-		gameobject->SetShader(shader);
-
-		AddGameObject(gameobject, RenderingType::Deferred);
-	}
-
-
-	{
-		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
-		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
-		gameobject->SetFrustumCuling(false);
-		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
-		gameobject->SetModel(model);
-		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
-		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
-		gameobject->SetShader(shader);
-		AddGameObject(gameobject, RenderingType::Deferred);
-	}
 
 
 
@@ -440,7 +414,37 @@ void Stage1::BulidForward()
 	}
 
 
+	{
+		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"room/room", L"room");
+		gameobject->SetModel(model);
+		gameobject->GetTransform()->SetLocalScale(vec3(5000.0f, 5000.0f, 5000.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(50000, 49000.0f, 50000));
 
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"default.hlsl");
+		gameobject->SetShader(shader);
+
+		ResourceManager::GetInstance()->Add<GameObject>(L"room", gameobject);
+
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
+
+
+	{
+		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
+		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
+		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"room"));
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
+		gameobject->SetModel(model);
+		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 180.0f, 0));
+		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"defaultBlend.hlsl");
+		gameobject->SetShader(shader);
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
 
 	
 
@@ -556,7 +560,7 @@ void Stage1::CameraControl()
 	CameraManager::GetInstance()->SetData();
 
 }
-void Stage1::ShaodwRender()
+void Stage1::ShadowRender()
 {
 
 	ResourceManager::GetInstance()->Get<GraphicsShader>(L"depthwrite.hlsl")->SetPipelineState();
@@ -579,9 +583,6 @@ void Stage1::ShaodwRender()
 void Stage1::ComputePass()
 {
 	
-
-
-
 	int threadGroupSizeX = 16;
 	int threadGroupSizeY = 16;
 

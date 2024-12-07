@@ -65,7 +65,6 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 
 	_pipelineDesc.InputLayout = { desc, _countof(desc) };
 	_pipelineDesc.pRootSignature = core->GetRootSignature()->GetGraphicsRootSignature().Get();
-
 	_pipelineDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	_pipelineDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	_pipelineDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
@@ -74,7 +73,7 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 	_pipelineDesc.NumRenderTargets = 1;
 	_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_pipelineDesc.SampleDesc.Count = 1;
-	_pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	_pipelineDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	switch (info.shaderType)
 	{
@@ -86,6 +85,7 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		break;
 	case ShaderType::SHADOW:
 		_pipelineDesc.NumRenderTargets = 0;
+		_pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 		_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
 		break;
 	default:
@@ -140,10 +140,33 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		_pipelineDesc.DepthStencilState.DepthEnable = FALSE;
 		_pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 		break;
-	case DEPTH_STENCIL_TYPE::DPTH_TEST_NO_WRITE:
+	case DEPTH_STENCIL_TYPE::DEPTH_TEST_NO_WRITE:
 		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
 		_pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 		_pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		break;
+	case DEPTH_STENCIL_TYPE::STENCILL_WRITE:
+		_pipelineDesc.DepthStencilState.StencilEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		_pipelineDesc.DepthStencilState.StencilWriteMask = 0xFF;
+		_pipelineDesc.DepthStencilState.StencilReadMask = 0xFF;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilFailOp  = D3D12_STENCIL_OP_KEEP;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
+		break;
+
+	case DEPTH_STENCIL_TYPE::STENCILL_READ:
+		_pipelineDesc.DepthStencilState.StencilEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+		_pipelineDesc.DepthStencilState.StencilWriteMask = 0xFF;
+		_pipelineDesc.DepthStencilState.StencilReadMask = 0xFF;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_EQUAL;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+		_pipelineDesc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
 		break;
 	}
 
@@ -168,6 +191,13 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		rt.LogicOpEnable = FALSE;
 		rt.SrcBlend = D3D12_BLEND_ONE;
 		rt.DestBlend = D3D12_BLEND_ONE;
+		break;
+	case BLEND_TYPE::BLEND_FACTOR:
+		rt.BlendEnable = FALSE;  // ∫Ì∑ªµÂ »∞º∫»≠
+		rt.SrcBlend = D3D12_BLEND_INV_BLEND_FACTOR;  // º“Ω∫ ∫Ì∑ªµÂ ∆—≈Õ¥¬ ∫Ì∑ªµÂ ∆—≈Õ
+		rt.DestBlend = D3D12_BLEND_BLEND_FACTOR; // ¥ÎªÛ ∫Ì∑ªµÂ ∆—≈Õµµ ∫Ì∑ªµÂ ∆—≈Õ
+		rt.BlendOp = D3D12_BLEND_OP_ADD;  // ∫Ì∑ªµÂ ø¨ªÍ¿∫ ¥ı«œ±‚
+		rt.LogicOpEnable = FALSE;  // ≥Ì∏Æ ø¨ªÍ ªÁøÎ æ» «‘
 		break;
 	}
 

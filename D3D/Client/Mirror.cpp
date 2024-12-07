@@ -8,17 +8,27 @@
 #include "BufferPool.h"
 #include "Mesh.h"
 #include "HireacyObject.h"
-
+#include "RenderTargets.h"
 void Mirror::Init()
 {
 	ModelObject::Init();
 
-	_mirrorShader = make_shared<GraphicsShader>();
+	{
+		_mirrorWriteShader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.depthStencilType = DEPTH_STENCIL_TYPE::STENCILL_WRITE;
+		_mirrorWriteShader->Init(L"mirror.hlsl", info);
+	}
 
-	ShaderInfo info;
-	info.shaderType = ShaderType::DEFREED;
+	{
+		_mirrorReadShader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.depthStencilType = DEPTH_STENCIL_TYPE::STENCILL_READ;
+		_mirrorReadShader->Init(L"mirror.hlsl", info);
+	}
 
-	_mirrorShader->Init(L"mirror.hlsl",info);
 
 	_plane = SimpleMath::Plane(vec3(51339.36f, 500014.73f, 49858.14f),
 		vec3(-1, 0, 0));
@@ -35,6 +45,7 @@ void Mirror::Init()
 		}
 	}
 
+
 }
 
 void Mirror::Update()
@@ -44,10 +55,25 @@ void Mirror::Update()
 
 void Mirror::Render()
 {
-	//물체의 형태를 그대로 그리는것.
-	ModelObject::Render();
+	auto& list = core->GetCmdList();
 
-	MirrorRender();
+	//// 1. 스텐실버퍼에  거울의 스텐실 값을 기록하는단계 ( 실제렌더링 X) => 1값을 기록함
+	_mirrorWriteShader->SetPipelineState();
+	list->OMSetStencilRef(1);
+	ModelObject::ShaderNoSetRender();
+
+	//// 2. 스텐실버퍼에 반사된 오브젝트 들은 렌더링  ( _mirrorReadShader 에는 반사행렬이 계산되있음)
+	_mirrorReadShader->SetPipelineState();
+
+	for (auto& ele : _mirrorObjects)
+	{
+		list->OMSetStencilRef(1);
+		ele->ShaderNoSetRender();
+	}
+
+
+
+
 
 }
 
@@ -59,14 +85,3 @@ void Mirror::OnComponentEndOverlap(shared_ptr<BaseCollider> collider, shared_ptr
 {
 }
 
-void Mirror::MirrorRender()
-{
-
-	_mirrorShader->SetPipelineState();
-
-	for (auto& ele : _mirrorObjects)
-	{
-		ele->ShaderNoSetRender();
-	}
-	
-}

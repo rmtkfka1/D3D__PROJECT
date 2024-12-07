@@ -146,6 +146,7 @@ void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalStat
     D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
     desc.MipLevels = 1;
     desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+    
 
     if (HasFlag(usageFlags, TextureUsageFlags::RTV)) {
         desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
@@ -171,6 +172,7 @@ void Texture::CreateTexture(DXGI_FORMAT format, D3D12_RESOURCE_STATES initalStat
         if (HasFlag(usageFlags, TextureUsageFlags::DSV))
         {
             cvalue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
+            desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
         }
 
         auto hr = core->GetDevice()->CreateCommittedResource(

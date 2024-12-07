@@ -19,11 +19,12 @@ public:
 	void PushObject(shared_ptr<GameObject> object) { _mirrorObjects.push_back(object); }
 
 private:
-	void MirrorRender();
+	
 
 private:
 	vector<shared_ptr<GameObject>> _mirrorObjects;
-	shared_ptr<GraphicsShader> _mirrorShader;
+	shared_ptr<GraphicsShader> _mirrorWriteShader;
+	shared_ptr<GraphicsShader> _mirrorReadShader;
 	DirectX::SimpleMath::Plane  _plane;
 	Matrix _reflectMat;
 };

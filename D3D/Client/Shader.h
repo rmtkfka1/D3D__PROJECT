@@ -24,7 +24,9 @@ enum class DEPTH_STENCIL_TYPE : uint8
 	GREATER_EQUAL,
 	NO_DEPTH_TEST, // 깊이 테스트(X) + 깊이 기록(O)
 	NO_DEPTH_TEST_NO_WRITE, // 깊이 테스트(X) + 깊이 기록(X)
-	DPTH_TEST_NO_WRITE, // 깊이 테스트(O) + 깊이 기록(X)
+	DEPTH_TEST_NO_WRITE, // 깊이 테스트(O) + 깊이 기록(X)
+	STENCILL_WRITE,
+	STENCILL_READ,
 };
 
 enum class BLEND_TYPE : uint8
@@ -32,6 +34,7 @@ enum class BLEND_TYPE : uint8
 	DEFAULT,
 	ALPHA_BLEND,
 	ONE_TO_ONE_BLEND,
+	BLEND_FACTOR,
 	END,
 };
 
