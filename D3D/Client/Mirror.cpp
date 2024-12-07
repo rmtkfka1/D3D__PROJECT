@@ -14,6 +14,7 @@
 void Mirror::Init()
 {
 	ModelObject::Init();
+	_defaultShader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"default.hlsl");
 
 	{
 		_mirrorWriteShader = make_shared<GraphicsShader>();
@@ -81,14 +82,37 @@ void Mirror::Render()
 
 
 	{
-		const float color[4] = { 0.4f,  0.4f,  0.4f,  0.4f };
-		list->OMSetBlendFactor(color);
+		const float mixColor[4] = { 0.1f,  0.1f,  0.1f, 0.1f };
+		vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
+		list->OMSetBlendFactor(mixColor);
 
-		ModelObject::Render();  //더뒤에있음. // DEPTH TEST - O / DEPTH WRITE - X
+		for (auto& data : meshData)
+		{
+			_transform->PushData();
+
+			if (data->material)
+			{
+				data->material->PushData();
+			}
+
+			core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
+
+			if (data->name == L"low_glass.001")
+			{
+				_shader->SetPipelineState();
+			}
+
+			else
+			{
+				_defaultShader->SetPipelineState();
+			}
+
+			data->meshes->Render();
+
+		}
 	}
+
 	
-
-
 
 }
 

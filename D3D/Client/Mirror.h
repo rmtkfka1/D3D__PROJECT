@@ -28,6 +28,7 @@ private:
 	vector<shared_ptr<GameObject>> _mirrorObjects;
 	shared_ptr<GraphicsShader> _mirrorWriteShader;
 	shared_ptr<GraphicsShader> _mirrorReadShader;
+	shared_ptr<GraphicsShader> _defaultShader;
 	DirectX::SimpleMath::Plane  _plane;
 	Matrix _reflectMat;
 };
