@@ -281,6 +281,34 @@ void Stage1::BulidDeferred()
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
+	{
+		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"room/room",L"room");
+		gameobject->SetModel(model);
+		gameobject->GetTransform()->SetLocalScale(vec3(5000.0f, 5000.0f, 5000.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(50000, 49000.0f, 50000));
+
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
+		gameobject->SetShader(shader);
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
+
+	{
+		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
+		gameobject->SetModel(model);
+		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
+
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
+		gameobject->SetShader(shader);
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
+
 
 
 
@@ -516,31 +544,11 @@ void Stage1::ShaodwRender()
 
 	for (auto& ele : _deferredObjects)
 	{
-		ele->Update();
-
-		//if (ele->GetFrustumCuling())
-		//{
-		//	if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
-		//	{
-		//		continue;
-		//	}
-		//}
-
 		ele->ShadowRender();
 	}
 
 	for (auto& ele : _forwardObjects)
 	{
-		ele->Update();
-
-	/*	if (ele->GetFrustumCuling())
-		{
-			if (CameraManager::GetInstance()->GetActiveCamera()->IsInFrustum(ele->GetCollider()) == false)
-			{
-				continue;
-			}
-		}*/
-
 		ele->ShadowRender();
 	}
 

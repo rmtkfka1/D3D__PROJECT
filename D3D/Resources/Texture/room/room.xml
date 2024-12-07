@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials>
+    <Material>
+        <Name>DefaultMaterial</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Stone</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Stationary_Water</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Gravel</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Block_of_Gold</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Stone_Slab</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Cobblestone_Stairs</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Redstone_Torch_(active)</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Stone_Bricks</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Stone_Brick_Stairs</Name>
+        <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Cobblestone_Wall</Name>
+          <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>Concrete</Name>
+         <DiffuseFile>Mineways2Skfb-RGBA.png</DiffuseFile>
+        <NormalFile>Mineways2Skfb-RGBA.png</NormalFile>
+        <SpecularFile>Mineways2Skfb-RGBA.png</SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.60000002" G="0.60000002" B="0.60000002" A="1"/>
+        <Specular R="0" G="0" B="0" A="0"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>

@@ -9,9 +9,9 @@ Converter converter;
 
 int main()
 {
-	converter.ReadAssetFile(L"comical-bomb/source/ComBomb_ForSket.fbx");
-	converter.ExportMaterialData(L"bomb/bomb");
-	converter.ExportModelData(L"bomb/bomb",false);
+	converter.ReadAssetFile(L"mirror/source/mirror_for render.fbx");
+	converter.ExportMaterialData(L"mirror/mirror");
+	converter.ExportModelData(L"mirror/mirror",false);
 
 	for (auto& bone : converter._bones)
 	{

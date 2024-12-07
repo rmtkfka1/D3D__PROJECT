@@ -43,8 +43,25 @@ void Player::Update()
 
 	AnimateUpdate();
 	Shot();
-	Super::Update();
 
+	if (KeyManager::GetInstance()->GetButtonDown(KEY_TYPE::M))
+	{
+		static bool toroom = true;
+
+		if (toroom)
+		{
+
+			GetTransform()->SetLocalPosition(vec3(50000, 50000, 50000));
+
+		}
+		else
+			GetTransform()->SetLocalPosition(vec3(100, 1500, 0));
+		
+		toroom = !toroom;
+	}
+
+	
+	Super::Update();
 	CameraManager::GetInstance()->SetData();
 }
 

@@ -16,6 +16,7 @@ enum class KEY_TYPE
 	Z = 'Z',
 	C = 'C',
 	O = 'O',
+	M = 'M',
 	ONE = '1',
 	TWO = '2',
 	THREE = '3',

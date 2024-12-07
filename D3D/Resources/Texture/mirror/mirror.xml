@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Materials>
+    <Material>
+        <Name>mirror</Name>
+        <DiffuseFile>mirror_for_render_mirror_BaseColor.png</DiffuseFile>
+        <NormalFile></NormalFile>
+        <SpecularFile></SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="25"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+    <Material>
+        <Name>DefaultMaterial</Name>
+        <DiffuseFile>mirror_for_render_mirror_BaseColor.png</DiffuseFile>
+        <NormalFile></NormalFile>
+        <SpecularFile></SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Emissive R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+    </Material>
+    <Material>
+        <Name>glass</Name>
+        <DiffuseFile>mirror_for_render_glass_BaseColor.png</DiffuseFile>
+        <NormalFile></NormalFile>
+        <SpecularFile></SpecularFile>
+        <Ambient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Specular R="0.80000001" G="0.80000001" B="0.80000001" A="36"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Material>
+</Materials>

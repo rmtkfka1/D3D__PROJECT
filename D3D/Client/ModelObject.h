@@ -11,6 +11,7 @@ class ModelObject : public GameObject
 {
 
 public:
+	ModelObject();
 	ModelObject(PlayerType type);
 	virtual ~ModelObject();
 

@@ -10,6 +10,10 @@
 #include "CollisonManager.h"
 #include "Shader.h"
 #include "SphereCollider.h"
+ModelObject::ModelObject() :GameObject(GameObjectType::Model)
+{
+	_transform = make_shared<Transform>();
+}
 ModelObject::ModelObject(PlayerType type):GameObject(GameObjectType::Model)
 {
 	_playerType = type;
