@@ -180,12 +180,14 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		rt.LogicOpEnable = FALSE;
 		rt.SrcBlend = D3D12_BLEND_ONE;
 		rt.DestBlend = D3D12_BLEND_ZERO;
+		rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 	case BLEND_TYPE::ALPHA_BLEND:
 		rt.BlendEnable = TRUE;
 		rt.LogicOpEnable = D3D12_LOGIC_OP_NOOP;
 		rt.SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		rt.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+		rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 
 	case BLEND_TYPE::ONE_TO_ONE_BLEND:
@@ -193,13 +195,14 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		rt.LogicOpEnable = FALSE;
 		rt.SrcBlend = D3D12_BLEND_ONE;
 		rt.DestBlend = D3D12_BLEND_ONE;
+		rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 
 	case BLEND_TYPE::BLEND_FACTOR:
 		rt.BlendEnable = TRUE;  // ∫Ì∑ªµÂ »∞º∫»≠
 		rt.LogicOpEnable = FALSE;  // ≥Ì∏Æ ø¨ªÍ ªÁøÎ æ» «‘
-		rt.SrcBlend = D3D12_BLEND_INV_BLEND_FACTOR;  // º“Ω∫ ∫Ì∑ªµÂ ∆—≈Õ¥¬ ∫Ì∑ªµÂ ∆—≈Õ
-		rt.DestBlend = D3D12_BLEND_BLEND_FACTOR; // ¥ÎªÛ ∫Ì∑ªµÂ ∆—≈Õµµ ∫Ì∑ªµÂ ∆—≈Õ
+		rt.SrcBlend = D3D12_BLEND_BLEND_FACTOR; 
+		rt.DestBlend = D3D12_BLEND_INV_BLEND_FACTOR; 
 		rt.BlendOp = D3D12_BLEND_OP_ADD;  // ∫Ì∑ªµÂ ø¨ªÍ¿∫ ¥ı«œ±‚
 		rt.RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
