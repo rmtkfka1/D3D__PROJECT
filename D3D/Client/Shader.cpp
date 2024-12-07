@@ -157,7 +157,6 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		_pipelineDesc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
 		_pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = 0;
 		break;
-
 	case DEPTH_STENCIL_TYPE::STENCILL_READ:
 		_pipelineDesc.DepthStencilState.StencilEnable = TRUE;
 		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
@@ -180,14 +179,12 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		rt.LogicOpEnable = FALSE;
 		rt.SrcBlend = D3D12_BLEND_ONE;
 		rt.DestBlend = D3D12_BLEND_ZERO;
-		rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 	case BLEND_TYPE::ALPHA_BLEND:
 		rt.BlendEnable = TRUE;
 		rt.LogicOpEnable = D3D12_LOGIC_OP_NOOP;
 		rt.SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		rt.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-		rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 
 	case BLEND_TYPE::ONE_TO_ONE_BLEND:
@@ -195,7 +192,6 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		rt.LogicOpEnable = FALSE;
 		rt.SrcBlend = D3D12_BLEND_ONE;
 		rt.DestBlend = D3D12_BLEND_ONE;
-		rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 
 	case BLEND_TYPE::BLEND_FACTOR:

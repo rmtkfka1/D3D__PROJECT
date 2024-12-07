@@ -52,8 +52,7 @@ void Mirror::Init()
 	_glass->GetTransform()->SetLocalPosition(vec3(51330.0f, 50120.0f, 49850.0f));
 	_glass->GetTransform()->SetLocalScale(vec3(248.0f, 320.0f, 250.0f));
 	_glass->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
-	_glass->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"defaultBlend.hlsl"));
-	_glass->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Get<Texture>(L"info.png"));
+
 	_glass->GetTransform()->Update();
 }
 
@@ -67,25 +66,26 @@ void Mirror::Render()
 	auto& list = core->GetCmdList();
 
 	//// 1. 스텐실버퍼에  거울의 스텐실 값을 기록하는단계 ( 실제렌더링 X) => 1값을 기록함
-	_mirrorWriteShader->SetPipelineState(); // DEPTH TEST  - O / DEPTH WRITE - X
+	_mirrorWriteShader->SetPipelineState();
 	list->OMSetStencilRef(1);
 	_glass->ShaderNoSetRender();
 
 	//// 2. 스텐실버퍼에 반사된 오브젝트 들은 렌더링  ( _mirrorReadShader 에는 반사행렬이 계산되있음)
 
-	_mirrorReadShader->SetPipelineState(); // DEPTH TEST  - O / DEPTH WRITE - X
-
+	_mirrorReadShader->SetPipelineState();
 	//씬에서 반사되는 오브젝트만을 렌더
-	for (auto& ele : _mirrorObjects) 
+	for (auto& ele : _mirrorObjects)
 	{
 		ele->ShaderNoSetRender();
 	}
 
-	const float color[4] = { 0.3f,0.3f,0.3f,0.4f };
-	list->OMSetBlendFactor(color);
 
-	ModelObject::Render();  //더뒤에있음. // DEPTH TEST - O / DEPTH WRITE - X
+	{
+		const float color[4] = { 0.4f,  0.4f,  0.4f,  0.4f };
+		list->OMSetBlendFactor(color);
 
+		ModelObject::Render();  //더뒤에있음. // DEPTH TEST - O / DEPTH WRITE - X
+	}
 	
 
 

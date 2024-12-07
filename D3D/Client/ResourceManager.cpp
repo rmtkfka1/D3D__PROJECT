@@ -126,18 +126,17 @@ void ResourceManager::CreateDefaultShader()
 		ShaderInfo info;
 		info.blendType = BLEND_TYPE::BLEND_FACTOR;
 		info.depthStencilType = DEPTH_STENCIL_TYPE::DEPTH_TEST_NO_WRITE;
-		shader->Init(L"default.hlsl",info);
+		shader->Init(L"default.hlsl", info);
 		Add<GraphicsShader>(L"defaultBlend.hlsl", shader);
 	}
 
 
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
-		ShaderInfo info;
-		info.depthStencilType = DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE;
 		shader->Init(L"default.hlsl");
 		Add<GraphicsShader>(L"default.hlsl", shader);
 	}
+
 
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
