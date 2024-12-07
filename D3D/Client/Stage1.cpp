@@ -203,15 +203,15 @@ void Stage1::BulidDeferred()
 
 	}
 	
-	//for (int i = 0; i < 10; ++i)
-	//{
-	//	shared_ptr<Sphere> object = make_shared<Sphere>();
-	//	shared_ptr<Model> data = Model::ReadData(L"Earth/Earth",L"Earth");
-	//	object->SetModel(data);
-	//	object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
-	//	object->AddSphereColliderWithModel("earth", ColliderBehave::Passive);
-	//	AddGameObject(object, RenderingType::Deferred);
-	//}
+	for (int i = 0; i < 3; ++i)
+	{
+		shared_ptr<Sphere> object = make_shared<Sphere>();
+		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth",L"Earth");
+		object->SetModel(data);
+		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
+		object->AddSphereColliderWithModel("earth", ColliderBehave::Passive);
+		AddGameObject(object, RenderingType::Deferred);
+	}
 
 	//{
 	//	shared_ptr<Enemy> enemy = make_shared<Enemy>();

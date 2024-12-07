@@ -4,7 +4,7 @@
 #include <random>
 
 static default_random_engine dre;
-static uniform_real_distribution<double> random_xz(-3000.0f, 3000.0f);
+static uniform_real_distribution<double> random_xz(-2000.0f, 2000.0f);
 static normal_distribution<double> random_y(5500.0f, 500.0f);
 static normal_distribution  <double> random_sclae(5.0f, 2.0f);
 

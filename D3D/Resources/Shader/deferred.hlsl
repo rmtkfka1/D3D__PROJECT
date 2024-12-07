@@ -37,7 +37,7 @@ Texture2D diffuseTexture : register(t0);
 Texture2D normalTexture : register(t1);
 Texture2D shadowTexture : register(t3);
 SamplerState g_sam_0 : register(s0);
-SamplerState g_sam_1 : register(s1);
+SamplerState PointSampling : register(s1);
 struct VS_IN
 {
     float3 pos : POSITION;
@@ -101,7 +101,7 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
    
     output.position = float4(input.worldPos, 1.0f);
     
-    output.color = diffuseTexture.Sample(g_sam_1, input.uv);
+    output.color = diffuseTexture.Sample(g_sam_0, input.uv);
     
 
     // 기본 색상 텍스처 샘플링
@@ -119,7 +119,7 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
     if (NormalOn)
     {
         // [0,255] 범위에서 [0,1]로 변환
-        float3 tangentSpaceNormal = normalTexture.Sample(g_sam_1, input.uv).xyz;
+        float3 tangentSpaceNormal = normalTexture.Sample(PointSampling, input.uv).xyz;
         // [0,1] 범위에서 [-1,1]로 변환
         tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
         float3x3 matTBN = { input.worldTangent, input.worldBinormal, input.worldNormal };
@@ -128,17 +128,21 @@ PS_OUT PS_Main(VS_OUT input) : SV_Target
    
     
     float4 shadowClipPos = mul(float4(input.worldPos,1.0f), shadowCameraVP);
-    float depth = shadowClipPos.z / shadowClipPos.w;
-    float2 uv = shadowClipPos.xy / shadowClipPos.w;
+    float3 NDCPos = shadowClipPos.xyz / shadowClipPos.w;
+    float depth = NDCPos.z;
+    float2 uv = NDCPos.xy;
     uv.y = -uv.y;
     uv = uv * 0.5 + 0.5;
     
-    float shadowDepth = shadowTexture.Sample(g_sam_1, uv).r;
-    if (shadowDepth > 0 && depth > shadowDepth + 0.0099f)
-    {
-        output.color *= 0.5f;
-    }
+    float shadowDepth = shadowTexture.Sample(PointSampling, uv).r;
     
+    if(uv.x >=0 && uv.x <=1.0f && uv.y >= 0.0f && uv.y <=1.0f)
+    {
+        if (depth > shadowDepth + 0.0099f)
+        {
+            output.color *= 0.5f;
+        }
+    }
     
     return output;
 

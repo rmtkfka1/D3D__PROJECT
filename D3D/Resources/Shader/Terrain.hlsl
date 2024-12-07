@@ -135,7 +135,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
     { 
         if (shadowDepth > 0 && depth > shadowDepth + 0.003f)
         {
-            result *= 0.2f;
+            result *= 0.3f;
         }
     }
     

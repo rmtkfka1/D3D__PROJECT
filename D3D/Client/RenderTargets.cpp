@@ -228,12 +228,12 @@ Shadow::~Shadow()
 void Shadow::Init()
 {
 
-	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT), 0,1.0f };
-	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH),static_cast<LONG>(WINDOW_HEIGHT) };
+	_viewport = D3D12_VIEWPORT{ 0.0f,0.0f,static_cast<float>(WINDOW_WIDTH*3),static_cast<float>(WINDOW_WIDTH * 3), 0,1.0f };
+	_scissorRect = D3D12_RECT{ 0,0, static_cast<LONG>(WINDOW_WIDTH * 3),static_cast<LONG>(WINDOW_WIDTH * 3) };
 
 	_texture = make_shared<Texture>();
 
-	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R32_TYPELESS, WINDOW_WIDTH, WINDOW_HEIGHT);
+	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R32_TYPELESS, WINDOW_WIDTH * 3, WINDOW_WIDTH * 3);
 	desc.MipLevels = 1;
 	desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
