@@ -168,7 +168,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<Player> player = make_shared<Player>();
 
 		player->SetModel(data);
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"default.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
 		player->SetShader(shader);
 
 		player->GetTransform()->SetLocalScale(vec3(5.0f, 5.0f, 5.0f));
@@ -184,8 +184,15 @@ void Stage1::BulidDeferred()
 		_terrain->Init();
 		terrain->SetFrustumCuling(false);
 		player->SetTerrain(terrain);
+		auto& mat = static_pointer_cast<ShadowCamera>(CameraManager::GetInstance()->GetCamera(CameraType::SHADOW))->GetVPMatrix();
 
-		AddGameObject(player, RenderingType::Forward);
+		auto&  v =player->GetMatrial();
+		for (auto& ele : v)
+		{
+			ele->SetMatrix(0,mat);
+		}
+
+		AddGameObject(player, RenderingType::Deferred);
 		AddGameObject(terrain,RenderingType::Forward);
 
 		_player = player;
@@ -209,7 +216,7 @@ void Stage1::BulidDeferred()
 
 		for (auto& ele : vec)
 		{
-			ele->SetMatrix(mat);
+			ele->SetMatrix(0,mat);
 		}
 
 		AddGameObject(object, RenderingType::Deferred);
@@ -230,26 +237,11 @@ void Stage1::BulidDeferred()
 
 		for (auto& ele : vec)
 		{
-			ele->SetMatrix(mat);
+			ele->SetMatrix(0,mat);
 		}
 
 		AddGameObject(object, RenderingType::Deferred);
 	}
-
-	//{
-	//	shared_ptr<Enemy> enemy = make_shared<Enemy>();
-	//	shared_ptr<Model> data = Model::ReadData(L"helicopter/helicopter",L"EnemyHelicopter");
-	//	data->SetIntValue(0, 1);
-	//	enemy->SetModel(data);
-	//	enemy->SetPlayer(_player);
-	//	enemy->GetTransform()->SetLocalScale(vec3(70.0f, 70.0f, 70.0f));
-	//	enemy->GetTransform()->SetLocalPosition(vec3(2000.0f, 5000.0f, 0));
-	//	//enemy->GetTransform()->SetLocalRotation(vec3(50.0f, 0, 40.0f));
-	//	enemy->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"deferred.hlsl"));
-	//	//enemy->AddBoxCollider("raycheck", vec3(1.5f, 1.5f, 40.0f), vec3(0, 2.0f, -30.0f));
-	//	enemy->AddBoxColliderWithModel("enemy", ColliderBehave::Active,vec3(-2.0f,-0.5,0));
-	//	AddGameObject(enemy, RenderingType::Deferred);
-	//}
 
 
 	for (int i = 0; i < 50; ++i)
@@ -289,20 +281,7 @@ void Stage1::BulidDeferred()
 	}*/
 
 
-	{
-		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/result.dds", TextureType::CubeMap);
-
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
-
-		gameobject->SetShader(shader);
-		gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
-		AddGameObject(gameobject, RenderingType::Deferred);
-	}
 
 
 
@@ -422,19 +401,36 @@ void Stage1::BulidForward()
 		gameobject->GetTransform()->SetLocalScale(vec3(5000.0f, 5000.0f, 5000.0f));
 		gameobject->GetTransform()->SetLocalPosition(vec3(50000, 49000.0f, 50000));
 
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"default.hlsl");
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
 		gameobject->SetShader(shader);
 
 		ResourceManager::GetInstance()->Add<GameObject>(L"room", gameobject);
 
-		AddGameObject(gameobject, RenderingType::Forward);
+		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
+
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/result.dds", TextureType::CubeMap);
+
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
+
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+		ResourceManager::GetInstance()->Add<GameObject>(L"cubeMap", gameobject);
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
 
 	{
 		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
 		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
 		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"room"));
+		gameobject->SetCubeMap(ResourceManager::GetInstance()->Get<GameObject>(L"cubeMap"));
 		gameobject->SetFrustumCuling(false);
 		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
 		gameobject->SetModel(model);

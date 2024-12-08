@@ -54,7 +54,7 @@ void Terrain::Init()
     auto& camera = CameraManager::GetInstance()->GetCamera(CameraType::SHADOW);
     Matrix mat = static_pointer_cast<ShadowCamera>(camera)->GetVPMatrix();
     auto& ele =GetMaterial();
-    ele->SetMatrix(mat);
+    ele->SetMatrix(0,mat);
     
 
 }

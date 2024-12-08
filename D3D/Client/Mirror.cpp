@@ -32,6 +32,15 @@ void Mirror::Init()
 		_mirrorReadShader->Init(L"mirror.hlsl", info);
 	}
 
+
+	{
+		_mirrorCubeReadShader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.depthStencilType = DEPTH_STENCIL_TYPE::STENCILL_READ;
+		_mirrorCubeReadShader->Init(L"skyForward.hlsl", info);
+	}
+
 	_plane = SimpleMath::Plane(vec3(51339.36f, 500014.73f, 49858.14f),
 		vec3(-1, 0, 0));
 
@@ -39,13 +48,20 @@ void Mirror::Init()
 
 	for (auto& ele : _mirrorObjects)
 	{
+
 		auto& v = static_pointer_cast<HireacyObject>(ele)->GetMatrial();
 
 		for (auto& i : v)
 		{
-			i->SetMatrix(_reflectMat);
+			i->SetMatrix(1,_reflectMat);
 		}
-	}
+
+
+	};
+	
+	static_pointer_cast<CustomObject>(_cubeMap)->GetMaterial()->SetMatrix(1,_reflectMat);
+
+
 
 }
 
@@ -72,6 +88,8 @@ void Mirror::Render()
 		ele->ShaderNoSetRender();
 	}
 
+	//_mirrorCubeReadShader->SetPipelineState();
+	//_cubeMap->ShaderNoSetRender();
 
 	{
 		const float mixColor[4] = { 0.1f,  0.1f,  0.1f, 0.1f };

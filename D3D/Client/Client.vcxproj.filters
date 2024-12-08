@@ -468,6 +468,9 @@
     <FxCompile Include="..\Resources\Shader\mirror.hlsl">
       <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\skyForward.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">

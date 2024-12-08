@@ -48,7 +48,7 @@ cbuffer materialparams : register(b3)
     int texon4;
 
     row_major float4x4 g_mat_0;
- 
+    row_major float4x4 g_mat_1;
 
 };
 
