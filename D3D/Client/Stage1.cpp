@@ -293,7 +293,6 @@ void Stage1::BulidDeferred()
 		gameobject->SetShader(shader);
 
 		ResourceManager::GetInstance()->Add<GameObject>(L"room", gameobject);
-
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
@@ -321,8 +320,6 @@ void Stage1::BulidDeferred()
 		gameobject->SetModel(model);
 		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
 		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"defaultBlend.hlsl");
-		gameobject->SetShader(shader);
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
