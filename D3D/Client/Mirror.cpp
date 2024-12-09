@@ -83,7 +83,7 @@ void Mirror::Render()
 
 
 	{
-		const float mixColor[4] = { 0.1f,  0.1f,  0.1f, 0.1f };
+		const float mixColor[4] = { 0.3f,  0.3f,  0.3f, 0.1f };
 		vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
 		list->OMSetBlendFactor(mixColor);
 
