@@ -421,8 +421,6 @@ void Stage1::BulidForward()
 		gameobject->SetShader(shader);
 		gameobject->GetMaterial()->SetDiffuseTexture(texture);
 
-		ResourceManager::GetInstance()->Add<GameObject>(L"cubeMap", gameobject);
-
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
@@ -430,7 +428,6 @@ void Stage1::BulidForward()
 		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
 		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
 		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"room"));
-		gameobject->SetCubeMap(ResourceManager::GetInstance()->Get<GameObject>(L"cubeMap"));
 		gameobject->SetFrustumCuling(false);
 		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
 		gameobject->SetModel(model);

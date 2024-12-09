@@ -38,7 +38,6 @@ VS_OUT VS_Main(VS_IN input)
     // w/w=1이기 때문에 항상 깊이가 1로 유지된다
     output.pos = clipSpacePos.xyww;
     
-    output.pos.z -= 0.0001f;
 
     return output;
 }
