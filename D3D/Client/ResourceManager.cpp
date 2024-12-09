@@ -121,14 +121,7 @@ void ResourceManager::CreateDefaultShader()
 	//	Add<Shader>(L"BilboardStreamOutput.hlsl", shader);
 	//}
 
-	{
-		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
-		ShaderInfo info;
-		info.blendType = BLEND_TYPE::BLEND_FACTOR;
-		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
-		shader->Init(L"default.hlsl", info);
-		Add<GraphicsShader>(L"defaultBlend.hlsl", shader);
-	}
+
 
 
 	{

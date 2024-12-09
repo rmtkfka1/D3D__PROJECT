@@ -281,6 +281,50 @@ void Stage1::BulidDeferred()
 	}*/
 
 
+	{
+		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"room/room", L"room");
+		gameobject->SetModel(model);
+		gameobject->GetTransform()->SetLocalScale(vec3(5000.0f, 5000.0f, 5000.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(50000, 49000.0f, 50000));
+
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
+		gameobject->SetShader(shader);
+
+		ResourceManager::GetInstance()->Add<GameObject>(L"room", gameobject);
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
+
+	{
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
+		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
+
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/result.dds", TextureType::CubeMap);
+
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
+
+		gameobject->SetShader(shader);
+		gameobject->GetMaterial()->SetDiffuseTexture(texture);
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
+
+	{
+		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
+		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
+		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"room"));
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
+		gameobject->SetModel(model);
+		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"defaultBlend.hlsl");
+		gameobject->SetShader(shader);
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
 
 
 
@@ -393,50 +437,6 @@ void Stage1::BulidForward()
 	}
 
 
-	{
-		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
-		gameobject->SetFrustumCuling(false);
-		shared_ptr<Model> model = Model::ReadData(L"room/room", L"room");
-		gameobject->SetModel(model);
-		gameobject->GetTransform()->SetLocalScale(vec3(5000.0f, 5000.0f, 5000.0f));
-		gameobject->GetTransform()->SetLocalPosition(vec3(50000, 49000.0f, 50000));
-
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
-		gameobject->SetShader(shader);
-
-		ResourceManager::GetInstance()->Add<GameObject>(L"room", gameobject);
-
-		AddGameObject(gameobject, RenderingType::Deferred);
-	}
-
-	{
-		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
-		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
-
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/result.dds", TextureType::CubeMap);
-
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
-
-		gameobject->SetShader(shader);
-		gameobject->GetMaterial()->SetDiffuseTexture(texture);
-
-		AddGameObject(gameobject, RenderingType::Deferred);
-	}
-
-	{
-		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
-		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
-		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"room"));
-		gameobject->SetFrustumCuling(false);
-		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
-		gameobject->SetModel(model);
-		gameobject->GetTransform()->SetLocalScale(vec3(4.0f, 4.0f, 4.0f));
-		gameobject->GetTransform()->SetLocalPosition(vec3(51400.0f, 49600.0f, 47650.0f));
-		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"defaultBlend.hlsl");
-		gameobject->SetShader(shader);
-		AddGameObject(gameobject, RenderingType::Forward);
-	}
 
 	
 

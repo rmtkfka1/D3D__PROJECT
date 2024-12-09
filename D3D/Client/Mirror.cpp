@@ -14,12 +14,23 @@
 void Mirror::Init()
 {
 	ModelObject::Init();
-	_defaultShader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"default.hlsl");
+	_defaultShader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
+
+
+	{
+		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::DEFREED;
+		info.blendType = BLEND_TYPE::BLEND_FACTOR;
+		info.depthStencilType = DEPTH_STENCIL_TYPE::LESS_EQUAL;
+		shader->Init(L"mirror.hlsl", info);
+		_shader = shader;
+	}
 
 	{
 		_mirrorWriteShader = make_shared<GraphicsShader>();
 		ShaderInfo info;
-		info.shaderType = ShaderType::FORWARD;
+		info.shaderType = ShaderType::DEFREED;
 		info.depthStencilType = DEPTH_STENCIL_TYPE::STENCILL_WRITE;
 		_mirrorWriteShader->Init(L"mirror.hlsl", info);
 	}
@@ -27,12 +38,10 @@ void Mirror::Init()
 	{
 		_mirrorReadShader = make_shared<GraphicsShader>();
 		ShaderInfo info;
-		info.shaderType = ShaderType::FORWARD;
+		info.shaderType = ShaderType::DEFREED;
 		info.depthStencilType = DEPTH_STENCIL_TYPE::STENCILL_READ;
 		_mirrorReadShader->Init(L"mirror.hlsl", info);
 	}
-
-
 
 
 	_plane = SimpleMath::Plane(vec3(51339.36f, 500014.73f, 49858.14f),
@@ -50,10 +59,8 @@ void Mirror::Init()
 			i->SetMatrix(1,_reflectMat);
 		}
 
-
 	};
 	
-
 
 }
 
@@ -79,8 +86,6 @@ void Mirror::Render()
 	{
 		ele->ShaderNoSetRender();
 	}
-
-
 
 	{
 		const float mixColor[4] = { 0.3f,  0.3f,  0.3f, 0.1f };
