@@ -52,9 +52,8 @@ VS_OUT VS_Main(VS_IN input)
     VS_OUT output = (VS_OUT) 0;
 
     // 로컬 좌표를 그대로 전달
-    output.localPos.x = -input.localPos.y;
-    output.localPos.y = -input.localPos.z;
-    output.localPos.x = -input.localPos.x;
+    output.localPos.x = input.localPos.y;
+
     // Translation은 하지 않고 Rotation만 적용한다
     float4 viewPos = mul(float4(input.localPos, 0), ViewMatrix);
     float4 clipSpacePos = mul(viewPos, ProjectionMatrix);
