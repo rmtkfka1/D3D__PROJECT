@@ -56,6 +56,7 @@ void Converter::ExportModelData(wstring savePath, DataType type)
 	Matrix tr =Matrix::Identity;
 
 	ReadModelData(_scene->mRootNode, -1, -1, tr);
+	ReadSkinData();
 	WriteModelFile(finalPath);
 }
 
@@ -295,7 +296,7 @@ void Converter::WriteModelFile(wstring finalPath)
 }
 void Converter::CalculateBoundingBox()
 {
-	if (_useHireacy)
+	if (_type==DataType::HIEARCY)
 	{
 		for (int i = 0; i < _meshes.size(); ++i)
 		{
@@ -476,6 +477,61 @@ void Converter::WriteMaterialData(wstring finalPath)
 	}
 
 	document->SaveFile(Utils::ToString(finalPath).c_str());
+}
+
+void Converter::ReadSkinData()
+{
+
+	for (int32 i = 0; i < _scene->mNumMeshes; ++i)
+	{
+		aiMesh* srcMesh = _scene->mMeshes[i];
+
+		if (srcMesh->HasBones() == false)
+			continue;
+
+		shared_ptr<asMesh> mesh = _meshes[i];
+		vector<asBoneWeights> temp;
+		temp.resize(mesh->vertices.size());
+
+		for (int32 b = 0; b < srcMesh->mNumBones; ++b)
+		{
+			aiBone* srcMeshBone = srcMesh->mBones[b];
+
+			uint32 boneIndex = GetBoneIndex(srcMeshBone->mName.C_Str());
+
+			for (uint32 w = 0; w < srcMeshBone->mNumWeights; ++w)
+			{
+				uint32 vertexId = srcMeshBone->mWeights[w].mVertexId;
+				float weight = srcMeshBone->mWeights[w].mWeight;
+
+				temp[vertexId].AddWeights(boneIndex, weight);
+			}
+		}
+
+		for (uint32 v = 0; v < temp.size(); ++v)
+		{
+			temp[v].Normalize();
+
+			asBlendWeight blendWeight = temp[v].GetBlendWeights();
+			mesh->vertices[v].blendIndices = blendWeight.indices;
+			mesh->vertices[v].blendWeights = blendWeight.weights;
+		}
+	}
+
+}
+
+uint32 Converter::GetBoneIndex(const string& name)
+{
+	for (auto& bone : _bones)
+	{
+		if (bone->name == name)
+		{
+			return bone->index;
+		}
+	}
+
+	assert(false);
+
 }
 
 std::string Converter::WriteTexture(string saveFolder, string file)

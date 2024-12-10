@@ -11,7 +11,7 @@ public:
 
 public:
 	void ReadAssetFile(wstring file);
-	void ExportModelData(wstring savePath, bool useHireacy);
+	void ExportModelData(wstring savePath, DataType type);
 	void ExportMaterialData(wstring savePath);
 
 
@@ -26,6 +26,9 @@ private:
 
 	void ReadMaterialData();
 	void WriteMaterialData(wstring finalPath);
+	void ReadSkinData();
+	uint32 GetBoneIndex(const string& name);
+
 	string WriteTexture(string saveFolder, string file);
 
 private:
@@ -43,7 +46,8 @@ public:
 	vector<shared_ptr<asMaterial>> _materials;
 
 private:
-	bool _useHireacy;
+
+	DataType _type;
 	BoundingBox _totalbox;
 	BoundingSphere _totalSphere;
 };

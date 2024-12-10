@@ -10,8 +10,8 @@ Converter converter;
 int main()
 {
 	converter.ReadAssetFile(L"mirror/source/mirror_for render.fbx");
-	converter.ExportMaterialData(L"mirror/mirror");
-	converter.ExportModelData(L"mirror/mirror",false);
+	converter.ExportMaterialData(L"x/x");
+	converter.ExportModelData(L"x/x",DataType::HIEARCY);
 
 	for (auto& bone : converter._bones)
 	{
