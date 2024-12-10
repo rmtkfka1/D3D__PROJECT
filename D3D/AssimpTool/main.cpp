@@ -9,7 +9,7 @@ Converter converter;
 
 int main()
 {
-	converter.ReadAssetFile(L"mirror/source/mirror_for render.fbx");
+	converter.ReadAssetFile(L"Mesh.fbx");
 	converter.ExportMaterialData(L"x/x");
 	converter.ExportModelData(L"x/x",DataType::HIEARCY);
 
