@@ -48,12 +48,12 @@ void Converter::ExportMaterialData(wstring savePath )
 
 
 
-void Converter::ExportModelData(wstring savePath, bool useHireacy)
+void Converter::ExportModelData(wstring savePath, DataType type)
 {
-	_useHireacy = useHireacy;
+	_type = type;
 
 	wstring finalPath = _modelPath + savePath + L".mesh";
-	Matrix tr;
+	Matrix tr =Matrix::Identity;
 
 	ReadModelData(_scene->mRootNode, -1, -1, tr);
 	WriteModelFile(finalPath);
@@ -78,10 +78,11 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::
 		matParent = _bones[parent]->transform;
 
 	////// Local (Root) Transform
-	if (_useHireacy == false)
+	if (_type == DataType::STATIC || _type == DataType::ANIMATION)
 	{
 		bone->transform = bone->transform * matParent;
 	}
+
 	else
 	{
 		bone->transform = bone->transform;
@@ -139,7 +140,6 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 
 			mesh->vertices.push_back(vertex);
 
-
 		}
 
 		// Index
@@ -152,7 +152,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 		}
 	}
 
-	if (_useHireacy == false)
+	if (_type == DataType::STATIC)
 	{
 		for (auto& v : mesh->vertices)
 		{
