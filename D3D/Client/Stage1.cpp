@@ -324,7 +324,16 @@ void Stage1::BulidDeferred()
 	}
 
 
-
+	{
+		shared_ptr<HireacyObject> gameobject = make_shared<HireacyObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"ghost/ghost", L"ghost");
+		gameobject->SetModel(model);
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
+		gameobject->GetTransform()->SetLocalScale(vec3(3.0f, 3.0f, 3.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(55000.0f, 55000.0f, 55000.0f));
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
 
 
 

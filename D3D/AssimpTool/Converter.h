@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 class Converter
 {
 public:
@@ -14,10 +12,9 @@ public:
 	void ExportModelData(wstring savePath, DataType type);
 	void ExportMaterialData(wstring savePath);
 	void ExportAnimationData(wstring savePath, uint32 index = 0);
-
+	void PrintAnimationData(shared_ptr<asAnimation> animation);
 
 private:
-
 	void ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::SimpleMath::Matrix tr );
 	void ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matrix m);
 	void WriteModelFile(wstring finalPath);
@@ -33,8 +30,8 @@ private:
 
 private:
 	shared_ptr<asAnimation> ReadAnimationData(aiAnimation* source);
-	shared_ptr<asAnimationNode> ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode);
-	void ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asAnimationNode>>& cache);
+	shared_ptr<asKeyFrameTemp> ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode);
+	void ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asKeyFrameTemp>>& cache);
 private:
 	wstring _assetPath = L"../Resources/Asset/";
 	wstring _modelPath = L"../Resources/Model/";

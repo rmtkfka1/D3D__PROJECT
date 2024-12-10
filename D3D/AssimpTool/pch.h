@@ -236,7 +236,7 @@ struct asAnimation
 };
 
 // Cache
-struct asAnimationNode
+struct asKeyFrameTemp
 {
 	aiString name;
 	vector<asKeyframeData> keyframe;

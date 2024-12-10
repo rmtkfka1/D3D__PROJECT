@@ -50,8 +50,8 @@ void Converter::ExportAnimationData(wstring savePath, uint32 index)
 	wstring finalPath = _modelPath + savePath + L".clip";
 	assert(index < _scene->mNumAnimations);
 	shared_ptr<asAnimation> animation = ReadAnimationData(_scene->mAnimations[index]);
+	PrintAnimationData(animation);
 	WriteAnimationData(animation, finalPath);
-
 }
 
 void Converter::ExportModelData(wstring savePath, DataType type)
@@ -61,12 +61,47 @@ void Converter::ExportModelData(wstring savePath, DataType type)
 	wstring finalPath = _modelPath + savePath + L".mesh";
 	Matrix tr =Matrix::Identity;
 
+	cout << "메쉬 갯수:"<< _scene->mNumMeshes << endl;
+
+	for (unsigned int i = 0; i < _scene->mNumMeshes; ++i)
+	{
+		aiMesh* mesh = _scene->mMeshes[i];
+		if (mesh->mName.length > 0)
+		{
+			cout << "메쉬 이름: " << mesh->mName.C_Str() << endl;
+		}
+		else
+		{
+			cout << "메쉬 이름: (없음)" << endl;
+		}
+	}
+
 	ReadModelData(_scene->mRootNode, -1, -1, tr);
 	ReadSkinData();
 	WriteModelFile(finalPath);
 }
 
 
+
+void Converter::PrintAnimationData(shared_ptr<asAnimation> animation)
+{
+	cout << animation->name << endl;
+	cout << animation->duration << endl;
+	cout << animation->frameCount << endl;
+	cout << animation->frameRate << endl;
+
+	cout << endl;
+
+
+	for (auto& ele : animation->keyframes)
+	{
+		cout << ele->boneName << endl;
+		int size = ele->transforms.size();
+		cout << size << endl;
+
+		
+	}
+}
 
 void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::SimpleMath::Matrix tr )
 {
@@ -114,10 +149,8 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 	mesh->name = node->mName.C_Str();
 	mesh->boneIndex = bone;
 
-
 	for (uint32 i = 0; i < node->mNumMeshes; i++)
 	{
-
 		uint32 index = node->mMeshes[i];
 		const aiMesh* srcMesh = _scene->mMeshes[index];
 
@@ -159,14 +192,14 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 		}
 	}
 
-	if (_type == DataType::STATIC)
-	{
-		for (auto& v : mesh->vertices)
-		{
-			v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
-			v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);
-		}
-	}
+	//if (_type == DataType::STATIC)
+	//{
+	//	for (auto& v : mesh->vertices)
+	//	{
+	//		v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
+	//		v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);
+	//	}
+	//}
 
 	_meshes.push_back(mesh);
 
@@ -495,6 +528,9 @@ void Converter::ReadSkinData()
 		if (srcMesh->HasBones() == false)
 			continue;
 
+		if (i>= _meshes.size())
+			continue;
+
 		shared_ptr<asMesh> mesh = _meshes[i];
 		vector<asBoneWeights> temp;
 		temp.resize(mesh->vertices.size());
@@ -588,27 +624,27 @@ shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* source)
 	animation->frameRate = source->mTicksPerSecond;
 	animation->frameCount = source->mDuration + 1;
 
-	map<string, shared_ptr<asAnimationNode>> cacheAnimNodes;
+	map<string, shared_ptr<asKeyFrameTemp>> cacheAnimNodes;
 
 	for (uint32 i = 0; i < source->mNumChannels; ++i)
 	{
 		aiNodeAnim* srcNode = source->mChannels[i];
 
-		shared_ptr<asAnimationNode> node = ParseAnimationNode(animation, srcNode);
+		shared_ptr<asKeyFrameTemp> node = ParseAnimationNode(animation, srcNode);
 
 		// 현재 찾은 노드 중에 제일 긴 시간으로 애니메이션 시간 갱신
 		animation->duration = max(animation->duration, node->keyframe.back().time);
-
 		cacheAnimNodes[srcNode->mNodeName.C_Str()] = node;
+
 	}
 
 	ReadKeyframeData(animation, _scene->mRootNode, cacheAnimNodes);
 
 	return animation;
 }
-shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode)
+shared_ptr<asKeyFrameTemp> Converter::ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode)
 {
-	shared_ptr<asAnimationNode> node = make_shared<asAnimationNode>();
+	shared_ptr<asKeyFrameTemp> node = make_shared<asKeyFrameTemp>();
 
 	node->name = srcNode->mNodeName;
 
@@ -623,17 +659,17 @@ shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation
 		uint32 t = node->keyframe.size();
 
 		// Position
-		if (::fabsf((float)srcNode->mPositionKeys[k].mTime - (float)t) <= 0.0001f)
+		
+		if (k < srcNode->mNumPositionKeys  && fabsf((float)srcNode->mPositionKeys[k].mTime - (float)t) <= 0.0001f) //키없는거 방지용max,max 쓰기때문에
 		{
 			aiVectorKey key = srcNode->mPositionKeys[k];
 			frameData.time = (float)key.mTime;
 			::memcpy_s(&frameData.translation, sizeof(vec3), &key.mValue, sizeof(aiVector3D));
-
 			found = true;
 		}
 
 		// Rotation
-		if (::fabsf((float)srcNode->mRotationKeys[k].mTime - (float)t) <= 0.0001f)
+		if (k < srcNode->mNumRotationKeys  && fabsf((float)srcNode->mRotationKeys[k].mTime - (float)t) <= 0.0001f)//키없는거 방지용
 		{
 			aiQuatKey key = srcNode->mRotationKeys[k];
 			frameData.time = (float)key.mTime;
@@ -647,7 +683,7 @@ shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation
 		}
 
 		// Scale
-		if (::fabsf((float)srcNode->mScalingKeys[k].mTime - (float)t) <= 0.0001f)
+		if (k < srcNode->mNumScalingKeys  && fabsf((float)srcNode->mScalingKeys[k].mTime - (float)t) <= 0.0001f)//키없는거 방지용
 		{
 			aiVectorKey key = srcNode->mScalingKeys[k];
 			frameData.time = (float)key.mTime;
@@ -658,11 +694,13 @@ shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation
 
 		if (found == true)
 			node->keyframe.push_back(frameData);
+
 	}
 
 	// Keyframe 늘려주기
 	if (node->keyframe.size() < animation->frameCount)
 	{
+
 		uint32 count = animation->frameCount - node->keyframe.size();
 		asKeyframeData keyFrame = node->keyframe.back();
 
@@ -674,12 +712,12 @@ shared_ptr<asAnimationNode> Converter::ParseAnimationNode(shared_ptr<asAnimation
 	
 
 }
-void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asAnimationNode>>& cache)
+void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asKeyFrameTemp>>& cache)
 {
 	shared_ptr<asKeyframe> keyframe = make_shared<asKeyframe>();
 	keyframe->boneName = srcNode->mName.C_Str();
 
-	shared_ptr<asAnimationNode> findNode = cache[srcNode->mName.C_Str()];
+	shared_ptr<asKeyFrameTemp> findNode = cache[srcNode->mName.C_Str()];
 
 	for (uint32 i = 0; i < animation->frameCount; i++)
 	{
@@ -692,6 +730,7 @@ void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcN
 			frameData.time = (float)i;
 			transform.Decompose(OUT frameData.scale, OUT frameData.rotation, OUT frameData.translation);
 		}
+
 		else
 		{
 			frameData = findNode->keyframe[i];
@@ -705,5 +744,6 @@ void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcN
 
 	for (uint32 i = 0; i < srcNode->mNumChildren; i++)
 		ReadKeyframeData(animation, srcNode->mChildren[i], cache);
+
 }
 ;

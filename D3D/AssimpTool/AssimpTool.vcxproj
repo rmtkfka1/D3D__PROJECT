@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AssimpTest.h" />
     <ClInclude Include="Converter.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="pch.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssimpTest.cpp" />
     <ClCompile Include="Converter.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="main.cpp" />

@@ -11,6 +11,7 @@ class HireacyObject :public GameObject
 {
 
 public:
+	HireacyObject();
 	HireacyObject(PlayerType type);
 	virtual ~HireacyObject();
 

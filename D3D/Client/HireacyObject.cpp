@@ -12,6 +12,9 @@
 #include "KeyManager.h"
 #include "Shader.h"
 #include "SphereCollider.h"
+HireacyObject::HireacyObject():GameObject(GameObjectType::Hierarchy)
+{
+}
 HireacyObject::HireacyObject(PlayerType type):GameObject(GameObjectType::Hierarchy)
 {
 	_playerType = type;
