@@ -9,13 +9,14 @@ Converter converter;
 
 int main()
 {
-	converter.ReadAssetFile(L"Mesh.fbx");
-	converter.ExportMaterialData(L"x/x");
-	converter.ExportModelData(L"x/x",DataType::HIEARCY);
-
-	for (auto& bone : converter._bones)
 	{
+		converter.ReadAssetFile(L"Kachujin/Mesh.fbx");
+		converter.ExportMaterialData(L"Kachujin/Kachujin");
+		converter.ExportModelData(L"Kachujin/Kachujin", DataType::ANIMATION);
+	}
 
-		cout << bone->name << "," << bone->index << " " << bone->parent << endl;
+	{
+		converter.ReadAssetFile(L"Kachujin/Idle.fbx");
+		converter.ExportAnimationData(L"Kachujin/Idle");
 	}
 };

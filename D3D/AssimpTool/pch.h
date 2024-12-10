@@ -50,6 +50,7 @@ using namespace Microsoft::WRL;
 #include "SimpleMath.inl"
 #include "tinyxml2.h"
 
+
 // 각종 lib
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
@@ -83,6 +84,8 @@ using Matrix = DirectX::SimpleMath::Matrix;
 using Color = DirectX::XMFLOAT4;
 using Ray = DirectX::SimpleMath::Ray;
 using Quaternion = DirectX::SimpleMath::Quaternion;
+
+#include "FileUtils.h"
 
 struct Vertex
 {
@@ -205,4 +208,36 @@ struct asBoneWeights
 
 	using Pair = pair<int32, float>;
 	vector<Pair> boneWeights;
+};
+
+
+//애니메이션 클립 데이터
+struct asKeyframeData
+{
+	float time;
+	vec3 scale;
+	Quaternion rotation;
+	vec3 translation;
+};
+
+struct asKeyframe
+{
+	string boneName;
+	vector<asKeyframeData> transforms;
+};
+
+struct asAnimation
+{
+	string name;
+	uint32 frameCount; //몇프레임짜리인지
+	float frameRate; // 몇프레임으로 돌아갈지
+	float duration; // 지속시간
+	vector<shared_ptr<asKeyframe>> keyframes;
+};
+
+// Cache
+struct asAnimationNode
+{
+	aiString name;
+	vector<asKeyframeData> keyframe;
 };
