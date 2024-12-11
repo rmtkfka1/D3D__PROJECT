@@ -51,7 +51,7 @@ void Player::Update()
 		if (toroom)
 		{
 
-			GetTransform()->SetLocalPosition(vec3(50000, 50000, 50000));
+			GetTransform()->SetLocalPosition(vec3(50000.0f, 50000.0f, 50000.0f));
 
 		}
 		else

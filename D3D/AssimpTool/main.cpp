@@ -11,9 +11,9 @@ int main()
 {
 	{
 		converter.ReadAssetFile(L"ghost/source/ghost.fbx");
-		//converter.ExportMaterialData(L"ghost/ghost");
-		converter.ExportModelData(L"ghost/ghost", DataType::HIEARCY);
-		//converter.ExportAnimationData(L"ghost/ghost");
+		//converter.ExportMaterialData(L"Tank/Tank");
+		//converter.ExportModelData(L"Tank/Tank", DataType::STATIC);
+		converter.ExportAnimationData(L"ghost/ghost");
 	}
 
 	//{

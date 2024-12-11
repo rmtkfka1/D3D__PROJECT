@@ -230,8 +230,7 @@ struct asAnimation
 {
 	string name;
 	uint32 frameCount; //몇프레임짜리인지
-	float frameRate; // 몇프레임으로 돌아갈지
-	float duration; // 지속시간
+	float frameRate; //몇프레임으로 돌아갈지
 	vector<shared_ptr<asKeyframe>> keyframes;
 };
 

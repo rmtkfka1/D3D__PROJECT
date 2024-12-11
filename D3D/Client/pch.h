@@ -115,6 +115,8 @@ struct CameraParams
     Matrix matProjection;
 };
 
+#define MAX_BONE 250
+#define MAX_FRAME 500
 
 extern unique_ptr<class Core> core;
 

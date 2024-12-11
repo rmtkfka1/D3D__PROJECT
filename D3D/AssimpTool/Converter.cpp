@@ -86,7 +86,7 @@ void Converter::ExportModelData(wstring savePath, DataType type)
 void Converter::PrintAnimationData(shared_ptr<asAnimation> animation)
 {
 	cout << animation->name << endl;
-	cout << animation->duration << endl;
+	//cout << animation->duration << endl;
 	cout << animation->frameCount << endl;
 	cout << animation->frameRate << endl;
 
@@ -192,14 +192,14 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 		}
 	}
 
-	//if (_type == DataType::STATIC)
-	//{
-	//	for (auto& v : mesh->vertices)
-	//	{
-	//		v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
-	//		v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);
-	//	}
-	//}
+	/*if (_type == DataType::STATIC)
+	{
+		for (auto& v : mesh->vertices)
+		{
+			v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
+			v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);
+		}
+	}*/
 
 	_meshes.push_back(mesh);
 
@@ -572,7 +572,7 @@ void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring fi
 	file->Open(finalPath, FileMode::Write);
 
 	file->Write<string>(animation->name);
-	file->Write<float>(animation->duration);
+	//file->Write<float>(animation->duration);
 	file->Write<float>(animation->frameRate);
 	file->Write<uint32>(animation->frameCount);
 
@@ -621,8 +621,8 @@ shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* source)
 {
 	shared_ptr<asAnimation> animation = make_shared<asAnimation>();
 	animation->name = source->mName.C_Str();
-	animation->frameRate = source->mTicksPerSecond;
-	animation->frameCount = source->mDuration + 1;
+	animation->frameRate = source->mTicksPerSecond; // 틱단위( 초당틱수)
+	animation->frameCount = source->mDuration + 1; //애니메이션의 지속시간
 
 	map<string, shared_ptr<asKeyFrameTemp>> cacheAnimNodes;
 
@@ -633,7 +633,7 @@ shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* source)
 		shared_ptr<asKeyFrameTemp> node = ParseAnimationNode(animation, srcNode);
 
 		// 현재 찾은 노드 중에 제일 긴 시간으로 애니메이션 시간 갱신
-		animation->duration = max(animation->duration, node->keyframe.back().time);
+		//animation->duration = max(animation->duration, node->keyframe.back().time);
 		cacheAnimNodes[srcNode->mNodeName.C_Str()] = node;
 
 	}

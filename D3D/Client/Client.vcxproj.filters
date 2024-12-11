@@ -53,14 +53,17 @@
     <Filter Include="리소스 파일\Utils">
       <UniqueIdentifier>{df27f001-bb9d-491c-a9a8-ccd65aeb2505}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.GameObject\04.PostProcess">
-      <UniqueIdentifier>{e5afacb5-cb0f-409b-9edd-b370d434838b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.HLSL\compute">
       <UniqueIdentifier>{fb2c783c-e848-4e8c-8e2f-993e8ae7ba21}</UniqueIdentifier>
     </Filter>
     <Filter Include="04.HLSL\graphics">
       <UniqueIdentifier>{42c1b844-6eac-4c2e-b962-04e8954ac3fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\05.AnimationObject">
+      <UniqueIdentifier>{fc7b4a0f-b7c9-4bb5-bc71-8b56bf1b30d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.GameObject\PostProcess">
+      <UniqueIdentifier>{d2993f86-7c84-4f77-a955-51bad49a4bf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,9 +217,6 @@
     <ClInclude Include="BufferManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
-    <ClInclude Include="BloomEffect.h">
-      <Filter>05.GameObject\04.PostProcess</Filter>
-    </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>02.Core</Filter>
     </ClInclude>
@@ -225,6 +225,21 @@
     </ClInclude>
     <ClInclude Include="Mirror.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>pch</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationData.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomEffect.h">
+      <Filter>05.GameObject\PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationObject.h">
+      <Filter>05.GameObject\05.AnimationObject</Filter>
+    </ClInclude>
+    <ClInclude Include="StructuredBuffer.h">
+      <Filter>03.Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -385,14 +400,26 @@
     <ClCompile Include="BufferManager.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
-    <ClCompile Include="BloomEffect.cpp">
-      <Filter>05.GameObject\04.PostProcess</Filter>
-    </ClCompile>
     <ClCompile Include="Core.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
     <ClCompile Include="Mirror.cpp">
       <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>pch</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationData.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="BloomEffect.cpp">
+      <Filter>05.GameObject\PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationObject.cpp">
+      <Filter>05.GameObject\05.AnimationObject</Filter>
+    </ClCompile>
+    <ClCompile Include="StructuredBuffer.cpp">
+      <Filter>03.Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -469,6 +496,9 @@
       <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\skyForward.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\animationForward.hlsl">
       <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
   </ItemGroup>
