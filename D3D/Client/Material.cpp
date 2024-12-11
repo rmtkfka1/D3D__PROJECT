@@ -59,7 +59,6 @@ void Material::PushData()
 		core->GetBufferManager()->GetTable()->CopySRV(_shadowTexture->GetSRVCpuHandle(), reg);
 		_params.SetTexon(3, 1);
 	}
-
 	else
 	{
 		_params.SetTexon(3, 0);

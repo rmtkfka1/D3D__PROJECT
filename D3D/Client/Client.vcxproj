@@ -160,9 +160,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationData.h" />
-    <ClInclude Include="AnimationObject.h" />
-    <ClInclude Include="Animator.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BilboardObject.h" />
     <ClInclude Include="BloomEffect.h" />
@@ -180,7 +177,6 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBullet.h" />
-    <ClInclude Include="FileUtils.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeoMetryHelper.h" />
@@ -215,7 +211,6 @@
     <ClInclude Include="Stage1.h" />
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="SteamOutputBuffer.h" />
-    <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Terrain.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -231,9 +226,6 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimationData.cpp" />
-    <ClCompile Include="AnimationObject.cpp" />
-    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BilboardObject.cpp" />
     <ClCompile Include="BloomEffect.cpp" />
@@ -250,7 +242,6 @@
     <ClCompile Include="D3D12ResourceManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
-    <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeoMetryHelper.cpp" />
@@ -293,7 +284,6 @@
     <ClCompile Include="Stage1.cpp" />
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="SteamOutputBuffer.cpp" />
-    <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
@@ -315,12 +305,6 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Resources\Shader\animationForward.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
     <FxCompile Include="..\Resources\Shader\Bilboard.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

@@ -101,6 +101,8 @@ struct Vertex
     vec2 uv = { 0, 0 };
     vec3 normal = { 0, 0, 0 };
     vec3 tangent = { 0, 0, 0 };
+    vec4 blendIndices = { 0,0, 0, 0 };
+    vec4 blendWeights = { 0,0, 0, 0 };
 };
 
 
@@ -113,30 +115,6 @@ struct CameraParams
 {
     Matrix matView;
     Matrix matProjection;
-};
-
-#define MAX_BONE 250
-#define MAX_FRAME 250
-
-enum class CBV_REGISTER : uint8
-{
-    b2 = 0,
-    b3 = 1,
-};
-
-enum class SRV_REGISTER : uint8
-{
-    t0 = 2,
-    t1,
-    t2,
-    t3,
-};
-
-enum class UAV_REGISTER : uint8
-{
-    u0 = 6,
-    u1,
-    u2
 };
 
 

@@ -1,32 +1,21 @@
 #include "pch.h"
 #include "Converter.h"
 #include <random>
-#include "AssimpTest.h"
+
 default_random_engine dre;
 
 Converter converter;
-AssimpTest test;
+
 
 int main()
 {
+	converter.ReadAssetFile(L"mirror/source/mirror_for render.fbx");
+	//converter.ExportMaterialData(L"helicopter/helicopter");
+	converter.ExportModelData(L"mirror/mirror",false);
+
+	for (auto& bone : converter._bones)
 	{
-		converter.ReadAssetFile(L"ghost/source/ghost.fbx");
-		//converter.ExportMaterialData(L"Tank/Tank");
-		//converter.ExportModelData(L"Tank/Tank", DataType::STATIC);
-		converter.ExportAnimationData(L"ghost/ghost");
+
+		cout << bone->name << "," << bone->index << " " << bone->parent << endl;
 	}
-
-	//{
-	//	converter.ReadAssetFile(L"Kachujin/Idle.fbx");
-	//	converter.ExportAnimationData(L"Kachujin/Idle");
-
-	//}
-
-	//{
-	//	converter.ReadAssetFile(L"sponge.glb");
-	//	converter.ExportAnimationData(L"sponge/sponge");
-	//}
-
-	//test.Init(L"sponge.glb");
-
 };

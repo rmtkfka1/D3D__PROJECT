@@ -31,7 +31,6 @@
 #include <random>
 #include "BloomEffect.h"
 #include "Mirror.h"
-#include "AnimationObject.h"
 
 static default_random_engine dre;
 static uniform_int_distribution<int> random_xz(-3800, 3800);
@@ -206,24 +205,25 @@ void Stage1::BulidDeferred()
 	for (int i = 0; i < 10; ++i)
 	{
 		shared_ptr<Box> object = make_shared<Box>();
-		shared_ptr<Model> data = Model::ReadData(L"Box/Box",L"Box");
+		shared_ptr<Model> data = Model::ReadData(L"Box/Box", L"Box");
 		object->SetModel(data);
 		object->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
-		object->AddBoxColliderWithModel("block",ColliderBehave::Passive);
+		object->AddBoxColliderWithModel("block", ColliderBehave::Passive);
 
 		auto& camera = CameraManager::GetInstance()->GetCamera(CameraType::SHADOW);
 		Matrix mat = static_pointer_cast<ShadowCamera>(camera)->GetVPMatrix();
-		auto& vec =object->GetMaterial();
+		auto& vec = object->GetMaterial();
 
 		for (auto& ele : vec)
 		{
-			ele->SetMatrix(0,mat);
+			ele->SetMatrix(0, mat);
 		}
 
 		AddGameObject(object, RenderingType::Deferred);
 
 	}
-	
+
+
 	for (int i = 0; i < 3; ++i)
 	{
 		shared_ptr<Sphere> object = make_shared<Sphere>();
@@ -325,19 +325,9 @@ void Stage1::BulidDeferred()
 	}
 
 
-	{
-		shared_ptr<AnimationObject> gameobject = make_shared<AnimationObject>();
-		gameobject->SetFrustumCuling(false);
-		shared_ptr<Model> model = Model::ReadData(L"ghost/ghost", L"ghost");
-		model->ReadAnimation(L"ghost/ghost");
-		gameobject->SetModel(model);
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl"));
-		gameobject->GetTransform()->SetLocalScale(vec3(30.0f, 30.0f, 30.0f));
-		gameobject->GetTransform()->SetLocalPosition(vec3(55000.0f, 55000.0f, 55000.0f));
-		AddGameObject(gameobject, RenderingType::Deferred);
-	}
 
-	//temp
+
+	////temp
 	Model::ReadData(L"playerBullet/playerBullet", L"playerBullet");
 }
 
@@ -441,8 +431,6 @@ void Stage1::BulidForward()
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 90.0f, 0));
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
-
-
 
 	
 

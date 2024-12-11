@@ -1,6 +1,26 @@
 #pragma once
 
 
+enum class CBV_REGISTER : uint8
+{
+	b2=0,
+	b3=1,
+};
+
+enum class SRV_REGISTER : uint8
+{
+	t0 = 2,
+	t1,
+	t2,
+	t3,
+};
+
+enum class UAV_REGISTER : uint8
+{
+	u0 = 6,
+	u1,
+	u2
+};
 
 
 /*************************

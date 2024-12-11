@@ -37,6 +37,7 @@ void Transform::Update()
     for (const shared_ptr<Transform>& child : _children)
         child->Update();
 
+
 }
 
 void Transform::PushData()

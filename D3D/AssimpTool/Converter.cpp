@@ -45,63 +45,21 @@ void Converter::ExportMaterialData(wstring savePath )
 	WriteMaterialData(finalPath);
 }
 
-void Converter::ExportAnimationData(wstring savePath, uint32 index)
-{
-	wstring finalPath = _modelPath + savePath + L".clip";
-	assert(index < _scene->mNumAnimations);
-	shared_ptr<asAnimation> animation = ReadAnimationData(_scene->mAnimations[index]);
-	PrintAnimationData(animation);
-	WriteAnimationData(animation, finalPath);
-}
 
-void Converter::ExportModelData(wstring savePath, DataType type)
+
+
+void Converter::ExportModelData(wstring savePath, bool useHireacy)
 {
-	_type = type;
+	_useHireacy = useHireacy;
 
 	wstring finalPath = _modelPath + savePath + L".mesh";
-	Matrix tr =Matrix::Identity;
-
-	cout << "메쉬 갯수:"<< _scene->mNumMeshes << endl;
-
-	for (unsigned int i = 0; i < _scene->mNumMeshes; ++i)
-	{
-		aiMesh* mesh = _scene->mMeshes[i];
-		if (mesh->mName.length > 0)
-		{
-			cout << "메쉬 이름: " << mesh->mName.C_Str() << endl;
-		}
-		else
-		{
-			cout << "메쉬 이름: (없음)" << endl;
-		}
-	}
+	Matrix tr;
 
 	ReadModelData(_scene->mRootNode, -1, -1, tr);
-	ReadSkinData();
 	WriteModelFile(finalPath);
 }
 
 
-
-void Converter::PrintAnimationData(shared_ptr<asAnimation> animation)
-{
-	cout << animation->name << endl;
-	//cout << animation->duration << endl;
-	cout << animation->frameCount << endl;
-	cout << animation->frameRate << endl;
-
-	cout << endl;
-
-
-	for (auto& ele : animation->keyframes)
-	{
-		cout << ele->boneName << endl;
-		int size = ele->transforms.size();
-		cout << size << endl;
-
-		
-	}
-}
 
 void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::SimpleMath::Matrix tr )
 {
@@ -120,11 +78,10 @@ void Converter::ReadModelData(aiNode* node, int32 index, int32 parent, DirectX::
 		matParent = _bones[parent]->transform;
 
 	////// Local (Root) Transform
-	if (_type == DataType::STATIC || _type == DataType::ANIMATION)
+	if (_useHireacy == false)
 	{
 		bone->transform = bone->transform * matParent;
 	}
-
 	else
 	{
 		bone->transform = bone->transform;
@@ -149,8 +106,10 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 	mesh->name = node->mName.C_Str();
 	mesh->boneIndex = bone;
 
+
 	for (uint32 i = 0; i < node->mNumMeshes; i++)
 	{
+
 		uint32 index = node->mMeshes[i];
 		const aiMesh* srcMesh = _scene->mMeshes[index];
 
@@ -180,6 +139,7 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 
 			mesh->vertices.push_back(vertex);
 
+
 		}
 
 		// Index
@@ -192,14 +152,14 @@ void Converter::ReadMeshData(aiNode* node, int32 bone, DirectX::SimpleMath::Matr
 		}
 	}
 
-	/*if (_type == DataType::STATIC)
+	if (_useHireacy == false)
 	{
 		for (auto& v : mesh->vertices)
 		{
 			v.position = DirectX::SimpleMath::Vector3::Transform(v.position, m);
 			v.normal = DirectX::SimpleMath::Vector3::TransformNormal(v.normal, m);
 		}
-	}*/
+	}
 
 	_meshes.push_back(mesh);
 
@@ -278,15 +238,14 @@ void Converter::WriteModelFile(wstring finalPath)
 				size_t len = mesh->vertices.size();
 				out.write((const char*)&len, sizeof(size_t));
 
-
 				for (int i = 0; i < len; ++i)
 				{
 					out.write((const char*)&mesh->vertices[i].position, sizeof(vec3));
 					out.write((const char*)&mesh->vertices[i].uv, sizeof(vec2));
 					out.write((const char*)&mesh->vertices[i].normal, sizeof(vec3));
 					out.write((const char*)&mesh->vertices[i].tangent, sizeof(vec3));
-				/*	out.write((const char*)&mesh->vertices[i].blendIndices, sizeof(vec4));
-					out.write((const char*)&mesh->vertices[i].blendWeights, sizeof(vec4));*/
+					out.write((const char*)&mesh->vertices[i].blendIndices, sizeof(vec4));
+					out.write((const char*)&mesh->vertices[i].blendWeights, sizeof(vec4));
 				}
 			}
 
@@ -335,7 +294,7 @@ void Converter::WriteModelFile(wstring finalPath)
 }
 void Converter::CalculateBoundingBox()
 {
-	if (_type==DataType::HIEARCY)
+	if (_useHireacy)
 	{
 		for (int i = 0; i < _meshes.size(); ++i)
 		{
@@ -518,89 +477,6 @@ void Converter::WriteMaterialData(wstring finalPath)
 	document->SaveFile(Utils::ToString(finalPath).c_str());
 }
 
-void Converter::ReadSkinData()
-{
-
-	for (int32 i = 0; i < _scene->mNumMeshes; ++i)
-	{
-		aiMesh* srcMesh = _scene->mMeshes[i];
-
-		if (srcMesh->HasBones() == false)
-			continue;
-
-		if (i>= _meshes.size())
-			continue;
-
-		shared_ptr<asMesh> mesh = _meshes[i];
-		vector<asBoneWeights> temp;
-		temp.resize(mesh->vertices.size());
-
-		for (int32 b = 0; b < srcMesh->mNumBones; ++b)
-		{
-			aiBone* srcMeshBone = srcMesh->mBones[b];
-
-			uint32 boneIndex = GetBoneIndex(srcMeshBone->mName.C_Str());
-
-			for (uint32 w = 0; w < srcMeshBone->mNumWeights; ++w)
-			{
-				uint32 vertexId = srcMeshBone->mWeights[w].mVertexId;
-				float weight = srcMeshBone->mWeights[w].mWeight;
-
-				temp[vertexId].AddWeights(boneIndex, weight);
-			}
-		}
-
-		for (uint32 v = 0; v < temp.size(); ++v)
-		{
-			temp[v].Normalize();
-
-			asBlendWeight blendWeight = temp[v].GetBlendWeights();
-			mesh->vertices[v].blendIndices = blendWeight.indices;
-			mesh->vertices[v].blendWeights = blendWeight.weights;
-		}
-	}
-
-}
-
-void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring finalPath)
-{
-	auto path = filesystem::path(finalPath);
-
-	filesystem::create_directory(path.parent_path());
-
-	shared_ptr<FileUtils> file = make_shared<FileUtils>();
-	file->Open(finalPath, FileMode::Write);
-
-	file->Write<string>(animation->name);
-	//file->Write<float>(animation->duration);
-	file->Write<float>(animation->frameRate);
-	file->Write<uint32>(animation->frameCount);
-
-	file->Write<uint32>(animation->keyframes.size());
-
-	for (shared_ptr<asKeyframe> keyframe : animation->keyframes)
-	{
-		file->Write<string>(keyframe->boneName);
-
-		file->Write<uint32>(keyframe->transforms.size());
-		file->Write(&keyframe->transforms[0], sizeof(asKeyframeData) * keyframe->transforms.size());
-	}
-}
-
-uint32 Converter::GetBoneIndex(const string& name)
-{
-	for (auto& bone : _bones)
-	{
-		if (bone->name == name)
-		{
-			return bone->index;
-		}
-	}
-
-	assert(false);
-
-}
-
 std::string Converter::WriteTexture(string saveFolder, string file)
 {
 	string fileName = filesystem::path(file).filename().string();
@@ -616,134 +492,4 @@ std::string Converter::WriteTexture(string saveFolder, string file)
 	::CopyFileA(originStr.c_str(), pathStr.c_str(), false);
 
 	return fileName;
-}
-shared_ptr<asAnimation> Converter::ReadAnimationData(aiAnimation* source)
-{
-	shared_ptr<asAnimation> animation = make_shared<asAnimation>();
-	animation->name = source->mName.C_Str();
-	animation->frameRate = source->mTicksPerSecond; // 틱단위( 초당틱수)
-	animation->frameCount = source->mDuration + 1; //애니메이션의 지속시간
-
-	map<string, shared_ptr<asKeyFrameTemp>> cacheAnimNodes;
-
-	for (uint32 i = 0; i < source->mNumChannels; ++i)
-	{
-		aiNodeAnim* srcNode = source->mChannels[i];
-
-		shared_ptr<asKeyFrameTemp> node = ParseAnimationNode(animation, srcNode);
-
-		// 현재 찾은 노드 중에 제일 긴 시간으로 애니메이션 시간 갱신
-		//animation->duration = max(animation->duration, node->keyframe.back().time);
-		cacheAnimNodes[srcNode->mNodeName.C_Str()] = node;
-
-	}
-
-	ReadKeyframeData(animation, _scene->mRootNode, cacheAnimNodes);
-
-	return animation;
-}
-shared_ptr<asKeyFrameTemp> Converter::ParseAnimationNode(shared_ptr<asAnimation> animation, aiNodeAnim* srcNode)
-{
-	shared_ptr<asKeyFrameTemp> node = make_shared<asKeyFrameTemp>();
-
-	node->name = srcNode->mNodeName;
-
-	uint32 keyCount =max(max(srcNode->mNumPositionKeys, srcNode->mNumRotationKeys), srcNode->mNumScalingKeys);
-
-	for (uint32 k = 0; k < keyCount; k++)
-	{
-		asKeyframeData frameData;
-
-		bool found = false;
-
-		uint32 t = node->keyframe.size();
-
-		// Position
-		
-		if (k < srcNode->mNumPositionKeys  && fabsf((float)srcNode->mPositionKeys[k].mTime - (float)t) <= 0.0001f) //키없는거 방지용max,max 쓰기때문에
-		{
-			aiVectorKey key = srcNode->mPositionKeys[k];
-			frameData.time = (float)key.mTime;
-			::memcpy_s(&frameData.translation, sizeof(vec3), &key.mValue, sizeof(aiVector3D));
-			found = true;
-		}
-
-		// Rotation
-		if (k < srcNode->mNumRotationKeys  && fabsf((float)srcNode->mRotationKeys[k].mTime - (float)t) <= 0.0001f)//키없는거 방지용
-		{
-			aiQuatKey key = srcNode->mRotationKeys[k];
-			frameData.time = (float)key.mTime;
-
-			frameData.rotation.x = key.mValue.x;
-			frameData.rotation.y = key.mValue.y;
-			frameData.rotation.z = key.mValue.z;
-			frameData.rotation.w = key.mValue.w;
-
-			found = true;
-		}
-
-		// Scale
-		if (k < srcNode->mNumScalingKeys  && fabsf((float)srcNode->mScalingKeys[k].mTime - (float)t) <= 0.0001f)//키없는거 방지용
-		{
-			aiVectorKey key = srcNode->mScalingKeys[k];
-			frameData.time = (float)key.mTime;
-			::memcpy_s(&frameData.scale, sizeof(vec3), &key.mValue, sizeof(aiVector3D));
-
-			found = true;
-		}
-
-		if (found == true)
-			node->keyframe.push_back(frameData);
-
-	}
-
-	// Keyframe 늘려주기
-	if (node->keyframe.size() < animation->frameCount)
-	{
-
-		uint32 count = animation->frameCount - node->keyframe.size();
-		asKeyframeData keyFrame = node->keyframe.back();
-
-		for (uint32 n = 0; n < count; n++)
-			node->keyframe.push_back(keyFrame);
-	}
-
-	return node;
-	
-
-}
-void Converter::ReadKeyframeData(shared_ptr<asAnimation> animation, aiNode* srcNode, map<string, shared_ptr<asKeyFrameTemp>>& cache)
-{
-	shared_ptr<asKeyframe> keyframe = make_shared<asKeyframe>();
-	keyframe->boneName = srcNode->mName.C_Str();
-
-	shared_ptr<asKeyFrameTemp> findNode = cache[srcNode->mName.C_Str()];
-
-	for (uint32 i = 0; i < animation->frameCount; i++)
-	{
-		asKeyframeData frameData;
-
-		if (findNode == nullptr)
-		{
-			Matrix transform(srcNode->mTransformation[0]);
-			transform = transform.Transpose();
-			frameData.time = (float)i;
-			transform.Decompose(OUT frameData.scale, OUT frameData.rotation, OUT frameData.translation);
-		}
-
-		else
-		{
-			frameData = findNode->keyframe[i];
-		}
-
-		keyframe->transforms.push_back(frameData);
-	}
-
-	// 애니메이션 키프레임 채우기
-	animation->keyframes.push_back(keyframe);
-
-	for (uint32 i = 0; i < srcNode->mNumChildren; i++)
-		ReadKeyframeData(animation, srcNode->mChildren[i], cache);
-
-}
-;
+};

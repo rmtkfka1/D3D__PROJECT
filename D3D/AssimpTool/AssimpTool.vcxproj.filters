@@ -26,7 +26,6 @@
     <ClInclude Include="pch.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="AssimpTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Converter.cpp" />
@@ -46,7 +45,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="AssimpTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
