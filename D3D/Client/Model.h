@@ -6,10 +6,7 @@ class GraphicsShader;
 class ModelAnimation;
 
 
-struct AnimationMatrix
-{
-	array<array<Matrix, MAX_BONE>, MAX_FRAME> transforms;
-};
+
 
 struct ModelBone
 {
@@ -53,6 +50,7 @@ public:
 	void SetIntValue(uint8 index, int32 value);
 	void SetFloatValue(uint8 index, float value);
 
+
 public:
 	uint32 GetMaterialCount() { return static_cast<uint32>(_materialData.size()); }
 	vector<shared_ptr<Material>>& GetMaterials() { return _materialData; }
@@ -69,12 +67,10 @@ public:
 	shared_ptr<ModelBone> GetBoneByIndex(uint32 index) { return (index < 0 || index >= _boneData.size() ? nullptr : _boneData[index]); }
 	shared_ptr<ModelBone> GetBoneByName(const wstring& name);
 
-	uint32 GetAnimationCount() { return _animations.size(); }
-	vector<shared_ptr<ModelAnimation>>& GetAnimations() { return _animations; }
-	shared_ptr<ModelAnimation> GetAnimationByIndex(UINT index) { return (index < 0 || index >= _animations.size()) ? nullptr : _animations[index]; }
-	shared_ptr<ModelAnimation> GetAnimationByName(wstring name);
-	void CreateAnimationInfo();
 
+	shared_ptr<ModelAnimation>& GetAnimation() { return _animations; }
+	shared_ptr<ModelAnimation> GetAnimationByName(wstring name);
+	
 
 	void PrintInfo();
 
@@ -95,8 +91,8 @@ private:
 	vector<shared_ptr<Material>>		_materialData;
 	vector<shared_ptr<ModelBone>>		_boneData;
 	vector<shared_ptr<ModelMesh>>		_meshData;
-	vector<shared_ptr<ModelAnimation>>   _animations; //애니메이션 여러개 ..
-	shared_ptr<AnimationMatrix> _animTransforms;
+	shared_ptr<ModelAnimation>			_animations; 
+
 	vec3 _totalCenter{};
 	vec3 _totalSize{};
 	float _totalRadius{};

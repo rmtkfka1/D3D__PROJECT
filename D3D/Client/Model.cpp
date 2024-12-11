@@ -10,7 +10,7 @@
 #include "Texture.h"
 #include "FileUtils.h"
 #include "AnimationData.h"
-
+#include "StructuredBuffer.h"
 
 Model::Model() :ResourceBase(ResourceType::Model)
 {
@@ -347,12 +347,7 @@ void Model::ReadAnimation(wstring filename)
 		animation->keyframes[keyframe->boneName] = keyframe;
 	}
 
-	_animations.push_back(animation);
-
-
-	CreateAnimationInfo();
-
-
+	_animations=animation;
 }
 
 void Model::SetIntValue(uint8 index, int32 value)
@@ -420,67 +415,16 @@ std::shared_ptr<ModelBone> Model::GetBoneByName(const wstring& name)
 
 shared_ptr<ModelAnimation> Model::GetAnimationByName(wstring name)
 {
-	for (auto& animation : _animations)
-	{
-		if (animation->name == name)
-			return animation;
-	}
+	//for (auto& animation : _animations)
+	//{
+	//	if (animation->name == name)
+	//		return animation;
+	//}
 
 	return nullptr;
 }
 
-void Model::CreateAnimationInfo()
-{
-	_animTransforms = make_shared< AnimationMatrix>();
 
-	vector<Matrix> tempAnimBoneTransforms(MAX_BONE, Matrix::Identity);
-
-	shared_ptr<ModelAnimation> animation = GetAnimationByIndex(0);
-
-	for (uint32 f = 0; f < animation->frameCount; f++)
-	{
-		for (uint32 b = 0; b < GetBoneCount(); b++)
-		{
-			shared_ptr<ModelBone> bone = GetBoneByIndex(b);
-
-			Matrix matAnimation;
-
-			shared_ptr<ModelKeyframe> frame = animation->GetKeyframe(bone->name);
-
-			if (frame != nullptr)
-			{
-				ModelKeyframeData& data = frame->transforms[f];
-
-				Matrix S, R, T;
-				S = Matrix::CreateScale(data.scale.x, data.scale.y, data.scale.z);
-				R = Matrix::CreateFromQuaternion(data.rotation);
-				T = Matrix::CreateTranslation(data.translation.x, data.translation.y, data.translation.z);
-
-				matAnimation = S * R * T;
-			}
-			else
-			{
-				matAnimation = Matrix::Identity;
-			}
-
-		
-			Matrix toRootMatrix = bone->transformData;
-			Matrix invGlobal = toRootMatrix.Invert();
-
-			int32 parentIndex = bone->parentIndex;
-
-			Matrix matParent = Matrix::Identity;
-			if (parentIndex >= 0)
-				matParent = tempAnimBoneTransforms[parentIndex];
-
-			tempAnimBoneTransforms[b] = matAnimation * matParent;
-
-			_animTransforms->transforms[f][b] = invGlobal * tempAnimBoneTransforms[b];
-		}
-	}
-
-
-}
 
 
 void Model::BindCacheInfo()

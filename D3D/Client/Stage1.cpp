@@ -31,6 +31,7 @@
 #include <random>
 #include "BloomEffect.h"
 #include "Mirror.h"
+#include "AnimationObject.h"
 
 static default_random_engine dre;
 static uniform_int_distribution<int> random_xz(-3800, 3800);
@@ -325,7 +326,7 @@ void Stage1::BulidDeferred()
 
 
 	{
-		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
+		shared_ptr<AnimationObject> gameobject = make_shared<AnimationObject>();
 		gameobject->SetFrustumCuling(false);
 		shared_ptr<Model> model = Model::ReadData(L"ghost/ghost", L"ghost");
 		model->ReadAnimation(L"ghost/ghost");
@@ -335,8 +336,6 @@ void Stage1::BulidDeferred()
 		gameobject->GetTransform()->SetLocalPosition(vec3(55000.0f, 55000.0f, 55000.0f));
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
-
-
 
 	//temp
 	Model::ReadData(L"playerBullet/playerBullet", L"playerBullet");

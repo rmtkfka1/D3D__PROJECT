@@ -241,6 +241,9 @@
     <ClInclude Include="StructuredBuffer.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -419,6 +422,9 @@
       <Filter>05.GameObject\05.AnimationObject</Filter>
     </ClCompile>
     <ClCompile Include="StructuredBuffer.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
       <Filter>03.Resource</Filter>
     </ClCompile>
   </ItemGroup>

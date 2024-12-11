@@ -10,7 +10,6 @@ void StructuredBuffer::Init(uint32 size, uint32 count, void* initData)
 	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 	D3D12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
-
 	core->GetDevice()->CreateCommittedResource(
 		&heapProperties,
 		D3D12_HEAP_FLAG_NONE,
@@ -37,6 +36,11 @@ void StructuredBuffer::Init(uint32 size, uint32 count, void* initData)
 
 	core->GetDevice()->CreateShaderResourceView(_resource.Get(), &srvDesc, _srvHandle);
 
+}
+
+void StructuredBuffer::PushData(SRV_REGISTER reg)
+{
+	core->GetBufferManager()->GetTable()->CopySRV(_srvHandle, reg);
 }
 
 void StructuredBuffer::CopyInitialData(uint64 bufferSize, void* initialData)

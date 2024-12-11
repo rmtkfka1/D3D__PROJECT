@@ -6,6 +6,7 @@ class StructuredBuffer
 
 public:
 	void Init(uint32 size , uint32 count ,void* initData);
+	void PushData(SRV_REGISTER reg);
 
 private:
 	void CopyInitialData(uint64 bufferSize, void* initialData);

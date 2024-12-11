@@ -8,9 +8,21 @@
 #include "BufferManager.h"
 #include "BufferPool.h"
 #include "Mesh.h"
-void AnimationObject::Init()
+#include "Animator.h"
+AnimationObject::AnimationObject():GameObject(GameObjectType::ANI)
 {
 	_transform = make_shared<Transform>();
+}
+AnimationObject::~AnimationObject()
+{
+}
+void AnimationObject::Init()
+{
+	_animator = make_shared<Animator>();
+	_animator->SetModel(_model);
+	_animator->Init();
+
+	
 }
 
 void AnimationObject::Update()
@@ -24,14 +36,9 @@ void AnimationObject::Render()
 	auto& list = core->GetCmdList();
 
 	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
-	vector<shared_ptr<ModelAnimation>>& animation = _model->GetAnimations();
 
 	_shader->SetPipelineState();
-
-
-
-
-
+	_animator->PushData();
 
 	for (auto& data : meshData)
 	{
@@ -56,7 +63,13 @@ void AnimationObject::ShaderNoSetRender()
 
 shared_ptr<Transform> AnimationObject::GetTransform()
 {
-	return shared_ptr<Transform>();
+	return _transform;
+}
+
+
+void AnimationObject::SetModel(shared_ptr<Model> model)
+{
+	_model = model;
 }
 
 void AnimationObject::OnComponentBeginOverlap(shared_ptr<BaseCollider> collider, shared_ptr<BaseCollider> other)
