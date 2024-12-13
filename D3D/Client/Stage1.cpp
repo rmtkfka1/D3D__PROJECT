@@ -314,9 +314,26 @@ void Stage1::BulidDeferred()
 	}
 
 	{
+		shared_ptr<AnimationObject> gameobject = make_shared<AnimationObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"Kachujin/Kachujin", L"Kachujin");
+		model->ReadAnimation(L"Kachujin/Slash");
+		gameobject->SetModel(model);
+		gameobject->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"forwardAnimation.hlsl"));
+
+		ResourceManager::GetInstance()->Add<GameObject>(L"Kachujin", gameobject);
+		gameobject->GetTransform()->SetLocalScale(vec3(2.0f, 2.0f, 2.0f));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 270.0f, 0));
+		gameobject->GetTransform()->SetLocalPosition(vec3(50500.0f, 49700.0f, 49900.0f));
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
+
+
+	{
 		shared_ptr<Mirror> gameobject = make_shared<Mirror>();
 		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Player"));
 		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"room"));
+		gameobject->PushObject(ResourceManager::GetInstance()->Get<GameObject>(L"Kachujin"));
 		gameobject->SetFrustumCuling(false);
 		shared_ptr<Model> model = Model::ReadData(L"mirror/mirror", L"mirror");
 		gameobject->SetModel(model);
@@ -327,18 +344,6 @@ void Stage1::BulidDeferred()
 
 
 
-	{
-		shared_ptr<AnimationObject> gameobject = make_shared<AnimationObject>();
-		gameobject->SetFrustumCuling(false);
-		shared_ptr<Model> model = Model::ReadData(L"Kachujin/Kachujin", L"Kachujin");
-		model->ReadAnimation(L"Kachujin/Slash");
-		gameobject->SetModel(model);
-		gameobject->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"forwardAnimation.hlsl"));
-		gameobject->GetTransform()->SetLocalScale(vec3(2.0f, 2.0f, 2.0f));
-		gameobject->GetTransform()->SetLocalRotation(vec3(0, 270.0f, 0));
-		gameobject->GetTransform()->SetLocalPosition(vec3(50500.0f, 49700.0f, 49900.0f));
-		AddGameObject(gameobject, RenderingType::Forward);
-	}
 
 
 	////temp

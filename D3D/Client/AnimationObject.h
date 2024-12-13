@@ -17,6 +17,7 @@ public:
 	virtual void ShaderNoSetRender() override;
 	virtual shared_ptr<Transform> GetTransform();
 
+	vector<shared_ptr<Material>>& GetMatrial();
 	void SetModel(shared_ptr< Model> model);
 	const shared_ptr<Model>& GetModel() { return _model; }
 

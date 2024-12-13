@@ -11,6 +11,7 @@
 #include "RenderTargets.h"
 #include "CustomObject.h"
 #include "GeoMetryHelper.h"
+#include "AnimationObject.h"
 void Mirror::Init()
 {
 	ModelObject::Init();
@@ -52,12 +53,37 @@ void Mirror::Init()
 	for (auto& ele : _mirrorObjects)
 	{
 
-		auto& v = static_pointer_cast<HireacyObject>(ele)->GetMatrial();
-
-		for (auto& i : v)
+		if (ele->GetGameObjectType() == GameObjectType::Hierarchy)
 		{
-			i->SetMatrix(1,_reflectMat);
+
+			auto& v = static_pointer_cast<HireacyObject>(ele)->GetMatrial();
+
+			for (auto& i : v)
+			{
+				i->SetMatrix(1, _reflectMat);
+			}
 		}
+
+		else if (ele->GetGameObjectType() == GameObjectType::ANI)
+		{
+			auto& v = static_pointer_cast<AnimationObject>(ele)->GetMatrial();
+
+			for (auto& i : v)
+			{
+				i->SetMatrix(1, _reflectMat);
+			}
+		}
+
+		else if (ele->GetGameObjectType() == GameObjectType::Model)
+		{
+			auto& v = static_pointer_cast<ModelObject>(ele)->GetMaterial();
+
+			for (auto& i : v)
+			{
+				i->SetMatrix(1, _reflectMat);
+			}
+		}
+
 
 	};
 	

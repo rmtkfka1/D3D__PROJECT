@@ -67,6 +67,11 @@ shared_ptr<Transform> AnimationObject::GetTransform()
 }
 
 
+vector<shared_ptr<Material>>& AnimationObject::GetMatrial()
+{
+	return _model->GetMaterials();
+}
+
 void AnimationObject::SetModel(shared_ptr<Model> model)
 {
 	_model = model;
