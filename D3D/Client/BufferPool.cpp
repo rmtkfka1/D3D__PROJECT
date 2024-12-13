@@ -2,6 +2,8 @@
 #include "BufferPool.h"
 #include "Core.h"
 #include "BufferManager.h"
+
+
 void ConstantBufferPool::Init(CBV_REGISTER reg, uint32 size, uint32 count)
 {
 	_reg = reg;
@@ -74,6 +76,12 @@ void ConstantBufferPool::SetData(int index ,void* buffer, uint32 size)
 		objCBAddress += _currentIndex * _elementSize;
 		core->GetCmdList()->SetGraphicsRootConstantBufferView(1, objCBAddress);
 		_currentIndex++;
+	}
+
+	else if (index == 2)
+	{
+		::memcpy(&_mappedBuffer[0], buffer, size);
+		core->GetCmdList()->SetGraphicsRootConstantBufferView(2, _cbvBufferPool->GetGPUVirtualAddress());
 	}
 
 	else
@@ -330,7 +338,7 @@ void DescriptorTable::SetGraphicsRootDescriptorTable()
 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
-	core->GetCmdList()->SetGraphicsRootDescriptorTable(2, handle);
+	core->GetCmdList()->SetGraphicsRootDescriptorTable(3, handle);
 	_currentGroupIndex++;
 }
 
@@ -340,7 +348,7 @@ void DescriptorTable::SetComputeRootDescriptorTable()
 
 	D3D12_GPU_DESCRIPTOR_HANDLE handle = _descHeap->GetGPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize;
-	core->GetCmdList()->SetComputeRootDescriptorTable(2, handle);
+	core->GetCmdList()->SetComputeRootDescriptorTable(3, handle);
 	_currentGroupIndex++;
 }
 

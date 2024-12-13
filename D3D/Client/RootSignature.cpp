@@ -46,10 +46,11 @@ void RootSignature::Init()
 
 
 
-	CD3DX12_ROOT_PARAMETER param[3];
+	CD3DX12_ROOT_PARAMETER param[4];
 	param[0].InitAsConstantBufferView(0);  //라이팅 b0
 	param[1].InitAsConstantBufferView(1);  //카메라 b1
-	param[2].InitAsDescriptorTable(_countof(ranges), ranges);
+	param[2].InitAsConstantBufferView(4);  //애니메이션 b4
+	param[3].InitAsDescriptorTable(_countof(ranges), ranges);
 
 	// 루트 서명 설정
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc = {};

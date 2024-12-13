@@ -3,6 +3,7 @@
 #include "BufferPool.h"
 #include "LightManager.h"
 #include "Material.h"
+#include "Animator.h"
 
 BufferManager::BufferManager()
 {
@@ -43,7 +44,13 @@ void BufferManager::Init()
 	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
 	{
 		_materialParamsBufferPool[i] = make_shared<ConstantBufferPool>();
-		_materialParamsBufferPool[i]->Init(CBV_REGISTER::b3, sizeof(MaterialParams), 10000); //b0 는 계산에 이용되지않음
+		_materialParamsBufferPool[i]->Init(CBV_REGISTER::b3, sizeof(MaterialParams), 1000); //b0 는 계산에 이용되지않음
+	}
+
+	for (int i = 0; i < MAX_FRAME_COUNT; ++i)
+	{
+		_aniMationBufferPool[i] = make_shared<ConstantBufferPool>();
+		_aniMationBufferPool[i]->Init(CBV_REGISTER::None, sizeof(Matrix)*MAX_BONE , 1); //b0 는 계산에 이용되지않음
 	}
 
 	_textureBufferPool = make_shared<TextureBufferPool>();

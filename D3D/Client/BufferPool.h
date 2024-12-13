@@ -1,8 +1,9 @@
 #pragma once
 
 
-enum class CBV_REGISTER : uint8
+enum class CBV_REGISTER : int8
 {
+	None=0,
 	b2=0,
 	b3=1,
 };

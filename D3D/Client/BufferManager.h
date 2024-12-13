@@ -24,6 +24,7 @@ public:
 	shared_ptr<ConstantBufferPool>& GetCameraBufferPool() { return _CameraBufferPool[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetLIghtBufferPool() { return _lightBufferPool[_currentContextIndex]; }
 	shared_ptr<ConstantBufferPool>& GetMaterialParamsBufferPool() { return _materialParamsBufferPool[_currentContextIndex]; }
+	shared_ptr<ConstantBufferPool>& GetAnimationBufferPool() { return _aniMationBufferPool[_currentContextIndex]; }
 	shared_ptr<TextureBufferPool>& GetTextureBufferPool() { return _textureBufferPool; }
 
 private:
@@ -33,6 +34,7 @@ private:
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _WorldBufferPool;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _CameraBufferPool;
 	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _materialParamsBufferPool;
+	array<shared_ptr<ConstantBufferPool>, MAX_FRAME_COUNT> _aniMationBufferPool;
 	shared_ptr<TextureBufferPool>  _textureBufferPool;
 
 private:
