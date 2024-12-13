@@ -10,7 +10,8 @@ enum class GameObjectType
 {
 	Custom,
 	Model,
-	Hierarchy
+	Hierarchy,
+	ANI
 };
 
 enum class PlayerType

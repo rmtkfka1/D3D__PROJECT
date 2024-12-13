@@ -151,3 +151,6 @@ struct ModelAnimation
     uint32 frameCount = 0;
     unordered_map<wstring, shared_ptr<ModelKeyframe>> keyframes;
 };
+
+#define MAX_BONE 200
+#define MAX_FRAME 200

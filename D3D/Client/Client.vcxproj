@@ -160,6 +160,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationObject.h" />
+    <ClInclude Include="Animator.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BilboardObject.h" />
     <ClInclude Include="BloomEffect.h" />
@@ -227,6 +229,8 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationObject.cpp" />
+    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BilboardObject.cpp" />
     <ClCompile Include="BloomEffect.cpp" />

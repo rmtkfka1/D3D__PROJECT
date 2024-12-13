@@ -62,6 +62,9 @@
     <Filter Include="04.HLSL\graphics">
       <UniqueIdentifier>{42c1b844-6eac-4c2e-b962-04e8954ac3fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.GameObject\05.AnimationObject">
+      <UniqueIdentifier>{533a292a-b268-4955-b825-9604b0f649ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -228,6 +231,12 @@
     </ClInclude>
     <ClInclude Include="FileUtils.h">
       <Filter>pch</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationObject.h">
+      <Filter>05.GameObject\05.AnimationObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>03.Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -399,6 +408,12 @@
     </ClCompile>
     <ClCompile Include="FileUtils.cpp">
       <Filter>pch</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationObject.cpp">
+      <Filter>05.GameObject\05.AnimationObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>03.Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
