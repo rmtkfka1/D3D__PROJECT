@@ -568,23 +568,41 @@ void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring fi
 
 	filesystem::create_directory(path.parent_path());
 
-	shared_ptr<FileUtils> file = make_shared<FileUtils>();
-	file->Open(finalPath, FileMode::Write);
+	ofstream out{ path ,ios::binary };
 
-	file->Write<string>(animation->name);
-	//file->Write<float>(animation->duration);
-	file->Write<float>(animation->frameRate);
-	file->Write<uint32>(animation->frameCount);
+	//애니메이션의 이름기록
+	size_t len = animation->name.length();
+	out.write((const char*)&len, sizeof(len));
+	out.write((const char*)animation->name.data(), len);
 
-	file->Write<uint32>(animation->keyframes.size());
 
-	for (shared_ptr<asKeyframe> keyframe : animation->keyframes)
+	out.write((const char*)&animation->frameRate, sizeof(float));
+	out.write((const char*)&animation->frameCount, sizeof(uint32));
+
+	size_t size = animation->keyframes.size();
+	out.write((const char*)&size, sizeof(size));
+
+
+	for (auto& ele : animation->keyframes)
 	{
-		file->Write<string>(keyframe->boneName);
+		size_t len = ele->boneName.length();
+		out.write((const char*)&len, sizeof(len));
 
-		file->Write<uint32>(keyframe->transforms.size());
-		file->Write(&keyframe->transforms[0], sizeof(asKeyframeData) * keyframe->transforms.size());
+		out.write((const char*)ele->boneName.data(), len);
+
+		size_t size = ele->transforms.size();
+		out.write((const char*)&size, sizeof(size));
+
+		for (int i = 0; i < size; ++i)
+		{
+			out.write((const char*)&ele->transforms[i].time, sizeof(float));
+			out.write((const char*)&ele->transforms[i].scale, sizeof(vec3));
+			out.write((const char*)&ele->transforms[i].rotation, sizeof(Quaternion));
+			out.write((const char*)&ele->transforms[i].translation, sizeof(vec3));
+		}
+
 	}
+
 }
 
 uint32 Converter::GetBoneIndex(const string& name)

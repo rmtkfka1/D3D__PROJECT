@@ -11,7 +11,7 @@ int main()
 {
 	{
 		converter.ReadAssetFile(L"Kachujin/Mesh.fbx");
-		converter.ExportMaterialData(L"Kachujin/Kachujin");
+		/*converter.ExportMaterialData(L"Kachujin/Kachujin");*/
 		converter.ExportModelData(L"Kachujin/Kachujin", DataType::ANIMATION);
 	}
 
