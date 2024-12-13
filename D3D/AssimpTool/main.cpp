@@ -9,13 +9,24 @@ Converter converter;
 
 int main()
 {
-	converter.ReadAssetFile(L"mirror/source/mirror_for render.fbx");
-	//converter.ExportMaterialData(L"helicopter/helicopter");
-	converter.ExportModelData(L"mirror/mirror",false);
+	{
+		converter.ReadAssetFile(L"Kachujin/Mesh.fbx");
+		converter.ExportMaterialData(L"Kachujin/Kachujin");
+		converter.ExportModelData(L"Kachujin/Kachujin", DataType::ANIMATION);
+	}
 
-	for (auto& bone : converter._bones)
+
+	{
+		converter.ReadAssetFile(L"Kachujin/Slash.fbx");
+		converter.ExportAnimationData(L"Kachujin/Slash");
+	}
+
+
+
+
+	/*for (auto& bone : converter._bones)
 	{
 
 		cout << bone->name << "," << bone->index << " " << bone->parent << endl;
-	}
+	}*/
 };

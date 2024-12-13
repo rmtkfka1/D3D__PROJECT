@@ -1,17 +1,39 @@
 #include "pch.h"
 #include "Animator.h"
 #include "Model.h"
-
+#include "Core.h"
+#include "BufferPool.h"
+#include "TimeManager.h"
 void Animator::Init()
 {
 	_matrix = make_shared<AnimationMatrix>();
 
+	CreateMatrix();
 
 }
 
 void Animator::PushData()
 {
+	float dt = TimeManager::GetInstance()->GetDeltaTime();
+	static float currFrame = 0.0f; // float 타입으로 변경
+	float speed = 30.0f;
 
+	uint32 MaxFrame = _model->GetAnimation()->frameCount;
+
+	// 프레임 갱신
+	currFrame += speed * dt;
+
+	if (currFrame >= MaxFrame)
+	{
+		currFrame = 0; // 프레임을 반복
+	}
+
+	// 현재 프레임 인덱스
+	int frameIndex = static_cast<int>(currFrame); // 정수로 변환
+
+	// 현재 프레임 데이터 설정
+	void* currentFrameData = &_matrix->transforms[frameIndex];
+	core->GetBufferManager()->GetAnimationBufferPool()->SetData(2, currentFrameData, sizeof(Matrix) * MAX_BONE);
 }
 
 void Animator::CreateMatrix()

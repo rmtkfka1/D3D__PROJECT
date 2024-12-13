@@ -31,6 +31,7 @@
 #include <random>
 #include "BloomEffect.h"
 #include "Mirror.h"
+#include "AnimationObject.h"
 
 static default_random_engine dre;
 static uniform_int_distribution<int> random_xz(-3800, 3800);
@@ -325,6 +326,19 @@ void Stage1::BulidDeferred()
 	}
 
 
+
+	{
+		shared_ptr<AnimationObject> gameobject = make_shared<AnimationObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"Kachujin/Kachujin", L"Kachujin");
+		model->ReadAnimation(L"Kachujin/Slash");
+		gameobject->SetModel(model);
+		gameobject->SetShader(ResourceManager::GetInstance()->Load<GraphicsShader>(L"forwardAnimation.hlsl"));
+		gameobject->GetTransform()->SetLocalScale(vec3(2.0f, 2.0f, 2.0f));
+		gameobject->GetTransform()->SetLocalRotation(vec3(0, 270.0f, 0));
+		gameobject->GetTransform()->SetLocalPosition(vec3(50500.0f, 49700.0f, 49900.0f));
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
 
 
 	////temp

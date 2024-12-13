@@ -572,7 +572,7 @@ void Converter::WriteAnimationData(shared_ptr<asAnimation> animation, wstring fi
 	file->Open(finalPath, FileMode::Write);
 
 	file->Write<string>(animation->name);
-	file->Write<float>(animation->duration);
+	//file->Write<float>(animation->duration);
 	file->Write<float>(animation->frameRate);
 	file->Write<uint32>(animation->frameCount);
 
