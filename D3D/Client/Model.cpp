@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include "Texture.h"
+#include "FileUtils.h"
 
 Model::Model() :ResourceBase(ResourceType::Model)
 {
@@ -71,7 +72,7 @@ void Model::ReadMaterial(wstring filename)
 			wstring textureStr = Utils::ToWString(node->GetText());
 			if (textureStr.length() > 0)
 			{
-				auto texture = ResourceManager::GetInstance()->Load<Texture>((lastname/textureStr).wstring());
+				auto texture = ResourceManager::GetInstance()->Load<Texture>((lastname / textureStr).wstring());
 				texture->SetName(textureStr);
 				material->SetDiffuseTexture(texture);
 			}
@@ -117,7 +118,7 @@ void Model::ReadMaterial(wstring filename)
 			_color.y = node->FloatAttribute("G");
 			_color.z = node->FloatAttribute("B");
 			_color.w = node->FloatAttribute("A");
-	///*		material->GetMaterialDesc().ambient = _color;*/
+			///*		material->GetMaterialDesc().ambient = _color;*/
 		}
 
 		// Diffuse
@@ -129,7 +130,7 @@ void Model::ReadMaterial(wstring filename)
 			_color.y = node->FloatAttribute("G");
 			_color.z = node->FloatAttribute("B");
 			_color.w = node->FloatAttribute("A");
-		/*	material->GetMaterialDesc().diffuse = _color;*/
+			/*	material->GetMaterialDesc().diffuse = _color;*/
 		}
 
 		// Specular
@@ -153,7 +154,7 @@ void Model::ReadMaterial(wstring filename)
 			_color.y = node->FloatAttribute("G");
 			_color.z = node->FloatAttribute("B");
 			_color.w = node->FloatAttribute("A");
-		/*	material->GetMaterialDesc().emissive = _color;*/
+			/*	material->GetMaterialDesc().emissive = _color;*/
 		}
 
 		_materialData.push_back(material);
@@ -311,6 +312,41 @@ void Model::ReadModel(wstring filename)
 	BindCacheInfo();
 }
 
+void Model::ReadAnimation(wstring filename)
+{
+	wstring fullPath = _modelPath + filename + L".clip";
+
+	shared_ptr<FileUtils> file = make_shared<FileUtils>();
+	file->Open(fullPath, FileMode::Read);
+
+	shared_ptr<ModelAnimation> animation = make_shared<ModelAnimation>();
+
+	animation->name = Utils::ToWString(file->Read<string>());
+	//animation->duration = file->Read<float>();
+	animation->frameRate = file->Read<float>();
+	animation->frameCount = file->Read<uint32>();
+
+	uint32 keyframesCount = file->Read<uint32>();
+
+	for (uint32 i = 0; i < keyframesCount; i++)
+	{
+		shared_ptr<ModelKeyframe> keyframe = make_shared<ModelKeyframe>();
+		keyframe->boneName = Utils::ToWString(file->Read<string>());
+
+		uint32 size = file->Read<uint32>();
+
+		if (size > 0)
+		{
+			keyframe->transforms.resize(size);
+			void* ptr = &keyframe->transforms[0];
+			file->Read(&ptr, sizeof(ModelKeyframeData) * size);
+		}
+
+		animation->keyframes[keyframe->boneName] = keyframe;
+	}
+
+	_animations = animation;
+}
 
 void Model::SetIntValue(uint8 index, int32 value)
 {
@@ -374,6 +410,19 @@ std::shared_ptr<ModelBone> Model::GetBoneByName(const wstring& name)
 
 	return nullptr;
 }
+
+shared_ptr<ModelAnimation> Model::GetAnimationByName(wstring name)
+{
+	//for (auto& animation : _animations)
+	//{
+	//	if (animation->name == name)
+	//		return animation;
+	//}
+
+	return nullptr;
+}
+
+
 
 
 void Model::BindCacheInfo()

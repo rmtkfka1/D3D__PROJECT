@@ -3,6 +3,10 @@
 class Material;
 class Mesh;
 class GraphicsShader;
+class ModelAnimation;
+
+
+
 
 struct ModelBone
 {
@@ -36,15 +40,18 @@ public:
 	Model();
 	virtual ~Model();
 
-	static shared_ptr<Model> ReadData(wstring filename ,wstring key);
+	static shared_ptr<Model> ReadData(wstring filename, wstring key);
 
 public:
 	void ReadMaterial(wstring filename);
 	void ReadModel(wstring filename);
+	void ReadAnimation(wstring filename);
+
 	void SetIntValue(uint8 index, int32 value);
 	void SetFloatValue(uint8 index, float value);
-public:
 
+
+public:
 	uint32 GetMaterialCount() { return static_cast<uint32>(_materialData.size()); }
 	vector<shared_ptr<Material>>& GetMaterials() { return _materialData; }
 	shared_ptr<Material> GetMaterialByIndex(uint32 index) { return _materialData[index]; }
@@ -59,6 +66,11 @@ public:
 	vector<shared_ptr<ModelBone>>& GetBones() { return _boneData; }
 	shared_ptr<ModelBone> GetBoneByIndex(uint32 index) { return (index < 0 || index >= _boneData.size() ? nullptr : _boneData[index]); }
 	shared_ptr<ModelBone> GetBoneByName(const wstring& name);
+
+
+	shared_ptr<ModelAnimation>& GetAnimation() { return _animations; }
+	shared_ptr<ModelAnimation> GetAnimationByName(wstring name);
+
 
 	void PrintInfo();
 
@@ -75,10 +87,11 @@ private:
 	wstring _texturePath = L"../Resources/Texture/";
 
 private:
-	shared_ptr<ModelBone>           _root;
-	vector<shared_ptr<Material>>    _materialData;
-	vector<shared_ptr<ModelBone>>   _boneData;
-	vector<shared_ptr<ModelMesh>>   _meshData;
+	shared_ptr<ModelBone>				_root;
+	vector<shared_ptr<Material>>		_materialData;
+	vector<shared_ptr<ModelBone>>		_boneData;
+	vector<shared_ptr<ModelMesh>>		_meshData;
+	shared_ptr<ModelAnimation>			_animations;
 
 	vec3 _totalCenter{};
 	vec3 _totalSize{};

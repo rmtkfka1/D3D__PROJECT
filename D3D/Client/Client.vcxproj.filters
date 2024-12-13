@@ -226,6 +226,9 @@
     <ClInclude Include="Mirror.h">
       <Filter>05.GameObject\02.ModelObject</Filter>
     </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>pch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -393,6 +396,9 @@
     </ClCompile>
     <ClCompile Include="Mirror.cpp">
       <Filter>05.GameObject\02.ModelObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>pch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
