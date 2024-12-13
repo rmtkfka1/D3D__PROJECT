@@ -113,6 +113,8 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 	case RASTERIZER_TYPE::WIREFRAME:
 		_pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 		_pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	case RASTERIZER_TYPE::COUNTERCLOCKWIES:
+		_pipelineDesc.RasterizerState.FrontCounterClockwise = true;
 		break;
 	}
 

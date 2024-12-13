@@ -38,6 +38,14 @@ void ResourceManager::CreateDefaultShader()
 		Add<GraphicsShader>(L"depthrender.hlsl", shader);
 	}
 
+	{
+		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::DEFREED;
+		shader->Init(L"deferredAnimation.hlsl", info);
+		Add<GraphicsShader>(L"deferredAnimation.hlsl", shader);
+	}
+
 	
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();

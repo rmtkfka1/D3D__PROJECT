@@ -40,12 +40,14 @@ void AnimationObject::Render()
 	_shader->SetPipelineState();
 	_animator->PushData();
 
+
 	for (auto& data : meshData)
 	{
 		_transform->PushData();
 
 		if (data->material)
 		{
+			data->material->SetInt(3, 0);
 			data->material->PushData();
 		}
 
@@ -59,6 +61,30 @@ void AnimationObject::Render()
 
 void AnimationObject::ShaderNoSetRender()
 {
+
+	auto& list = core->GetCmdList();
+
+	vector<shared_ptr<ModelMesh>>& meshData = _model->GetMeshes();
+
+
+	_animator->PushData();
+
+
+	for (auto& data : meshData)
+	{
+		_transform->PushData();
+
+		if (data->material)
+		{
+			data->material->SetInt(3, 1);
+			data->material->PushData();
+		}
+
+		core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
+
+		data->meshes->Render();
+
+	}
 }
 
 shared_ptr<Transform> AnimationObject::GetTransform()

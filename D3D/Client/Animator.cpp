@@ -16,7 +16,7 @@ void Animator::PushData()
 {
 	float dt = TimeManager::GetInstance()->GetDeltaTime();
 	static float currFrame = 0.0f; // float 타입으로 변경
-	float speed = 30.0f;
+	float speed = 7.5f;
 
 	uint32 MaxFrame = _model->GetAnimation()->frameCount;
 

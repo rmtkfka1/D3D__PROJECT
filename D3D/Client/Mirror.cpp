@@ -40,8 +40,18 @@ void Mirror::Init()
 		_mirrorReadShader = make_shared<GraphicsShader>();
 		ShaderInfo info;
 		info.shaderType = ShaderType::DEFREED;
+		info.rasterizerType = RASTERIZER_TYPE::COUNTERCLOCKWIES;
 		info.depthStencilType = DEPTH_STENCIL_TYPE::STENCILL_READ;
 		_mirrorReadShader->Init(L"mirror.hlsl", info);
+	}
+
+	{
+		_mirrorReadAniShader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::DEFREED;
+		info.rasterizerType = RASTERIZER_TYPE::COUNTERCLOCKWIES;
+		info.depthStencilType = DEPTH_STENCIL_TYPE::STENCILL_READ;
+		_mirrorReadAniShader->Init(L"deferredAnimation.hlsl", info);
 	}
 
 
@@ -64,15 +74,6 @@ void Mirror::Init()
 			}
 		}
 
-		else if (ele->GetGameObjectType() == GameObjectType::ANI)
-		{
-			auto& v = static_pointer_cast<AnimationObject>(ele)->GetMatrial();
-
-			for (auto& i : v)
-			{
-				i->SetMatrix(1, _reflectMat);
-			}
-		}
 
 		else if (ele->GetGameObjectType() == GameObjectType::Model)
 		{
@@ -87,6 +88,11 @@ void Mirror::Init()
 
 	};
 	
+	auto& material =_animationObject->GetMatrial();
+	for (auto& i : material)
+	{
+		i->SetMatrix(1, _reflectMat);
+	}
 
 }
 
@@ -104,6 +110,7 @@ void Mirror::Render()
 	list->OMSetStencilRef(1);
 	ModelObject::ShaderNoSetRender();
 
+
 	//// 2. 스텐실버퍼에 반사된 오브젝트 들은 렌더링  ( _mirrorReadShader 에는 반사행렬이 계산되있음)
 
 	_mirrorReadShader->SetPipelineState();
@@ -112,6 +119,10 @@ void Mirror::Render()
 	{
 		ele->ShaderNoSetRender();
 	}
+
+	_mirrorReadAniShader->SetPipelineState();
+	_animationObject->ShaderNoSetRender();
+
 
 	{
 		const float mixColor[4] = { 0.3f,  0.3f,  0.3f, 0.1f };
