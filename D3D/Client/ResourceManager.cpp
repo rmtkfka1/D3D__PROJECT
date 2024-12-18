@@ -32,6 +32,31 @@ void ResourceManager::CreateDefaultShader()
 	{
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
 		ShaderInfo info;
+		info.shaderType = ShaderType::DEFREED;
+		info.bActiveGSShader = false;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		shader->Init(L"BilboardRender.hlsl", info);
+		Add<GraphicsShader>(L"BilboardRender.hlsl", shader);
+	}
+
+	{
+		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.shaderType = ShaderType::FORWARD;
+		info.bActvieStreamOutput = true;
+		info.bActiveGSShader = true;
+		info.bActivePixelShader = false;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+		shader->Init(L"BilboardStreamOutput.hlsl", info);
+		Add<GraphicsShader>(L"BilboardStreamOutput.hlsl", shader);
+	}
+
+
+	{
+		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+		ShaderInfo info;
 		info.shaderType = ShaderType::FORWARD;
 		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		shader->Init(L"depthrender.hlsl", info);

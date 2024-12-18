@@ -211,9 +211,6 @@
     <ClInclude Include="BilboardObject.h">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClInclude>
-    <ClInclude Include="SteamOutputBuffer.h">
-      <Filter>03.Resource</Filter>
-    </ClInclude>
     <ClInclude Include="BufferManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
@@ -236,6 +233,9 @@
       <Filter>05.GameObject\05.AnimationObject</Filter>
     </ClInclude>
     <ClInclude Include="Animator.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamOutputBuffer.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
   </ItemGroup>
@@ -391,9 +391,6 @@
     <ClCompile Include="BilboardObject.cpp">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
-    <ClCompile Include="SteamOutputBuffer.cpp">
-      <Filter>03.Resource</Filter>
-    </ClCompile>
     <ClCompile Include="BufferManager.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
@@ -413,6 +410,9 @@
       <Filter>05.GameObject\05.AnimationObject</Filter>
     </ClCompile>
     <ClCompile Include="Animator.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamOutputBuffer.cpp">
       <Filter>03.Resource</Filter>
     </ClCompile>
   </ItemGroup>

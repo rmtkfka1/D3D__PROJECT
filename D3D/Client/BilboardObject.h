@@ -3,7 +3,7 @@
 
 class Texture;
 class StreamOutputBuffer;
-class GraphicsShader;
+class Graphics;
 
 struct StreamOutputData
 {
@@ -14,7 +14,7 @@ struct StreamOutputData
 };
 
 
-class BilboardObject :	public CustomObject
+class BilboardObject : public CustomObject
 {
 public:
 	BilboardObject();
@@ -27,9 +27,6 @@ public:
 
 
 public:
-
-	bool _useWithHeightMap = false;
-
 
 private:
 	static StreamOutputData _soData;

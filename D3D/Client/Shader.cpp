@@ -2,7 +2,7 @@
 #include "Shader.h"
 #include "Core.h"
 #include "RootSignature.h"
-
+#include <iostream>
 Shader::Shader() :ResourceBase(ResourceType::Shader)
 {
 
@@ -38,7 +38,7 @@ GraphicsShader::GraphicsShader()
 GraphicsShader::~GraphicsShader()
 {
 
-}
+} 
 
 void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 {
@@ -47,7 +47,11 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 	_info = info;
 
 	CreateVertexShader(finalPath, "VS_Main", "vs_5_0");
-	CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
+
+	if (info.bActivePixelShader)
+	{
+		CreatePixelShader(finalPath, "PS_Main", "ps_5_0");
+	}
 
 	if (info.bActiveGSShader)
 	{
@@ -113,6 +117,7 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 	case RASTERIZER_TYPE::WIREFRAME:
 		_pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 		_pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		break;
 	case RASTERIZER_TYPE::COUNTERCLOCKWIES:
 		_pipelineDesc.RasterizerState.FrontCounterClockwise = true;
 		break;
@@ -212,6 +217,36 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		rt.RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
 		break;
 	}
+
+
+	
+
+
+	if (info.bActvieStreamOutput)
+	{
+
+		vector<D3D12_SO_DECLARATION_ENTRY> entry = {
+		{0, "POSITION", 0, 0, 3, 0},  // Stream 0: POSITION (3 컴포넌트)
+		{0, "TEXCOORD", 0, 0, 2, 0},  // Stream 0: TEXCOORD (2 컴포넌트)
+		{0, "NORMAL", 0, 0, 3, 0},    // Stream 0: NORMAL (3 컴포넌트)
+		{0, "TANGENT", 0, 0, 3, 0}    // Stream 0: TANGENT (3 컴포넌트)
+		};
+
+		UINT strides[] = { 44 };  // 각 스트림의 스트라이드 값은 44바이트
+
+		// 스트림 출력 설명자
+		D3D12_STREAM_OUTPUT_DESC soDesc = {};
+		soDesc.pSODeclaration = entry.data();  // 선언된 스트림 출력 엔트리 배열
+		soDesc.NumEntries = entry.size();  // 엔트리 수 (4개)
+		soDesc.pBufferStrides = strides;  // 스트라이드 배열
+		soDesc.NumStrides = _countof(strides); // 스트라이드 개수 (1개)
+		soDesc.RasterizedStream = D3D12_SO_NO_RASTERIZED_STREAM;  // 래스터화된 스트림은 없음
+		_pipelineDesc.StreamOutput = soDesc;
+
+		core->GetDevice()->CreateGraphicsPipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));
+		return;
+	}
+
 
 	core->GetDevice()->CreateGraphicsPipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));
 }
