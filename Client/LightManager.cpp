@@ -36,4 +36,13 @@ void LightManager::Update()
 
 	_lightParmas.eyeWorldPos = _player->GetTransform()->GetLocalPosition();
 
+	WCHAR wchTxt[300];
+	swprintf_s(wchTxt, 300, L"pos.x: %.2f, pos.y: %.2f, pos.z: %.2f"
+		,
+		_lightParmas.eyeWorldPos.x,
+		_lightParmas.eyeWorldPos.y,
+		_lightParmas.eyeWorldPos.z);
+
+	SetWindowText(core->GetWindowHandle(), wchTxt);
+
 }

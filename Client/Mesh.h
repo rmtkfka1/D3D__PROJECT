@@ -13,12 +13,17 @@ public:
 	void RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY topolgy = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	void CreateVertexBuffer(vector<Vertex>& vec);
 	void CreateIndexBuffer(vector<uint32>& vec);
-
+	void SetTopology(D3D_PRIMITIVE_TOPOLOGY topoloy) { _topology = topoloy; }
 	D3D12_VERTEX_BUFFER_VIEW& GetVertexView() { return _vertexBufferView; }
 	D3D12_INDEX_BUFFER_VIEW& GetIndexView() { return _indexBufferView; }
 	uint32 GetIndexCount() { return _indexCount; }
 
+public:
+
+
 private:
+	D3D_PRIMITIVE_TOPOLOGY _topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
 	ComPtr<ID3D12Resource>		_vertexBuffer;
 	D3D12_VERTEX_BUFFER_VIEW	_vertexBufferView = {};
 	uint32 _vertexCount = 0;

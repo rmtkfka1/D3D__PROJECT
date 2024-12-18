@@ -211,6 +211,9 @@
     <ClInclude Include="BilboardObject.h">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClInclude>
+    <ClInclude Include="SteamOutputBuffer.h">
+      <Filter>03.Resource</Filter>
+    </ClInclude>
     <ClInclude Include="BufferManager.h">
       <Filter>02.Core</Filter>
     </ClInclude>
@@ -235,8 +238,8 @@
     <ClInclude Include="Animator.h">
       <Filter>03.Resource</Filter>
     </ClInclude>
-    <ClInclude Include="StreamOutputBuffer.h">
-      <Filter>03.Resource</Filter>
+    <ClInclude Include="Tessllation.h">
+      <Filter>05.GameObject\01.CustomObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +394,9 @@
     <ClCompile Include="BilboardObject.cpp">
       <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
+    <ClCompile Include="SteamOutputBuffer.cpp">
+      <Filter>03.Resource</Filter>
+    </ClCompile>
     <ClCompile Include="BufferManager.cpp">
       <Filter>02.Core</Filter>
     </ClCompile>
@@ -412,8 +418,8 @@
     <ClCompile Include="Animator.cpp">
       <Filter>03.Resource</Filter>
     </ClCompile>
-    <ClCompile Include="StreamOutputBuffer.cpp">
-      <Filter>03.Resource</Filter>
+    <ClCompile Include="Tessllation.cpp">
+      <Filter>05.GameObject\01.CustomObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -496,6 +502,9 @@
       <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\deferredAnimation.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\tess.hlsl">
       <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
   </ItemGroup>

@@ -102,23 +102,23 @@ void Player::MoveUpdate()
 			_camera->AddMove(diection * _speed * dt);
 		}
 
-		//if (key->GetButton(KEY_TYPE::S))
-		//{
-		//	_transform->GetRoot()->AddMove(-(diection * _speed * dt));
-		//	_camera->AddMove(diection * _speed * dt);
-		//}
+		if (key->GetButton(KEY_TYPE::S))
+		{
+			_transform->GetRoot()->AddMove(-(diection * _speed * dt));
+			_camera->AddMove(diection * _speed * dt);
+		}
 
-		//if (key->GetButton(KEY_TYPE::D))
-		//{
-		//	_transform->GetRoot()->AddMove((right * _speed * dt));
-		//	_camera->AddMove(diection * _speed * dt);
-		//}
+		if (key->GetButton(KEY_TYPE::D))
+		{
+			_transform->GetRoot()->AddMove((right * _speed * dt));
+			_camera->AddMove(diection * _speed * dt);
+		}
 
-		//if (key->GetButton(KEY_TYPE::A))
-		//{
-		//	_transform->GetRoot()->AddMove(-(right * _speed * dt));
-		//	_camera->AddMove(diection * _speed * dt);
-		//}
+		if (key->GetButton(KEY_TYPE::A))
+		{
+			_transform->GetRoot()->AddMove(-(right * _speed * dt));
+			_camera->AddMove(diection * _speed * dt);
+		}
 	}
 	
 

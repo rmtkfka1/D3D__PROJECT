@@ -9,7 +9,7 @@ public:
     void Render();
 
     ComPtr<ID3D12Resource> GetBuffer() const { return _StreamOutputBuffer; }
-    ComPtr<ID3D12Resource> GetFilledSizeBuffer() const { return _FilledSizeBuffer; }
+	ComPtr<ID3D12Resource> GetFilledSizeBuffer() const { return _FilledSizeBuffer; }
 
     D3D12_STREAM_OUTPUT_BUFFER_VIEW GetSOView() const { return _SOBufferView; }
 

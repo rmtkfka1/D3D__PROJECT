@@ -31,6 +31,7 @@
 #include <random>
 #include "BloomEffect.h"
 #include "Mirror.h"
+#include "Tessllation.h"
 #include "AnimationObject.h"
 
 static default_random_engine dre;
@@ -59,7 +60,6 @@ void Stage1::Run()
 {
 	LightManager::GetInstnace()->SetData();
 
-
 	core->GetRenderTarget()->ClearDepth();
 
 	core->GetShadow()->RenderBegin();
@@ -81,24 +81,7 @@ void Stage1::Run()
 	core->GetRenderTarget()->RenderEnd();
 
 
-	WCHAR wchTxt[300];
-	swprintf_s(wchTxt, 300, L"pos.x: %.2f, pos.y: %.2f, pos.z: %.2f, look.x: % .2f, look.y : % .2f, look.z : % .2f [] up.x: % .2f, up.y : % .2f, up.z : % .2f"
-		,
-		_player->GetTransform()->GetLocalPosition().x,
-		_player->GetTransform()->GetLocalPosition().y,
-		_player->GetTransform()->GetLocalPosition().z,
-
-		_player->GetTransform()->GetLook().x,
-		_player->GetTransform()->GetLook().y,
-		_player->GetTransform()->GetLook().z,
-
-		_player->GetTransform()->GetUp().x,
-		_player->GetTransform()->GetUp().y,
-		_player->GetTransform()->GetUp().z
-	);
-
-
-	SetWindowText(core->GetWindowHandle(), wchTxt);
+	
 
 
 }
@@ -249,11 +232,13 @@ void Stage1::BulidDeferred()
 	for (int i = 0; i < 50; ++i)
 	{
 		shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
-		
+		gameobject->_useWithHeightMap = true;
+
 		vector<Vertex> v;
 
 		v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
 		gameobject->GetMesh()->Init(v);
+
 
 		int randomValueX = random_xz(dre);
 		int randomValueZ = random_xz(dre);
@@ -262,11 +247,23 @@ void Stage1::BulidDeferred()
 		gameobject->GetTransform()->SetLocalPosition(vec3(Pos.x, Pos.y + 250.0f, Pos.z));
 		gameobject->GetTransform()->SetLocalScale(vec3(60.0f, 60.0f, 60.0f));
 		gameobject->AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 5.0f, 2.0f), vec3(0, 0, 0));
-		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"BilboardRender.hlsl"));
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"Bilboard.hlsl"));
+
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
+	/*for (int i = 0; i < 10; ++i)
+	{
+		shared_ptr<BilboardObject> gameobject = make_shared<BilboardObject>();
 
+		vector<Vertex> v;
+		v.push_back(Vertex(vec3(0, 0, 0.0f), vec2(0.0f, 0.0f)));
+		gameobject->GetMesh()->Init(v);
+
+		gameobject->SetShader(ResourceManager::GetInstance()->Get<GraphicsShader>(L"Bilboard.hlsl"));
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}*/
 
 
 	{
@@ -298,6 +295,48 @@ void Stage1::BulidDeferred()
 
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
+
+
+
+	{
+		shared_ptr<Tessllation> gameobject = make_shared<Tessllation>();
+		gameobject->SetFrustumCuling(false);
+
+		std::vector<Vertex> controlPoints;
+
+		Vertex p;
+		p.position = vec3(-1.0f, 1.0f, 0);
+
+		Vertex p2;
+		p2.position = vec3(1.0f, 1.0f, 0);
+
+		Vertex p3;
+		p3.position = vec3(-1.0f, -1.0f, 0);
+
+		Vertex p4;
+		p4.position = vec3(1.0f, -1.0f, 0);
+
+		controlPoints.push_back(p);
+		controlPoints.push_back(p2);
+		controlPoints.push_back(p3);
+		controlPoints.push_back(p4);
+	
+		gameobject->GetMesh()->Init(controlPoints);
+		//gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1.0f);
+		gameobject->GetTransform()->SetLocalPosition(vec3(50000.0f, 50000.f, 50000.0f));
+		gameobject->GetTransform()->SetLocalScale(vec3(100.0f, 100.0f, 100.0f));
+
+		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+		ShaderInfo info;
+		info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
+		info.bActiveDSShader = true;
+		info.bActiveHSShader = true;
+		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
+		shader->Init(L"tess.hlsl",info);
+		gameobject->SetShader(shader);
+		AddGameObject(gameobject, RenderingType::Forward);
+	}
+
 
 	{
 		shared_ptr<AnimationObject> gameobject = make_shared<AnimationObject>();

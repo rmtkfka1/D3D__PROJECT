@@ -8,7 +8,8 @@
 #include "Material.h"
 #include <random>
 #include "Texture.h"
-#include "StreamOutputBuffer.h"
+#include "SteamOutputBuffer.h"
+
 
 static default_random_engine dre;
 static default_random_engine dre2;
@@ -28,13 +29,13 @@ BilboardObject::~BilboardObject()
 
 void BilboardObject::Init()
 {
-	if (_soData.binit == false)
+	/*if (_soData.binit == false)
 	{
 		_soData.SOBuffer = make_shared<StreamOutputBuffer>();
-		_soData.SOBuffer->Init(44 * 6);
-		_soData.SOShader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"BilboardStreamOutput.hlsl");
+		_soData.SOBuffer->Init(44*6);
+		_soData.SOShader = ResourceManager::GetInstance()->Get<Shader>(L"BilboardStreamOutput.hlsl");
 		_soData.binit = true;
-	}
+	}*/
 
 	int randomTexture = random_texture(dre2);
 
@@ -43,7 +44,7 @@ void BilboardObject::Init()
 
 	case 1:
 	{
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Get<Texture>(L"BilboardTexture/1.png");
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"BilboardTexture/1.png");
 		GetMaterial()->SetDiffuseTexture(texture);
 	}
 	break;
@@ -87,9 +88,17 @@ void BilboardObject::Init()
 	}
 
 
+	if (_useWithHeightMap==false)
+	{
+		float x = random_xz(dre);
+		float z = random_xz(dre);
+		float y = random_y(dre);
+		float scale = random_sclae(dre);
 
-	AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 4.0f, 2.0f), vec3(0, 0, 0));
-	
+		_transform->SetLocalScale(vec3(scale, scale, scale));
+		_transform->SetLocalPosition(vec3(x, y + scale * 14.0f, z));
+		AddBoxCollider("bilboard", ColliderBehave::Passive, vec3(2.0f, 4.0f, 2.0f), vec3(0, 0, 0));
+	}
 
 
 }
@@ -104,7 +113,7 @@ void BilboardObject::Update()
 	toCameraDir.Normalize();
 
 	// y축을 기준으로 빌보드를 회전시켜 항상 카메라를 바라보게 함
-	float angle = atan2(toCameraDir.x, toCameraDir.z);
+	float angle = atan2(toCameraDir.x, toCameraDir.z); 
 	_transform->SetLocalRotation(vec3(0, XMConvertToDegrees(angle), 0));
 	_transform->Update();
 }
@@ -112,7 +121,7 @@ void BilboardObject::Update()
 void BilboardObject::Render()
 {
 
-	if (_soData._bStreamRender == false)
+	/*if (_soData._bStreamRender == false)
 	{
 		_soData.SOShader->SetPipelineState();
 		_soData.SOBuffer->Bind();
@@ -120,18 +129,20 @@ void BilboardObject::Render()
 		_soData.SOBuffer->UnBind();
 		_soData._bStreamRender = true;
 
-	}
+	}*/
 
-	else
-	{
+	//else
+	//{
 		_shader->SetPipelineState();
 		_transform->PushData();
 		_material->PushData();
 		core->GetBufferManager()->GetTable()->SetGraphicsRootDescriptorTable();
-		_soData.SOBuffer->Render();
-	}
+		//_soData.SOBuffer->Render();
+		_mesh->RenderWithoutIndex(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
 
+	//}
 
+	
 
 }
 

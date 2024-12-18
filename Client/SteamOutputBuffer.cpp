@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "StreamOutputBuffer.h"
+#include "SteamOutputBuffer.h"
 #include "Core.h"
 
 void StreamOutputBuffer::Init(uint64 bufferSize)
@@ -25,7 +25,7 @@ void StreamOutputBuffer::Init(uint64 bufferSize)
         D3D12_RESOURCE_STATE_STREAM_OUT,
         nullptr,
         IID_PPV_ARGS(&_FilledSizeBuffer)));
-
+ 
 
     ThrowIfFailed(core->GetDevice()->CreateCommittedResource(
         &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_READBACK),
@@ -36,14 +36,14 @@ void StreamOutputBuffer::Init(uint64 bufferSize)
         IID_PPV_ARGS(&_FilledSizeReadbackBuffer)));
 
     _SOBufferView.BufferLocation = _StreamOutputBuffer->GetGPUVirtualAddress();
-    _SOBufferView.SizeInBytes = bufferSize;
+	_SOBufferView.SizeInBytes = bufferSize; 
     _SOBufferView.BufferFilledSizeLocation = _FilledSizeBuffer->GetGPUVirtualAddress();
 
 }
 
 void StreamOutputBuffer::Bind()
-{
-    core->GetCmdList()->SOSetTargets(0, 1, &_SOBufferView);
+{   
+    core->GetCmdList()->SOSetTargets(0,1,&_SOBufferView);
 }
 
 void StreamOutputBuffer::UnBind()
@@ -53,7 +53,7 @@ void StreamOutputBuffer::UnBind()
 
 void StreamOutputBuffer::Render()
 {
-
+    
     core->GetCmdList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
         _FilledSizeBuffer.Get(),
         D3D12_RESOURCE_STATE_STREAM_OUT,
@@ -73,7 +73,7 @@ void StreamOutputBuffer::Render()
     CD3DX12_RANGE readRange(0, 0);
     void* data = nullptr;
     ThrowIfFailed(_FilledSizeReadbackBuffer->Map(0, &readRange, &data));
-
+  
     filledSize = *reinterpret_cast<uint32*>(data);
     _FilledSizeReadbackBuffer->Unmap(0, nullptr);
 
@@ -84,8 +84,8 @@ void StreamOutputBuffer::Render()
 
     D3D12_VERTEX_BUFFER_VIEW VertexView;
     VertexView.BufferLocation = _StreamOutputBuffer->GetGPUVirtualAddress();
-    VertexView.StrideInBytes = 44;
-    VertexView.SizeInBytes = filledSize;
+    VertexView.StrideInBytes =44;
+    VertexView.SizeInBytes = filledSize; 
 
     auto commandList = core->GetCmdList();
 

@@ -47,10 +47,8 @@ struct ShaderInfo
 	RASTERIZER_TYPE rasterizerType = RASTERIZER_TYPE::CULL_BACK;
 	DEPTH_STENCIL_TYPE depthStencilType = DEPTH_STENCIL_TYPE::LESS;
 	BLEND_TYPE blendType = BLEND_TYPE::DEFAULT;
-
-	bool bActivePixelShader = true;
-	//bool bActiveHSShader = false;
-	//bool bActiveDSShader = false;
+	bool bActiveHSShader = false;
+	bool bActiveDSShader = false;
 	bool bActiveGSShader = false;
 	bool bActvieStreamOutput = false;
 };
@@ -84,13 +82,16 @@ private:
 	void CreateVertexShader(const wstring& path, const string& name, const string& version);
 	void CreatePixelShader(const wstring& path, const string& name, const string& version);
 	void CreateGeometryShader(const wstring& path, const string& name, const string& version);
-
+	void CreateHullShader(const wstring& path, const string& name, const string& version);
+	void CreateDomainShader(const wstring& path, const string& name, const string& version);
 private:
 	ShaderInfo _info;
 
 	ComPtr<ID3DBlob>					_vsBlob;
 	ComPtr<ID3DBlob>					_psBlob;
 	ComPtr<ID3DBlob>					_gsBlob;
+	ComPtr<ID3DBlob>					_hsBlob;
+	ComPtr<ID3DBlob>					_dsBlob;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC  _pipelineDesc = {};
 
