@@ -120,6 +120,7 @@ void Mirror::Render()
 		ele->ShaderNoSetRender();
 	}
 
+
 	_mirrorReadAniShader->SetPipelineState();
 	_animationObject->ShaderNoSetRender();
 

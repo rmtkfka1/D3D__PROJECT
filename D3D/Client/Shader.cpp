@@ -159,6 +159,7 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		_pipelineDesc.DepthStencilState.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
 		_pipelineDesc.DepthStencilState.FrontFace.StencilFailOp  = D3D12_STENCIL_OP_KEEP;
 		_pipelineDesc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_REPLACE;
+		_pipelineDesc.DepthStencilState.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
 		_pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask = 0;
 		break;
 	case DEPTH_STENCIL_TYPE::STENCILL_READ:
@@ -171,6 +172,10 @@ void GraphicsShader::Init(const wstring& path, ShaderInfo info)
 		_pipelineDesc.DepthStencilState.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
 		_pipelineDesc.DepthStencilState.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
 		_pipelineDesc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+		_pipelineDesc.DepthStencilState.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_NEVER;
+		_pipelineDesc.DepthStencilState.BackFace.StencilPassOp = D3D12_STENCIL_OP_ZERO;
+		_pipelineDesc.DepthStencilState.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_ZERO;
+		_pipelineDesc.DepthStencilState.BackFace.StencilPassOp = D3D12_STENCIL_OP_ZERO;
 		break;
 	}
 

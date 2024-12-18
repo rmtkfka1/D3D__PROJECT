@@ -324,7 +324,7 @@ void Stage1::BulidDeferred()
 		ResourceManager::GetInstance()->Add<GameObject>(L"Kachujin", gameobject);
 		gameobject->GetTransform()->SetLocalScale(vec3(2.0f, 2.0f, 2.0f));
 		gameobject->GetTransform()->SetLocalRotation(vec3(0, 270.0f, 0));
-		gameobject->GetTransform()->SetLocalPosition(vec3(50500.0f, 49700.0f, 49900.0f));
+		gameobject->GetTransform()->SetLocalPosition(vec3(50200.0f, 49700.0f, 49900.0f));
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}
 
