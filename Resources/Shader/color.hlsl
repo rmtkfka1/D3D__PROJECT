@@ -1,3 +1,5 @@
+//공부용참고자료 https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models
+
 #define PI 3.14159f
 
 cbuffer TEST_B0 : register(b1)
@@ -32,7 +34,6 @@ cbuffer materialparams : register(b3)
     row_major float4x4 shadowCameraVP;
     row_major float4x4 g_mat_1;
  
-
 };
 
 
@@ -52,31 +53,33 @@ struct VS_OUT
     float2 uv : TEXCOORD;
 };
 
-float3 WaveGenaration(float3 pos)
+float3 WaveGeneration(float3 pos)
 {
-       // 파동 파라미터
-    float amplitude = 100.0f; // 진폭 (파도의 높이)
-    float wavelength = 200.0f; // 파장 (물결 간 거리)
-    float speed = 3.0f; // 파도의 속도
 
-    // 주파수와 파도 벡터 계산
-    float frequency = 2 * PI / wavelength;
-    float2 waveDirection = normalize(float2(0.3f, 0.3f)); // 파도의 방향 (X, Z 평면에서)
-    
-    // 시간에 따른 위상 변화
-    float phase = speed * Time;
+    const int waveCount = 3; // 파동의 개수
+    float amplitudes[waveCount] = { 10.0f, 8.0f, 9.0f }; // 각 파동의 진폭
+    float wavelengths[waveCount] = { 200.0f, 150.0f, 300.0f }; // 각 파동의 파장
+    float speeds[waveCount] = { 3.0f, 2.5f, 4.0f }; // 각 파동의 속도
+    float2 waveDirections[waveCount] =
+    {
+        normalize(float2(1.0f, 0.0f)), 
+        normalize(float2(0.5f, 0.5f)), 
+        normalize(float2(-0.7f, 0.3f)) 
+    };
 
-    // 수평 변위 계산 (파도의 진행 방향)
-    float3 displacement = amplitude * sin(frequency * (pos.x * waveDirection.x + pos.z * waveDirection.y) + phase);
-
-    // 물결의 진행 방향에 따른 수직 및 수평 변위 계산
+    // 초기 위치
     float3 modifiedPos = pos;
-    modifiedPos.y += displacement; // 수직 변위
 
- 
+    // 각 파동에 대해 위치 변위 계산
+    for (int i = 0; i < waveCount; i++)
+    {
+        float frequency = 2 * PI / wavelengths[i]; // 주파수 계산
+        float phase = speeds[i] * Time; // 시간에 따른 위상 변화
+        float wave = sin(dot(waveDirections[i], pos.xz) * frequency + phase); // 파동 계산
+        modifiedPos.y += amplitudes[i] * wave; // 수직 변위 추가
+    }
 
     return modifiedPos;
-
 }
 
 
@@ -85,7 +88,7 @@ VS_OUT VS_Main(VS_IN input)
 {
     VS_OUT output = (VS_OUT) 0;
 
-    float3 modifiedPos =WaveGenaration(input.pos);
+    float3 modifiedPos = WaveGeneration(input.pos);
  
     // 월드, 뷰, 프로젝션 변환
     float4 worldPos = mul(float4(modifiedPos, 1.0f), WorldMat);
