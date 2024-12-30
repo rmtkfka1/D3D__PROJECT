@@ -61,7 +61,7 @@ float3 WaveGenaration(float3 pos)
 
     // 주파수와 파도 벡터 계산
     float frequency = 2 * PI / wavelength;
-    float2 waveDirection = normalize(float2(1.0f, 0.0f)); // 파도의 방향 (X, Z 평면에서)
+    float2 waveDirection = normalize(float2(0.3f, 0.3f)); // 파도의 방향 (X, Z 평면에서)
     
     // 시간에 따른 위상 변화
     float phase = speed * Time;

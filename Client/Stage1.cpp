@@ -308,7 +308,7 @@ void Stage1::BulidDeferred()
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
 
 		ShaderInfo info;
-		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
+		info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
 		shader->Init(L"color.hlsl", info);
 
 		gameobject->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"sea.jpg"));
