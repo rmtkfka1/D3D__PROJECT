@@ -301,16 +301,17 @@ void Stage1::BulidDeferred()
 
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
 		gameobject->SetFrustumCuling(false);
-		gameobject->GetMesh() = GeoMetryHelper::LoadGripMesh(1000.0f,1000.0f,5,5);
+		gameobject->GetMesh() = GeoMetryHelper::LoadGripMesh(1000.0f,1000.0f,100,100);
 
-		gameobject->GetTransform()->SetLocalPosition(vec3(0, 10000.0f, 0));
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, 5000.0f, 0));
+
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
 
 		ShaderInfo info;
-		info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		shader->Init(L"color.hlsl", info);
 
-		gameobject->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"start.jpg"));
+		gameobject->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"sea.jpg"));
 		gameobject->SetShader(shader);
 
 		AddGameObject(gameobject, RenderingType::Forward);

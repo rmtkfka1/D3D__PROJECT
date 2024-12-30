@@ -38,7 +38,9 @@ void CustomObject::Update()
 {
 
 	_transform->Update();
-
+	static float time = 0.0f;
+	time+=0.1f * TimeManager::GetInstance()->GetDeltaTime();
+	_material->SetFloat(0, time);
 }
 
 void CustomObject::Render()

@@ -138,6 +138,8 @@ void Core::CreateDevice(bool EnableDebugLayer, bool EnableGBV)
 		}
 	}
 
+
+
 	_adapterDesc = bestDesc;
 
 
