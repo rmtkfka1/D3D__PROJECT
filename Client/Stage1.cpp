@@ -297,45 +297,25 @@ void Stage1::BulidDeferred()
 	}
 
 
-
 	{
-		shared_ptr<Tessllation> gameobject = make_shared<Tessllation>();
+
+		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
 		gameobject->SetFrustumCuling(false);
+		gameobject->GetMesh() = GeoMetryHelper::LoadGripMesh(1000.0f,1000.0f,5,5);
 
-		std::vector<Vertex> controlPoints;
-
-		Vertex p;
-		p.position = vec3(-1.0f, 1.0f, 0);
-
-		Vertex p2;
-		p2.position = vec3(1.0f, 1.0f, 0);
-
-		Vertex p3;
-		p3.position = vec3(-1.0f, -1.0f, 0);
-
-		Vertex p4;
-		p4.position = vec3(1.0f, -1.0f, 0);
-
-		controlPoints.push_back(p);
-		controlPoints.push_back(p2);
-		controlPoints.push_back(p3);
-		controlPoints.push_back(p4);
-	
-		gameobject->GetMesh()->Init(controlPoints);
-		//gameobject->GetMesh() = GeoMetryHelper::LoadRectangleMesh(1.0f);
-		gameobject->GetTransform()->SetLocalPosition(vec3(50000.0f, 50000.f, 50000.0f));
-		gameobject->GetTransform()->SetLocalScale(vec3(100.0f, 100.0f, 100.0f));
-
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, 10000.0f, 0));
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
+
 		ShaderInfo info;
 		info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
-		info.bActiveDSShader = true;
-		info.bActiveHSShader = true;
-		info.primitiveType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
-		shader->Init(L"tess.hlsl",info);
+		shader->Init(L"color.hlsl", info);
+
+		gameobject->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"start.jpg"));
 		gameobject->SetShader(shader);
+
 		AddGameObject(gameobject, RenderingType::Forward);
 	}
+
 
 
 	{

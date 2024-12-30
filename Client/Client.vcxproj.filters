@@ -507,6 +507,9 @@
     <FxCompile Include="..\Resources\Shader\tess.hlsl">
       <Filter>04.HLSL\graphics</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\color.hlsl">
+      <Filter>04.HLSL\graphics</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath_LH.inl">

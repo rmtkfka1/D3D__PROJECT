@@ -93,6 +93,7 @@ float hash(float2 p)
     float h = dot(p, float2(127.1, 311.7));
     return frac(sin(h) * 43758.5453123);
 }
+
 float noise(in float2 p)
 {
     float2 i = floor(p);

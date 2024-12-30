@@ -12,9 +12,9 @@
 #include "BufferManager.h"
 
 
-
 Core::Core()
 {
+
 };
 
 Core::~Core()
