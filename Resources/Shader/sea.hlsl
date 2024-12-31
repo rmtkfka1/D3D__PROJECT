@@ -90,6 +90,7 @@ float3x3 fromEuler(float3 ang)
     m[2] = float3(a3.y * a1.x * a2.x + a1.y * a3.x, a1.x * a3.x - a1.y * a3.y * a2.x, a2.y * a3.y);
     return m;
 }
+
 float hash(float2 p)
 {
     float h = dot(p, float2(127.1, 311.7));
@@ -111,6 +112,7 @@ float diffuse(float3 n, float3 l, float p)
 {
     return pow(dot(n, l) * 0.4 + 0.6, p);
 }
+
 float specular(float3 n, float3 l, float3 e, float s)
 {
     float nrm = (s + 8.0) / (PI * 8.0);
@@ -175,6 +177,7 @@ float map_detailed(float3 p)
         amp *= 0.22;
         choppy = lerp(choppy, 1.0, 0.2);
     }
+    
     return p.y - h;
 }
 

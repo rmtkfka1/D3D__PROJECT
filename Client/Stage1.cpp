@@ -286,7 +286,7 @@ void Stage1::BulidDeferred()
 		gameobject->SetFrustumCuling(false);
 		gameobject->GetMesh() = GeoMetryHelper::LoadRectangleBox(10.0f);
 
-		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/result.dds", TextureType::CubeMap);
+		shared_ptr<Texture> texture = ResourceManager::GetInstance()->Load<Texture>(L"cubemap/output.dds", TextureType::CubeMap);
 
 		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"sky.hlsl");
 
@@ -301,6 +301,8 @@ void Stage1::BulidDeferred()
 
 		shared_ptr<CustomObject> gameobject = make_shared<CustomObject>();
 		gameobject->SetFrustumCuling(false);
+
+		shared_ptr<Model> data = Model::ReadData(L"Earth/Earth", L"Earth");
 		gameobject->GetMesh() = GeoMetryHelper::LoadGripMesh(1000.0f,1000.0f,100,100);
 
 		gameobject->GetTransform()->SetLocalPosition(vec3(0, 5000.0f, 0));
@@ -308,10 +310,11 @@ void Stage1::BulidDeferred()
 		shared_ptr<GraphicsShader> shader = make_shared<GraphicsShader>();
 
 		ShaderInfo info;
-		info.rasterizerType = RASTERIZER_TYPE::WIREFRAME;
+		info.rasterizerType = RASTERIZER_TYPE::CULL_NONE;
 		shader->Init(L"color.hlsl", info);
 
 		gameobject->GetMaterial()->SetDiffuseTexture(ResourceManager::GetInstance()->Load<Texture>(L"sea.jpg"));
+		gameobject->GetMaterial()->SetNormalTexture(ResourceManager::GetInstance()->Get<Texture>(L"cubemap/output.dds"));
 		gameobject->SetShader(shader);
 
 		AddGameObject(gameobject, RenderingType::Forward);
