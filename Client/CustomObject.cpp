@@ -31,7 +31,7 @@ CustomObject::~CustomObject()
 
 void CustomObject::Init()
 {
-
+	 
 }
 
 void CustomObject::Update()
