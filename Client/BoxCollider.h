@@ -28,8 +28,8 @@ public:
 
 
 private:
-	BoundingOrientedBox _box;
-	BoundingOrientedBox _orginbox;
+	BoundingOrientedBox _box; // 실제 연산에사용되는 박스
+	BoundingOrientedBox _orginbox; // 처음에 원본박스
 
 	shared_ptr<Mesh> _mesh; //디버깅용 그려주는 박스
 	vec3 _totalSize;

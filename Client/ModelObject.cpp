@@ -32,6 +32,13 @@ void ModelObject::Init()
 
 void ModelObject::Update()
 {
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::O))
+	{
+		static int i = 0;
+		_transform->SetLocalRotation(vec3(0, i, 0));
+		i++;
+	}
+
 	_transform->Update();
 
 	for (auto& ele : _colliders)

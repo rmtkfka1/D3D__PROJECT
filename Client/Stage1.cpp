@@ -264,7 +264,19 @@ void Stage1::BulidDeferred()
 
 		AddGameObject(gameobject, RenderingType::Deferred);
 	}*/
+	{
+		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();
+		gameobject->SetFrustumCuling(false);
+		shared_ptr<Model> model = Model::ReadData(L"untitled/untitled", L"room");
+		gameobject->SetModel(model);
+		gameobject->GetTransform()->SetLocalPosition(vec3(0, 0, 0));
 
+		shared_ptr<GraphicsShader> shader = ResourceManager::GetInstance()->Get<GraphicsShader>(L"deferred.hlsl");
+		gameobject->SetShader(shader);
+
+
+		AddGameObject(gameobject, RenderingType::Deferred);
+	}
 
 	{
 		shared_ptr<ModelObject> gameobject = make_shared<ModelObject>();

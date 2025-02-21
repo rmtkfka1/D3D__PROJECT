@@ -81,7 +81,6 @@ float4 PS_Main(VS_OUT input) : SV_Target
           
     }
     
-  
-    return float4(color, 1.0f) * AlbedoColor;
+    return  AlbedoColor;
     
 };

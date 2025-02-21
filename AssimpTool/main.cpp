@@ -10,16 +10,16 @@ Converter converter;
 int main()
 {
 	{
-		converter.ReadAssetFile(L"Kachujin/Mesh.fbx");
-		/*converter.ExportMaterialData(L"Kachujin/Kachujin");*/
-		converter.ExportModelData(L"Kachujin/Kachujin", DataType::ANIMATION);
+		converter.ReadAssetFile(L"untitled.fbx");
+		converter.ExportMaterialData(L"untitled/untitled");
+		converter.ExportModelData(L"untitled/untitled", DataType::STATIC);
 	}
 
 
-	{
-		converter.ReadAssetFile(L"Kachujin/Slash.fbx");
-		converter.ExportAnimationData(L"Kachujin/Slash");
-	}
+	//{
+	//	converter.ReadAssetFile(L"Kachujin/Slash.fbx");
+	//	converter.ExportAnimationData(L"Kachujin/Slash");
+	//}
 
 
 

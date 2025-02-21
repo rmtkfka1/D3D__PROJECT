@@ -75,6 +75,7 @@ void Animator::CreateMatrix()
 			int32 parentIndex = bone->parentIndex;
 
 			Matrix matParent = Matrix::Identity;
+
 			if (parentIndex >= 0)
 				matParent = tempAnimBoneTransforms[parentIndex];
 
