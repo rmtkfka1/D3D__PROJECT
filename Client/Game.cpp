@@ -37,6 +37,10 @@ void Game::Run()
 	Update();
 	Render();
 
+	if (KeyManager::GetInstance()->GetButton(KEY_TYPE::RBUTTON))
+	{
+		exit(1);
+	}
 }
 
 void Game::Update()
